@@ -1,0 +1,27 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+authors:
+  - given-names: CVD Risk Calculator
+    family-names: Contributors
+title: "CVD Risk Calculator: Production-grade cardiovascular risk assessment in Python"
+version: 0.1.0
+date-released: 2024-01-01
+repository-code: "https://github.com/yourusername/cvd-risk-calculator"
+url: "https://github.com/yourusername/cvd-risk-calculator"
+license: MIT
+keywords:
+  - cardiovascular disease
+  - risk assessment
+  - clinical decision support
+  - epidemiology
+  - SCORE2
+  - Framingham
+  - ASCVD
+  - QRISK3
+preferred-citation:
+  title: "CVD Risk Calculator: Production-grade cardiovascular risk assessment in Python"
+  type: software
+  authors:
+    - given-names: CVD Risk Calculator
+      family-names: Contributors
+
