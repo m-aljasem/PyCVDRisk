@@ -10,7 +10,7 @@ readme = "README.md"
 requires-python = ">=3.10"
 license = {text = "MIT"}
 authors = [
-    {name = "CVD Risk Calculator Contributors"}
+    {name = "Mohamad AlJasem", email = "mohamad@aljasem.eu.org"}
 ]
 keywords = [
     "cardiovascular",
@@ -72,10 +72,12 @@ performance = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/yourusername/cvd-risk-calculator"
-Documentation = "https://cvd-risk-calculator.readthedocs.io"
-Repository = "https://github.com/yourusername/cvd-risk-calculator"
-Issues = "https://github.com/yourusername/cvd-risk-calculator/issues"
+Homepage = "https://pycvdrisk.aljasem.eu.org"
+Documentation = "https://pycvdrisk.aljasem.eu.org/docs"
+Repository = "https://github.com/m-aljasem/PyCVDRisk"
+Issues = "https://github.com/m-aljasem/PyCVDRisk/issues"
+Changelog = "https://github.com/m-aljasem/PyCVDRisk/blob/main/CHANGELOG.md"
+Author = "https://aljasem.eu.org"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/cvd_risk_calculator"]

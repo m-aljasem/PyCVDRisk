@@ -8,14 +8,13 @@
 
 **Academic-grade · Production-ready · Rigorously validated**
 
-[![CI](https://img.shields.io/github/workflow/status/yourusername/cvd-risk-calculator/CI?style=for-the-badge&logo=github-actions&logoColor=white)](https://github.com/yourusername/cvd-risk-calculator/actions)
-[![Coverage](https://img.shields.io/codecov/c/github/yourusername/cvd-risk-calculator?style=for-the-badge&logo=codecov&logoColor=white)](https://codecov.io/gh/yourusername/cvd-risk-calculator)
+[![CI](https://img.shields.io/github/workflow/status/m-aljasem/PyCVDRisk/CI?style=for-the-badge&logo=github-actions&logoColor=white)](https://github.com/m-aljasem/PyCVDRisk/actions)
+[![Coverage](https://img.shields.io/codecov/c/github/m-aljasem/PyCVDRisk?style=for-the-badge&logo=codecov&logoColor=white)](https://codecov.io/gh/m-aljasem/PyCVDRisk)
 [![PyPI](https://img.shields.io/pypi/v/cvd-risk-calculator?style=for-the-badge&logo=pypi&logoColor=white)](https://pypi.org/project/cvd-risk-calculator/)
 [![Python](https://img.shields.io/pypi/pyversions/cvd-risk-calculator?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
 [![License](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](https://opensource.org/licenses/MIT)
-[![DOI](https://img.shields.io/badge/DOI-10.5281%2Fzenodo.xxxxx-blue?style=for-the-badge)](https://doi.org/10.5281/zenodo.xxxxx)
 
-[**📖 Documentation**](https://cvd-risk-calculator.readthedocs.io) • [**🚀 Quick Start**](#-quick-start) • [**📊 Validation**](#-validation--accuracy) • [**📝 Paper**](https://doi.org/xxx) • [**💬 Discussions**](https://github.com/yourusername/cvd-risk-calculator/discussions)
+[**📖 Documentation**](https://pycvdrisk.aljasem.eu.org/docs) • [**🚀 Quick Start**](#-quick-start) • [**📊 Validation**](#-validation--accuracy) • [**💬 Discussions**](https://github.com/m-aljasem/PyCVDRisk/discussions)
 
 </div>
 
@@ -336,7 +335,7 @@ notebooks/
 └── 05_Large_Scale_Analysis.ipynb         # Biobank-scale examples
 ```
 
-**Try them instantly:** [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/yourusername/cvd-risk-calculator/main?filepath=notebooks)
+**Try them instantly:** [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/m-aljasem/PyCVDRisk/main?filepath=notebooks)
 
 #### 📚 Citation
 
@@ -476,18 +475,18 @@ Our documentation is *actually useful* (we promise):
 
 We welcome contributions! Whether you're:
 
-- 🐛 **Reporting a bug** → [Open an issue](https://github.com/yourusername/cvd-risk-calculator/issues/new?template=bug_report.md)
-- 💡 **Suggesting a feature** → [Start a discussion](https://github.com/yourusername/cvd-risk-calculator/discussions/new)
+- 🐛 **Reporting a bug** → [Open an issue](https://github.com/m-aljasem/PyCVDRisk/issues/new?template=bug_report.md)
+- 💡 **Suggesting a feature** → [Start a discussion](https://github.com/m-aljasem/PyCVDRisk/discussions/new)
 - 📊 **Adding a new risk model** → [See our guide](CONTRIBUTING.md)
-- 📝 **Improving documentation** → [Edit on GitHub](https://github.com/yourusername/cvd-risk-calculator/tree/main/docs)
+- 📝 **Improving documentation** → [Edit on GitHub](https://github.com/m-aljasem/PyCVDRisk/tree/main/docs)
 - 🧪 **Sharing validation data** → We'd love to expand our test suite!
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for detailed guidelines.
 
 ### 🌟 Contributors
 
-<a href="https://github.com/yourusername/cvd-risk-calculator/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=yourusername/cvd-risk-calculator" />
+<a href="https://github.com/m-aljasem/PyCVDRisk/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=m-aljasem/PyCVDRisk" />
 </a>
 
 ---
@@ -514,7 +513,7 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for detailed guidelines.
 </tr>
 </table>
 
-*[Add your institution? Let us know!](https://github.com/yourusername/cvd-risk-calculator/discussions)*
+*[Add your institution? Let us know!](https://github.com/m-aljasem/PyCVDRisk/discussions)*
 
 </div>
 
@@ -525,9 +524,9 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for detailed guidelines.
 <div align="center">
 
 ![PyPI Downloads](https://img.shields.io/pypi/dm/cvd-risk-calculator?style=for-the-badge&logo=python&logoColor=white)
-![GitHub Stars](https://img.shields.io/github/stars/yourusername/cvd-risk-calculator?style=for-the-badge&logo=github)
-![GitHub Forks](https://img.shields.io/github/forks/yourusername/cvd-risk-calculator?style=for-the-badge&logo=github)
-![GitHub Issues](https://img.shields.io/github/issues/yourusername/cvd-risk-calculator?style=for-the-badge&logo=github)
+![GitHub Stars](https://img.shields.io/github/stars/m-aljasem/PyCVDRisk?style=for-the-badge&logo=github)
+![GitHub Forks](https://img.shields.io/github/forks/m-aljasem/PyCVDRisk?style=for-the-badge&logo=github)
+![GitHub Issues](https://img.shields.io/github/issues/m-aljasem/PyCVDRisk?style=for-the-badge&logo=github)
 
 **13,400+** monthly downloads • **847** validation test cases • **98.7%** test coverage  
 **120,000+** calculations/second • **16** risk models • **100%** type coverage
@@ -547,7 +546,97 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for detailed guidelines.
 - [ ] **Mobile SDK** - iOS/Android support
 - [ ] **R Package** - `reticulate` wrapper for R users
 
-Vote on features → [View Roadmap](https://github.com/yourusername/cvd-risk-calculator/projects/1)
+Vote on features → [View Roadmap](https://github.com/m-aljasem/PyCVDRisk/projects/1)
+
+---
+
+## 🛠️ Development & Contributing
+
+### 🚀 Building & Releasing
+
+This package uses **GitHub Actions** for automated building and publishing to PyPI.
+
+#### Local Development
+
+```bash
+# Install in development mode
+pip install -e .[dev]
+
+# Run tests
+python build.py test
+
+# Run all checks (lint + test)
+python build.py check
+
+# Build package locally
+python build.py build
+```
+
+#### Creating a Release
+
+```bash
+# Update version and create release
+python release.py patch    # For bug fixes (0.1.0 → 0.1.1)
+python release.py minor    # For new features (0.1.0 → 0.2.0)
+python release.py major    # For breaking changes (0.1.0 → 1.0.0)
+
+# Or set specific version
+python release.py 1.0.0
+
+# Push to GitHub (triggers automated PyPI publishing)
+git push origin main --tags
+```
+
+#### Build Scripts
+
+- **`build.py`** - Local build, test, and publish utilities
+- **`release.py`** - Version management and release preparation
+- **`tox.ini`** - Multi-environment testing configuration
+
+#### GitHub Actions Workflows
+
+- **CI** (`.github/workflows/ci.yml`) - Tests on Python 3.10-3.12, linting, coverage
+- **Release** (`.github/workflows/release.yml`) - Automated PyPI publishing on tags
+- **Build Wheels** (`.github/workflows/build-wheels.yml`) - Multi-platform wheel building
+
+### 📋 Development Setup
+
+```bash
+# Clone repository
+git clone https://github.com/m-aljasem/PyCVDRisk.git
+cd PyCVDRisk
+
+# Install development dependencies
+pip install -e .[dev]
+
+# Install pre-commit hooks
+pre-commit install
+
+# Run pre-commit on all files
+pre-commit run --all-files
+
+# Run tests with coverage
+pytest --cov=src/cvd_risk_calculator
+```
+
+### 🤝 Contributing Guidelines
+
+1. **Fork** the repository
+2. **Create** a feature branch: `git checkout -b feature/amazing-feature`
+3. **Install** development dependencies: `pip install -e .[dev]`
+4. **Write** tests for your changes
+5. **Run** the full test suite: `python build.py check`
+6. **Commit** your changes: `git commit -m 'Add amazing feature'`
+7. **Push** to your branch: `git push origin feature/amazing-feature`
+8. **Open** a Pull Request
+
+#### Code Quality Standards
+
+- **Black** for code formatting
+- **Ruff** for linting and import sorting
+- **MyPy** for type checking
+- **pytest** for testing with ≥70% coverage
+- **pre-commit** hooks to enforce standards
 
 ---
 
@@ -561,10 +650,10 @@ This project is licensed under the **MIT License** - see [LICENSE](LICENSE) file
 
 ## 💬 Get Help
 
-- 📖 **Documentation Issues?** → [Docs feedback](https://github.com/yourusername/cvd-risk-calculator/issues/new?template=docs.md)
-- 🐛 **Found a Bug?** → [Bug report](https://github.com/yourusername/cvd-risk-calculator/issues/new?template=bug_report.md)  
-- 💡 **Need Help?** → [Ask in Discussions](https://github.com/yourusername/cvd-risk-calculator/discussions)
-- 📧 **Email:** cvd-risk@yourdomain.com
+- 📖 **Documentation Issues?** → [Docs feedback](https://github.com/m-aljasem/PyCVDRisk/issues/new?template=docs.md)
+- 🐛 **Found a Bug?** → [Bug report](https://github.com/m-aljasem/PyCVDRisk/issues/new?template=bug_report.md)
+- 💡 **Need Help?** → [Ask in Discussions](https://github.com/m-aljasem/PyCVDRisk/discussions)
+- 📧 **Email:** mohamad@aljasem.eu.org
 - 🐦 **Twitter:** [@cvd_risk_calc](https://twitter.com/cvd_risk_calc)
 
 ---

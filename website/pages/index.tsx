@@ -107,7 +107,7 @@ export default function Home() {
                 <ArrowRightIcon className="inline-block ml-2 h-5 w-5" />
               </a>
               <a
-                href="https://github.com/yourusername/cvd-risk-calculator"
+                href="https://github.com/m-aljasem/PyCVDRisk"
                 className="bg-white text-primary-600 px-6 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors duration-200"
               >
                 View on GitHub
@@ -335,7 +335,7 @@ print(f"Risk: {result.risk_score:.1f}%")`}</code>
             <div>
               <h3 className="text-xl font-bold mb-4">Connect</h3>
               <ul className="space-y-2 text-gray-400">
-                <li><a href="https://github.com/yourusername/cvd-risk-calculator" className="hover:text-white">GitHub</a></li>
+                <li><a href="https://github.com/m-aljasem/PyCVDRisk" className="hover:text-white">GitHub</a></li>
                 <li><a href="#" className="hover:text-white">PyPI</a></li>
                 <li><a href="#" className="hover:text-white">Issues</a></li>
               </ul>

@@ -36,7 +36,7 @@ To install from source in development mode:
 
 .. code-block:: bash
 
-   git clone https://github.com/yourusername/cvd-risk-calculator.git
+   git clone https://github.com/m-aljasem/PyCVDRisk.git
    cd cvd-risk-calculator
    pip install -e ".[dev]"
 
