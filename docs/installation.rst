@@ -8,7 +8,7 @@ The easiest way to install CVD Risk Calculator is using pip:
 
 .. code-block:: bash
 
-   pip install cvd-risk-calculator
+   pip install cvd-risk
 
 Installation with optional dependencies
 ---------------------------------------
@@ -18,16 +18,16 @@ For development work, documentation, or performance optimization:
 .. code-block:: bash
 
    # Development dependencies
-   pip install cvd-risk-calculator[dev]
+   pip install cvd-risk[dev]
 
    # Documentation dependencies
-   pip install cvd-risk-calculator[docs]
+   pip install cvd-risk[docs]
 
    # Performance optimization dependencies
-   pip install cvd-risk-calculator[performance]
+   pip install cvd-risk[performance]
 
    # All dependencies
-   pip install cvd-risk-calculator[dev,docs,performance]
+   pip install cvd-risk[dev,docs,performance]
 
 Development installation
 ------------------------
@@ -37,7 +37,7 @@ To install from source in development mode:
 .. code-block:: bash
 
    git clone https://github.com/m-aljasem/PyCVDRisk.git
-   cd cvd-risk-calculator
+   cd cvd-risk
    pip install -e ".[dev]"
 
 Requirements

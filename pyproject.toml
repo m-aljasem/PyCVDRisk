@@ -3,7 +3,7 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [project]
-name = "cvd-risk-calculator"
+name = "cvd-risk"
 version = "0.1.0"
 description = "Production-grade Python package for cardiovascular disease risk calculation"
 readme = "README.md"

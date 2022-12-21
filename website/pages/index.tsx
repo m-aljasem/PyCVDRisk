@@ -289,7 +289,7 @@ export default function Home() {
             <div className="bg-gray-900 rounded-xl p-8 text-left">
               <pre className="text-green-400 overflow-x-auto">
                 <code>{`# Install
-pip install cvd-risk-calculator
+pip install cvd-risk
 
 # Usage
 from cvd_risk_calculator.models import SCORE2

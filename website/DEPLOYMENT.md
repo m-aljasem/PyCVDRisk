@@ -50,7 +50,7 @@ vercel --prod
 # - Set up and deploy? Yes
 # - Which scope? (Choose your account)
 # - Link to existing project? No
-# - What's your project's name? cvd-risk-calculator
+# - What's your project's name? cvd-risk
 # - In which directory is your code located? ./
 ```
 

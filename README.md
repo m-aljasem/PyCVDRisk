@@ -10,8 +10,8 @@
 
 [![CI](https://img.shields.io/github/workflow/status/m-aljasem/PyCVDRisk/CI?style=for-the-badge&logo=github-actions&logoColor=white)](https://github.com/m-aljasem/PyCVDRisk/actions)
 [![Coverage](https://img.shields.io/codecov/c/github/m-aljasem/PyCVDRisk?style=for-the-badge&logo=codecov&logoColor=white)](https://codecov.io/gh/m-aljasem/PyCVDRisk)
-[![PyPI](https://img.shields.io/pypi/v/cvd-risk-calculator?style=for-the-badge&logo=pypi&logoColor=white)](https://pypi.org/project/cvd-risk-calculator/)
-[![Python](https://img.shields.io/pypi/pyversions/cvd-risk-calculator?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
+[![PyPI](https://img.shields.io/pypi/v/cvd-risk?style=for-the-badge&logo=pypi&logoColor=white)](https://pypi.org/project/cvd-risk/)
+[![Python](https://img.shields.io/pypi/pyversions/cvd-risk?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
 [![License](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](https://opensource.org/licenses/MIT)
 
 [**📖 Documentation**](https://pycvdrisk.aljasem.eu.org/docs) • [**🚀 Quick Start**](#-quick-start) • [**📊 Validation**](#-validation--accuracy) • [**💬 Discussions**](https://github.com/m-aljasem/PyCVDRisk/discussions)
@@ -113,7 +113,7 @@
 ### Installation
 
 ```bash
-pip install cvd-risk-calculator
+pip install cvd-risk
 ```
 
 ### Your First Risk Calculation (30 seconds)
@@ -343,7 +343,7 @@ If you use this package in your research, please cite:
 
 ```bibtex
 @article{your_name2024cvd,
-  title={cvd-risk-calculator: A validated Python package for cardiovascular disease risk estimation},
+  title={cvd-risk: A validated Python package for cardiovascular disease risk estimation},
   author={Your Name and Collaborators},
   journal={Journal of Open Source Software},
   year={2024},
@@ -462,12 +462,12 @@ pooled_risk = pool_results(risks)  # Rubin's rules
 
 Our documentation is *actually useful* (we promise):
 
-- **[Quick Start Guide](https://cvd-risk-calculator.readthedocs.io/quickstart)** - Get running in 5 minutes
-- **[Model Descriptions](https://cvd-risk-calculator.readthedocs.io/models)** - Clinical background + math for each model  
-- **[API Reference](https://cvd-risk-calculator.readthedocs.io/api)** - Complete function documentation
-- **[Validation Study](https://cvd-risk-calculator.readthedocs.io/validation)** - How we tested everything
-- **[Performance Guide](https://cvd-risk-calculator.readthedocs.io/performance)** - Optimize for your use case
-- **[Contributing](https://cvd-risk-calculator.readthedocs.io/contributing)** - Add new models or features
+- **[Quick Start Guide](https://pycvdrisk.aljasem.eu.org/docs/quickstart)** - Get running in 5 minutes
+- **[Model Descriptions](https://pycvdrisk.aljasem.eu.org/docs/models)** - Clinical background + math for each model
+- **[API Reference](https://pycvdrisk.aljasem.eu.org/docs/api)** - Complete function documentation
+- **[Validation Study](https://pycvdrisk.aljasem.eu.org/docs/validation)** - How we tested everything
+- **[Performance Guide](https://pycvdrisk.aljasem.eu.org/docs/performance)** - Optimize for your use case
+- **[Contributing](https://pycvdrisk.aljasem.eu.org/docs/contributing)** - Add new models or features
 
 ---
 
@@ -523,7 +523,7 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for detailed guidelines.
 
 <div align="center">
 
-![PyPI Downloads](https://img.shields.io/pypi/dm/cvd-risk-calculator?style=for-the-badge&logo=python&logoColor=white)
+![PyPI Downloads](https://img.shields.io/pypi/dm/cvd-risk?style=for-the-badge&logo=python&logoColor=white)
 ![GitHub Stars](https://img.shields.io/github/stars/m-aljasem/PyCVDRisk?style=for-the-badge&logo=github)
 ![GitHub Forks](https://img.shields.io/github/forks/m-aljasem/PyCVDRisk?style=for-the-badge&logo=github)
 ![GitHub Issues](https://img.shields.io/github/issues/m-aljasem/PyCVDRisk?style=for-the-badge&logo=github)
