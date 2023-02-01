@@ -510,16 +510,16 @@ This package uses **GitHub Actions** for automated building and publishing to Py
 pip install -e .[dev]
 
 # Run tests
-python build.py test
+python build_script.py test
 
 # Run all checks (lint + test)
-python build.py check
+python build_script.py check
 
 # Build package locally
-python build.py build
+python build_script.py build
 
 # See all available commands
-python build.py --help
+python build_script.py --help
 ```
 
 #### Creating a Release
@@ -539,7 +539,7 @@ git push origin main --tags
 
 #### Build Scripts
 
-- **`build.py`** - Local build, test, and publish utilities
+- **`build_script.py`** - Local build, test, and publish utilities
 - **`release.py`** - Version management and release preparation
 - **`tox.ini`** - Multi-environment testing configuration
 
@@ -575,7 +575,7 @@ pytest --cov=src/cvd_risk_calculator
 2. **Create** a feature branch: `git checkout -b feature/amazing-feature`
 3. **Install** development dependencies: `pip install -e .[dev]`
 4. **Write** tests for your changes
-5. **Run** the full test suite: `python build.py check`
+5. **Run** the full test suite: `python build_script.py check`
 6. **Commit** your changes: `git commit -m 'Add amazing feature'`
 7. **Push** to your branch: `git push origin feature/amazing-feature`
 8. **Open** a Pull Request
