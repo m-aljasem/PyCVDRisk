@@ -27,6 +27,18 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Install macOS dependencies (pre-setup)
+        if: matrix.os == 'macos-latest'
+        run: |
+          brew install gettext
+          brew link --force gettext
+          # Set library path for subsequent steps
+          if [ -d /opt/homebrew/opt/gettext ]; then
+            echo "DYLD_FALLBACK_LIBRARY_PATH=/opt/homebrew/opt/gettext/lib:$DYLD_FALLBACK_LIBRARY_PATH" >> $GITHUB_ENV
+          else
+            echo "DYLD_FALLBACK_LIBRARY_PATH=/usr/local/opt/gettext/lib:$DYLD_FALLBACK_LIBRARY_PATH" >> $GITHUB_ENV
+          fi
+
       - name: Set up QEMU for ARM64
         if: matrix.architecture == 'arm64' && matrix.os == 'ubuntu-latest'
         run: |
@@ -34,12 +46,6 @@ jobs:
           sudo apt-get install -y qemu-user-static binfmt-support libc6-arm64-cross
           sudo update-binfmts --enable qemu-arm
           sudo update-binfmts --enable qemu-aarch64
-
-      - name: Install macOS dependencies
-        if: matrix.os == 'macos-latest'
-        run: |
-          brew install gettext
-          brew link gettext --force
 
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v5
