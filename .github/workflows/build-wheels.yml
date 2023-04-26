@@ -100,29 +100,15 @@ jobs:
           path: dist/
 
       - name: Install wheel
-        run: pip install dist/*.whl
+        run: |
+          ls -la dist/
+          pip install dist/*.whl
 
       - name: Test basic import
         run: |
-          python -c "import cvd_risk_calculator; print('✓ Package imported successfully')"
-          python -c "from cvd_risk_calculator.models.score2 import SCORE2; print('✓ SCORE2 imported')"
+          python -c "import cvd_risk_calculator; print('✓ Package imported successfully')" || exit 1
+          python -c "from cvd_risk_calculator.models.score2 import SCORE2; print('✓ SCORE2 imported')" || exit 1
 
       - name: Test basic functionality
         run: |
-          python -c "
-          from cvd_risk_calculator.models.score2 import SCORE2
-          from cvd_risk_calculator.core.validation import PatientData
-
-          patient = PatientData(
-              age=55, sex='male', systolic_bp=140.0,
-              total_cholesterol=6.0, hdl_cholesterol=1.2,
-              smoking=True, region='moderate'
-          )
-
-          model = SCORE2()
-          result = model.calculate(patient)
-
-          print(f'✓ Risk calculation: {result.risk_score:.1f}%')
-          assert 0 <= result.risk_score <= 100, f'Invalid risk score: {result.risk_score}'
-          print('✓ All basic tests passed')
-          "
+          python -c "from cvd_risk_calculator.models.score2 import SCORE2; from cvd_risk_calculator.core.validation import PatientData; patient = PatientData(age=55, sex='male', systolic_bp=140.0, total_cholesterol=6.0, hdl_cholesterol=1.2, smoking=True, region='moderate'); model = SCORE2(); result = model.calculate(patient); print(f'✓ Risk calculation: {result.risk_score:.1f}%'); assert 0 <= result.risk_score <= 100; print('✓ All basic tests passed')"
