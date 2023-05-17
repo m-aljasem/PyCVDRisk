@@ -100,43 +100,52 @@ jobs:
           path: dist/
 
       - name: Install wheel
+        shell: bash
         run: |
+          echo "Contents of dist directory:"
           ls -la dist/
+          echo "Installing wheel..."
           pip install dist/*.whl
 
-      - name: Test basic import
+      - name: Run tests
         shell: bash
         run: |
-          echo "Testing package import..."
-          python -c "import cvd_risk_calculator; print('✓ Package imported successfully')"
-          if [ $? -ne 0 ]; then
-            echo "❌ Import failed"
-            exit 1
-          fi
-          python -c "from cvd_risk_calculator.models.score2 import SCORE2; print('✓ SCORE2 imported')"
-          if [ $? -ne 0 ]; then
-            echo "❌ SCORE2 import failed"
-            exit 1
-          fi
+          set -e  # Exit on any error
 
-      - name: Test basic functionality
-        shell: bash
-        run: |
+          echo "🧪 Running wheel tests..."
+
+          echo "Testing basic import..."
+          python -c "import cvd_risk_calculator; print('✅ Package imported successfully')"
+
+          echo "Testing SCORE2 import..."
+          python -c "from cvd_risk_calculator.models.score2 import SCORE2; print('✅ SCORE2 imported successfully')"
+
           echo "Testing basic functionality..."
           python -c "
-          try:
-              from cvd_risk_calculator.models.score2 import SCORE2
-              from cvd_risk_calculator.core.validation import PatientData
-              patient = PatientData(age=55, sex='male', systolic_bp=140.0, total_cholesterol=6.0, hdl_cholesterol=1.2, smoking=True, region='moderate')
-              model = SCORE2()
-              result = model.calculate(patient)
-              risk_score = result.risk_score
-              print(f'✓ Risk calculation: {risk_score:.1f}%')
-              if not (0 <= risk_score <= 100):
-                  print(f'❌ Invalid risk score: {risk_score}')
-                  exit(1)
-              print('✓ All basic tests passed')
-          except Exception as e:
-              print(f'❌ Test failed with error: {e}')
-              exit(1)
+          from cvd_risk_calculator.models.score2 import SCORE2
+          from cvd_risk_calculator.core.validation import PatientData
+
+          # Test data
+          patient = PatientData(
+              age=55, sex='male', systolic_bp=140.0,
+              total_cholesterol=6.0, hdl_cholesterol=1.2,
+              smoking=True, region='moderate'
+          )
+
+          # Calculate risk
+          model = SCORE2()
+          result = model.calculate(patient)
+
+          # Validate result
+          risk_score = result.risk_score
+          print(f'✅ Risk calculation successful: {risk_score:.1f}%')
+
+          if not (0 <= risk_score <= 100):
+              print(f'❌ Invalid risk score: {risk_score}')
+              import sys
+              sys.exit(1)
+
+          print('✅ All tests passed successfully!')
           "
+
+          echo "🎉 All wheel tests completed successfully!"
