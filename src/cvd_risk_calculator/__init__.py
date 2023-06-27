@@ -12,9 +12,27 @@ __license__ = "MIT"
 from cvd_risk_calculator.core.base import RiskModel
 from cvd_risk_calculator.core.validation import PatientData, RiskResult
 
+# Import all models for easy access
+from cvd_risk_calculator.models import (
+    SCORE2,
+    Framingham,
+    ASCVD,
+    QRISK3,
+    SMART2,
+    WHO,
+    Globorisk,
+)
+
 __all__ = [
     "RiskModel",
     "PatientData",
     "RiskResult",
+    "SCORE2",
+    "Framingham",
+    "ASCVD",
+    "QRISK3",
+    "SMART2",
+    "WHO",
+    "Globorisk",
 ]
 

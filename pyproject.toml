@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "cvd-risk"
-version = "0.1.1"
+version = "0.1.2"
 description = "Production-grade Python package for cardiovascular disease risk calculation"
 readme = "README.md"
 requires-python = ">=3.10"
@@ -80,7 +80,7 @@ Changelog = "https://github.com/m-aljasem/PyCVDRisk/blob/main/CHANGELOG.md"
 Author = "https://aljasem.eu.org"
 
 [tool.hatch.build.targets.wheel]
-packages = ["src/cvd_risk_calculator"]
+packages = ["src/cvd_risk_calculator", "src/cvd_risk"]
 
 [tool.black]
 line-length = 100
