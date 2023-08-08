@@ -80,7 +80,7 @@ Changelog = "https://github.com/m-aljasem/PyCVDRisk/blob/main/CHANGELOG.md"
 Author = "https://aljasem.eu.org"
 
 [tool.hatch.build.targets.wheel]
-packages = ["src/cvd_risk_calculator", "src/cvd_risk"]
+packages = ["src/cvd_risk"]
 
 [tool.black]
 line-length = 100
@@ -141,7 +141,7 @@ python_functions = ["test_*"]
 addopts = [
     "--strict-markers",
     "--strict-config",
-    "--cov=src/cvd_risk_calculator",
+    "--cov=src/cvd_risk",
     "--cov-report=term-missing",
     "--cov-report=html",
     "--cov-report=xml",
@@ -155,7 +155,7 @@ markers = [
 ]
 
 [tool.coverage.run]
-source = ["src/cvd_risk_calculator"]
+source = ["src/cvd_risk"]
 omit = [
     "*/tests/*",
     "*/__pycache__/*",

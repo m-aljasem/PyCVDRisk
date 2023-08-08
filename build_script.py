@@ -46,7 +46,7 @@ def build():
 
 def test():
     """Run tests with coverage."""
-    run_command("pytest --cov=src/cvd_risk_calculator --cov-report=term-missing", "Running tests")
+    run_command("pytest --cov=src/cvd_risk --cov-report=term-missing", "Running tests")
 
 
 def lint():

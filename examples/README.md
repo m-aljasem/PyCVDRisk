@@ -90,7 +90,7 @@ The fake patient data is designed to be realistic and representative:
 
 ```python
 import pandas as pd
-from cvd_risk_calculator.models.score2 import SCORE2
+from cvd_risk.models.score2 import SCORE2
 
 # Load fake patient data
 df = pd.read_csv('data/fake_patients.csv')
@@ -141,7 +141,7 @@ python examples/validate_edge_cases.py
 # Test specific model
 python -c "
 import pandas as pd
-from cvd_risk_calculator.models.score2 import SCORE2
+from cvd_risk.models.score2 import SCORE2
 
 df = pd.read_csv('data/edge_case_patients.csv')
 model = SCORE2()

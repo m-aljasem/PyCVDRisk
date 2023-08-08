@@ -32,7 +32,7 @@ By participating in this project, you agree to maintain a respectful and inclusi
 
 ## Adding New Risk Models
 
-1. Create a new file in `src/cvd_risk_calculator/models/`
+1. Create a new file in `src/cvd_risk/models/`
 2. Inherit from `RiskModel` base class
 3. Implement `calculate()` method
 4. Add comprehensive tests in `tests/unit/test_<model_name>.py`

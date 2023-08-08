@@ -469,7 +469,7 @@ def main():
     print("⚠️  WARNING: These edge cases may cause models to behave unexpectedly.")
     print("   Use for testing error handling and boundary conditions only.")
     print("\nExample usage with SCORE2 model:")
-    print("  from cvd_risk_calculator.models.score2 import SCORE2")
+    print("  from cvd_risk.models.score2 import SCORE2")
     print("  model = SCORE2()")
     print("  try:")
     print("      results = model.calculate_batch(df)")

@@ -10,8 +10,8 @@ Calculate risk for a single patient:
 
 .. code-block:: python
 
-   from cvd_risk_calculator.models.score2 import SCORE2
-   from cvd_risk_calculator.core.validation import PatientData
+   from cvd_risk.models.score2 import SCORE2
+   from cvd_risk.core.validation import PatientData
 
    # Create patient data
    patient = PatientData(
@@ -39,7 +39,7 @@ Process multiple patients using pandas:
 .. code-block:: python
 
    import pandas as pd
-   from cvd_risk_calculator.models.score2 import SCORE2
+   from cvd_risk.models.score2 import SCORE2
 
    # Create DataFrame with patient data
    df = pd.DataFrame({

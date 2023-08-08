@@ -2,7 +2,7 @@
 
 import pytest
 
-from cvd_risk_calculator.core.validation import PatientData
+from cvd_risk.core.validation import PatientData
 
 
 class TestPatientData:

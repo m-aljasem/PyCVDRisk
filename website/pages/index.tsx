@@ -292,8 +292,8 @@ export default function Home() {
 pip install cvd-risk
 
 # Usage
-from cvd_risk_calculator.models import SCORE2
-from cvd_risk_calculator.core.validation import PatientData
+from cvd_risk.models import SCORE2
+from cvd_risk.core.validation import PatientData
 
 patient = PatientData(
     age=55, sex="male",

@@ -22,7 +22,7 @@ test:
 	pytest
 
 test-cov:
-	pytest --cov=src/cvd_risk_calculator --cov-report=term-missing --cov-report=html
+	pytest --cov=src/cvd_risk --cov-report=term-missing --cov-report=html
 
 lint:
 	ruff check src tests

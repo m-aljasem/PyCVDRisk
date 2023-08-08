@@ -3,7 +3,7 @@
 import pandas as pd
 import pytest
 
-from cvd_risk_calculator.core.validation import validate_dataframe
+from cvd_risk.core.validation import validate_dataframe
 
 
 class TestValidateDataframe:

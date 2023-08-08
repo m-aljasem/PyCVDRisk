@@ -21,7 +21,7 @@ import pandas as pd
 # Add src to path for imports
 sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
 
-from cvd_risk_calculator.models.score2 import SCORE2
+from cvd_risk.models.score2 import SCORE2
 
 
 def load_fake_patients(csv_path: str = "data/fake_patients.csv") -> pd.DataFrame:

@@ -208,7 +208,7 @@ def main():
 
     print("\nGeneration complete! Use this data to validate your CVD risk models.")
     print("Example usage with SCORE2 model:")
-    print("  from cvd_risk_calculator.models.score2 import SCORE2")
+    print("  from cvd_risk.models.score2 import SCORE2")
     print("  model = SCORE2()")
     print("  results = model.calculate_batch(df)")
 
