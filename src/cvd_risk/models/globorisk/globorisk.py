@@ -130,42 +130,6 @@ class Globorisk(RiskModel):
         # Determine if country is LAC
         self.is_lac = self.country in LAC_COUNTRIES if self.country else False
 
-    def __init__(
-        self,
-        country: Optional[str] = None,
-        year: Optional[int] = None,
-        version: Literal["lab", "office", "fatal"] = "lab"
-    ) -> None:
-        """Initialize Globorisk model.
-
-        Parameters
-        ----------
-        country : str, optional
-            ISO 3-letter country code. If None, uses global coefficients.
-        year : int, optional
-            Baseline year (2000-2020). If None, uses latest available year.
-        version : str
-            Model version: 'lab', 'office', or 'fatal'.
-        """
-        super().__init__()
-        self.country = country.upper() if country else None
-        self.year = year
-        self.version = version
-
-        # Validate inputs
-        if _GLOBORISK_DATA is None:
-            raise RuntimeError("Globorisk data not loaded. Check data file.")
-
-        if self.country and self.country not in _GLOBORISK_DATA['cvd_rates']:
-            logger.warning(f"Country {self.country} not found in database. Using global coefficients.")
-            self.country = None
-
-        if self.year and (self.year < 2000 or self.year > 2020):
-            raise ValueError(f"Year {self.year} outside valid range [2000, 2020]")
-
-        # Determine if country is LAC
-        self.is_lac = self.country in LAC_COUNTRIES if self.country else False
-
     @classmethod
     def get_available_countries(cls) -> list:
         """Get list of available country codes."""
@@ -244,7 +208,7 @@ class Globorisk(RiskModel):
         rf_means = self._get_risk_factor_means(patient)
 
         # Prepare patient data
-        sex_numeric = 0 if patient.sex == "female" else 1
+        sex_numeric = 0 if patient.sex == "male" else 1
         age_centered = patient.age
         agec = int(np.clip((age_centered - 40) // 5, 0, 6))  # age category 0-6
 
@@ -350,7 +314,7 @@ class Globorisk(RiskModel):
 
     def _get_baseline_rates(self, patient: PatientData) -> dict:
         """Get baseline CVD rates for the current country/year."""
-        sex_numeric = 0 if patient.sex == "female" else 1
+        sex_numeric = 0 if patient.sex == "male" else 1
         age = patient.age
 
         # Determine CVD type based on version
@@ -392,7 +356,7 @@ class Globorisk(RiskModel):
 
     def _get_risk_factor_means(self, patient: PatientData) -> dict:
         """Get risk factor means for centering."""
-        sex_numeric = 0 if patient.sex == "female" else 1
+        sex_numeric = 0 if patient.sex == "male" else 1
         agec = int(np.clip((patient.age - 40) // 5, 0, 6)) + 1  # age category 1-7 in data
 
         country = self.country or "USA"  # Default fallback
