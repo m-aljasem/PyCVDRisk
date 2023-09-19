@@ -28,8 +28,10 @@ class PatientData(BaseModel):
         HDL cholesterol in mmol/L. Typical range: 0.5-3.5 mmol/L.
     smoking : bool
         Current smoking status.
-    region : Optional[Literal["low", "moderate", "high", "very_high"]]
-        CVD risk region (for SCORE2). Options: low, moderate, high, very_high.
+    region : Optional[str]
+        CVD risk region (for SCORE2: low, moderate, high, very_high;
+        for WHO: AFR_D, AFR_E, AMR_A, AMR_B, AMR_D, EMR_B, EMR_D,
+        EUR_A, EUR_B, EUR_C, SEAR_B, SEAR_D, WPR_A, WPR_B).
         None if not applicable to the model.
     diabetes : Optional[bool]
         Diabetes status. None if not applicable to the model.
@@ -65,8 +67,8 @@ class PatientData(BaseModel):
         ..., ge=0.3, le=5.0, description="HDL cholesterol in mmol/L"
     )
     smoking: bool = Field(..., description="Current smoking status")
-    region: Optional[Literal["low", "moderate", "high", "very_high"]] = Field(
-        default=None, description="CVD risk region for SCORE2"
+    region: Optional[str] = Field(
+        default=None, description="CVD risk region (SCORE2: low, moderate, high, very_high; WHO: epidemiological subregions)"
     )
     diabetes: Optional[bool] = Field(default=None, description="Diabetes status")
     ethnicity: Optional[
