@@ -1,16 +1,15 @@
 """
-Framingham Risk Score for cardiovascular disease risk prediction.
+Framingham 2008 ASCVD Risk Score (Lipid Model).
 
-The Framingham Risk Score estimates 10-year risk of cardiovascular disease
-based on traditional risk factors.
+This implements the D'Agostino et al. 2008 Framingham Risk Score for
+10-year risk of cardiovascular disease using traditional risk factors
+including lipid measurements.
 
 Reference:
-    Wilson PW, D'Agostino RB, Levy D, Belanger AM, Silbershatz H, Kannel WB.
-    Prediction of coronary heart disease using risk factor categories.
-    Circulation. 1998;97(18):1837-47.
-
-Note: This is a simplified implementation. The full Framingham model
-includes multiple variants (hard CHD, all CVD, etc.).
+    D'agostino, R.B., Vasan, R.S., Pencina, M.J., Wolf, P.A., Cobain, M.,
+    Massaro, J.M. and Kannel, W.B., 2008. General cardiovascular risk
+    profile for use in primary care: the Framingham Heart Study.
+    Circulation, 117(6), pp.743-753.
 """
 
 import logging
@@ -24,125 +23,73 @@ from cvd_risk.core.validation import PatientData, RiskResult
 
 logger = logging.getLogger(__name__)
 
-# Framingham point system coefficients (simplified version)
-_FRAMINGHAM_POINTS = {
+# Framingham 2008 Lipid Model coefficients from D'Agostino et al.
+# These match the R CVrisk package implementation
+_FRAMINGHAM_COEFFICIENTS = {
     "male": {
-        "age": {
-            "30-34": 0,
-            "35-39": 2,
-            "40-44": 5,
-            "45-49": 6,
-            "50-54": 8,
-            "55-59": 10,
-            "60-64": 11,
-            "65-69": 12,
-            "70-74": 14,
-        },
-        "total_cholesterol": {
-            "<160": [-2, 0, 1],
-            "160-199": [0, 1, 2],
-            "200-239": [1, 3, 4],
-            "240-279": [2, 4, 5],
-            "≥280": [3, 5, 6],
-        },
-        "hdl": {
-            "<35": 5,
-            "35-44": 2,
-            "45-49": 1,
-            "50-59": 0,
-            "≥60": -2,
-        },
-        "bp": {
-            "optimal": [0, 0],
-            "normal": [0, 1],
-            "high_normal": [1, 2],
-            "stage1": [2, 3],
-        },
+        "ln_age": 3.06117,
+        "ln_totchol": 1.12370,
+        "ln_hdl": -0.93263,
+        "ln_untreated_sbp": 1.93303,
+        "ln_treated_sbp": 1.99881,
+        "smoker": 0.65451,
+        "diabetes": 0.57367,
+        "group_mean": 23.9802,
+        "baseline_survival": 0.88936,
     },
     "female": {
-        "age": {
-            "30-34": 0,
-            "35-39": 2,
-            "40-44": 4,
-            "45-49": 5,
-            "50-54": 7,
-            "55-59": 8,
-            "60-64": 9,
-            "65-69": 10,
-            "70-74": 11,
-        },
-        "total_cholesterol": {
-            "<160": [-2, 0, 1],
-            "160-199": [0, 1, 3],
-            "200-239": [1, 3, 4],
-            "240-279": [3, 4, 5],
-            "≥280": [4, 6, 7],
-        },
-        "hdl": {
-            "<35": 7,
-            "35-44": 4,
-            "45-49": 2,
-            "50-59": 1,
-            "≥60": -1,
-        },
-        "bp": {
-            "optimal": [0, 0],
-            "normal": [0, 1],
-            "high_normal": [1, 2],
-            "stage1": [3, 4],
-        },
-    },
-}
-
-# 10-year risk by point totals and age
-_FRAMINGHAM_RISK_TABLE = {
-    "male": {
-        "30-39": [1, 1, 1, 1, 1, 2, 2, 3, 4, 5, 6, 8, 10, 12, 16, 20, 25],
-        "40-49": [2, 2, 3, 3, 4, 5, 6, 8, 10, 12, 15, 18, 22, 27, 33, 39, 47],
-        "50-59": [3, 4, 5, 6, 7, 8, 10, 12, 14, 16, 20, 24, 28, 33, 38, 45, 52],
-        "60-69": [5, 6, 7, 8, 9, 10, 11, 13, 15, 17, 19, 22, 25, 29, 33, 38, 42],
-        "70-79": [8, 9, 10, 11, 12, 13, 14, 15, 17, 18, 20, 22, 24, 27, 29, 32, 35],
-    },
-    "female": {
-        "30-39": [1, 1, 1, 1, 2, 2, 3, 4, 5, 6, 8, 11, 14, 17, 22, 27, 30],
-        "40-49": [2, 2, 2, 3, 4, 5, 6, 8, 10, 12, 15, 19, 23, 27, 32, 37, 40],
-        "50-59": [3, 4, 5, 6, 7, 8, 10, 12, 14, 17, 21, 25, 30, 35, 39, 43, 47],
-        "60-69": [5, 6, 7, 8, 9, 10, 12, 14, 16, 19, 22, 26, 30, 34, 38, 42, 47],
-        "70-79": [8, 9, 10, 11, 12, 13, 15, 16, 18, 20, 22, 24, 27, 29, 32, 34, 37],
+        "ln_age": 2.32888,
+        "ln_totchol": 1.20904,
+        "ln_hdl": -0.70833,
+        "ln_untreated_sbp": 2.76157,
+        "ln_treated_sbp": 2.82263,
+        "smoker": 0.52873,
+        "diabetes": 0.69154,
+        "group_mean": 26.1931,
+        "baseline_survival": 0.95012,
     },
 }
 
 
 class Framingham(RiskModel):
     """
-    Framingham Risk Score for 10-year CVD risk prediction.
+    Framingham 2008 ASCVD Risk Score (Lipid Model).
 
-    The Framingham Risk Score uses a point-based system to estimate
-    10-year risk of cardiovascular disease.
+    This model estimates 10-year risk of cardiovascular disease events
+    (coronary death, myocardial infarction, coronary insufficiency, angina,
+    ischemic stroke, hemorrhagic stroke, transient ischemic attack,
+    peripheral artery disease, or heart failure).
+
+    The model uses the D'Agostino et al. 2008 Framingham Risk Score with
+    lipid measurements (total cholesterol and HDL cholesterol).
 
     Parameters
     ----------
     age : int
-        Age in years (30-79 for optimal performance).
+        Age in years (30-79 for optimal performance, validated up to 74).
     sex : Literal["male", "female"]
         Biological sex.
     systolic_bp : float
         Systolic blood pressure in mmHg.
     total_cholesterol : float
-        Total cholesterol in mg/dL (convert from mmol/L by multiplying by 38.67).
+        Total cholesterol in mmol/L.
     hdl_cholesterol : float
-        HDL cholesterol in mg/dL.
+        HDL cholesterol in mmol/L.
     smoking : bool
         Current smoking status.
+    diabetes : bool
+        Diabetes mellitus status.
+    bp_treated : bool
+        Whether patient is on blood pressure medication.
 
     Returns
     -------
     RiskResult
         Contains:
-        - risk_score: 10-year CVD risk as percentage
-        - risk_category: Risk classification
+        - risk_score: 10-year CVD risk as percentage (0.0-100.0)
+        - risk_category: Risk classification ("low", "moderate", "high")
         - model_name: "Framingham"
-        - model_version: Algorithm version identifier
+        - model_version: "2008"
 
     Examples
     --------
@@ -153,9 +100,11 @@ class Framingham(RiskModel):
     ...     age=55,
     ...     sex="male",
     ...     systolic_bp=140.0,
-    ...     total_cholesterol=6.0,  # mmol/L
-    ...     hdl_cholesterol=1.2,  # mmol/L
+    ...     total_cholesterol=5.52,  # mmol/L (213 mg/dL)
+    ...     hdl_cholesterol=1.29,    # mmol/L (50 mg/dL)
     ...     smoking=True,
+    ...     diabetes=False,
+    ...     bp_treated=True,
     ... )
     >>> model = Framingham()
     >>> result = model.calculate(patient)
@@ -163,18 +112,19 @@ class Framingham(RiskModel):
 
     Notes
     -----
-    - Model uses point-based system
-    - Cholesterol values are converted from mmol/L to mg/dL internally
-    - Risk estimates are for 10-year period
-    - Model validated for ages 30-79 years
+    - Uses log-transformed continuous variables and coefficients
+    - Formula: 1 - S₀(t)^exp(ΣβᵢXᵢ - mean_risk_factors)
+    - Cholesterol values expected in mmol/L (conversion factor: mg/dL ÷ 38.67)
+    - Model validated for ages 30-74 years in original study
+    - Risk estimates are for general CVD events, not just coronary heart disease
     """
 
     model_name = "Framingham"
-    model_version = "1998"
+    model_version = "2008"
     supported_regions = None  # Framingham is US-based but widely used
 
     def __init__(self) -> None:
-        """Initialize Framingham model."""
+        """Initialize Framingham 2008 model."""
         super().__init__()
 
     def validate_input(self, patient: PatientData) -> None:
@@ -193,15 +143,32 @@ class Framingham(RiskModel):
         """
         super().validate_input(patient)
 
+        # Framingham-specific validations
         if patient.age < 30 or patient.age > 79:
             logger.warning(
                 f"Age {patient.age} outside optimal range [30, 79] years. "
                 "Results may have reduced accuracy."
             )
 
+        if patient.age > 74:
+            logger.warning(
+                f"Age {patient.age} > 74 years. Model was validated up to age 74. "
+                "Extrapolation may be unreliable."
+            )
+
+        # Check for required fields that Framingham needs
+        if patient.total_cholesterol <= 0:
+            raise ValueError("Total cholesterol must be > 0 mmol/L")
+
+        if patient.hdl_cholesterol <= 0:
+            raise ValueError("HDL cholesterol must be > 0 mmol/L")
+
+        if patient.systolic_bp <= 0:
+            raise ValueError("Systolic blood pressure must be > 0 mmHg")
+
     def calculate(self, patient: PatientData) -> RiskResult:
         """
-        Calculate 10-year CVD risk using Framingham Risk Score.
+        Calculate 10-year CVD risk using Framingham 2008 Risk Score.
 
         Parameters
         ----------
@@ -215,42 +182,56 @@ class Framingham(RiskModel):
         """
         self.validate_input(patient)
 
-        # Calculate points
-        points = 0
+        # Get coefficients for the patient's sex
+        coeffs = _FRAMINGHAM_COEFFICIENTS[patient.sex.lower()]
 
-        # Age points
-        age_group = self._get_age_group(patient.age)
-        if age_group:
-            points += _FRAMINGHAM_POINTS[patient.sex]["age"][age_group]
+        # Transform input variables to log scale
+        # Framingham coefficients are calibrated for mg/dL, so convert mmol/L to mg/dL first
+        ln_age = np.log(patient.age)
+        ln_total_chol = np.log(patient.total_cholesterol * 38.67)  # Convert mmol/L to mg/dL
+        ln_hdl = np.log(patient.hdl_cholesterol * 38.67)  # Convert mmol/L to mg/dL
 
-        # Cholesterol points (convert mmol/L to mg/dL)
-        chol_mgdl = patient.total_cholesterol * 38.67
-        hdl_mgdl = patient.hdl_cholesterol * 38.67
-        chol_points = self._get_cholesterol_points(patient.sex, chol_mgdl, age_group)
-        points += chol_points
+        # Handle blood pressure based on treatment status
+        if patient.antihypertensive:
+            ln_sbp = np.log(patient.systolic_bp) * coeffs["ln_treated_sbp"]
+        else:
+            ln_sbp = np.log(patient.systolic_bp) * coeffs["ln_untreated_sbp"]
 
-        # HDL points
-        hdl_points = self._get_hdl_points(patient.sex, hdl_mgdl)
-        points += hdl_points
+        # Calculate the linear predictor (sum of beta * x)
+        linear_predictor = (
+            coeffs["ln_age"] * ln_age
+            + coeffs["ln_totchol"] * ln_total_chol
+            + coeffs["ln_hdl"] * ln_hdl
+            + ln_sbp  # Already multiplied by appropriate coefficient above
+            + coeffs["smoker"] * int(patient.smoking)
+            + coeffs["diabetes"] * int(patient.diabetes)
+        )
 
-        # BP points
-        bp_points = self._get_bp_points(patient.sex, patient.systolic_bp)
-        points += bp_points
+        # Calculate risk using Framingham formula:
+        # Risk = 1 - S₀(t)^exp(ΣβᵢXᵢ - mean_risk_factors)
+        risk_exponent = linear_predictor - coeffs["group_mean"]
+        risk_score = 1.0 - (coeffs["baseline_survival"] ** np.exp(risk_exponent))
 
-        # Smoking points
-        if patient.smoking:
-            # Smoking adds points based on age group
-            if age_group in ["50-54", "55-59", "60-64", "65-69", "70-74"]:
-                points += 2
-
-        # Look up risk from table
-        risk_percentage = self._lookup_risk(patient.sex, patient.age, points)
+        # Convert to percentage and clip to valid range
+        risk_percentage = np.clip(risk_score * 100.0, 0.0, 100.0)
 
         # Categorize risk
         risk_category = self._categorize_risk(risk_percentage)
 
+        # Create metadata
         metadata = self._get_metadata()
-        metadata.update({"points": points, "age": patient.age, "sex": patient.sex})
+        metadata.update({
+            "linear_predictor": float(linear_predictor),
+            "risk_exponent": float(risk_exponent),
+            "transformed_vars": {
+                "ln_age": float(ln_age),
+                "ln_total_chol_mgdl": float(ln_total_chol),  # After mg/dL conversion
+                "ln_hdl_mgdl": float(ln_hdl),               # After mg/dL conversion
+                "ln_sbp": float(np.log(patient.systolic_bp)),
+                "antihypertensive": patient.antihypertensive,
+                "cholesterol_conversion_factor": 38.67,
+            },
+        })
 
         return RiskResult(
             risk_score=float(risk_percentage),
@@ -260,104 +241,116 @@ class Framingham(RiskModel):
             calculation_metadata=metadata,
         )
 
-    def _get_age_group(self, age: int) -> str:
-        """Get age group for point calculation."""
-        if age < 35:
-            return "30-34"
-        elif age < 40:
-            return "35-39"
-        elif age < 45:
-            return "40-44"
-        elif age < 50:
-            return "45-49"
-        elif age < 55:
-            return "50-54"
-        elif age < 60:
-            return "55-59"
-        elif age < 65:
-            return "60-64"
-        elif age < 70:
-            return "65-69"
-        elif age < 75:
-            return "70-74"
-        else:
-            return "70-74"  # Use max for older ages
+    def calculate_batch(self, df: pd.DataFrame) -> pd.DataFrame:
+        """
+        Vectorized calculation for high-throughput analysis.
+        Calculates Framingham risk for a dataframe of patients.
 
-    def _get_cholesterol_points(
-        self, sex: Literal["male", "female"], chol_mgdl: float, age_group: str | None
-    ) -> int:
-        """Get cholesterol points based on sex, cholesterol level, and age."""
-        if age_group is None:
-            return 0
+        Parameters
+        ----------
+        df : pd.DataFrame
+            DataFrame with required columns. Must contain:
+            - age: Age in years
+            - sex: Sex ('male'/'female')
+            - systolic_bp: Systolic BP in mmHg
+            - total_cholesterol: Total cholesterol in mmol/L
+            - hdl_cholesterol: HDL cholesterol in mmol/L
+            - smoking: Smoking status (bool/int)
+            - diabetes: Diabetes status (bool/int)
+            - bp_treated: BP treatment status (bool/int)
 
-        if chol_mgdl < 160:
-            chol_cat = "<160"
-        elif chol_mgdl < 200:
-            chol_cat = "160-199"
-        elif chol_mgdl < 240:
-            chol_cat = "200-239"
-        elif chol_mgdl < 280:
-            chol_cat = "240-279"
-        else:
-            chol_cat = "≥280"
+        Returns
+        -------
+        pd.DataFrame
+            Input dataframe with additional columns:
+            - risk_score: 10-year CVD risk percentage
+            - risk_category: Risk category
+            - model_name: "Framingham"
+            - model_version: "2008"
+        """
+        required_cols = [
+            "age", "sex", "systolic_bp", "total_cholesterol",
+            "hdl_cholesterol", "smoking", "diabetes", "antihypertensive"
+        ]
 
-        points_list = _FRAMINGHAM_POINTS[sex]["total_cholesterol"][chol_cat]
-        # Use middle value as approximation
-        return points_list[1] if isinstance(points_list, list) else points_list
+        if not set(required_cols).issubset(df.columns):
+            missing = set(required_cols) - set(df.columns)
+            raise ValueError(f"Missing required columns: {missing}")
 
-    def _get_hdl_points(self, sex: Literal["male", "female"], hdl_mgdl: float) -> int:
-        """Get HDL points."""
-        if hdl_mgdl < 35:
-            hdl_cat = "<35"
-        elif hdl_mgdl < 45:
-            hdl_cat = "35-44"
-        elif hdl_mgdl < 50:
-            hdl_cat = "45-49"
-        elif hdl_mgdl < 60:
-            hdl_cat = "50-59"
-        else:
-            hdl_cat = "≥60"
+        # Create copy and initialize result columns
+        results = df.copy()
+        results["risk_score"] = np.nan
+        results["risk_category"] = ""
+        results["model_name"] = self.model_name
+        results["model_version"] = self.model_version
 
-        return _FRAMINGHAM_POINTS[sex]["hdl"][hdl_cat]
+        # Process by sex for efficiency
+        for sex in ["male", "female"]:
+            sex_mask = results["sex"].str.lower() == sex
+            if not sex_mask.any():
+                continue
 
-    def _get_bp_points(self, sex: Literal["male", "female"], sbp: float) -> int:
-        """Get blood pressure points."""
-        if sbp < 120:
-            bp_cat = "optimal"
-        elif sbp < 130:
-            bp_cat = "normal"
-        elif sbp < 140:
-            bp_cat = "high_normal"
-        else:
-            bp_cat = "stage1"
+            coeffs = _FRAMINGHAM_COEFFICIENTS[sex]
+            sex_data = results[sex_mask].copy()
 
-        points_list = _FRAMINGHAM_POINTS[sex]["bp"][bp_cat]
-        # Use treated as default (second value)
-        return points_list[1] if isinstance(points_list, list) else points_list
+            # Vectorized transformations
+            # Framingham coefficients are calibrated for mg/dL, so convert mmol/L to mg/dL first
+            ln_age = np.log(sex_data["age"])
+            ln_total_chol = np.log(sex_data["total_cholesterol"] * 38.67)  # Convert mmol/L to mg/dL
+            ln_hdl = np.log(sex_data["hdl_cholesterol"] * 38.67)  # Convert mmol/L to mg/dL
+            ln_sbp = np.log(sex_data["systolic_bp"])
 
-    def _lookup_risk(self, sex: Literal["male", "female"], age: int, points: int) -> float:
-        """Look up 10-year risk from points and age."""
-        # Map age to age group for risk table
-        if age < 40:
-            age_range = "30-39"
-        elif age < 50:
-            age_range = "40-49"
-        elif age < 60:
-            age_range = "50-59"
-        elif age < 70:
-            age_range = "60-69"
-        else:
-            age_range = "70-79"
+            # Blood pressure coefficients based on treatment
+            bp_coeff = np.where(
+                sex_data["antihypertensive"],
+                coeffs["ln_treated_sbp"],
+                coeffs["ln_untreated_sbp"]
+            )
+            sbp_term = ln_sbp * bp_coeff
 
-        risk_table = _FRAMINGHAM_RISK_TABLE[sex][age_range]
+            # Linear predictor
+            linear_predictor = (
+                coeffs["ln_age"] * ln_age
+                + coeffs["ln_totchol"] * ln_total_chol
+                + coeffs["ln_hdl"] * ln_hdl
+                + sbp_term
+                + coeffs["smoker"] * sex_data["smoking"].astype(float)
+                + coeffs["diabetes"] * sex_data["diabetes"].astype(float)
+            )
 
-        # Clamp points to valid range
-        points = max(0, min(points, len(risk_table) - 1))
+            # Risk calculation
+            risk_exponent = linear_predictor - coeffs["group_mean"]
+            risk_score = 1.0 - (coeffs["baseline_survival"] ** np.exp(risk_exponent))
+            risk_percentage = np.clip(risk_score * 100.0, 0.0, 100.0)
 
-        return float(risk_table[points])
+            # Assign results
+            results.loc[sex_mask, "risk_score"] = risk_percentage
+
+        # Vectorized categorization
+        conditions = [
+            results["risk_score"] < 10,
+            (results["risk_score"] >= 10) & (results["risk_score"] < 20),
+            results["risk_score"] >= 20
+        ]
+        choices = ["low", "moderate", "high"]
+        results["risk_category"] = np.select(conditions, choices, default="unknown")
+
+        return results
 
     def _categorize_risk(self, risk_percentage: float) -> str:
-        """Categorize risk."""
+        """
+        Categorize risk based on ACC/AHA guidelines adapted for Framingham.
+
+        Parameters
+        ----------
+        risk_percentage : float
+            10-year risk percentage
+
+        Returns
+        -------
+        str
+            Risk category
+        """
         if risk_percentage < 10:
             return "low"
         elif risk_percentage < 20:

@@ -10,7 +10,7 @@ export default function Navigation() {
         <div className="flex justify-between h-16">
           <div className="flex items-center">
             <HeartIcon className="h-8 w-8 text-primary-600" />
-            <span className="ml-2 text-xl font-bold text-gray-900">CVD Risk Calculator</span>
+            <span className="ml-2 text-xl font-bold text-gray-900">PyCVDRisk</span>
           </div>
           
           {/* Desktop Navigation */}

@@ -43,6 +43,8 @@ class PatientData(BaseModel):
         Family history of CVD. None if not applicable.
     antihypertensive : Optional[bool]
         Use of antihypertensive medication. None if not applicable.
+    statin_use : Optional[bool]
+        Current statin use. None if not applicable.
 
     Examples
     --------
@@ -82,6 +84,155 @@ class PatientData(BaseModel):
     )
     antihypertensive: Optional[bool] = Field(
         default=None, description="Use of antihypertensive medication"
+    )
+    statin_use: Optional[bool] = Field(
+        default=None, description="Current statin use"
+    )
+    race: Optional[Literal["white", "black", "other"]] = Field(
+        default=None, description="Race for ASCVD model (white, black, other)"
+    )
+    # TIMI-specific fields
+    hypertension: Optional[bool] = Field(
+        default=None, description="Hypertension diagnosis"
+    )
+    hyperlipidaemia: Optional[bool] = Field(
+        default=None, description="Hyperlipidaemia diagnosis"
+    )
+    previous_pci: Optional[bool] = Field(
+        default=None, description="Previous percutaneous coronary intervention"
+    )
+    previous_cabg: Optional[bool] = Field(
+        default=None, description="Previous coronary artery bypass grafting"
+    )
+    aspirin_use: Optional[bool] = Field(
+        default=None, description="Current aspirin use"
+    )
+    angina_episodes_24h: Optional[int] = Field(
+        default=None, ge=0, le=50, description="Number of angina episodes in 24 hours"
+    )
+    ecg_st_depression: Optional[bool] = Field(
+        default=None, description="ECG ST segment depression"
+    )
+    troponin_level: Optional[float] = Field(
+        default=None, ge=0.0, le=1000.0, description="Troponin level (ng/mL)"
+    )
+    # QRISK3-specific fields
+    atrial_fibrillation: Optional[bool] = Field(
+        default=None, description="Atrial fibrillation (AF)"
+    )
+    atypical_antipsychotics: Optional[bool] = Field(
+        default=None, description="Use of atypical antipsychotics"
+    )
+    impotence2: Optional[bool] = Field(
+        default=None, description="Erectile dysfunction (males only)"
+    )
+    corticosteroids: Optional[bool] = Field(
+        default=None, description="Systemic corticosteroids"
+    )
+    migraine: Optional[bool] = Field(
+        default=None, description="Migraine"
+    )
+    rheumatoid_arthritis: Optional[bool] = Field(
+        default=None, description="Rheumatoid arthritis"
+    )
+    renal_disease: Optional[bool] = Field(
+        default=None, description="Severe renal disease"
+    )
+    systemic_lupus: Optional[bool] = Field(
+        default=None, description="Systemic lupus erythematosus"
+    )
+    severe_mental_illness: Optional[bool] = Field(
+        default=None, description="Severe mental illness"
+    )
+    treated_hypertension: Optional[bool] = Field(
+        default=None, description="Treated hypertension"
+    )
+    type1_diabetes: Optional[bool] = Field(
+        default=None, description="Type 1 diabetes"
+    )
+    type2_diabetes: Optional[bool] = Field(
+        default=None, description="Type 2 diabetes"
+    )
+    diabetes_age: Optional[int] = Field(
+        default=None, ge=1, le=120, description="Age when diabetes was diagnosed (years)"
+    )
+    hba1c: Optional[float] = Field(
+        default=None, ge=10.0, le=200.0, description="Glycated hemoglobin (HbA1c) in mmol/mol"
+    )
+    egfr: Optional[float] = Field(
+        default=None, ge=5.0, le=200.0, description="Estimated glomerular filtration rate (eGFR) in ml/min/1.73m²"
+    )
+    acr: Optional[float] = Field(
+        default=None, ge=0.1, le=2000.0, description="Albumin-to-creatinine ratio (ACR) in mg/g"
+    )
+    proteinuria_trace: Optional[Literal["negative", "trace", "1+", "2+", "3+", "4+"]] = Field(
+        default=None, description="Proteinuria dipstick test result"
+    )
+    sbps5: Optional[float] = Field(
+        default=None, ge=0.0, le=50.0, description="Systolic BP variability (SD of 5 readings)"
+    )
+    smoking_category: Optional[Literal[1, 2, 3, 4]] = Field(
+        default=None, description="Smoking category: 1=non-smoker, 2=ex-smoker, 3=light, 4=heavy"
+    )
+    townsend_deprivation: Optional[float] = Field(
+        default=None, ge=-10.0, le=10.0, description="Townsend deprivation score"
+    )
+    # EDACS-specific fields
+    sweating: Optional[bool] = Field(
+        default=None, description="Sweating (diaphoresis) symptom"
+    )
+    pain_radiation: Optional[bool] = Field(
+        default=None, description="Pain radiates to arm, shoulder, neck, or jaw"
+    )
+    pleuritic: Optional[bool] = Field(
+        default=None, description="Pain occurred or worsened with inspiration"
+    )
+    palpation: Optional[bool] = Field(
+        default=None, description="Pain is reproduced by palpation"
+    )
+    ecg_st_depression: Optional[bool] = Field(
+        default=None, description="ECG shows ST depression"
+    )
+    ecg_twi: Optional[bool] = Field(
+        default=None, description="ECG shows T-wave inversion"
+    )
+    presentation_hstni: Optional[float] = Field(
+        default=None, ge=0.0, le=50000.0, description="Presentation high-sensitivity troponin I level"
+    )
+    second_hstni: Optional[float] = Field(
+        default=None, ge=0.0, le=50000.0, description="Second high-sensitivity troponin I level"
+    )
+    hypertension: Optional[bool] = Field(
+        default=None, description="Hypertension diagnosis"
+    )
+    hyperlipidaemia: Optional[bool] = Field(
+        default=None, description="Hyperlipidaemia diagnosis"
+    )
+    # HEART-specific fields
+    typical_symptoms_num: Optional[int] = Field(
+        default=None, ge=0, le=6, description="Number of typical cardiac symptoms (0-6)"
+    )
+    ecg_normal: Optional[bool] = Field(
+        default=None, description="ECG normal (no significant abnormalities)"
+    )
+    abn_repolarisation: Optional[bool] = Field(
+        default=None, description="Abnormal repolarization on ECG"
+    )
+    atherosclerotic_disease: Optional[bool] = Field(
+        default=None, description="Known atherosclerotic disease (CAD, MI, stroke, PAD, etc.)"
+    )
+    # GRACE2-specific fields
+    heart_rate: Optional[float] = Field(
+        default=None, ge=30.0, le=300.0, description="Heart rate in beats per minute"
+    )
+    creatinine: Optional[float] = Field(
+        default=None, ge=0.1, le=20.0, description="Creatinine level in mg/dL"
+    )
+    killip_class: Optional[Literal[1, 2, 3, 4]] = Field(
+        default=None, description="Killip classification: 1=No CHF, 2=Rales/JVD, 3=Pulmonary edema, 4=Cardiogenic shock"
+    )
+    cardiac_arrest: Optional[bool] = Field(
+        default=None, description="Cardiac arrest at presentation"
     )
 
     @field_validator("total_cholesterol")

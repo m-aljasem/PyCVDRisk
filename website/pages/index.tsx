@@ -12,46 +12,85 @@ import {
   ArrowRightIcon,
 } from '@heroicons/react/24/outline'
 
-const models = [
-  { name: 'SCORE2', year: '2021', region: 'Europe', color: 'bg-blue-500' },
-  { name: 'ASCVD', year: '2013', region: 'US', color: 'bg-green-500' },
-  { name: 'QRISK3', year: '2017', region: 'UK', color: 'bg-purple-500' },
-  { name: 'Framingham', year: '1998', region: 'US', color: 'bg-orange-500' },
-  { name: 'SMART2', year: '2014', region: 'Europe', color: 'bg-red-500' },
-  { name: 'WHO', year: '2019', region: 'Global', color: 'bg-indigo-500' },
-  { name: 'Globorisk', year: '2017', region: 'Global', color: 'bg-teal-500' },
+const modelCategories = [
+  {
+    category: 'Primary Prevention',
+    models: [
+      { name: 'SCORE2', year: '2021', region: 'Europe', color: 'bg-blue-500' },
+      { name: 'ASCVD', year: '2013', region: 'US', color: 'bg-green-500' },
+      { name: 'Framingham', year: '1998', region: 'US', color: 'bg-orange-500' },
+      { name: 'QRISK2', year: '2011', region: 'UK', color: 'bg-purple-500' },
+      { name: 'QRISK3', year: '2017', region: 'UK', color: 'bg-indigo-500' },
+      { name: 'SCORE', year: '2003', region: 'Europe', color: 'bg-teal-500' },
+      { name: 'WHO CVD', year: '2019', region: 'Global', color: 'bg-cyan-500' },
+      { name: 'Globorisk', year: '2017', region: 'Global', color: 'bg-emerald-500' },
+      { name: 'PREVENT', year: '2024', region: 'US', color: 'bg-lime-500' },
+    ]
+  },
+  {
+    category: 'Secondary Prevention',
+    models: [
+      { name: 'SMART2', year: '2014', region: 'Europe', color: 'bg-red-500' },
+      { name: 'SMART-REACH', year: '2019', region: 'Europe', color: 'bg-pink-500' },
+    ]
+  },
+  {
+    category: 'Special Populations',
+    models: [
+      { name: 'DIAL2', year: '2023', region: 'Europe', color: 'bg-amber-500' },
+      { name: 'SCORE2-DM', year: '2023', region: 'Europe', color: 'bg-yellow-500' },
+      { name: 'SCORE2-CKD', year: '2023', region: 'Europe', color: 'bg-orange-500' },
+      { name: 'SCORE2-OP', year: '2023', region: 'Europe', color: 'bg-stone-500' },
+    ]
+  },
+  {
+    category: 'Regional & Acute Care',
+    models: [
+      { name: 'ASSIGN', year: '2009', region: 'Scotland', color: 'bg-violet-500' },
+      { name: 'SCORE2-Asia CKD', year: '2022', region: 'Asia', color: 'bg-fuchsia-500' },
+      { name: 'GRACE2', year: '2003', region: 'Global', color: 'bg-rose-500' },
+      { name: 'TIMI', year: '2000', region: 'Global', color: 'bg-sky-500' },
+    ]
+  },
+  {
+    category: 'Emergency Medicine',
+    models: [
+      { name: 'EDACS', year: '2014', region: 'Global', color: 'bg-slate-500' },
+      { name: 'HEART', year: '2013', region: 'Global', color: 'bg-zinc-500' },
+    ]
+  }
 ]
 
 const features = [
   {
     icon: ChartBarIcon,
-    title: '7 Risk Models',
-    description: 'Comprehensive collection of major CVD risk prediction algorithms',
+    title: '22 Risk Models',
+    description: 'Complete coverage from primary prevention to emergency medicine',
   },
   {
     icon: BeakerIcon,
     title: 'Production Ready',
-    description: 'Type-safe, validated, and thoroughly tested (96% coverage)',
+    description: 'Type-safe, validated, and thoroughly tested for clinical use',
   },
   {
     icon: BookOpenIcon,
-    title: 'Academic Quality',
-    description: 'Validated against published results, suitable for research',
+    title: 'Research Quality',
+    description: 'Based on peer-reviewed algorithms and clinical guidelines',
   },
   {
     icon: CodeBracketIcon,
     title: 'Python 3.10+',
-    description: 'Modern Python with full type hints and comprehensive docs',
+    description: 'Modern Python with full type hints and comprehensive documentation',
   },
   {
     icon: HeartIcon,
     title: 'High Performance',
-    description: 'Optimized for processing 1M+ patient records efficiently',
+    description: 'Optimized for processing large patient cohorts efficiently',
   },
   {
     icon: ShieldCheckIcon,
-    title: 'Validated Inputs',
-    description: 'Pydantic validation ensures data integrity and type safety',
+    title: 'Data Validation',
+    description: 'Built-in validation ensures reliable risk calculations',
   },
 ]
 
@@ -80,8 +119,8 @@ export default function Home() {
   return (
     <>
       <Head>
-        <title>CVD Risk Calculator - Production-Grade Cardiovascular Risk Assessment</title>
-        <meta name="description" content="Professional Python package for cardiovascular disease risk calculation with 7 validated risk models. Suitable for research and clinical use." />
+        <title>PyCVDRisk - Comprehensive Cardiovascular Risk Assessment</title>
+        <meta name="description" content="Professional Python package for cardiovascular disease risk calculation with 22 validated risk models. Complete coverage from primary prevention to emergency medicine." />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
@@ -95,11 +134,11 @@ export default function Home() {
           <div className="text-center max-w-4xl mx-auto">
             <h1 className="text-5xl md:text-6xl font-bold mb-6">
               Cardiovascular Risk Assessment
-              <span className="block mt-2">Made Simple</span>
+              <span className="block mt-2 text-3xl md:text-4xl font-normal">for Python</span>
             </h1>
             <p className="text-xl md:text-2xl mb-8 text-blue-100">
-              Production-grade Python package for epidemiological research, clinical decision support,
-              and public health analysis
+              A comprehensive Python package with 22 validated cardiovascular risk models
+              for research and clinical applications
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <a href="#demo" className="btn-primary text-lg">
@@ -110,7 +149,7 @@ export default function Home() {
                 href="https://github.com/m-aljasem/PyCVDRisk"
                 className="bg-white text-primary-600 px-6 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors duration-200"
               >
-                View on GitHub
+                View Source Code
               </a>
             </div>
           </div>
@@ -121,9 +160,9 @@ export default function Home() {
       <section id="features" className="bg-gray-50">
         <div className="section-container">
           <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-gray-900 mb-4">Why CVD Risk Calculator?</h2>
+            <h2 className="text-4xl font-bold text-gray-900 mb-4">Key Features</h2>
             <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-              A comprehensive, validated, and production-ready solution for cardiovascular risk assessment
+              Reliable cardiovascular risk assessment for research and clinical practice
             </p>
           </div>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -142,21 +181,28 @@ export default function Home() {
       <section id="models" className="bg-white">
         <div className="section-container">
           <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-gray-900 mb-4">7 Validated Risk Models</h2>
+            <h2 className="text-4xl font-bold text-gray-900 mb-4">22 Cardiovascular Risk Models</h2>
             <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-              Choose the right model for your population and use case
+              Comprehensive coverage for different clinical scenarios and populations
             </p>
           </div>
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {models.map((model, idx) => (
-              <div key={idx} className="card group hover:scale-105 transition-transform">
-                <div className={`${model.color} w-16 h-16 rounded-lg mb-4 flex items-center justify-center text-white font-bold text-xl`}>
-                  {model.name.charAt(0)}
-                </div>
-                <h3 className="text-xl font-bold mb-2">{model.name}</h3>
-                <div className="text-sm text-gray-600 space-y-1">
-                  <p>Year: {model.year}</p>
-                  <p>Region: {model.region}</p>
+          <div className="space-y-12">
+            {modelCategories.map((category, catIdx) => (
+              <div key={catIdx}>
+                <h3 className="text-2xl font-bold text-gray-900 mb-6 text-center">{category.category}</h3>
+                <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                  {category.models.map((model, idx) => (
+                    <div key={idx} className="card group hover:scale-105 transition-transform">
+                      <div className={`${model.color} w-16 h-16 rounded-lg mb-4 flex items-center justify-center text-white font-bold text-xl`}>
+                        {model.name.charAt(0)}
+                      </div>
+                      <h4 className="text-lg font-bold mb-2">{model.name}</h4>
+                      <div className="text-sm text-gray-600 space-y-1">
+                        <p>Year: {model.year}</p>
+                        <p>Region: {model.region}</p>
+                      </div>
+                    </div>
+                  ))}
                 </div>
               </div>
             ))}
@@ -168,9 +214,9 @@ export default function Home() {
       <section id="demo" className="bg-gradient-to-br from-gray-50 to-gray-100">
         <div className="section-container">
           <div className="text-center mb-12">
-            <h2 className="text-4xl font-bold text-gray-900 mb-4">Interactive Demo</h2>
+            <h2 className="text-4xl font-bold text-gray-900 mb-4">Try It Out</h2>
             <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-              Try the risk calculator with sample patient data
+              Calculate cardiovascular risk using the SCORE2 model
             </p>
           </div>
           
@@ -285,30 +331,35 @@ export default function Home() {
         <div className="section-container">
           <div className="max-w-4xl mx-auto text-center">
             <RocketLaunchIcon className="h-16 w-16 text-primary-600 mx-auto mb-6" />
-            <h2 className="text-4xl font-bold text-gray-900 mb-6">Get Started in Minutes</h2>
+            <h2 className="text-4xl font-bold text-gray-900 mb-6">Quick Start</h2>
             <div className="bg-gray-900 rounded-xl p-8 text-left">
               <pre className="text-green-400 overflow-x-auto">
-                <code>{`# Install
+                <code>{`# Install the package
 pip install cvd-risk
 
-# Usage
-from cvd_risk.models import SCORE2
-from cvd_risk.core.validation import PatientData
+# Import and use
+from cvd_risk import SCORE2, PatientData
 
+# Create patient data
 patient = PatientData(
-    age=55, sex="male",
-    systolic_bp=140.0,
+    age=55,
+    sex="male",
+    systolic_bp=140,
     total_cholesterol=6.0,
     hdl_cholesterol=1.2,
     smoking=True,
     region="moderate"
 )
 
+# Calculate risk
 model = SCORE2()
 result = model.calculate(patient)
-print(f"Risk: {result.risk_score:.1f}%")`}</code>
+print(f"10-year risk: {result.risk_score:.1f}%")`}</code>
               </pre>
             </div>
+            <p className="mt-6 text-gray-600">
+              All 22 models are available through simple imports. Check the documentation for model-specific requirements.
+            </p>
           </div>
         </div>
       </section>
@@ -318,31 +369,31 @@ print(f"Risk: {result.risk_score:.1f}%")`}</code>
         <div className="section-container">
           <div className="grid md:grid-cols-3 gap-8">
             <div>
-              <h3 className="text-xl font-bold mb-4">CVD Risk Calculator</h3>
+              <h3 className="text-xl font-bold mb-4">PyCVDRisk</h3>
               <p className="text-gray-400">
-                Production-grade cardiovascular risk assessment for research and clinical use.
+                Python package for cardiovascular disease risk assessment with 22 validated models.
               </p>
             </div>
             <div>
               <h3 className="text-xl font-bold mb-4">Resources</h3>
               <ul className="space-y-2 text-gray-400">
-                <li><a href="#" className="hover:text-white">Documentation</a></li>
-                <li><a href="#" className="hover:text-white">API Reference</a></li>
-                <li><a href="#" className="hover:text-white">Examples</a></li>
-                <li><a href="#" className="hover:text-white">Contributing</a></li>
+                <li><a href="https://pycvdrisk.aljasem.eu.org/docs" className="hover:text-white">Documentation</a></li>
+                <li><a href="https://pycvdrisk.aljasem.eu.org/docs/api" className="hover:text-white">API Reference</a></li>
+                <li><a href="https://github.com/m-aljasem/PyCVDRisk/tree/main/examples" className="hover:text-white">Examples</a></li>
+                <li><a href="https://github.com/m-aljasem/PyCVDRisk/blob/main/CONTRIBUTING.md" className="hover:text-white">Contributing</a></li>
               </ul>
             </div>
             <div>
-              <h3 className="text-xl font-bold mb-4">Connect</h3>
+              <h3 className="text-xl font-bold mb-4">Links</h3>
               <ul className="space-y-2 text-gray-400">
-                <li><a href="https://github.com/m-aljasem/PyCVDRisk" className="hover:text-white">GitHub</a></li>
-                <li><a href="#" className="hover:text-white">PyPI</a></li>
-                <li><a href="#" className="hover:text-white">Issues</a></li>
+                <li><a href="https://github.com/m-aljasem/PyCVDRisk" className="hover:text-white">GitHub Repository</a></li>
+                <li><a href="https://pypi.org/project/cvd-risk/" className="hover:text-white">PyPI Package</a></li>
+                <li><a href="https://github.com/m-aljasem/PyCVDRisk/issues" className="hover:text-white">Report Issues</a></li>
               </ul>
             </div>
           </div>
           <div className="mt-8 pt-8 border-t border-gray-800 text-center text-gray-400">
-            <p>&copy; 2024 CVD Risk Calculator. MIT License.</p>
+            <p>&copy; 2025 PyCVDRisk. MIT License.</p>
           </div>
         </div>
       </footer>

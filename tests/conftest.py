@@ -60,3 +60,26 @@ def sample_patient_low_risk() -> PatientData:
         region="low",
     )
 
+
+@pytest.fixture
+def sample_heart_patient() -> PatientData:
+    """Create a sample HEART patient for testing."""
+    return PatientData(
+        age=55,
+        sex="male",
+        systolic_bp=140.0,
+        total_cholesterol=6.0,
+        hdl_cholesterol=1.2,
+        smoking=True,
+        diabetes=True,
+        hypertension=True,
+        hyperlipidaemia=False,
+        family_history=True,
+        atherosclerotic_disease=False,
+        typical_symptoms_num=3,
+        ecg_normal=False,
+        abn_repolarisation=True,
+        ecg_st_depression=False,
+        presentation_hstni=50.0,
+    )
+
