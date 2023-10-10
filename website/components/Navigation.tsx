@@ -17,7 +17,6 @@ export default function Navigation() {
           <div className="hidden md:flex items-center space-x-8">
             <a href="#features" className="text-gray-600 hover:text-gray-900 transition-colors">Features</a>
             <a href="#models" className="text-gray-600 hover:text-gray-900 transition-colors">Models</a>
-            <a href="#demo" className="text-gray-600 hover:text-gray-900 transition-colors">Demo</a>
             <a href="https://github.com/m-aljasem/PyCVDRisk" className="btn-secondary">
               GitHub
             </a>
@@ -54,13 +53,6 @@ export default function Navigation() {
               onClick={() => setMobileMenuOpen(false)}
             >
               Models
-            </a>
-            <a
-              href="#demo"
-              className="block px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg"
-              onClick={() => setMobileMenuOpen(false)}
-            >
-              Demo
             </a>
             <a
               href="https://github.com/m-aljasem/PyCVDRisk"
