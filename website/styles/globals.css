@@ -35,10 +35,131 @@
 }
 
 .gradient-bg {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #B24592 0%, #F15F79 100%);
+  animation: gradientShift 3s ease-in-out infinite;
 }
 
 .medical-gradient {
-  background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
+  background: linear-gradient(
+    120deg,
+    #0ea5e9,
+    #6366f1,
+    #a855f7,
+    #f472b6,
+    #0ea5e9
+  );
+  background-size: 400% 400%;
+  animation: medicalGradientFlow 24s ease infinite;
+}
+
+/* Syntax Highlighting for Python Code - VS Code Dark Theme */
+.syntax-highlight {
+  background: radial-gradient(circle at 20% 20%, #1f2937, #0f172a) !important;
+  color: #e5e7eb !important;
+  font-family: 'Fira Code', 'SF Mono', 'Monaco', 'Inconsolata', 'Fira Mono', 'Droid Sans Mono', 'Source Code Pro', monospace !important;
+  font-size: 14px !important;
+  line-height: 1.6 !important;
+  padding: 1rem !important;
+  border-radius: 8px !important;
+  overflow-x: auto !important;
+  white-space: pre !important;
+  text-align: left !important;
+  border: 1px solid #1f2937 !important;
+  box-shadow: 0 10px 30px -12px rgba(0, 0, 0, 0.8) !important;
+}
+
+/* VS Code Dark Theme Colors */
+.syntax-highlight .keyword {
+  color: #a78bfa !important;
+  font-weight: 600 !important;
+}
+
+.syntax-highlight .string {
+  color: #34d399 !important;
+}
+
+.syntax-highlight .comment {
+  color: #9ca3af !important;
+  font-style: italic !important;
+}
+
+.syntax-highlight .function {
+  color: #38bdf8 !important;
+  font-weight: 600 !important;
+}
+
+.syntax-highlight .class {
+  color: #f472b6 !important;
+  font-weight: 600 !important;
+}
+
+.syntax-highlight .number {
+  color: #f97316 !important;
+  font-weight: 600 !important;
+}
+
+.syntax-highlight .operator,
+.syntax-highlight .equals {
+  color: #e5e7eb !important;
+}
+
+.syntax-highlight .parameter {
+  color: #c7d2fe !important;
+}
+
+.syntax-highlight .bracket {
+  color: #facc15 !important;
+  font-weight: 700 !important;
+}
+
+.syntax-highlight .dot {
+  color: #e5e7eb !important;
+}
+
+/* Built-in types */
+.syntax-highlight .type {
+  color: #4ec9b0 !important;
+}
+
+/* Special syntax elements */
+.syntax-highlight .decorator {
+  color: #c586c0 !important;
+}
+
+.syntax-highlight .import {
+  color: #c586c0 !important;
+}
+
+@keyframes gradientShift {
+  0% {
+    background: linear-gradient(135deg, #B24592 0%, #F15F79 100%);
+  }
+  20% {
+    background: linear-gradient(135deg, #B24592 0%, #F15F79 100%);
+  }
+  40% {
+    background: linear-gradient(135deg, #C0392B 0%, #E74C3C 100%);
+  }
+  60% {
+    background: linear-gradient(135deg, #9B59B6 0%, #8E44AD 100%);
+  }
+  80% {
+    background: linear-gradient(135deg, #F39C12 0%, #E67E22 100%);
+  }
+  100% {
+    background: linear-gradient(135deg, #B24592 0%, #F15F79 100%);
+  }
+}
+
+@keyframes medicalGradientFlow {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
 }
 
