@@ -1,8 +1,10 @@
+<div align="center"> <img src="./docs/pycvdrisk-github-header-banner.png"> </div>
+
 # PyCVDRisk 🫀
 
 <div align="center">
 
-### World's Most Comprehensive CVD Risk Calculator
+### World's Most Comprehensive CVD Risk Models Package
 
 *The world's most comprehensive CVD risk assessment library with global coverage*
 
