@@ -32,7 +32,7 @@ jobs:
         run: |
           # Test that the package can be installed
           pip install --force-reinstall dist/*.whl
-          python -c "import cvd_risk_calculator; print('Package installed successfully')"
+          python -c "import cvd_risk; print('Package installed successfully')"
 
       - name: Publish to PyPI
         uses: pypa/gh-action-pypi-publish@release/v1
