@@ -18,7 +18,8 @@ import numpy as np
 import pandas as pd
 
 from cvd_risk.core.base import RiskModel
-from cvd_risk.core.validation import PatientData, RiskResult
+from cvd_risk.core.data_classes import PROCAMPatientData
+from cvd_risk.core.validation import RiskResult
 
 logger = logging.getLogger(__name__)
 
@@ -51,7 +52,7 @@ _PROCAM_COEFFICIENTS_WOMEN = {
 }
 
 
-class PROCAM(RiskModel):
+class PROCAM(RiskModel[PROCAMPatientData]):
     """
     PROCAM Risk Score for coronary heart disease prediction.
 
@@ -92,14 +93,15 @@ class PROCAM(RiskModel):
     """
 
     model_name = "PROCAM"
-    model_version = "2002"
-    supported_regions = ["Europe", "Germany"]  # Primarily validated in German population
+    model_version = "2007"
+    supported_regions = None  # Germany/Europe
+    patient_data_class = PROCAMPatientData
 
     def __init__(self) -> None:
         """Initialize PROCAM model."""
         super().__init__()
 
-    def validate_input(self, patient: PatientData) -> None:
+    def validate_input(self, patient: PROCAMPatientData) -> None:
         """
         Validate patient input for PROCAM requirements.
 
@@ -135,7 +137,7 @@ class PROCAM(RiskModel):
                 "HDL, and triglycerides if available."
             )
 
-    def _calculate_ldl(self, patient: PatientData) -> float:
+    def _calculate_ldl(self, patient: PROCAMPatientData) -> float:
         """Estimate LDL cholesterol using Friedewald equation if not provided."""
         if patient.ldl_cholesterol is not None:
             return patient.ldl_cholesterol
@@ -147,7 +149,7 @@ class PROCAM(RiskModel):
         # If triglycerides >= 4.5 or not available, use simpler estimate
         return patient.total_cholesterol - patient.hdl_cholesterol - 0.8
 
-    def calculate(self, patient: PatientData) -> RiskResult:
+    def calculate(self, patient: PROCAMPatientData) -> RiskResult:
         """
         Calculate 10-year CHD risk using PROCAM score.
 

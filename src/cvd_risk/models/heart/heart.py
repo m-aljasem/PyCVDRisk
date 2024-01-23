@@ -24,7 +24,8 @@ import numpy as np
 import pandas as pd
 
 from cvd_risk.core.base import RiskModel
-from cvd_risk.core.validation import PatientData, RiskResult
+from cvd_risk.core.data_classes import HEARTPatientData
+from cvd_risk.core.validation import RiskResult
 
 logger = logging.getLogger(__name__)
 
@@ -43,7 +44,7 @@ _HEART_THRESHOLDS = {
 }
 
 
-class HEART(RiskModel):
+class HEART(RiskModel[HEARTPatientData]):
     """
     HEART (History, ECG, Age, Risk factors, Troponin) risk score.
 
@@ -62,12 +63,13 @@ class HEART(RiskModel):
 
     model_name = "HEART"
     model_version = "2013"
-    supported_regions = None  # HEART is not region-specific
+    supported_regions = None  # Clinical score, not region-specific
+    patient_data_class = HEARTPatientData
 
     def __init__(self) -> None:
         super().__init__()
 
-    def validate_input(self, patient: PatientData) -> None:
+    def validate_input(self, patient: HEARTPatientData) -> None:
         """Validate patient data for HEART score calculation."""
         super().validate_input(patient)
 
@@ -177,7 +179,7 @@ class HEART(RiskModel):
         else:  # 65+
             return 2
 
-    def _calculate_risk_factors_score(self, patient: PatientData) -> int:
+    def _calculate_risk_factors_score(self, patient: HEARTPatientData) -> int:
         """
         Calculate Risk factors component score.
 
@@ -267,7 +269,7 @@ class HEART(RiskModel):
         else:  # 3x threshold or higher
             return 2
 
-    def calculate(self, patient: PatientData) -> RiskResult:
+    def calculate(self, patient: HEARTPatientData) -> RiskResult:
         """
         Calculate HEART score for a single patient.
 

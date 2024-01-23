@@ -18,7 +18,8 @@ import numpy as np
 import pandas as pd
 
 from cvd_risk.core.base import RiskModel
-from cvd_risk.core.validation import PatientData, RiskResult
+from cvd_risk.core.data_classes import WHOPatientData
+from cvd_risk.core.validation import RiskResult
 
 logger = logging.getLogger(__name__)
 
@@ -39,7 +40,7 @@ _WHO_RISK_SCORE_MAPPING = {
 }
 
 
-class WHO(RiskModel):
+class WHO(RiskModel[WHOPatientData]):
     """
     WHO CVD Risk Chart for cardiovascular disease risk prediction.
 
@@ -100,6 +101,7 @@ class WHO(RiskModel):
     model_name = "WHO"
     model_version = "2019"
     supported_regions = _WHO_SUPPORTED_REGIONS
+    patient_data_class = WHOPatientData
 
     def __init__(self) -> None:
         """Initialize WHO model."""
@@ -155,7 +157,7 @@ class WHO(RiskModel):
         else:  # sbp >= 180
             return 180
 
-    def _create_lookup_value(self, patient: PatientData) -> str:
+    def _create_lookup_value(self, patient: WHOPatientData) -> str:
         """Create lookup value by concatenating discretized parameters."""
         age_disc = self._discretize_age(patient.age)
         gdr = 1 if patient.sex == "male" else 0  # 1=male, 0=female
@@ -167,7 +169,7 @@ class WHO(RiskModel):
         # Format: age + gdr + dm + smk + sbp + chl (all as single digits)
         return f"{age_disc}{gdr}{dm}{smk}{sbp_disc}{chl_disc}"
 
-    def validate_input(self, patient: PatientData) -> None:
+    def validate_input(self, patient: WHOPatientData) -> None:
         """Validate patient input for WHO model."""
         super().validate_input(patient)
 
@@ -192,7 +194,7 @@ class WHO(RiskModel):
                 "Ensure all values are in units of mmol/L."
             )
 
-    def calculate(self, patient: PatientData) -> RiskResult:
+    def calculate(self, patient: WHOPatientData) -> RiskResult:
         """Calculate 10-year CVD risk using WHO lookup table."""
         self.validate_input(patient)
 

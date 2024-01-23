@@ -22,6 +22,9 @@ _CARDIA_COEFFICIENTS = {
 }
 
 class CARDIA(RiskModel):
+    unvalidated = (
+        "no CARDIA 10-year CVD risk equation has been published; use Prevent for young adults"
+    )
     model_name = "CARDIA"
     model_version = "2015"
     supported_regions = ["US", "Young Adults"]

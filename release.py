@@ -24,7 +24,7 @@ def get_current_version():
     pyproject_path = Path("pyproject.toml")
     content = pyproject_path.read_text()
 
-    match = re.search(r'version = "([^"]+)"', content)
+    match = re.search(r'^version = "([^"]+)"', content, flags=re.MULTILINE)
     if not match:
         raise ValueError("Could not find version in pyproject.toml")
 
@@ -37,7 +37,8 @@ def update_version(new_version):
     content = pyproject_path.read_text()
 
     # Update version
-    content = re.sub(r'version = "[^"]*"', f'version = "{new_version}"', content)
+    # Anchor to the [project] line only; ruff/mypy also have `*version = "..."` keys
+    content = re.sub(r'^version = "[^"]*"', f'version = "{new_version}"', content, count=1, flags=re.MULTILINE)
 
     pyproject_path.write_text(content)
     print(f"✅ Updated version to {new_version} in pyproject.toml")

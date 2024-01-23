@@ -13,13 +13,14 @@ Reference:
 """
 
 import logging
-from typing import Literal, Optional, Tuple, Union
 
 import numpy as np
 import pandas as pd
 
 from cvd_risk.core.base import RiskModel
-from cvd_risk.core.validation import PatientData, RiskResult
+from cvd_risk.models.score2.score2 import categorize_esc2021
+from cvd_risk.core.data_classes import SCORE2CKDPatientData
+from cvd_risk.core.validation import RiskResult
 
 logger = logging.getLogger(__name__)
 
@@ -185,7 +186,7 @@ _CKD_CONSTANTS = {
 }
 
 
-class SCORE2CKD(RiskModel):
+class SCORE2CKD(RiskModel[SCORE2CKDPatientData]):
     """
     SCORE2-CKD cardiovascular risk prediction model for patients with chronic kidney disease.
 
@@ -196,11 +197,12 @@ class SCORE2CKD(RiskModel):
     model_name = "SCORE2-CKD"
     model_version = "2023"
     supported_regions = ["low", "moderate", "high", "very_high"]
+    patient_data_class = SCORE2CKDPatientData
 
     def __init__(self) -> None:
         super().__init__()
 
-    def validate_input(self, patient: PatientData) -> None:
+    def validate_input(self, patient: SCORE2CKDPatientData) -> None:
         super().validate_input(patient)
         if patient.age < 40:
             logger.warning(
@@ -227,40 +229,7 @@ class SCORE2CKD(RiskModel):
         elif patient.proteinuria_trace is not None and patient.proteinuria_trace not in _CKD_CONSTANTS["dipstick_coefficients"]:
             raise ValueError(f"Proteinuria trace must be one of {list(_CKD_CONSTANTS['dipstick_coefficients'].keys())}")
 
-    def _get_risk_thresholds(self, age: Union[int, float, np.ndarray]) -> Tuple:
-        """
-        Get clinical risk thresholds based on Age (ESC 2021 Guidelines).
-
-        Returns
-        -------
-        Tuple (low_cutoff, high_cutoff)
-            < low_cutoff: Low-to-Moderate Risk
-            >= high_cutoff: High Risk
-            >= high_cutoff * 2 (approx): Very High Risk
-        """
-        # Vectorized logic for NumPy arrays
-        if isinstance(age, (np.ndarray, pd.Series)):
-            low_cut = np.select(
-                [age < 50, (age >= 50) & (age < 70), age >= 70],
-                [2.5, 5.0, 7.5],
-                default=5.0
-            )
-            high_cut = np.select(
-                [age < 50, (age >= 50) & (age < 70), age >= 70],
-                [7.5, 10.0, 15.0],
-                default=10.0
-            )
-            return low_cut, high_cut
-
-        # Scalar logic for single patient
-        if age < 50:
-            return 2.5, 7.5
-        elif age < 70:
-            return 5.0, 10.0
-        else:
-            return 7.5, 15.0
-
-    def _calculate_expected_egfr(self, patient: PatientData) -> float:
+    def _calculate_expected_egfr(self, patient: SCORE2CKDPatientData) -> float:
         """Calculate expected eGFR based on patient characteristics."""
         sex = patient.sex.lower()
         cage = (patient.age - 60) / 5
@@ -282,7 +251,7 @@ class SCORE2CKD(RiskModel):
         )
         return exeGFR
 
-    def _calculate_expected_acr(self, patient: PatientData, exeGFR: float) -> float:
+    def _calculate_expected_acr(self, patient: SCORE2CKDPatientData, exeGFR: float) -> float:
         """Calculate expected ACR (albumin-to-creatinine ratio)."""
         sex = patient.sex.lower()
         cage = (patient.age - 60) / 5
@@ -307,7 +276,7 @@ class SCORE2CKD(RiskModel):
         )
         return exACR
 
-    def _apply_egfr_adjustment(self, base_risk: float, patient: PatientData, exeGFR: float) -> float:
+    def _apply_egfr_adjustment(self, base_risk: float, patient: SCORE2CKDPatientData, exeGFR: float) -> float:
         """Apply eGFR-based risk adjustment."""
         if patient.age < 70:
             const = _CKD_CONSTANTS["egfr_adjust_age_under_70"]
@@ -331,7 +300,7 @@ class SCORE2CKD(RiskModel):
         adjusted_risk = 1 - (1 - base_risk) ** np.exp(adjustment)
         return adjusted_risk
 
-    def _apply_acr_adjustment(self, egfr_adjusted_risk: float, patient: PatientData, exACR: float) -> float:
+    def _apply_acr_adjustment(self, egfr_adjusted_risk: float, patient: SCORE2CKDPatientData, exACR: float) -> float:
         """Apply ACR-based risk adjustment."""
         if patient.acr is None:
             return egfr_adjusted_risk
@@ -342,7 +311,7 @@ class SCORE2CKD(RiskModel):
         acr_adjusted_risk = 1 - (1 - egfr_adjusted_risk) ** np.exp(adjustment)
         return acr_adjusted_risk
 
-    def _apply_dipstick_adjustment(self, egfr_adjusted_risk: float, patient: PatientData) -> float:
+    def _apply_dipstick_adjustment(self, egfr_adjusted_risk: float, patient: SCORE2CKDPatientData) -> float:
         """Apply proteinuria dipstick-based risk adjustment."""
         if patient.proteinuria_trace is None:
             return egfr_adjusted_risk
@@ -351,7 +320,7 @@ class SCORE2CKD(RiskModel):
         dipstick_adjusted_risk = 1 - (1 - egfr_adjusted_risk) ** np.exp(beta)
         return dipstick_adjusted_risk
 
-    def calculate(self, patient: PatientData) -> RiskResult:
+    def calculate(self, patient: SCORE2CKDPatientData) -> RiskResult:
         self.validate_input(patient)
 
         # Determine which SCORE2 version to use
@@ -435,29 +404,12 @@ class SCORE2CKD(RiskModel):
 
         risk_percent = np.clip(ckd_risk * 100.0, 0.0, 100.0)
 
-        # Categorize
-        low_cut, high_cut = self._get_risk_thresholds(patient.age)
-
-        if risk_percent < low_cut:
-            cat = "low-to-moderate"
-        elif risk_percent < high_cut:
-            cat = "high"
-        else:
-            cat = "very_high"
-
-        # Simplified bucketing
-        if risk_percent < low_cut:
-            final_cat = "low"
-        elif risk_percent < high_cut:
-            final_cat = "moderate"
-        elif risk_percent < (high_cut * 2):
-            final_cat = "high"
-        else:
-            final_cat = "very_high"
+        # Categorize (ESC 2021 age-specific thresholds)
+        cat = str(categorize_esc2021(risk_percent, patient.age))
 
         return RiskResult(
             risk_score=float(risk_percent),
-            risk_category=final_cat,
+            risk_category=cat,
             model_name=self.model_name,
             model_version=self.model_version,
             calculation_metadata={
@@ -672,17 +624,7 @@ class SCORE2CKD(RiskModel):
                     results.loc[data.index, "exeGFR"] = exeGFR
 
         # Vectorized categorization
-        low_cuts, high_cuts = self._get_risk_thresholds(results["age"].values)
-
-        conditions = [
-            results["risk_score"] < low_cuts,
-            (results["risk_score"] >= low_cuts) & (results["risk_score"] < high_cuts),
-            (results["risk_score"] >= high_cuts) & (results["risk_score"] < (high_cuts * 2)),
-            results["risk_score"] >= (high_cuts * 2)
-        ]
-        choices = ["low", "moderate", "high", "very_high"]
-
-        results["risk_category"] = np.select(conditions, choices, default="unknown")
+        results["risk_category"] = categorize_esc2021(results["risk_score"], results["age"])
 
         return results
 

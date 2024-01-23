@@ -21,7 +21,8 @@ import numpy as np
 import pandas as pd
 
 from cvd_risk.core.base import RiskModel
-from cvd_risk.core.validation import PatientData, RiskResult
+from cvd_risk.core.data_classes import SMARTREACHPatientData
+from cvd_risk.core.validation import RiskResult
 
 logger = logging.getLogger(__name__)
 
@@ -87,7 +88,7 @@ _REGIONAL_OFFSETS = {
 }
 
 
-class SMART_REACH(RiskModel):
+class SMART_REACH(RiskModel[SMARTREACHPatientData]):
     """
     SMART-REACH Model for recurrent cardiovascular events.
     
@@ -96,13 +97,14 @@ class SMART_REACH(RiskModel):
     """
 
     model_name = "SMART-REACH"
-    model_version = "2018"
-    supported_regions = ["western_europe", "north_america"]
+    model_version = "2020"
+    supported_regions = list(_REGIONAL_OFFSETS.keys())
+    patient_data_class = SMARTREACHPatientData
 
     def __init__(self) -> None:
         super().__init__()
 
-    def validate_input(self, patient: PatientData) -> None:
+    def validate_input(self, patient: SMARTREACHPatientData) -> None:
         """
         Validates patient data against model constraints.
         """
@@ -133,7 +135,7 @@ class SMART_REACH(RiskModel):
 
     def _get_linear_predictors(
         self, 
-        patient: PatientData, 
+        patient: SMARTREACHPatientData, 
         current_sim_age: float
     ) -> Tuple[float, float]:
         """
@@ -201,7 +203,7 @@ class SMART_REACH(RiskModel):
 
         return lp_a, lp_b
 
-    def calculate(self, patient: PatientData) -> RiskResult:
+    def calculate(self, patient: SMARTREACHPatientData) -> RiskResult:
         """
         Calculates 10-year risk of recurrent cardiovascular events.
         """

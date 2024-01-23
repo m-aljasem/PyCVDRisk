@@ -18,7 +18,8 @@ import numpy as np
 import pandas as pd
 
 from cvd_risk.core.base import RiskModel
-from cvd_risk.core.validation import PatientData, RiskResult
+from cvd_risk.core.data_classes import GRACE2PatientData
+from cvd_risk.core.validation import RiskResult
 
 logger = logging.getLogger(__name__)
 
@@ -30,7 +31,7 @@ _GRACE2_CATEGORIES = {
 }
 
 
-class GRACE2(RiskModel):
+class GRACE2(RiskModel[GRACE2PatientData]):
     """
     GRACE2 risk prediction model for acute coronary syndromes.
 
@@ -40,14 +41,15 @@ class GRACE2(RiskModel):
     Valid for patients presenting with acute coronary syndromes (ACS).
     """
 
-    model_name = "GRACE2"
-    model_version = "2.0"
+    model_name = "GRACE 2.0"
+    model_version = "2014"
     supported_regions = None  # GRACE2 is not region-specific
+    patient_data_class = GRACE2PatientData
 
     def __init__(self) -> None:
         super().__init__()
 
-    def validate_input(self, patient: PatientData) -> None:
+    def validate_input(self, patient: GRACE2PatientData) -> None:
         super().validate_input(patient)
 
         # GRACE2-specific validation
@@ -194,7 +196,7 @@ class GRACE2(RiskModel):
         """Calculate points for ST segment depression."""
         return 17 if ecg_st_depression else 0
 
-    def calculate(self, patient: PatientData) -> RiskResult:
+    def calculate(self, patient: GRACE2PatientData) -> RiskResult:
         self.validate_input(patient)
 
         # Calculate points for each component

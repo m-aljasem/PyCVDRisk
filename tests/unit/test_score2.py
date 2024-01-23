@@ -24,8 +24,8 @@ class TestSCORE2:
         assert result.model_name == "SCORE2"
         assert result.model_version == "2021"
         assert 0.0 <= result.risk_score <= 100.0
-        assert result.risk_category in ["low", "moderate", "high", "very_high"]
-        assert "region" in result.calculation_metadata
+        assert result.risk_category in ["low_to_moderate", "high", "very_high"]
+        assert "raw_uncalibrated" in result.calculation_metadata
 
     def test_calculate_requires_region(self) -> None:
         """Test that calculation requires region."""
@@ -40,7 +40,7 @@ class TestSCORE2:
             region=None,
         )
 
-        with pytest.raises(ValueError, match="SCORE2 requires region"):
+        with pytest.raises(ValueError, match="Region must be one of"):
             model.calculate(patient)
 
     def test_invalid_region(self) -> None:
@@ -68,7 +68,7 @@ class TestSCORE2:
             smoking=True,
             region=None,
         )
-        with pytest.raises(ValueError, match="SCORE2 requires region"):
+        with pytest.raises(ValueError, match="Region must be one of"):
             model.validate_input(patient_no_region)
 
     def test_risk_categorization_low(self, sample_patient_low_risk: PatientData) -> None:
@@ -77,7 +77,7 @@ class TestSCORE2:
         result = model.calculate(sample_patient_low_risk)
 
         # Low-risk patient should typically have low or moderate risk
-        assert result.risk_category in ["low", "moderate"]
+        assert result.risk_category == "low_to_moderate"
 
     def test_risk_categorization_high(self, sample_patient_high_risk: PatientData) -> None:
         """Test risk categorization for high-risk patient."""
@@ -197,3 +197,28 @@ class TestSCORE2:
         result = model.calculate(patient)
         assert result.risk_score >= 0.0
 
+
+
+def test_matches_r_riskscorescvd_reference() -> None:
+    """SCORE2 matches the R RiskScorescvd package on 4,232 synthetic patients."""
+    from pathlib import Path
+
+    import pandas as pd
+
+    path = Path(__file__).parents[2] / "validation/score2/score2_r_results.csv"
+    if not path.exists():
+        pytest.skip("validation data not available")
+    ref = pd.read_csv(path)
+    df = ref[["age", "sex", "systolic_bp", "total_cholesterol", "hdl_cholesterol", "smoking", "region"]].copy()
+    df["smoking"] = df["smoking"].astype(str).str.upper().eq("TRUE")
+    out = SCORE2().calculate_batch(df)
+
+    # R reports risk rounded to 1 decimal
+    assert (out["risk_score"].round(1) - ref["r_risk_score"]).abs().max() == 0
+    # R categorises the rounded value, so only rows whose risk rounds onto a cutoff may differ
+    r_cat = ref["r_risk_category"].map(
+        {"Low risk": "low_to_moderate", "Moderate risk": "high", "High risk": "very_high"}
+    )
+    differ = out["risk_category"] != r_cat
+    cutoffs = {2.5, 5.0, 7.5, 10.0, 15.0}
+    assert ref.loc[differ, "r_risk_score"].isin(cutoffs).all()

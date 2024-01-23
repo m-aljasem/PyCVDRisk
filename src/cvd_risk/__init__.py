@@ -5,7 +5,12 @@ This package provides implementations of major cardiovascular disease risk
 prediction models for epidemiological research and clinical decision support.
 """
 
-__version__ = "0.1.0"
+from importlib.metadata import PackageNotFoundError, version
+
+try:
+    __version__ = version("cvd-risk")
+except PackageNotFoundError:  # running from a source tree without install
+    __version__ = "0+unknown"
 __author__ = "CVD Risk Calculator Contributors"
 __license__ = "MIT"
 

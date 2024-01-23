@@ -49,6 +49,9 @@ _ARIC_COEFFICIENTS = {
 class ARIC_Update(RiskModel):
     """ARIC Update model for CVD risk prediction."""
 
+    unvalidated = (
+        "the ARIC CHD equation (Chambless et al., J Clin Epidemiol 2003) is paywalled and its coefficients have not been verified from the source"
+    )
     model_name = "ARIC_Update"
     model_version = "2015"
     supported_regions = ["US", "Global"]

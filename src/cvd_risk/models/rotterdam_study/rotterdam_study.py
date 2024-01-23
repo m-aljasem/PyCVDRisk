@@ -22,6 +22,9 @@ _ROTTERDAM_COEFFICIENTS = {
 }
 
 class RotterdamStudy(RiskModel):
+    unvalidated = (
+        "no Rotterdam Study CVD risk equation has been published; use SCORE2OP for older adults"
+    )
     model_name = "RotterdamStudy"
     model_version = "2012"
     supported_regions = ["Netherlands", "Europe", "Elderly"]

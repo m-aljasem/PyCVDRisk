@@ -44,6 +44,9 @@ _CAMBRIDGE_COEFFICIENTS_WOMEN = {
 
 
 class Cambridge(RiskModel):
+    unvalidated = (
+        "the Cambridge Risk Score predicts undiagnosed diabetes, not cardiovascular disease"
+    )
     model_name = "Cambridge"
     model_version = "2004"
     supported_regions = ["UK", "Europe"]

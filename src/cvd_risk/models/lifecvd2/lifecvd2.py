@@ -19,7 +19,8 @@ import numpy as np
 import pandas as pd
 
 from cvd_risk.core.base import RiskModel
-from cvd_risk.core.validation import PatientData, RiskResult
+from cvd_risk.core.data_classes import LifeCVD2PatientData
+from cvd_risk.core.validation import RiskResult
 
 logger = logging.getLogger(__name__)
 
@@ -127,7 +128,7 @@ _LIFECVD2_BASELINE_SURVIVAL = {
 }
 
 
-class LifeCVD2(RiskModel):
+class LifeCVD2(RiskModel[LifeCVD2PatientData]):
     """
     LifeCVD2 lifetime cardiovascular risk prediction model.
 
@@ -139,9 +140,10 @@ class LifeCVD2(RiskModel):
     smoking status, and diabetes status.
     """
 
-    model_name = "LifeCVD2"
-    model_version = "1.0"
+    model_name = "Life-CVD2"
+    model_version = "2021"
     supported_regions = ["low", "moderate", "high", "very_high"]
+    patient_data_class = LifeCVD2PatientData
 
     def __init__(self, clinical_practice_mode: bool = True) -> None:
         """
@@ -172,7 +174,7 @@ class LifeCVD2(RiskModel):
         # No interpolation is required, so we simply return the dictionary.
         return _LIFECVD2_BASELINE_SURVIVAL
 
-    def validate_input(self, patient: PatientData) -> None:
+    def validate_input(self, patient: LifeCVD2PatientData) -> None:
         """
         Validate patient data for LifeCVD2 calculation.
 
@@ -453,7 +455,7 @@ class LifeCVD2(RiskModel):
 
         return ten_year_cat, lifetime_cat
 
-    def calculate(self, patient: PatientData) -> RiskResult:
+    def calculate(self, patient: LifeCVD2PatientData) -> RiskResult:
         """
         Calculate lifetime CVD risk for a single patient.
 

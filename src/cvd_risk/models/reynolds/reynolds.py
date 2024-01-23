@@ -22,7 +22,8 @@ import numpy as np
 import pandas as pd
 
 from cvd_risk.core.base import RiskModel
-from cvd_risk.core.validation import PatientData, RiskResult
+from cvd_risk.core.data_classes import ReynoldsPatientData
+from cvd_risk.core.validation import RiskResult
 
 logger = logging.getLogger(__name__)
 
@@ -51,7 +52,7 @@ _REYNOLDS_COEFFICIENTS_MEN = {
 }
 
 
-class Reynolds(RiskModel):
+class Reynolds(RiskModel[ReynoldsPatientData]):
     """
     Reynolds Risk Score for cardiovascular disease prediction.
 
@@ -89,14 +90,15 @@ class Reynolds(RiskModel):
     """
 
     model_name = "Reynolds"
-    model_version = "2007/2008"
-    supported_regions = ["US"]  # Developed and validated in US populations
+    model_version = "2007"
+    supported_regions = None  # US-based
+    patient_data_class = ReynoldsPatientData
 
     def __init__(self) -> None:
         """Initialize Reynolds Risk Score model."""
         super().__init__()
 
-    def validate_input(self, patient: PatientData) -> None:
+    def validate_input(self, patient: ReynoldsPatientData) -> None:
         """
         Validate patient input for Reynolds Risk Score requirements.
 
@@ -136,7 +138,7 @@ class Reynolds(RiskModel):
         """Get appropriate coefficients based on sex."""
         return _REYNOLDS_COEFFICIENTS_MEN if sex == "male" else _REYNOLDS_COEFFICIENTS_WOMEN
 
-    def calculate(self, patient: PatientData) -> RiskResult:
+    def calculate(self, patient: ReynoldsPatientData) -> RiskResult:
         """
         Calculate 10-year CVD risk using Reynolds Risk Score.
 

@@ -1,7 +1,0 @@
-"""
-Centralized constants for PyCVDRisk.
-"""
-
-# Unit Conversions
-CONVERSION_MMOL_TO_MGDL_CHOLESTEROL = 38.67
-CONVERSION_MMOL_TO_MGDL_CREATININE = 88.4

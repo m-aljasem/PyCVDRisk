@@ -46,6 +46,9 @@ _MALAYSIAN_COEFFICIENTS_WOMEN = {
 
 
 class Malaysian_CVD(RiskModel):
+    unvalidated = (
+        "Malaysian studies (Selvarajah 2014) validated Framingham/SCORE; no Malaysian equation was published"
+    )
     model_name = "Malaysian_CVD"
     model_version = "2017"
     supported_regions = ["Malaysia", "Asia"]

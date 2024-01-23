@@ -22,7 +22,8 @@ import numpy as np
 import pandas as pd
 
 from cvd_risk.core.base import RiskModel
-from cvd_risk.core.validation import PatientData, RiskResult
+from cvd_risk.core.data_classes import GloboriskPatientData
+from cvd_risk.core.validation import RiskResult
 
 logger = logging.getLogger(__name__)
 
@@ -49,7 +50,7 @@ except Exception as e:
     _GLOBORISK_DATA = None
 
 
-class Globorisk(RiskModel):
+class Globorisk(RiskModel[GloboriskPatientData]):
     """
     Globorisk cardiovascular disease risk prediction model.
 
@@ -86,9 +87,11 @@ class Globorisk(RiskModel):
     """
 
     model_name = "Globorisk"
-    model_version = "2017"
+    model_version = "2015"
     supported_versions = ["lab", "office", "fatal"]
-    supported_regions = "182 countries (ISO 3-letter codes)"
+    supported_regions = None
+    patient_data_class = GloboriskPatientData
+    # supported_regions = "182 countries (ISO 3-letter codes)"  # Annotated in docstring
 
     def __init__(
         self,
@@ -142,7 +145,7 @@ class Globorisk(RiskModel):
         """Get list of Latin America and Caribbean countries."""
         return sorted(LAC_COUNTRIES)
 
-    def validate_input(self, patient: PatientData) -> None:
+    def validate_input(self, patient: GloboriskPatientData) -> None:
         """Validate patient input for Globorisk."""
         super().validate_input(patient)
 
@@ -175,7 +178,7 @@ class Globorisk(RiskModel):
         if patient.diabetes is None:
             logger.debug("Diabetes status not provided, assuming False")
 
-    def calculate(self, patient: PatientData) -> RiskResult:
+    def calculate(self, patient: GloboriskPatientData) -> RiskResult:
         """
         Calculate 10-year CVD risk using Globorisk.
 
@@ -312,7 +315,7 @@ class Globorisk(RiskModel):
 
         return _GLOBORISK_DATA['coefficients'][self.version][lac_key]
 
-    def _get_baseline_rates(self, patient: PatientData) -> dict:
+    def _get_baseline_rates(self, patient: GloboriskPatientData) -> dict:
         """Get baseline CVD rates for the current country/year."""
         sex_numeric = 0 if patient.sex == "male" else 1
         age = patient.age
@@ -354,7 +357,7 @@ class Globorisk(RiskModel):
 
         return _GLOBORISK_DATA['cvd_rates'][country][sex_numeric][cvd_type][year][age]
 
-    def _get_risk_factor_means(self, patient: PatientData) -> dict:
+    def _get_risk_factor_means(self, patient: GloboriskPatientData) -> dict:
         """Get risk factor means for centering."""
         sex_numeric = 0 if patient.sex == "male" else 1
         agec = int(np.clip((patient.age - 40) // 5, 0, 6)) + 1  # age category 1-7 in data
@@ -479,7 +482,7 @@ class Globorisk(RiskModel):
 
         return df_copy
 
-    def _row_to_patient_data(self, row: pd.Series, version: str) -> PatientData:
+    def _row_to_patient_data(self, row: pd.Series, version: str) -> GloboriskPatientData:
         """Convert DataFrame row to PatientData object."""
         # Build the data dict
         data = {
@@ -504,5 +507,5 @@ class Globorisk(RiskModel):
         if 'bmi' in row.index and pd.notna(row['bmi']) and version != 'office':
             data['bmi'] = float(row['bmi'])
 
-        return PatientData(**data)
+        return GloboriskPatientData(**data)
 

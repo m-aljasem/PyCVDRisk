@@ -23,6 +23,9 @@ _EPIC_NORFOLK_COEFFICIENTS = {
 }
 
 class EPIC_Norfolk(RiskModel):
+    unvalidated = (
+        "no EPIC-Norfolk CVD risk equation has been published"
+    )
     model_name = "EPIC_Norfolk"
     model_version = "2007"
     supported_regions = ["UK", "Europe"]

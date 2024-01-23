@@ -22,6 +22,9 @@ _JACKSON_COEFFICIENTS = {
 }
 
 class JacksonHeart(RiskModel):
+    unvalidated = (
+        "Fox et al. (JAMA Cardiol 2016) publish per-SD coefficients of within-sex standardized log covariates but not the SDs or baseline survival, so absolute risk cannot be reproduced"
+    )
     model_name = "JacksonHeart"
     model_version = "2015"
     supported_regions = ["US", "African American"]

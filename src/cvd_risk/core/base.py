@@ -1,14 +1,17 @@
 """Abstract base class for all CVD risk models."""
 
 from abc import ABC, abstractmethod
-from typing import Any, Optional
+from typing import Any, Generic, Optional, Type, TypeVar
 
 import pandas as pd
 
+from cvd_risk.core.data_classes.base import BasePatientData
 from cvd_risk.core.validation import PatientData, RiskResult
 
+T = TypeVar("T", bound=BasePatientData)
 
-class RiskModel(ABC):
+
+class RiskModel(ABC, Generic[T]):
     """
     Abstract base class for all cardiovascular risk prediction models.
 
@@ -38,19 +41,26 @@ class RiskModel(ABC):
     model_name: str
     model_version: str
     supported_regions: Optional[list[str]] = None
+    patient_data_class: Type[T] = PatientData  # Default to base for backward compat
+    # Reason the model is disabled (coefficients not traceable to a publication); "" = usable.
+    unvalidated: str = ""
 
     def __init__(self) -> None:
         """Initialize the risk model."""
-        pass
+        if self.unvalidated:
+            raise NotImplementedError(
+                f"{type(self).__name__} is disabled: {self.unvalidated}. Its coefficients were "
+                "placeholders, not published values."
+            )
 
     @abstractmethod
-    def calculate(self, patient: PatientData) -> RiskResult:
+    def calculate(self, patient: T) -> RiskResult:
         """
         Calculate CVD risk for a single patient.
 
         Parameters
         ----------
-        patient : PatientData
+        patient : T
             Validated patient data.
 
         Returns
@@ -100,7 +110,9 @@ class RiskModel(ABC):
             patient_dict = row.to_dict()
             try:
                 # Convert row to PatientData
-                patient = PatientData(**patient_dict)
+                # Use the model-specific data class if available, else fallback
+                data_cls = getattr(self, "patient_data_class", PatientData)
+                patient = data_cls(**patient_dict)
                 result = self.calculate(patient)
                 results.append(
                     {
@@ -110,8 +122,9 @@ class RiskModel(ABC):
                         "model_name": result.model_name,
                     }
                 )
-            except Exception as e:
-                # Handle validation errors or calculation failures
+            except ValueError as e:
+                # Invalid patient data (pydantic ValidationError is a ValueError);
+                # anything else is a bug and must propagate.
                 results.append(
                     {
                         **patient_dict,
@@ -122,7 +135,7 @@ class RiskModel(ABC):
                 )
         return pd.DataFrame(results)
 
-    def validate_input(self, patient: PatientData) -> None:
+    def validate_input(self, patient: T) -> None:
         """
         Validate patient input is within model's applicable range.
 
@@ -130,7 +143,7 @@ class RiskModel(ABC):
 
         Parameters
         ----------
-        patient : PatientData
+        patient : T
             Patient data to validate.
 
         Raises

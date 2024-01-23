@@ -11,7 +11,11 @@ import streamlit as st
 from cvd_risk import models as cvd_models
 from cvd_risk.core.validation import PatientData
 
-MODEL_CLASSES: Dict[str, Any] = {name: getattr(cvd_models, name) for name in cvd_models.__all__}
+MODEL_CLASSES: Dict[str, Any] = {
+    name: getattr(cvd_models, name)
+    for name in cvd_models.__all__
+    if not getattr(getattr(cvd_models, name), "unvalidated", False)
+}
 
 # Region fallbacks to keep the demo running when a model needs a specific value
 MODEL_DEFAULT_OVERRIDES: Dict[str, Dict[str, Any]] = {

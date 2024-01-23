@@ -35,7 +35,8 @@ import numpy as np
 import pandas as pd
 
 from cvd_risk.core.base import RiskModel
-from cvd_risk.core.validation import PatientData, RiskResult
+from cvd_risk.core.data_classes import QRISK2PatientData
+from cvd_risk.core.validation import RiskResult
 
 logger = logging.getLogger(__name__)
 
@@ -220,7 +221,7 @@ _QRISK2_CENTRES = {
 }
 
 
-class QRISK2(RiskModel):
+class QRISK2(RiskModel[QRISK2PatientData]):
     """
     QRISK2 cardiovascular disease risk prediction model (ClinRisk 2014).
 
@@ -234,7 +235,8 @@ class QRISK2(RiskModel):
 
     model_name = "QRISK2"
     model_version = "2014"
-    supported_regions = None  # UK-specific model
+    supported_regions = None  # UK-based
+    patient_data_class = QRISK2PatientData
 
     def __init__(self) -> None:
         super().__init__()
@@ -255,7 +257,7 @@ class QRISK2(RiskModel):
         else:
             return 0
 
-    def validate_input(self, patient: PatientData) -> None:
+    def validate_input(self, patient: QRISK2PatientData) -> None:
         """Validate patient data for QRISK2 applicability."""
         super().validate_input(patient)
 
@@ -279,7 +281,7 @@ class QRISK2(RiskModel):
             if patient.townsend_deprivation < -7 or patient.townsend_deprivation > 11:
                 raise ValueError(f"Townsend score {patient.townsend_deprivation} outside QRISK2 range [-7, 11]")
 
-    def _transform_variables(self, patient: PatientData, sex: str) -> Dict[str, float]:
+    def _transform_variables(self, patient: QRISK2PatientData, sex: str) -> Dict[str, float]:
         """Transform input variables according to QRISK2 algorithm."""
         centres = _QRISK2_CENTRES[sex]
 
@@ -313,7 +315,7 @@ class QRISK2(RiskModel):
             "town": town,
         }
 
-    def _calculate_linear_predictor(self, patient: PatientData, sex: str) -> float:
+    def _calculate_linear_predictor(self, patient: QRISK2PatientData, sex: str) -> float:
         """Calculate the linear predictor for QRISK2."""
         coeffs = _QRISK2_FEMALE_COEFFICIENTS if sex == "female" else _QRISK2_MALE_COEFFICIENTS
 
@@ -421,7 +423,7 @@ class QRISK2(RiskModel):
         else:
             return "high"
 
-    def calculate(self, patient: PatientData) -> RiskResult:
+    def calculate(self, patient: QRISK2PatientData) -> RiskResult:
         """Calculate QRISK2 risk for a single patient."""
         self.validate_input(patient)
 

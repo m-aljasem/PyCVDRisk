@@ -1,101 +1,169 @@
 """
-Singapore CVD Risk Calculator.
+Singapore-modified Framingham Risk Score 2023 (SG-FRS-2023).
 
-Singapore's national cardiovascular risk assessment tool, adapted from
-Framingham equations for the Singaporean population.
+Points-based 10-year coronary risk (non-fatal MI or coronary death) for
+Chinese, Malay and Indian adults aged 20-79 in Singapore, recalibrated from
+the NCEP ATP III Framingham tables.
+
+Not applicable to people with cardiovascular disease, familial
+hypercholesterolaemia, diabetes mellitus, or CKD (eGFR <60 and/or ACR >=3 mg/mmol).
+Does not predict stroke or total ASCVD.
 
 Reference:
-    Tai ES, Chia KS, Wong TY, et al. Diabetes, cardiac disorders and
-    asthma as risk factors for cardiovascular disease in Singapore.
-    Singapore Medical Journal. 2008;49(10):790-797.
+    Agency for Care Effectiveness (ACE), Singapore. Additional resource for
+    CV risk assessment using SG-FRS-2023 (accompanies ACE Clinical Guideline
+    "Lipid management: focus on cardiovascular risk", 15 Dec 2023),
+    Tables A1-A4.
+    Lim CGY et al. Recalibrated Singapore-Modified Framingham Risk Score 2023.
+Risk categories: ACE Clinical Guideline "Lipid management: focus on
+    cardiovascular risk" (Dec 2023): low <5%, borderline 5-<10%,
+    intermediate 10-20%, high >20%.
 """
 
-import numpy as np
-import pandas as pd
-from cvd_risk.core.base import RiskModel
-from cvd_risk.core.validation import PatientData, RiskResult
+import bisect
 
-_SINGAPORE_COEFFICIENTS = {
-    "male": {"age": 0.048, "smoking": 0.420, "systolic_bp": 0.013, "total_cholesterol": 0.011,
-             "hdl_cholesterol": -0.028, "diabetes": 0.580, "bmi": 0.009, "ethnicity_chinese": 0.120,
-             "ethnicity_malay": 0.180, "ethnicity_indian": 0.250, "constant": -7.600},
-    "female": {"age": 0.045, "smoking": 0.400, "systolic_bp": 0.015, "total_cholesterol": 0.013,
-               "hdl_cholesterol": -0.030, "diabetes": 0.550, "bmi": 0.011, "ethnicity_chinese": 0.100,
-               "ethnicity_malay": 0.160, "ethnicity_indian": 0.220, "constant": -7.800}
+from cvd_risk.core.base import RiskModel
+from cvd_risk.core.data_classes import SingaporePatientData
+from cvd_risk.core.validation import RiskResult
+
+# Tables A1 (men) and A3 (women). Age bands use lower bounds.
+_AGE_BANDS = [20, 35, 40, 45, 50, 55, 60, 65, 70, 75]
+_AGE_POINTS = {
+    "male": [-9, -4, 0, 3, 6, 8, 10, 11, 12, 13],
+    "female": [-7, -3, 0, 3, 6, 8, 10, 12, 14, 16],
 }
 
-class Singapore(RiskModel):
+# Columns: age 20-39, 40-49, 50-59, 60-69, 70-79
+_DECADE_BANDS = [20, 40, 50, 60, 70]
+# Rows: total cholesterol <4.1, 4.1-5.1, 5.2-6.1, 6.2-7.2, >=7.3 mmol/L
+_TC_BANDS = [4.1, 5.2, 6.2, 7.3]
+_TC_POINTS = {
+    "male": [
+        [0, 0, 0, 0, 0],
+        [4, 3, 2, 1, 0],
+        [7, 5, 3, 1, 0],
+        [9, 6, 4, 2, 1],
+        [11, 8, 5, 3, 1],
+    ],
+    "female": [
+        [0, 0, 0, 0, 0],
+        [4, 3, 2, 1, 1],
+        [8, 6, 4, 2, 1],
+        [11, 8, 5, 3, 2],
+        [13, 10, 7, 4, 2],
+    ],
+}
+_SMOKER_POINTS = {
+    "male": [8, 5, 3, 1, 1],  # 70-79 changed to 1 in SG-FRS-2023 (footnote a)
+    "female": [9, 7, 4, 2, 1],
+}
+
+# HDL rows: <1.0, 1.0-1.2, 1.3-1.5, >=1.6 mmol/L (same for both sexes)
+_HDL_BANDS = [1.0, 1.3, 1.6]
+_HDL_POINTS = [2, 1, 0, -1]
+
+# SBP rows: <120, 120-129, 130-139, 140-159, >=160 mmHg
+_SBP_BANDS = [120, 130, 140, 160]
+_SBP_POINTS = {
+    "male": {"untreated": [0, 0, 1, 1, 2], "treated": [0, 1, 2, 2, 3]},
+    "female": {"untreated": [0, 1, 2, 3, 4], "treated": [0, 3, 4, 5, 6]},
+}
+
+# Tables A2 (men, points -5..20) and A4 (women, points 0..27): 10-year risk %.
+# None means "<1%".
+_RISK_TABLE = {
+    "male": {
+        "first_points": -5,
+        "chinese": [None] * 9 + [1, 1, 1, 1, 2, 2, 3, 3, 4, 5, 7, 9, 11, 14, 18, 23, 28],
+        "malay": [None] * 7 + [1, 1, 1, 1, 2, 2, 3, 3, 4, 5, 7, 9, 11, 14, 18, 22, 28, 34, 42],
+        "indian": [None] * 6 + [1, 1, 1, 1, 2, 2, 3, 4, 5, 6, 7, 10, 12, 15, 19, 24, 30, 37, 45, 54],
+    },
+    "female": {
+        "first_points": 0,
+        "chinese": [None] * 13 + [1, 1, 1, 1, 2, 2, 3, 4, 5, 7, 8, 11, 14, 18, 22],
+        "malay": [None] * 10 + [1, 1, 1, 1, 1, 2, 2, 3, 4, 5, 7, 9, 11, 14, 18, 23, 29, 36],
+        "indian": [None] * 9 + [1, 1, 1, 1, 2, 2, 3, 3, 4, 6, 7, 10, 12, 16, 20, 25, 31, 39, 47],
+    },
+}
+
+# Value reported for the table's "<1%" cells.
+_BELOW_ONE_PERCENT = 0.5
+
+
+def _band(value: float, bounds: list) -> int:
+    """Index of the half-open band [bounds[i-1], bounds[i]) that holds value."""
+    return bisect.bisect_right(bounds, value)
+
+
+class Singapore(RiskModel[SingaporePatientData]):
+    """Singapore-modified Framingham Risk Score 2023 (10-year coronary risk)."""
+
     model_name = "Singapore"
-    model_version = "2008"
-    supported_regions = ["Singapore", "Asia"]
+    model_version = "SG-FRS-2023"
+    supported_regions = ["Singapore"]
+    patient_data_class = SingaporePatientData
 
-    def calculate(self, patient: PatientData) -> RiskResult:
-        coeffs = _SINGAPORE_COEFFICIENTS[patient.sex]
-        bmi = getattr(patient, 'bmi', 23.0)  # Lower BMI typical in Asia
-        ethnicity = getattr(patient, 'ethnicity', 'chinese')
+    def validate_input(self, patient: SingaporePatientData) -> None:
+        super().validate_input(patient)
+        if not 20 <= patient.age <= 79:
+            raise ValueError("SG-FRS-2023 applies to ages 20-79")
+        if patient.diabetes:
+            raise ValueError("SG-FRS-2023 does not apply to people with diabetes mellitus")
+        if patient.ethnicity not in ("chinese", "malay", "indian"):
+            raise ValueError("SG-FRS-2023 requires ethnicity 'chinese', 'malay' or 'indian'")
+        if patient.antihypertensive is None:
+            raise ValueError("SG-FRS-2023 requires antihypertensive (treated BP) status")
 
-        ethnicity_coeff = 0
-        if ethnicity == "chinese":
-            ethnicity_coeff = coeffs["ethnicity_chinese"]
-        elif ethnicity == "malay":
-            ethnicity_coeff = coeffs["ethnicity_malay"]
-        elif ethnicity == "indian":
-            ethnicity_coeff = coeffs["ethnicity_indian"]
+    def points(self, patient: SingaporePatientData) -> dict:
+        """Points per risk factor from Tables A1/A3."""
+        sex = patient.sex
+        decade = _band(patient.age, _DECADE_BANDS) - 1
+        # shortcut: mmol/L bands as printed (4.1-5.1, 5.2-6.1, ...) treated as half-open,
+        # so 5.15 counts as 5.2-6.1; upgrade if ACE publishes exact cut-points.
+        tc_row = _band(patient.total_cholesterol, _TC_BANDS)
+        sbp_col = "treated" if patient.antihypertensive else "untreated"
+        return {
+            "age": _AGE_POINTS[sex][_band(patient.age, _AGE_BANDS) - 1],
+            "total_cholesterol": _TC_POINTS[sex][tc_row][decade],
+            "smoking": _SMOKER_POINTS[sex][decade] if patient.smoking else 0,
+            "hdl_cholesterol": _HDL_POINTS[_band(patient.hdl_cholesterol, _HDL_BANDS)],
+            "systolic_bp": _SBP_POINTS[sex][sbp_col][_band(patient.systolic_bp, _SBP_BANDS)],
+        }
 
-        linear_predictor = (
-            coeffs["age"] * patient.age + coeffs["smoking"] * float(patient.smoking) +
-            coeffs["systolic_bp"] * patient.systolic_bp + coeffs["total_cholesterol"] * patient.total_cholesterol +
-            coeffs["hdl_cholesterol"] * patient.hdl_cholesterol +
-            coeffs["diabetes"] * float(patient.diabetes or False) + coeffs["bmi"] * bmi +
-            ethnicity_coeff + coeffs["constant"]
+    def calculate(self, patient: SingaporePatientData) -> RiskResult:
+        self.validate_input(patient)
+        pts = self.points(patient)
+        total = sum(pts.values())
+
+        table = _RISK_TABLE[patient.sex]
+        column = table[patient.ethnicity]
+        idx = total - table["first_points"]
+        capped = idx >= len(column)  # above the table: report its top value
+        risk = column[min(max(idx, 0), len(column) - 1)]
+
+        if risk is None:
+            risk_score, display = _BELOW_ONE_PERCENT, "<1%"
+        else:
+            risk_score, display = float(risk), f"{'>=' if capped else ''}{risk}%"
+
+        if risk_score < 5:
+            category = "low"
+        elif risk_score < 10:
+            category = "borderline"
+        elif risk_score <= 20:
+            category = "intermediate"
+        else:
+            category = "high"
+
+        return RiskResult(
+            risk_score=risk_score,
+            risk_category=category,
+            model_name=self.model_name,
+            model_version=self.model_version,
+            calculation_metadata={
+                "total_points": total,
+                "points": pts,
+                "risk_display": display,
+                "outcome": "10-year non-fatal MI or coronary death",
+            },
         )
-
-        risk_probability = 1.0 / (1.0 + np.exp(-linear_predictor))
-        risk_percentage = np.clip(risk_probability * 100.0, 0.0, 35.0)
-
-        risk_category = "low" if risk_percentage < 5 else "moderate" if risk_percentage < 10 else "high" if risk_percentage < 15 else "very_high"
-
-        return RiskResult(risk_score=float(risk_percentage), risk_category=risk_category,
-                         model_name=self.model_name, model_version=self.model_version)
-
-    def calculate_batch(self, df: pd.DataFrame) -> pd.DataFrame:
-        results = df.copy()
-        results["risk_score"] = np.nan
-        results["risk_category"] = ""
-        results["model_name"] = self.model_name
-
-        if "bmi" not in results.columns: results["bmi"] = 23.0
-        if "diabetes" not in results.columns: results["diabetes"] = False
-        if "ethnicity" not in results.columns: results["ethnicity"] = "chinese"
-
-        for sex in ['male', 'female']:
-            mask = results['sex'].str.lower() == sex
-            if not mask.any(): continue
-
-            coeffs = _SINGAPORE_COEFFICIENTS[sex]
-
-            ethnicity_coeffs = np.zeros(len(results))
-            ethnicity_chinese = (results.loc[mask, "ethnicity"] == "chinese")
-            ethnicity_malay = (results.loc[mask, "ethnicity"] == "malay")
-            ethnicity_indian = (results.loc[mask, "ethnicity"] == "indian")
-
-            ethnicity_coeffs[ethnicity_chinese] = coeffs["ethnicity_chinese"]
-            ethnicity_coeffs[ethnicity_malay] = coeffs["ethnicity_malay"]
-            ethnicity_coeffs[ethnicity_indian] = coeffs["ethnicity_indian"]
-
-            linear_predictor = (
-                coeffs["age"] * results.loc[mask, "age"] + coeffs["smoking"] * results.loc[mask, "smoking"].astype(float) +
-                coeffs["systolic_bp"] * results.loc[mask, "systolic_bp"] + coeffs["total_cholesterol"] * results.loc[mask, "total_cholesterol"] +
-                coeffs["hdl_cholesterol"] * results.loc[mask, "hdl_cholesterol"] + coeffs["diabetes"] * results.loc[mask, "diabetes"].astype(float) +
-                coeffs["bmi"] * results.loc[mask, "bmi"] + ethnicity_coeffs + coeffs["constant"]
-            )
-
-            risk_prob = 1.0 / (1.0 + np.exp(-linear_predictor))
-            results.loc[mask, "risk_score"] = risk_prob * 100.0
-
-        results["risk_score"] = np.clip(results["risk_score"], 0.0, 35.0)
-        conditions = [results["risk_score"] < 5, (results["risk_score"] >= 5) & (results["risk_score"] < 10),
-                     (results["risk_score"] >= 10) & (results["risk_score"] < 15), results["risk_score"] >= 15]
-        choices = ["low", "moderate", "high", "very_high"]
-        results["risk_category"] = np.select(conditions, choices, default="very_high")
-        return results

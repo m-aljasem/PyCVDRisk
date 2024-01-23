@@ -17,7 +17,8 @@ import numpy as np
 import pandas as pd
 
 from cvd_risk.core.base import RiskModel
-from cvd_risk.core.validation import PatientData, RiskResult
+from cvd_risk.core.data_classes import PreventPatientData
+from cvd_risk.core.validation import RiskResult
 
 logger = logging.getLogger(__name__)
 
@@ -162,7 +163,7 @@ _PREVENT_COEFFICIENTS = {
 }
 
 
-class Prevent(RiskModel):
+class Prevent(RiskModel[PreventPatientData]):
     """
     PREVENT cardiovascular risk prediction model (AHA 2023).
 
@@ -175,8 +176,10 @@ class Prevent(RiskModel):
     """
 
     model_name = "PREVENT"
-    model_version = "2023"
+    model_version = "2024"
     supported_outcomes = ["total_cvd", "ascvd", "hf"]
+    supported_regions = None  # US-based
+    patient_data_class = PreventPatientData
 
     def __init__(self, outcome: Literal["total_cvd", "ascvd", "hf"] = "total_cvd") -> None:
         """
@@ -192,7 +195,7 @@ class Prevent(RiskModel):
             raise ValueError(f"Outcome must be one of {self.supported_outcomes}")
         self.outcome = outcome
 
-    def validate_input(self, patient: PatientData) -> None:
+    def validate_input(self, patient: PreventPatientData) -> None:
         super().validate_input(patient)
         if patient.age < 30 or patient.age > 79:
             logger.warning(
@@ -296,7 +299,7 @@ class Prevent(RiskModel):
         else:
             return 10.0, 20.0
 
-    def calculate(self, patient: PatientData) -> RiskResult:
+    def calculate(self, patient: PreventPatientData) -> RiskResult:
         """
         Calculate PREVENT risk for a single patient.
 

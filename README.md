@@ -35,21 +35,21 @@ PyCVDRisk is the **world's most comprehensive Python package** for cardiovascula
 
 ### 🌍 Global Coverage & Diversity
 
-PyCVDRisk offers unparalleled geographic and ethnic coverage:
+PyCVDRisk covers these populations:
 
-- **Europe**: 15+ models (SCORE2, PROCAM, REGICOR, Progetto CUORE, PRIME, DECODE, INTERHEART, etc.)
-- **Americas**: 8+ models (ASCVD, Framingham, PREVENT, Reynolds, Brazilian CVD, Mexican CVD, etc.)
-- **Asia**: 4+ models (Singapore, Malaysian CVD, QRISK2/3, SCORE2-Asia CKD)
-- **Oceania**: 3+ models (New Zealand, PREDICT)
-- **Middle East**: 1+ model (Gulf RACE)
+> **Note:** 11 regional models (ARIC Update, Jackson Heart, CARDIA, Rotterdam, Heinz Nixdorf, EPIC-Norfolk, New Zealand, Dundee, Cambridge, Malaysian CVD, Gulf RACE) are disabled: their coefficients were placeholders and no verifiable published equation could be implemented. Instantiating one raises `NotImplementedError` with the specific reason.
+
+- **Europe**: SCORE, SCORE2 family, PROCAM, REGICOR, Progetto CUORE, FINRISK, RISC, ASSIGN, QRISK2/3
+- **Americas**: ASCVD, Framingham, PREVENT, Reynolds
+- **Asia**: SCORE2-Asia CKD, Singapore (SG-FRS-2023)
+- **Oceania**: PREDICT
 - **Global**: 3+ models (WHO CVD, Globorisk, INTERHEART)
 
 **Special Populations Covered:**
 - HIV-positive patients (D:A:D Score)
-- Diabetes patients (DIAL2, SCORE2-DM, DECODE)
+- Diabetes patients (DIAL2, SCORE2-DM)
 - CKD patients (SCORE2-CKD)
-- Elderly populations (SCORE2-OP, Rotterdam Study)
-- Young adults (CARDIA)
+- Elderly populations (SCORE2-OP)
 - Atrial fibrillation (CHADS2, CHA2DS2-VASc)
 - Anticoagulation bleeding risk (HAS-BLED)
 
@@ -145,25 +145,25 @@ print(results_df[['age', 'sex', 'risk_score', 'risk_category']])
 | **FINRISK** | Finnish adults | Primary prevention | ✅ Production Ready |
 | **REGICOR** | Spanish adults | Primary prevention | ✅ Production Ready |
 | **Progetto CUORE** | Italian adults | Primary prevention | ✅ Production Ready |
-| **PRIME** | France/Ireland adults | Primary prevention | ✅ Production Ready |
+| **PRIME** | France/Ireland adults | Primary prevention | ❌ Not implemented |
 | **RISC** | German adults | Primary prevention | ✅ Production Ready |
-| **ARIC Update** | US multi-ethnic | Primary prevention | ✅ Production Ready |
-| **Jackson Heart** | US African American | Primary prevention | ✅ Production Ready |
-| **CARDIA** | US young adults | Primary prevention | ✅ Production Ready |
-| **Rotterdam** | Dutch elderly | Primary prevention | ✅ Production Ready |
-| **Heinz Nixdorf** | German adults | Primary prevention | ✅ Production Ready |
-| **EPIC-Norfolk** | UK adults | Primary prevention | ✅ Production Ready |
-| **Singapore** | Singapore adults | Primary prevention | ✅ Production Ready |
+| **ARIC Update** | US multi-ethnic | Primary prevention | ⛔ Disabled: placeholder coefficients |
+| **Jackson Heart** | US African American | Primary prevention | ⛔ Disabled: placeholder coefficients |
+| **CARDIA** | US young adults | Primary prevention | ⛔ Disabled: placeholder coefficients |
+| **Rotterdam** | Dutch elderly | Primary prevention | ⛔ Disabled: placeholder coefficients |
+| **Heinz Nixdorf** | German adults | Primary prevention | ⛔ Disabled: placeholder coefficients |
+| **EPIC-Norfolk** | UK adults | Primary prevention | ⛔ Disabled: placeholder coefficients |
+| **Singapore** | Singapore adults (SG-FRS-2023, 10-yr CHD) | Primary prevention | ✅ Verified against ACE 2023 tables |
 | **PREDICT** | New Zealand adults | Primary prevention | ✅ Production Ready |
-| **New Zealand** | New Zealand adults | Primary prevention | ✅ Production Ready |
-| **Dundee** | Scottish adults | Primary prevention | ✅ Production Ready |
-| **Cambridge** | UK adults | Primary prevention | ✅ Production Ready |
-| **DECODE** | European adults | Primary prevention | ✅ Production Ready |
-| **NHANES** | US population survey | Primary prevention | ✅ Production Ready |
-| **Malaysian CVD** | Malaysian adults | Primary prevention | ✅ Production Ready |
-| **Brazilian CVD** | Brazilian adults | Primary prevention | ✅ Production Ready |
-| **Mexican CVD** | Mexican adults | Primary prevention | ✅ Production Ready |
-| **Gulf RACE** | Gulf countries | Primary prevention | ✅ Production Ready |
+| **New Zealand** | New Zealand adults | Primary prevention | ⛔ Disabled: placeholder coefficients |
+| **Dundee** | Scottish adults | Primary prevention | ⛔ Disabled: placeholder coefficients |
+| **Cambridge** | UK adults | Primary prevention | ⛔ Disabled: placeholder coefficients |
+| **DECODE** | European adults | Primary prevention | ❌ Not implemented |
+| **NHANES** | US population survey | Primary prevention | ❌ Not implemented |
+| **Malaysian CVD** | Malaysian adults | Primary prevention | ⛔ Disabled: placeholder coefficients |
+| **Brazilian CVD** | Brazilian adults | Primary prevention | ❌ Not implemented |
+| **Mexican CVD** | Mexican adults | Primary prevention | ❌ Not implemented |
+| **Gulf RACE** | Gulf countries | Primary prevention | ⛔ Disabled: placeholder coefficients |
 
 ### Secondary Prevention Models
 
@@ -200,21 +200,21 @@ print(results_df[['age', 'sex', 'risk_score', 'risk_category']])
 | **SCORE2-Asia CKD** | Asian CKD patients | CVD risk assessment | ✅ Production Ready |
 | **REGICOR** | Spanish adults | Primary prevention | ✅ Production Ready |
 | **Progetto CUORE** | Italian adults | Primary prevention | ✅ Production Ready |
-| **PRIME** | France/Ireland adults | Primary prevention | ✅ Production Ready |
+| **PRIME** | France/Ireland adults | Primary prevention | ❌ Not implemented |
 | **RISC** | German adults | Primary prevention | ✅ Production Ready |
-| **Heinz Nixdorf** | German adults | Primary prevention | ✅ Production Ready |
-| **EPIC-Norfolk** | UK adults | Primary prevention | ✅ Production Ready |
-| **Singapore** | Singapore adults | Primary prevention | ✅ Production Ready |
+| **Heinz Nixdorf** | German adults | Primary prevention | ⛔ Disabled: placeholder coefficients |
+| **EPIC-Norfolk** | UK adults | Primary prevention | ⛔ Disabled: placeholder coefficients |
+| **Singapore** | Singapore adults (SG-FRS-2023, 10-yr CHD) | Primary prevention | ✅ Verified against ACE 2023 tables |
 | **PREDICT** | New Zealand adults | Primary prevention | ✅ Production Ready |
-| **New Zealand** | New Zealand adults | Primary prevention | ✅ Production Ready |
-| **Dundee** | Scottish adults | Primary prevention | ✅ Production Ready |
-| **Cambridge** | UK adults | Primary prevention | ✅ Production Ready |
-| **DECODE** | European adults | Primary prevention | ✅ Production Ready |
-| **NHANES** | US population survey | Primary prevention | ✅ Production Ready |
-| **Malaysian CVD** | Malaysian adults | Primary prevention | ✅ Production Ready |
-| **Brazilian CVD** | Brazilian adults | Primary prevention | ✅ Production Ready |
-| **Mexican CVD** | Mexican adults | Primary prevention | ✅ Production Ready |
-| **Gulf RACE** | Gulf countries | Primary prevention | ✅ Production Ready |
+| **New Zealand** | New Zealand adults | Primary prevention | ⛔ Disabled: placeholder coefficients |
+| **Dundee** | Scottish adults | Primary prevention | ⛔ Disabled: placeholder coefficients |
+| **Cambridge** | UK adults | Primary prevention | ⛔ Disabled: placeholder coefficients |
+| **DECODE** | European adults | Primary prevention | ❌ Not implemented |
+| **NHANES** | US population survey | Primary prevention | ❌ Not implemented |
+| **Malaysian CVD** | Malaysian adults | Primary prevention | ⛔ Disabled: placeholder coefficients |
+| **Brazilian CVD** | Brazilian adults | Primary prevention | ❌ Not implemented |
+| **Mexican CVD** | Mexican adults | Primary prevention | ❌ Not implemented |
+| **Gulf RACE** | Gulf countries | Primary prevention | ⛔ Disabled: placeholder coefficients |
 
 ### Lifetime Risk Models
 
@@ -292,7 +292,7 @@ print(f"High-risk patients: {high_risk:,} ({high_risk_percentage:.1f}%)")
 ### Model Comparison
 
 ```python
-from cvd_risk import SCORE2, Framingham, PROCAM, Singapore, PREDICT
+from cvd_risk import SCORE2, Framingham, PROCAM, PREDICT
 import pandas as pd
 import numpy as np
 
@@ -316,13 +316,11 @@ population_df = pd.DataFrame({
 score2_model = SCORE2()
 framingham_model = Framingham()
 procam_model = PROCAM()
-singapore_model = Singapore()
 predict_model = PREDICT()
 
 score2_results = score2_model.calculate_batch(population_df)
 framingham_results = framingham_model.calculate_batch(population_df)
 procam_results = procam_model.calculate_batch(population_df)
-singapore_results = singapore_model.calculate_batch(population_df)
 predict_results = predict_model.calculate_batch(population_df)
 
 # Compare average risks across continents
@@ -330,7 +328,6 @@ avg_risks = {
     'SCORE2 (Europe)': score2_results['risk_score'].mean(),
     'Framingham (US)': framingham_results['risk_score'].mean(),
     'PROCAM (Germany)': procam_results['risk_score'].mean(),
-    'Singapore (Asia)': singapore_results['risk_score'].mean(),
     'PREDICT (New Zealand)': predict_results['risk_score'].mean()
 }
 
@@ -394,8 +391,8 @@ Just cite us in your research! 📚
 - **American Heart Association** - ASCVD and Framingham algorithms
 - **National Health Services (UK)** - QRISK algorithms
 - **World Health Organization** - Global CVD risk charts
-- **International Cardiology Societies** - INTERHEART, PRIME, and other global studies
-- **National Health Ministries** - Country-specific algorithms (Finland, Singapore, Thailand, Malaysia, Brazil, Mexico, etc.)
+- **International Cardiology Societies** - INTERHEART and other global studies
+- **National Health Ministries** - Country-specific algorithms (e.g. FINRISK, Finland)
 - **Scientific Python Community** - NumPy, Pandas, SciPy
 - **Open Source Contributors** - Making global research software accessible
 

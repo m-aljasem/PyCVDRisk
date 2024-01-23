@@ -20,7 +20,8 @@ import numpy as np
 import pandas as pd
 
 from cvd_risk.core.base import RiskModel
-from cvd_risk.core.validation import PatientData, RiskResult
+from cvd_risk.core.data_classes import SCORE2DMPatientData
+from cvd_risk.core.validation import RiskResult
 
 logger = logging.getLogger(__name__)
 
@@ -120,7 +121,7 @@ def _round_to_nearest_digit(number: Union[float, np.ndarray], digits: int = 0) -
     return (number_abs / 10**digits) * posneg
 
 
-class SCORE2DM(RiskModel):
+class SCORE2DM(RiskModel[SCORE2DMPatientData]):
     """
     SCORE2-DM cardiovascular risk prediction model (ESC 2023).
 
@@ -131,11 +132,12 @@ class SCORE2DM(RiskModel):
     model_name = "SCORE2-DM"
     model_version = "2023"
     supported_regions = ["low", "moderate", "high", "very_high"]
+    patient_data_class = SCORE2DMPatientData
 
     def __init__(self) -> None:
         super().__init__()
 
-    def validate_input(self, patient: PatientData) -> None:
+    def validate_input(self, patient: SCORE2DMPatientData) -> None:
         """Validate patient input for SCORE2-DM."""
         super().validate_input(patient)
 
@@ -204,7 +206,7 @@ class SCORE2DM(RiskModel):
         else:
             return "very_high"
 
-    def calculate(self, patient: PatientData) -> RiskResult:
+    def calculate(self, patient: SCORE2DMPatientData) -> RiskResult:
         """Calculate 10-year CVD risk for a single patient."""
         self.validate_input(patient)
 

@@ -18,7 +18,8 @@ import numpy as np
 import pandas as pd
 
 from cvd_risk.core.base import RiskModel
-from cvd_risk.core.validation import PatientData, RiskResult
+from cvd_risk.core.data_classes import REGICORPatientData
+from cvd_risk.core.validation import RiskResult
 
 logger = logging.getLogger(__name__)
 
@@ -45,7 +46,7 @@ _REGICOR_COEFFICIENTS_WOMEN = {
 }
 
 
-class REGICOR(RiskModel):
+class REGICOR(RiskModel[REGICORPatientData]):
     """
     REGICOR Risk Score for cardiovascular disease prediction.
 
@@ -81,13 +82,14 @@ class REGICOR(RiskModel):
 
     model_name = "REGICOR"
     model_version = "2003"
-    supported_regions = ["Spain", "Catalonia", "Europe"]  # Catalan population
+    supported_regions = None  # Spain/Mediterranean
+    patient_data_class = REGICORPatientData
 
     def __init__(self) -> None:
         """Initialize REGICOR model."""
         super().__init__()
 
-    def validate_input(self, patient: PatientData) -> None:
+    def validate_input(self, patient: REGICORPatientData) -> None:
         """
         Validate patient input for REGICOR requirements.
 
@@ -119,7 +121,7 @@ class REGICOR(RiskModel):
         if patient.systolic_bp is None:
             raise ValueError("REGICOR requires systolic blood pressure measurement")
 
-    def calculate(self, patient: PatientData) -> RiskResult:
+    def calculate(self, patient: REGICORPatientData) -> RiskResult:
         """
         Calculate 10-year CVD risk using REGICOR score.
 

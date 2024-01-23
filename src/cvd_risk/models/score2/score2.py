@@ -12,13 +12,13 @@ Reference:
 """
 
 import logging
-from typing import Literal, Tuple, Union
 
 import numpy as np
 import pandas as pd
 
 from cvd_risk.core.base import RiskModel
-from cvd_risk.core.validation import PatientData, RiskResult
+from cvd_risk.core.data_classes import SCORE2PatientData
+from cvd_risk.core.validation import RiskResult, validate_dataframe
 
 logger = logging.getLogger(__name__)
 
@@ -71,20 +71,76 @@ _SCORE2_COEFFICIENTS = {
 }
 
 
-class SCORE2(RiskModel):
+def categorize_esc2021(risk_percent, age) -> np.ndarray:
+    """
+    ESC 2021 age-specific risk categories for the SCORE2 family.
+
+    Ages <50: <2.5% low_to_moderate, 2.5-<7.5% high, >=7.5% very_high.
+    Ages 50-69: <5%, 5-<10%, >=10%. Ages >=70: <7.5%, 7.5-<15%, >=15%.
+    Works on scalars and arrays; NaN risk maps to "error".
+    """
+    risk = np.asarray(risk_percent, dtype=float)
+    age = np.asarray(age, dtype=float)
+    low_cut = np.select([age < 50, age < 70], [2.5, 5.0], default=7.5)
+    high_cut = np.select([age < 50, age < 70], [7.5, 10.0], default=15.0)
+    return np.select(
+        [np.isnan(risk), risk < low_cut, risk < high_cut],
+        ["error", "low_to_moderate", "high"],
+        default="very_high",
+    )
+
+
+def _score2_risk(sex: str, region: str, age, sbp, tchol, hdl, smoking):
+    """10-year calibrated SCORE2 risk (%) and uncalibrated risk (0-1); scalars or arrays."""
+    c = _SCORE2_COEFFICIENTS[sex]
+    scales = _SCORE2_CALIBRATION_SCALES[sex][region]
+    cage = (age - 60) / 5
+    csbp = (sbp - 120) / 20
+    ctchol = tchol - 6
+    chdl = (hdl - 1.3) / 0.5
+    lin_pred = (
+        c["cage"] * cage
+        + c["smoking"] * smoking
+        + c["csbp"] * csbp
+        + c["ctchol"] * ctchol
+        + c["chdl"] * chdl
+        + c["smoking_cage"] * smoking * cage
+        + c["csbp_cage"] * csbp * cage
+        + c["ctchol_cage"] * ctchol * cage
+        + c["chdl_cage"] * chdl * cage
+    )
+    uncalib = 1.0 - _SCORE2_BASELINE_SURVIVAL[sex] ** np.exp(lin_pred)
+    # Clip to avoid log(0) in the calibration step
+    uncalib = np.clip(uncalib, 1e-9, 1.0 - 1e-9)
+    ln_neg_ln = np.log(-np.log(1 - uncalib))
+    calib = 1.0 - np.exp(-np.exp(scales["scale1"] + scales["scale2"] * ln_neg_ln))
+    return np.clip(calib * 100.0, 0.0, 100.0), uncalib
+
+
+# Input ranges enforced by SCORE2PatientData, applied to batch rows too
+_BATCH_RANGES = {
+    "age": (18, 120),
+    "systolic_bp": (50.0, 250.0),
+    "total_cholesterol": (1.0, 15.0),
+    "hdl_cholesterol": (0.3, 5.0),
+}
+
+
+class SCORE2(RiskModel[SCORE2PatientData]):
     """
     SCORE2 cardiovascular risk prediction model (ESC 2021).
     Valid for ages 40-69.
+
+    Risk categories follow ESC 2021 (see ``categorize_esc2021``):
+    "low_to_moderate", "high", "very_high".
     """
 
     model_name = "SCORE2"
     model_version = "2021"
     supported_regions = ["low", "moderate", "high", "very_high"]
+    patient_data_class = SCORE2PatientData
 
-    def __init__(self) -> None:
-        super().__init__()
-
-    def validate_input(self, patient: PatientData) -> None:
+    def validate_input(self, patient: SCORE2PatientData) -> None:
         super().validate_input(patient)
         if patient.age < 40 or patient.age > 69:
             logger.warning(
@@ -94,185 +150,64 @@ class SCORE2(RiskModel):
         if patient.region is None or patient.region not in self.supported_regions:
             raise ValueError(f"Region must be one of {self.supported_regions}")
 
-    def _get_risk_thresholds(self, age: Union[int, float, np.ndarray]) -> Tuple:
-        """
-        Get clinical risk thresholds based on Age (ESC 2021 Guidelines).
-        
-        Returns
-        -------
-        Tuple (low_cutoff, high_cutoff)
-            < low_cutoff: Low-to-Moderate Risk
-            >= high_cutoff: High Risk
-            >= high_cutoff * 2 (approx): Very High Risk
-        """
-        # Vectorized logic for NumPy arrays
-        if isinstance(age, (np.ndarray, pd.Series)):
-            low_cut = np.select(
-                [age < 50, (age >= 50) & (age < 70), age >= 70],
-                [2.5, 5.0, 7.5],
-                default=5.0
-            )
-            high_cut = np.select(
-                [age < 50, (age >= 50) & (age < 70), age >= 70],
-                [7.5, 10.0, 15.0],
-                default=10.0
-            )
-            return low_cut, high_cut
-
-        # Scalar logic for single patient
-        if age < 50:
-            return 2.5, 7.5
-        elif age < 70:
-            return 5.0, 10.0
-        else:
-            return 7.5, 15.0
-
-    def calculate(self, patient: PatientData) -> RiskResult:
+    def calculate(self, patient: SCORE2PatientData) -> RiskResult:
         self.validate_input(patient)
-
-        # 1. Setup Constants
-        sex = patient.sex.lower()
-        coeffs = _SCORE2_COEFFICIENTS[sex]
-        base_surv = _SCORE2_BASELINE_SURVIVAL[sex]
-        scales = _SCORE2_CALIBRATION_SCALES[sex][patient.region]
-
-        # 2. Transform Inputs
-        cage = (patient.age - 60) / 5
-        csbp = (patient.systolic_bp - 120) / 20
-        ctchol = patient.total_cholesterol - 6
-        chdl = (patient.hdl_cholesterol - 1.3) / 0.5
-        smoking = float(patient.smoking)
-
-        # 3. Linear Predictor
-        lin_pred = (
-            coeffs["cage"] * cage
-            + coeffs["smoking"] * smoking
-            + coeffs["csbp"] * csbp
-            + coeffs["ctchol"] * ctchol
-            + coeffs["chdl"] * chdl
-            + coeffs["smoking_cage"] * smoking * cage
-            + coeffs["csbp_cage"] * csbp * cage
-            + coeffs["ctchol_cage"] * ctchol * cage
-            + coeffs["chdl_cage"] * chdl * cage
+        risk_percent, uncalib = _score2_risk(
+            patient.sex.lower(),
+            patient.region,
+            patient.age,
+            patient.systolic_bp,
+            patient.total_cholesterol,
+            patient.hdl_cholesterol,
+            float(patient.smoking),
         )
-
-        # 4. Uncalibrated Risk
-        uncalibrated_risk = 1.0 - (base_surv ** np.exp(lin_pred))
-        
-        # Clip to avoid log errors
-        uncalibrated_risk = np.clip(uncalibrated_risk, 1e-9, 1.0 - 1e-9)
-
-        # 5. Calibration
-        ln_neg_ln = np.log(-np.log(1 - uncalibrated_risk))
-        calib_risk = 1.0 - np.exp(-np.exp(scales["scale1"] + scales["scale2"] * ln_neg_ln))
-        
-        risk_percent = np.clip(calib_risk * 100.0, 0.0, 100.0)
-
-        # 6. Categorize (Age Adjusted)
-        low_cut, high_cut = self._get_risk_thresholds(patient.age)
-        
-        if risk_percent < low_cut:
-            cat = "low-to-moderate"
-        elif risk_percent < high_cut:
-            cat = "high" # Note: In SCORE2 terminology, the gap is often "high"
-        else:
-            cat = "very_high"
-            
-        # Simplified bucketing to match standard output expectations
-        # You may adjust these strings to match your specific UI needs
-        if risk_percent < low_cut: final_cat = "low"
-        elif risk_percent < high_cut: final_cat = "moderate" 
-        elif risk_percent < (high_cut * 2): final_cat = "high"
-        else: final_cat = "very_high"
-
         return RiskResult(
             risk_score=float(risk_percent),
-            risk_category=final_cat,
+            risk_category=str(categorize_esc2021(risk_percent, patient.age)),
             model_name=self.model_name,
             model_version=self.model_version,
-            calculation_metadata={"raw_uncalibrated": uncalibrated_risk}
+            calculation_metadata={"raw_uncalibrated": float(uncalib)},
         )
 
     def calculate_batch(self, df: pd.DataFrame) -> pd.DataFrame:
         """
         Vectorized calculation for high-throughput analysis.
-        Calculates by grouping (Sex, Region) for efficiency.
+
+        Rows that fail validation get ``risk_score`` NaN, ``risk_category``
+        "error" and a reason in the ``error`` column (same contract as
+        ``RiskModel.calculate_batch``).
         """
         required = ["age", "sex", "systolic_bp", "total_cholesterol", "hdl_cholesterol", "smoking", "region"]
-        if not set(required).issubset(df.columns):
-            raise ValueError(f"Missing columns: {set(required) - set(df.columns)}")
+        validate_dataframe(df, required)
 
         results = df.copy()
         results["risk_score"] = np.nan
         results["model_name"] = self.model_name
+        error = pd.Series(None, index=results.index, dtype=object)
 
-        # Process by Sex (Major coefficient change)
-        for sex in ["male", "female"]:
-            # Create mask for this sex
-            sex_mask = results["sex"].str.lower() == sex
-            if not sex_mask.any():
-                continue
+        sex = results["sex"].astype(str).str.lower()
+        error[~sex.isin(["male", "female"])] = "sex must be 'male' or 'female'"
+        error[error.isna() & ~results["region"].isin(self.supported_regions)] = (
+            f"region must be one of {self.supported_regions}"
+        )
+        error[error.isna() & ~results["smoking"].isin([True, False, 0, 1])] = "smoking must be boolean"
+        for col, (lo, hi) in _BATCH_RANGES.items():
+            values = pd.to_numeric(results[col], errors="coerce")
+            error[error.isna() & ~values.between(lo, hi)] = f"{col} outside [{lo}, {hi}]"
 
-            # Get Sex Constants
-            coeffs = _SCORE2_COEFFICIENTS[sex]
-            base_surv = _SCORE2_BASELINE_SURVIVAL[sex]
-            
-            # Sub-loop by Region (Scale change)
-            # We only loop regions present in the data to save time
-            present_regions = results.loc[sex_mask, "region"].unique()
-            
-            for region in present_regions:
-                if region not in _SCORE2_CALIBRATION_SCALES[sex]:
-                    continue # Skip invalid regions or handle error
-                
-                # Mask for Sex AND Region
-                mask = sex_mask & (results["region"] == region)
-                data = results[mask]
-                scales = _SCORE2_CALIBRATION_SCALES[sex][region]
+        valid = error.isna()
+        for (s, region), group in results[valid].groupby([sex[valid], results.loc[valid, "region"]]):
+            risk, _ = _score2_risk(
+                s,
+                region,
+                group["age"].astype(float),
+                group["systolic_bp"].astype(float),
+                group["total_cholesterol"].astype(float),
+                group["hdl_cholesterol"].astype(float),
+                group["smoking"].astype(float),
+            )
+            results.loc[group.index, "risk_score"] = risk
 
-                # Vectorized Inputs
-                cage = (data["age"] - 60) / 5
-                csbp = (data["systolic_bp"] - 120) / 20
-                ctchol = data["total_cholesterol"] - 6
-                chdl = (data["hdl_cholesterol"] - 1.3) / 0.5
-                smoking = data["smoking"].astype(float)
-
-                # Vectorized Linear Predictor
-                lin_pred = (
-                    coeffs["cage"] * cage
-                    + coeffs["smoking"] * smoking
-                    + coeffs["csbp"] * csbp
-                    + coeffs["ctchol"] * ctchol
-                    + coeffs["chdl"] * chdl
-                    + coeffs["smoking_cage"] * (smoking * cage)
-                    + coeffs["csbp_cage"] * (csbp * cage)
-                    + coeffs["ctchol_cage"] * (ctchol * cage)
-                    + coeffs["chdl_cage"] * (chdl * cage)
-                )
-
-                # Vectorized Uncalibrated Risk
-                uncalib = 1.0 - (base_surv ** np.exp(lin_pred))
-                uncalib = np.clip(uncalib, 1e-9, 1.0 - 1e-9)
-
-                # Vectorized Calibration
-                ln_neg_ln = np.log(-np.log(1 - uncalib))
-                calib = 1.0 - np.exp(-np.exp(scales["scale1"] + scales["scale2"] * ln_neg_ln))
-                
-                # Assign Results
-                results.loc[mask, "risk_score"] = np.clip(calib * 100.0, 0.0, 100.0)
-
-        # Vectorized Categorization (Age Specific)
-        low_cuts, high_cuts = self._get_risk_thresholds(results["age"].values)
-        
-        # Numpy Select for Classification
-        conditions = [
-            results["risk_score"] < low_cuts,
-            (results["risk_score"] >= low_cuts) & (results["risk_score"] < high_cuts),
-            (results["risk_score"] >= high_cuts) & (results["risk_score"] < (high_cuts * 2)),
-            results["risk_score"] >= (high_cuts * 2)
-        ]
-        choices = ["low", "moderate", "high", "very_high"]
-        
-        results["risk_category"] = np.select(conditions, choices, default="unknown")
-        
+        results["risk_category"] = categorize_esc2021(results["risk_score"], pd.to_numeric(results["age"], errors="coerce"))
+        results["error"] = error
         return results

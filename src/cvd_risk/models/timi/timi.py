@@ -19,7 +19,8 @@ import numpy as np
 import pandas as pd
 
 from cvd_risk.core.base import RiskModel
-from cvd_risk.core.validation import PatientData, RiskResult
+from cvd_risk.core.data_classes import TIMIPatientData
+from cvd_risk.core.validation import RiskResult
 
 logger = logging.getLogger(__name__)
 
@@ -32,7 +33,7 @@ _TIMI_CATEGORIES = {
 }
 
 
-class TIMI(RiskModel):
+class TIMI(RiskModel[TIMIPatientData]):
     """
     TIMI Risk Score for UA/NSTEMI patients.
 
@@ -44,12 +45,13 @@ class TIMI(RiskModel):
 
     model_name = "TIMI"
     model_version = "2000"
-    supported_regions = None  # TIMI is not region-specific
+    supported_regions = None  # Clinical score
+    patient_data_class = TIMIPatientData
 
     def __init__(self) -> None:
         super().__init__()
 
-    def validate_input(self, patient: PatientData) -> None:
+    def validate_input(self, patient: TIMIPatientData) -> None:
         super().validate_input(patient)
 
         # TIMI-specific validation
@@ -87,7 +89,7 @@ class TIMI(RiskModel):
         else:  # age >= 75
             return 3
 
-    def _calculate_risk_factors_score(self, patient: PatientData) -> int:
+    def _calculate_risk_factors_score(self, patient: TIMIPatientData) -> int:
         """Calculate risk factors component (≥3 risk factors = 1 point)."""
         risk_factors = [
             patient.diabetes,
@@ -102,27 +104,27 @@ class TIMI(RiskModel):
 
         return 1 if risk_factor_count >= 3 else 0
 
-    def _calculate_cad_history_score(self, patient: PatientData) -> int:
+    def _calculate_cad_history_score(self, patient: TIMIPatientData) -> int:
         """Calculate CAD history component (previous PCI or CABG = 1 point)."""
         has_previous_pci = patient.previous_pci is True
         has_previous_cabg = patient.previous_cabg is True
 
         return 1 if (has_previous_pci or has_previous_cabg) else 0
 
-    def _calculate_aspirin_score(self, patient: PatientData) -> int:
+    def _calculate_aspirin_score(self, patient: TIMIPatientData) -> int:
         """Calculate aspirin use component."""
         return 1 if patient.aspirin_use is True else 0
 
-    def _calculate_angina_score(self, patient: PatientData) -> int:
+    def _calculate_angina_score(self, patient: TIMIPatientData) -> int:
         """Calculate severe angina component (≥2 episodes in 24h = 1 point)."""
         episodes = patient.angina_episodes_24h or 0
         return 1 if episodes >= 2 else 0
 
-    def _calculate_ecg_score(self, patient: PatientData) -> int:
+    def _calculate_ecg_score(self, patient: TIMIPatientData) -> int:
         """Calculate ECG ST depression component."""
         return 1 if patient.ecg_st_depression is True else 0
 
-    def _calculate_marker_score(self, patient: PatientData) -> int:
+    def _calculate_marker_score(self, patient: TIMIPatientData) -> int:
         """Calculate cardiac marker component based on gender and troponin."""
         troponin = patient.troponin_level or 0
 
@@ -142,7 +144,7 @@ class TIMI(RiskModel):
         else:  # score >= 5
             return "high"
 
-    def calculate(self, patient: PatientData) -> RiskResult:
+    def calculate(self, patient: TIMIPatientData) -> RiskResult:
         self.validate_input(patient)
 
         # Calculate individual components

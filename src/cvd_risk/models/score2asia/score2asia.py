@@ -20,7 +20,8 @@ import numpy as np
 import pandas as pd
 
 from cvd_risk.core.base import RiskModel
-from cvd_risk.core.validation import PatientData, RiskResult
+from cvd_risk.core.data_classes import SCORE2AsiaPatientData
+from cvd_risk.core.validation import RiskResult
 
 logger = logging.getLogger(__name__)
 
@@ -107,7 +108,7 @@ _SCORE2_OP_COEFFICIENTS = {
 }
 
 
-class SCORE2AsiaCKD(RiskModel):
+class SCORE2AsiaCKD(RiskModel[SCORE2AsiaPatientData]):
     """
     SCORE2-Asia CKD cardiovascular risk prediction model.
 
@@ -120,11 +121,12 @@ class SCORE2AsiaCKD(RiskModel):
     model_name = "SCORE2-Asia CKD"
     model_version = "2022"
     supported_regions = ["low", "moderate", "high", "very_high"]
+    patient_data_class = SCORE2AsiaPatientData
 
     def __init__(self) -> None:
         super().__init__()
 
-    def validate_input(self, patient: PatientData) -> None:
+    def validate_input(self, patient: SCORE2AsiaPatientData) -> None:
         super().validate_input(patient)
         if patient.region is None or patient.region not in self.supported_regions:
             raise ValueError(f"Region must be one of {self.supported_regions}")
@@ -177,7 +179,7 @@ class SCORE2AsiaCKD(RiskModel):
         else:
             return 7.5, 15.0
 
-    def _calculate_expected_egfr(self, patient: PatientData) -> float:
+    def _calculate_expected_egfr(self, patient: SCORE2AsiaPatientData) -> float:
         """
         Calculate expected eGFR based on patient characteristics.
         Used for CKD risk adjustment.
@@ -204,7 +206,7 @@ class SCORE2AsiaCKD(RiskModel):
 
         return exeGFR
 
-    def _calculate_expected_acr(self, patient: PatientData) -> float:
+    def _calculate_expected_acr(self, patient: SCORE2AsiaPatientData) -> float:
         """
         Calculate expected ACR (albumin-creatinine ratio) based on patient characteristics.
         """
@@ -236,7 +238,7 @@ class SCORE2AsiaCKD(RiskModel):
 
         return exACR
 
-    def _apply_ckd_adjustment(self, base_risk: float, patient: PatientData) -> float:
+    def _apply_ckd_adjustment(self, base_risk: float, patient: SCORE2AsiaPatientData) -> float:
         """
         Apply CKD adjustment to the base SCORE2 risk using eGFR and ACR/trace.
         """
@@ -309,7 +311,7 @@ class SCORE2AsiaCKD(RiskModel):
 
         return score_ckd
 
-    def calculate(self, patient: PatientData) -> RiskResult:
+    def calculate(self, patient: SCORE2AsiaPatientData) -> RiskResult:
         self.validate_input(patient)
 
         # 1. Setup Constants

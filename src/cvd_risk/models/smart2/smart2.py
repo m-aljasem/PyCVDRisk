@@ -19,7 +19,8 @@ import numpy as np
 import pandas as pd
 
 from cvd_risk.core.base import RiskModel
-from cvd_risk.core.validation import PatientData, RiskResult
+from cvd_risk.core.data_classes import SMART2PatientData
+from cvd_risk.core.validation import RiskResult
 
 logger = logging.getLogger(__name__)
 
@@ -68,7 +69,7 @@ _SMART2_REGIONAL_RATIOS = {
 }
 
 
-class SMART2(RiskModel):
+class SMART2(RiskModel[SMART2PatientData]):
     """
     SMART2 Risk Prediction Model (2022 Update).
     
@@ -77,13 +78,14 @@ class SMART2(RiskModel):
     """
 
     model_name = "SMART2"
-    model_version = "2022"
+    model_version = "2018"
     supported_regions = list(_SMART2_REGIONAL_RATIOS.keys())
+    patient_data_class = SMART2PatientData
 
     def __init__(self) -> None:
         super().__init__()
 
-    def validate_input(self, patient: PatientData) -> None:
+    def validate_input(self, patient: SMART2PatientData) -> None:
         """
         Validates input data against SMART2 derivation ranges.
         Note: PatientData needs to be extended or dynamically accessed for 
@@ -108,11 +110,11 @@ class SMART2(RiskModel):
             "hs_crp", "egfr", "years_since_diagnosis", 
             "has_cad", "has_cevd", "has_pad", "has_aaa"
         ]
-        missing = [attr for attr in required_attrs if not hasattr(patient, attr)]
+        missing = [attr for attr in required_attrs if getattr(patient, attr, None) is None]
         if missing:
             raise AttributeError(f"PatientData missing required SMART2 attributes: {missing}")
 
-    def calculate(self, patient: PatientData) -> RiskResult:
+    def calculate(self, patient: SMART2PatientData) -> RiskResult:
         self.validate_input(patient)
 
         # 1. Setup Variables & Transformations

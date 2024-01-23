@@ -19,7 +19,8 @@ import numpy as np
 import pandas as pd
 
 from cvd_risk.core.base import RiskModel
-from cvd_risk.core.validation import PatientData, RiskResult
+from cvd_risk.core.data_classes import FraminghamPatientData
+from cvd_risk.core.validation import RiskResult
 
 logger = logging.getLogger(__name__)
 
@@ -51,7 +52,7 @@ _FRAMINGHAM_COEFFICIENTS = {
 }
 
 
-class Framingham(RiskModel):
+class Framingham(RiskModel[FraminghamPatientData]):
     """
     Framingham 2008 ASCVD Risk Score (Lipid Model).
 
@@ -121,13 +122,14 @@ class Framingham(RiskModel):
 
     model_name = "Framingham"
     model_version = "2008"
-    supported_regions = None  # Framingham is US-based but widely used
+    supported_regions = None  # Valid for US population
+    patient_data_class = FraminghamPatientData
 
     def __init__(self) -> None:
         """Initialize Framingham 2008 model."""
         super().__init__()
 
-    def validate_input(self, patient: PatientData) -> None:
+    def validate_input(self, patient: FraminghamPatientData) -> None:
         """
         Validate patient input for Framingham requirements.
 
@@ -166,7 +168,7 @@ class Framingham(RiskModel):
         if patient.systolic_bp <= 0:
             raise ValueError("Systolic blood pressure must be > 0 mmHg")
 
-    def calculate(self, patient: PatientData) -> RiskResult:
+    def calculate(self, patient: FraminghamPatientData) -> RiskResult:
         """
         Calculate 10-year CVD risk using Framingham 2008 Risk Score.
 

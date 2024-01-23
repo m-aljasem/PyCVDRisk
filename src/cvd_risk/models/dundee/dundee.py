@@ -42,6 +42,9 @@ _DUNDEE_COEFFICIENTS_WOMEN = {
 
 
 class Dundee(RiskModel):
+    unvalidated = (
+        "the Dundee risk-disk gives a population rank (1-100), not a % risk, and was superseded by ASSIGN"
+    )
     model_name = "Dundee"
     model_version = "2007"
     supported_regions = ["Scotland", "UK"]

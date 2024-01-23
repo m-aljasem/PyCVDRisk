@@ -20,7 +20,8 @@ import numpy as np
 import pandas as pd
 
 from cvd_risk.core.base import RiskModel
-from cvd_risk.core.validation import PatientData, RiskResult
+from cvd_risk.core.data_classes import QRISK3PatientData
+from cvd_risk.core.validation import RiskResult
 
 logger = logging.getLogger(__name__)
 
@@ -126,7 +127,7 @@ _SMOKING_TO_CATEGORY = {
 }
 
 
-class QRISK3(RiskModel):
+class QRISK3(RiskModel[QRISK3PatientData]):
     """
     QRISK3 cardiovascular disease risk prediction model.
 
@@ -205,12 +206,13 @@ class QRISK3(RiskModel):
     model_name = "QRISK3"
     model_version = "2017"
     supported_regions = None  # UK-based but widely applicable
+    patient_data_class = QRISK3PatientData
 
     def __init__(self) -> None:
         """Initialize QRISK3 model."""
         super().__init__()
 
-    def validate_input(self, patient: PatientData) -> None:
+    def validate_input(self, patient: QRISK3PatientData) -> None:
         """Validate patient input for QRISK3."""
         super().validate_input(patient)
 
@@ -256,7 +258,7 @@ class QRISK3(RiskModel):
             return smoking_category
         return _SMOKING_TO_CATEGORY.get(smoking, 1)
 
-    def _calculate_female_risk(self, patient: PatientData) -> float:
+    def _calculate_female_risk(self, patient: QRISK3PatientData) -> float:
         """Calculate CVD risk for females using official QRISK3 algorithm."""
         # Input parameters
         age = patient.age
@@ -370,7 +372,7 @@ class QRISK3(RiskModel):
         score = 100.0 * (1.0 - pow(_QRISK3_SURVIVOR_FEMALE[surv], np.exp(a)))
         return np.clip(score, 0.0, 100.0)
 
-    def _calculate_male_risk(self, patient: PatientData) -> float:
+    def _calculate_male_risk(self, patient: QRISK3PatientData) -> float:
         """Calculate CVD risk for males using official QRISK3 algorithm."""
         # Input parameters
         age = patient.age
@@ -486,7 +488,7 @@ class QRISK3(RiskModel):
         score = 100.0 * (1.0 - pow(_QRISK3_SURVIVOR_MALE[surv], np.exp(a)))
         return np.clip(score, 0.0, 100.0)
 
-    def calculate(self, patient: PatientData) -> RiskResult:
+    def calculate(self, patient: QRISK3PatientData) -> RiskResult:
         """Calculate 10-year CVD risk using QRISK3."""
         self.validate_input(patient)
 

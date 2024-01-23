@@ -18,7 +18,8 @@ import numpy as np
 import pandas as pd
 
 from cvd_risk.core.base import RiskModel
-from cvd_risk.core.validation import PatientData, RiskResult
+from cvd_risk.core.data_classes import SCOREPatientData
+from cvd_risk.core.validation import RiskResult
 
 logger = logging.getLogger(__name__)
 
@@ -63,7 +64,7 @@ _SCORE_COEFFICIENTS = {
 }
 
 
-class SCORE(RiskModel):
+class SCORE(RiskModel[SCOREPatientData]):
     """
     SCORE cardiovascular risk prediction model (ESC 2003).
 
@@ -76,11 +77,12 @@ class SCORE(RiskModel):
     model_name = "SCORE"
     model_version = "2003"
     supported_regions = ["low", "high"]
+    patient_data_class = SCOREPatientData
 
     def __init__(self) -> None:
         super().__init__()
 
-    def validate_input(self, patient: PatientData) -> None:
+    def validate_input(self, patient: SCOREPatientData) -> None:
         super().validate_input(patient)
         if patient.age < 40 or patient.age > 65:
             logger.warning(
@@ -118,7 +120,7 @@ class SCORE(RiskModel):
         # Scalar logic for single patient
         return 1.0, 5.0
 
-    def calculate(self, patient: PatientData) -> RiskResult:
+    def calculate(self, patient: SCOREPatientData) -> RiskResult:
         self.validate_input(patient)
 
         # 1. Setup Constants

@@ -20,12 +20,13 @@ import numpy as np
 import pandas as pd
 
 from cvd_risk.core.base import RiskModel
-from cvd_risk.core.validation import PatientData, RiskResult
+from cvd_risk.core.data_classes import EDACSPatientData
+from cvd_risk.core.validation import RiskResult
 
 logger = logging.getLogger(__name__)
 
 
-class EDACS(RiskModel):
+class EDACS(RiskModel[EDACSPatientData]):
     """
     Emergency Department Assessment of Chest Pain Score (EDACS).
 
@@ -38,12 +39,14 @@ class EDACS(RiskModel):
     """
 
     model_name = "EDACS"
-    model_version = "2014"
+    model_version = "2016"
+    supported_regions = None
+    patient_data_class = EDACSPatientData
 
     def __init__(self) -> None:
         super().__init__()
 
-    def validate_input(self, patient: PatientData) -> None:
+    def validate_input(self, patient: EDACSPatientData) -> None:
         super().validate_input(patient)
 
         # Check required EDACS fields
@@ -239,7 +242,7 @@ class EDACS(RiskModel):
         else:
             return "not_low_risk"
 
-    def calculate(self, patient: PatientData) -> RiskResult:
+    def calculate(self, patient: EDACSPatientData) -> RiskResult:
         self.validate_input(patient)
 
         # Calculate score components

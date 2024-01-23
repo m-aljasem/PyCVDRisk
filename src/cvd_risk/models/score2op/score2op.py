@@ -13,13 +13,14 @@ Reference:
 """
 
 import logging
-from typing import Literal, Tuple, Union
 
 import numpy as np
 import pandas as pd
 
 from cvd_risk.core.base import RiskModel
-from cvd_risk.core.validation import PatientData, RiskResult
+from cvd_risk.models.score2.score2 import categorize_esc2021
+from cvd_risk.core.data_classes import SCORE2OPPatientData
+from cvd_risk.core.validation import RiskResult
 
 logger = logging.getLogger(__name__)
 
@@ -82,7 +83,7 @@ _SCORE2OP_BASELINE_SHIFTS = {
 }
 
 
-class SCORE2OP(RiskModel):
+class SCORE2OP(RiskModel[SCORE2OPPatientData]):
     """
     SCORE2-OP cardiovascular risk prediction model (ESC 2021).
     Valid for ages 70+.
@@ -91,11 +92,12 @@ class SCORE2OP(RiskModel):
     model_name = "SCORE2-OP"
     model_version = "2021"
     supported_regions = ["low", "moderate", "high", "very_high"]
+    patient_data_class = SCORE2OPPatientData
 
     def __init__(self) -> None:
         super().__init__()
 
-    def validate_input(self, patient: PatientData) -> None:
+    def validate_input(self, patient: SCORE2OPPatientData) -> None:
         super().validate_input(patient)
         if patient.age < 70:
             logger.warning(
@@ -108,23 +110,7 @@ class SCORE2OP(RiskModel):
         if patient.diabetes is None:
             raise ValueError("Diabetes status is required for SCORE2-OP")
 
-    def _get_risk_thresholds(self, age: Union[int, float, np.ndarray]) -> Tuple:
-        """
-        Get clinical risk thresholds based on Age (ESC 2021 Guidelines).
-        SCORE2-OP uses the same thresholds as SCORE2 for ages >=70.
-
-        Returns
-        -------
-        Tuple (low_cutoff, high_cutoff)
-            < low_cutoff: Low Risk
-            >= high_cutoff: Very High Risk
-        """
-        # For SCORE2-OP (ages >=70), thresholds are fixed
-        low_cut = 7.5
-        high_cut = 15.0
-        return low_cut, high_cut
-
-    def calculate(self, patient: PatientData) -> RiskResult:
+    def calculate(self, patient: SCORE2OPPatientData) -> RiskResult:
         self.validate_input(patient)
 
         # 1. Setup Constants
@@ -170,22 +156,15 @@ class SCORE2OP(RiskModel):
 
         risk_percent = np.clip(calib_risk * 100.0, 0.0, 100.0)
 
-        # 6. Categorize (SCORE2-OP uses fixed thresholds for ages >=70)
-        low_cut, high_cut = self._get_risk_thresholds(patient.age)
-
-        if risk_percent < low_cut:
-            cat = "low"
-        elif risk_percent < high_cut:
-            cat = "moderate"  # Note: In SCORE2-OP terminology, the gap is "moderate"
-        else:
-            cat = "very_high"
+        # 6. Categorize (ESC 2021 age-specific thresholds)
+        cat = str(categorize_esc2021(risk_percent, patient.age))
 
         return RiskResult(
             risk_score=float(risk_percent),
             risk_category=cat,
             model_name=self.model_name,
             model_version=self.model_version,
-            calculation_metadata={"raw_uncalibrated": uncalibrated_risk}
+            calculation_metadata={"raw_uncalibrated": float(uncalibrated_risk)}
         )
 
     def calculate_batch(self, df: pd.DataFrame) -> pd.DataFrame:
@@ -260,18 +239,7 @@ class SCORE2OP(RiskModel):
                 # Assign Results
                 results.loc[mask, "risk_score"] = np.clip(calib * 100.0, 0.0, 100.0)
 
-        # Vectorized Categorization (Fixed thresholds for SCORE2-OP)
-        low_cuts, high_cuts = self._get_risk_thresholds(results["age"].values)
-
-        # Numpy Select for Classification
-        conditions = [
-            results["risk_score"] < low_cuts,
-            (results["risk_score"] >= low_cuts) & (results["risk_score"] < high_cuts),
-            results["risk_score"] >= high_cuts
-        ]
-        choices = ["low", "moderate", "very_high"]
-
-        results["risk_category"] = np.select(conditions, choices, default="unknown")
+        results["risk_category"] = categorize_esc2021(results["risk_score"], results["age"])
 
         return results
 

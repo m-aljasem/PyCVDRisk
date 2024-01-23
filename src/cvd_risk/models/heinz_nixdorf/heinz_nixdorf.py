@@ -23,6 +23,9 @@ _HEINZ_NIXDORF_COEFFICIENTS = {
 }
 
 class HeinzNixdorf(RiskModel):
+    unvalidated = (
+        "Heinz Nixdorf Recall studied coronary calcium on top of Framingham and published no standalone equation"
+    )
     model_name = "HeinzNixdorf"
     model_version = "2010"
     supported_regions = ["Germany"]

@@ -5,6 +5,7 @@ import pytest
 
 from cvd_risk.core.validation import PatientData
 from cvd_risk.models.score2 import SCORE2
+from cvd_risk.models.score2.score2 import categorize_esc2021
 
 
 class TestSCORE2Batch:
@@ -72,28 +73,55 @@ class TestSCORE2Batch:
         assert pd.isna(results.iloc[1]["risk_score"])
         assert results.iloc[1]["risk_category"] == "error"
 
-    def test_risk_categorization_boundary_values(self) -> None:
-        """Test risk categorization at boundary values."""
+    @pytest.mark.parametrize(
+        "age, risk, expected",
+        [
+            # ESC 2021 thresholds, age < 50: 2.5% / 7.5%
+            (45, 2.49, "low_to_moderate"),
+            (45, 2.5, "high"),
+            (45, 7.49, "high"),
+            (45, 7.5, "very_high"),
+            # age 50-69: 5% / 10%
+            (55, 4.99, "low_to_moderate"),
+            (55, 5.0, "high"),
+            (55, 9.99, "high"),
+            (55, 10.0, "very_high"),
+            (55, 12.0, "very_high"),  # was mislabelled "high" before the fix
+            # age >= 70: 7.5% / 15%
+            (75, 7.49, "low_to_moderate"),
+            (75, 7.5, "high"),
+            (75, 15.0, "very_high"),
+        ],
+    )
+    def test_risk_categorization_boundary_values(self, age: int, risk: float, expected: str) -> None:
+        """ESC 2021 age-specific categories for the SCORE2 family."""
+        assert str(categorize_esc2021(risk, age)) == expected
+
+    def test_batch_flags_bad_region_and_sex(self) -> None:
+        """Rows with unknown region or sex get an error, not a silent NaN."""
+        df = pd.DataFrame(
+            {
+                "age": [55, 55, 55],
+                "sex": ["male", "M", "male"],
+                "systolic_bp": [140.0] * 3,
+                "total_cholesterol": [6.0] * 3,
+                "hdl_cholesterol": [1.2] * 3,
+                "smoking": [True] * 3,
+                "region": ["moderate", "moderate", "Moderate"],
+            }
+        )
+        results = SCORE2().calculate_batch(df)
+        assert results["error"].isna().tolist() == [True, False, False]
+        assert results["risk_category"].tolist()[1:] == ["error", "error"]
+        assert results["risk_score"].isna().tolist() == [False, True, True]
+
+    def test_batch_matches_single(self, sample_patient: PatientData) -> None:
+        """Batch and single-patient paths give identical results."""
         model = SCORE2()
-
-        # Test low boundary (< 5%)
-        assert model._categorize_risk(4.9) == "low"
-        assert model._categorize_risk(0.0) == "low"
-
-        # Test moderate boundary (5-10%)
-        assert model._categorize_risk(5.0) == "moderate"
-        assert model._categorize_risk(7.5) == "moderate"
-        assert model._categorize_risk(9.9) == "moderate"
-
-        # Test high boundary (10-20%)
-        assert model._categorize_risk(10.0) == "high"
-        assert model._categorize_risk(15.0) == "high"
-        assert model._categorize_risk(19.9) == "high"
-
-        # Test very_high boundary (>= 20%)
-        assert model._categorize_risk(20.0) == "very_high"
-        assert model._categorize_risk(50.0) == "very_high"
-        assert model._categorize_risk(100.0) == "very_high"
+        single = model.calculate(sample_patient)
+        batch = model.calculate_batch(pd.DataFrame([sample_patient.model_dump()])).iloc[0]
+        assert batch["risk_score"] == single.risk_score
+        assert batch["risk_category"] == single.risk_category
 
     def test_all_regions(self) -> None:
         """Test calculation works for all supported regions."""
@@ -112,7 +140,7 @@ class TestSCORE2Batch:
             result = model.calculate(patient)
             assert result.risk_score >= 0
             assert result.risk_score <= 100
-            assert result.risk_category in ["low", "moderate", "high", "very_high"]
+            assert result.risk_category in ["low_to_moderate", "high", "very_high"]
 
     def test_extreme_values(self) -> None:
         """Test calculation with extreme but valid values."""

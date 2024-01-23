@@ -48,6 +48,9 @@ _NZ_COEFFICIENTS_WOMEN = {
 
 
 class NewZealand(RiskModel):
+    unvalidated = (
+        "New Zealand's CVD risk equation is PREDICT, available as the PREDICT model"
+    )
     model_name = "NewZealand"
     model_version = "2003"
     supported_regions = ["New Zealand", "Oceania"]

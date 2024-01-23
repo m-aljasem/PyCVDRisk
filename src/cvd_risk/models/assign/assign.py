@@ -17,7 +17,8 @@ import numpy as np
 import pandas as pd
 
 from cvd_risk.core.base import RiskModel
-from cvd_risk.core.validation import PatientData, RiskResult
+from cvd_risk.core.data_classes import ASSIGNPatientData
+from cvd_risk.core.validation import RiskResult
 
 logger = logging.getLogger(__name__)
 
@@ -106,14 +107,16 @@ _ASSIGN_BASELINE_MEANS = {
 }
 
 
-class ASSIGN(RiskModel):
+class ASSIGN(RiskModel[ASSIGNPatientData]):
     """
     ASSIGN cardiovascular risk prediction model (SIGN 2009).
     Valid for adults in Scotland. Provides both v1.0 and v2.0 versions.
     """
 
     model_name = "ASSIGN"
-    model_version = "v1.0/v2.0"
+    model_version = "2006"
+    supported_regions = None  # Scotland
+    patient_data_class = ASSIGNPatientData
     supported_versions = ["v1", "v2"]
 
     def __init__(self, version: Literal["v1", "v2"] = "v2") -> None:
@@ -130,12 +133,12 @@ class ASSIGN(RiskModel):
             raise ValueError(f"Version must be one of {self.supported_versions}")
         self.version = version
 
-    def validate_input(self, patient: PatientData) -> None:
+    def validate_input(self, patient: ASSIGNPatientData) -> None:
         super().validate_input(patient)
         # ASSIGN is specifically for Scotland, but we don't enforce region validation
         # as it's primarily a Scottish model but can be used elsewhere
 
-    def _calculate_linear_predictor(self, patient: PatientData) -> float:
+    def _calculate_linear_predictor(self, patient: ASSIGNPatientData) -> float:
         """Calculate the linear predictor component of ASSIGN score."""
         sex = patient.sex.lower()
         coeffs = _ASSIGN_COEFFICIENTS[sex]
@@ -183,7 +186,7 @@ class ASSIGN(RiskModel):
 
         return baseline_mean
 
-    def calculate(self, patient: PatientData) -> RiskResult:
+    def calculate(self, patient: ASSIGNPatientData) -> RiskResult:
         self.validate_input(patient)
 
         sex = patient.sex.lower()

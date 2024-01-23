@@ -53,6 +53,9 @@ _GULF_RACE_COEFFICIENTS_WOMEN = {
 
 
 class Gulf_RACE(RiskModel):
+    unvalidated = (
+        "Gulf RACE is an acute coronary syndrome registry, not a CVD risk equation"
+    )
     model_name = "Gulf_RACE"
     model_version = "2010"
     supported_regions = ["Gulf Countries", "Middle East"]

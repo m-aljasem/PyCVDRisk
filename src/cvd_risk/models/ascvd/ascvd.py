@@ -25,7 +25,8 @@ import numpy as np
 import pandas as pd
 
 from cvd_risk.core.base import RiskModel
-from cvd_risk.core.validation import PatientData, RiskResult
+from cvd_risk.core.data_classes import ASCVDPatientData
+from cvd_risk.core.validation import RiskResult
 
 logger = logging.getLogger(__name__)
 
@@ -150,7 +151,7 @@ _ASCVD_COEFFICIENTS = {
 _ASCVD_BASELINE_SURVIVAL = {"male": 0.91436, "female": 0.96652}
 
 
-class ASCVD(RiskModel):
+class ASCVD(RiskModel[ASCVDPatientData]):
     """
     ASCVD Pooled Cohort Equations for 10-year CVD risk prediction.
 
@@ -217,13 +218,14 @@ class ASCVD(RiskModel):
 
     model_name = "ASCVD"
     model_version = "2013"
-    supported_regions = None  # US-based model
+    supported_regions = None  # US-based
+    patient_data_class = ASCVDPatientData
 
     def __init__(self) -> None:
         """Initialize ASCVD model."""
         super().__init__()
 
-    def validate_input(self, patient: PatientData) -> None:
+    def validate_input(self, patient: ASCVDPatientData) -> None:
         """
         Validate patient input for ASCVD requirements.
 
@@ -253,7 +255,7 @@ class ASCVD(RiskModel):
         if patient.diabetes is None:
             logger.warning("Diabetes status not specified, assuming no diabetes")
 
-    def calculate(self, patient: PatientData) -> RiskResult:
+    def calculate(self, patient: ASCVDPatientData) -> RiskResult:
         """
         Calculate 10-year ASCVD risk using Pooled Cohort Equations.
 

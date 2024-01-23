@@ -21,7 +21,8 @@ import pandas as pd
 
 # Assuming these exist in your project structure, similar to the SCORE2 example
 from cvd_risk.core.base import RiskModel
-from cvd_risk.core.validation import PatientData, RiskResult
+from cvd_risk.core.data_classes import DIAL2PatientData
+from cvd_risk.core.validation import RiskResult
 
 logger = logging.getLogger(__name__)
 
@@ -128,15 +129,16 @@ _DIAL2_BASELINES_CORE = {
     }
 }
 
-class DIAL2(RiskModel):
+class DIAL2(RiskModel[DIAL2PatientData]):
     """
     DIAL2 Prediction Model (Core Version).
     Valid for ages 30-85 (extrapolated to 95 for lifetime risk).
     """
 
     model_name = "DIAL2"
-    model_version = "2023"
-    supported_regions = ["low", "moderate"] # High/Very High not supported in paper yet
+    model_version = "2024"
+    supported_regions = ["low", "moderate"]  # High/Very High not supported in paper yet
+    patient_data_class = DIAL2PatientData
 
     def __init__(self, extended_model: bool = False) -> None:
         """
@@ -187,7 +189,7 @@ class DIAL2(RiskModel):
                     
         return processed
 
-    def validate_input(self, patient: PatientData) -> None:
+    def validate_input(self, patient: DIAL2PatientData) -> None:
         super().validate_input(patient)
         
         if not (30 <= patient.age <= 85):
@@ -202,7 +204,7 @@ class DIAL2(RiskModel):
                 raise ValueError(f"DIAL2 requires '{attr}'")
 
     def _calculate_linear_predictor(self, 
-                                  patient: PatientData, 
+                                  patient: DIAL2PatientData, 
                                   coeffs: Dict[str, list], 
                                   current_age: float) -> float:
         """
@@ -267,7 +269,7 @@ class DIAL2(RiskModel):
         
         return np.clip(calib_risk, 0.0, 1.0)
 
-    def calculate(self, patient: PatientData) -> RiskResult:
+    def calculate(self, patient: DIAL2PatientData) -> RiskResult:
         self.validate_input(patient)
         
         sex = patient.sex.lower()

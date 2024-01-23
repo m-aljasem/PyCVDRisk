@@ -1,13 +1,30 @@
-"""Input validation models for patient data using Pydantic."""
+"""Input validation models for patient data using Pydantic.
+
+DEPRECATION NOTICE: The monolithic PatientData class is maintained for backward
+compatibility. New code should use the model-specific data classes from
+cvd_risk.core.data_classes (e.g., SCORE2PatientData, QRISK3PatientData).
+"""
 
 from typing import Literal, Optional
 
 import pandas as pd
 from pydantic import BaseModel, ConfigDict, Field, field_validator
 
+from cvd_risk.core.data_classes.base import BasePatientData
 
-class PatientData(BaseModel):
+
+class PatientData(BasePatientData):
     """
+    DEPRECATED: Use model-specific data classes instead.
+    
+    This class is maintained for backward compatibility. For new code,
+    import from cvd_risk.core.data_classes:
+    
+    - SCORE2PatientData for SCORE2 models
+    - QRISK3PatientData for QRISK models
+    - FraminghamPatientData for Framingham
+    - etc.
+    
     Validated patient data structure for CVD risk calculation.
 
     This model ensures type safety and value validation for patient
@@ -59,16 +76,7 @@ class PatientData(BaseModel):
     ... )
     """
 
-    age: int = Field(..., ge=18, le=120, description="Patient age in years")
-    sex: Literal["male", "female"] = Field(..., description="Patient biological sex")
-    systolic_bp: float = Field(..., ge=50.0, le=250.0, description="Systolic BP in mmHg")
-    total_cholesterol: float = Field(
-        ..., ge=1.0, le=15.0, description="Total cholesterol in mmol/L"
-    )
-    hdl_cholesterol: float = Field(
-        ..., ge=0.3, le=5.0, description="HDL cholesterol in mmol/L"
-    )
-    smoking: bool = Field(..., description="Current smoking status")
+    # Extended fields beyond BasePatientData for backward compatibility
     region: Optional[str] = Field(
         default=None, description="CVD risk region (SCORE2: low, moderate, high, very_high; WHO: epidemiological subregions)"
     )
@@ -190,9 +198,6 @@ class PatientData(BaseModel):
     palpation: Optional[bool] = Field(
         default=None, description="Pain is reproduced by palpation"
     )
-    ecg_st_depression: Optional[bool] = Field(
-        default=None, description="ECG shows ST depression"
-    )
     ecg_twi: Optional[bool] = Field(
         default=None, description="ECG shows T-wave inversion"
     )
@@ -201,12 +206,6 @@ class PatientData(BaseModel):
     )
     second_hstni: Optional[float] = Field(
         default=None, ge=0.0, le=50000.0, description="Second high-sensitivity troponin I level"
-    )
-    hypertension: Optional[bool] = Field(
-        default=None, description="Hypertension diagnosis"
-    )
-    hyperlipidaemia: Optional[bool] = Field(
-        default=None, description="Hyperlipidaemia diagnosis"
     )
     # HEART-specific fields
     typical_symptoms_num: Optional[int] = Field(
@@ -235,21 +234,35 @@ class PatientData(BaseModel):
         default=None, description="Cardiac arrest at presentation"
     )
 
-    @field_validator("total_cholesterol")
-    @classmethod
-    def validate_cholesterol(cls, v: float) -> float:
-        """Validate total cholesterol is reasonable."""
-        if v < 1.0 or v > 15.0:
-            raise ValueError(f"Total cholesterol {v} outside clinical range [1.0, 15.0] mmol/L")
-        return v
-
-    @field_validator("hdl_cholesterol")
-    @classmethod
-    def validate_hdl(cls, v: float) -> float:
-        """Validate HDL cholesterol is reasonable."""
-        if v < 0.3 or v > 5.0:
-            raise ValueError(f"HDL cholesterol {v} outside clinical range [0.3, 5.0] mmol/L")
-        return v
+    # CHADS2 / CHA2DS2-VASc / HAS-BLED fields
+    congestive_heart_failure: Optional[bool] = Field(
+        default=None, description="Congestive heart failure / LV dysfunction"
+    )
+    prior_stroke_tia: Optional[bool] = Field(
+        default=None, description="Prior stroke, TIA or thromboembolism"
+    )
+    vascular_disease: Optional[bool] = Field(
+        default=None, description="Vascular disease (prior MI, PAD or aortic plaque)"
+    )
+    abnormal_renal_function: Optional[bool] = Field(
+        default=None, description="Abnormal renal function (HAS-BLED)"
+    )
+    abnormal_liver_function: Optional[bool] = Field(
+        default=None, description="Abnormal liver function (HAS-BLED)"
+    )
+    bleeding_history: Optional[bool] = Field(
+        default=None, description="Prior major bleeding or predisposition"
+    )
+    labile_inr: Optional[bool] = Field(
+        default=None, description="Labile INR (time in therapeutic range < 60%)"
+    )
+    antiplatelet_drugs: Optional[bool] = Field(
+        default=None, description="Antiplatelet or NSAID use"
+    )
+    alcohol_abuse: Optional[bool] = Field(
+        default=None, description="Alcohol use >= 8 drinks/week"
+    )
+    # Note: validate_cholesterol and validate_hdl are inherited from BasePatientData
 
     model_config = ConfigDict(frozen=True, validate_assignment=True)
 

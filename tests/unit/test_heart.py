@@ -162,7 +162,7 @@ class TestHEART:
             family_history=False, atherosclerotic_disease=False,  # risk_factors_score = 1 (2 factors)
             typical_symptoms_num=3,  # history_score = 1
             ecg_normal=False, abn_repolarisation=True, ecg_st_depression=False,  # ecg_score = 1
-            presentation_hstni=50.0  # troponin_score = 2 (male, > 3x URL)
+            presentation_hstni=150.0  # troponin_score = 2 (male URL 34 ng/L, >= 3x = 102)
         )
 
         result = model.calculate(patient)
@@ -197,10 +197,10 @@ class TestHEART:
         # Moderate risk: 4-6
         patient_mod = PatientData(
             age=50, sex="male", systolic_bp=120, total_cholesterol=5.0, hdl_cholesterol=1.5,
-            smoking=True, diabetes=True, hypertension=True, hyperlipidaemia=True,
-            family_history=True, atherosclerotic_disease=False,
-            typical_symptoms_num=6, ecg_normal=False, abn_repolarisation=True,
-            ecg_st_depression=True, presentation_hstni=200.0  # Should give score around 4-6
+            smoking=True, diabetes=True, hypertension=False, hyperlipidaemia=False,
+            family_history=False, atherosclerotic_disease=False,
+            typical_symptoms_num=3, ecg_normal=True, abn_repolarisation=False,
+            ecg_st_depression=False, presentation_hstni=50.0  # H1 + E0 + A1 + R1 + T1 = 4
         )
         result_mod = model.calculate(patient_mod)
         assert result_mod.risk_category == "moderate"

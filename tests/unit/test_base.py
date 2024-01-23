@@ -138,3 +138,43 @@ class TestRiskModelBase:
         assert metadata["model_version"] == "1.0"
         assert metadata["supported_regions"] is None
 
+
+
+def _model_classes():
+    import cvd_risk.models as models
+
+    return [getattr(models, name) for name in models.__all__]
+
+
+@pytest.mark.parametrize("cls", _model_classes(), ids=lambda c: c.__name__)
+def test_data_class_has_every_field_the_model_reads(cls) -> None:
+    """Every `patient.<field>` a model reads must exist on its patient_data_class."""
+    import inspect
+    import re
+
+    data_cls = getattr(cls, "patient_data_class", PatientData)
+    src = inspect.getsource(inspect.getmodule(cls))
+    used = set(re.findall(r"\bpatient\.([a-z_0-9]+)\b", src)) - {"model_dump"}
+    assert used <= set(data_cls.model_fields), sorted(used - set(data_cls.model_fields))
+
+
+def test_unvalidated_models_refuse_to_run() -> None:
+    """Models with placeholder coefficients cannot be instantiated."""
+    unvalidated = [c for c in _model_classes() if c.unvalidated]
+    assert len(unvalidated) == 11
+    for cls in unvalidated:
+        with pytest.raises(NotImplementedError, match="placeholders"):
+            cls()
+
+
+def test_batch_propagates_programming_errors() -> None:
+    """Only invalid data becomes an 'error' row; bugs must raise."""
+
+    class Buggy(MockRiskModel):
+        def calculate(self, patient: PatientData) -> RiskResult:
+            raise KeyError("bug")
+
+    df = pd.DataFrame([dict(age=55, sex="male", systolic_bp=140.0, total_cholesterol=6.0,
+                            hdl_cholesterol=1.2, smoking=True)])
+    with pytest.raises(KeyError):
+        Buggy().calculate_batch(df)
