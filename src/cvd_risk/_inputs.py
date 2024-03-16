@@ -30,23 +30,21 @@ def _norm(v) -> str:
     return str(v).strip().lower().replace("-", "_").replace(" ", "_")
 
 
+def _map_strings(x, lookup: dict[str, int]) -> np.ndarray:
+    """Map values through `lookup` after normalising; unknown -> -1. Works on unique values only."""
+    uniq, inv = np.unique(np.asarray(x, dtype=object).astype(str), return_inverse=True)
+    codes = np.array([lookup.get(_norm(u), -1) for u in uniq], dtype=np.int64)
+    return codes[inv].reshape(np.shape(x))
+
+
 def as_category(x, allowed: tuple[str, ...]) -> np.ndarray:
     """Index of each value in `allowed` (case/whitespace/-/_ insensitive); -1 if unknown."""
-    lookup = {a: i for i, a in enumerate(allowed)}
-    arr = np.asarray(x, dtype=object)
-    out = np.full(arr.shape, -1, dtype=np.int64)
-    for i, v in np.ndenumerate(arr):
-        out[i] = lookup.get(_norm(v), -1)
-    return out
+    return _map_strings(x, {a: i for i, a in enumerate(allowed)})
 
 
 def as_sex(x) -> np.ndarray:
     """1 = male, 0 = female, -1 = unknown. Accepts 'male'/'female'/'m'/'f' (any case)."""
-    arr = np.asarray(x, dtype=object)
-    out = np.full(arr.shape, -1, dtype=np.int64)
-    for i, v in np.ndenumerate(arr):
-        out[i] = _SEX.get(_norm(v), -1)
-    return out
+    return _map_strings(x, _SEX)
 
 
 def as_bool(x) -> np.ndarray:
