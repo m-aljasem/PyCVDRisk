@@ -18,4 +18,5 @@ score2(age=[50, 62], sex=["male", "female"], smoker=[1, 0], sbp=[140, 130],
 | Score | Status |
 |---|---|
 | SCORE2, SCORE2-OP, SCORE2-Diabetes | implemented, verified vs R `RiskScorescvd` |
-| SCORE2-Asia-Pacific, SCORE2-CKD, PREVENT, WHO 2019, Globorisk, QRISK3 | planned |
+| Globorisk (lab, office, fatal; 182 countries) | implemented, verified vs the authors' R package |
+| SCORE2-Asia-Pacific, SCORE2-CKD, PREVENT, WHO 2019, QRISK3 | planned |
