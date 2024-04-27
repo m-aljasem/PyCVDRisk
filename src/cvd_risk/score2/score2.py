@@ -1,4 +1,4 @@
-"""SCORE2, SCORE2-OP and SCORE2-Diabetes: 10-year risk of fatal and non-fatal CVD.
+"""SCORE2, SCORE2-OP, SCORE2-Diabetes and SCORE2 Asia-Pacific: 10-year risk of fatal and non-fatal CVD.
 
 All functions accept scalars or array-likes (broadcast like numpy) and return a
 float64 array of risks as fractions in [0, 1]. A row is NaN when any input is
@@ -68,6 +68,21 @@ def score2(age, sex, smoker, sbp, total_chol, hdl_chol, diabetes, region) -> np.
     lp, _ = _score2_lp(C.SCORE2, male, age, sm, sbp, tc, hdl, dm)
     uncal = -np.expm1(np.exp(lp) * np.log(_by_sex(male, C.SCORE2, "s0")))
     return recalibrate(uncal, *_scales(sx, rg, C.SCORE2_SCALES))
+
+
+def score2_asia_pacific(age, sex, smoker, sbp, total_chol, hdl_chol, diabetes, region) -> np.ndarray:
+    """SCORE2 Asia-Pacific (ages 40-69). Source: coefficients.SCORE2_ASIA_PACIFIC_SOURCE.
+
+    `region` is the Asia-Pacific risk region ("low", "moderate", "high",
+    "very_high") as assigned per country in the source's Supplementary Table 4.
+    """
+    age, sx, sm, sbp, tc, hdl, dm, rg = _prepare(
+        age, sex, smoker, sbp, total_chol, hdl_chol, diabetes, region, "score2_asia_pacific"
+    )
+    male = sx == 1
+    lp, _ = _score2_lp(C.SCORE2, male, age, sm, sbp, tc, hdl, dm)
+    uncal = -np.expm1(np.exp(lp) * np.log(_by_sex(male, C.SCORE2, "s0")))
+    return recalibrate(uncal, *_scales(sx, rg, C.SCORE2_ASIA_PACIFIC_SCALES))
 
 
 def score2_op(age, sex, smoker, sbp, total_chol, hdl_chol, diabetes, region) -> np.ndarray:

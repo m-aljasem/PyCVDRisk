@@ -1,6 +1,6 @@
 """Verification of the SCORE2 family.
 
-1. Agreement with the R reference (RiskScorescvd, unrounded) on 60 000 synthetic patients.
+1. Agreement with the R reference (RiskScorescvd, unrounded) on 80 000 synthetic patients.
 2. Properties every valid implementation must satisfy.
 3. Input handling and range edges.
 """
@@ -13,7 +13,7 @@ import pytest
 from hypothesis import given, settings
 from hypothesis import strategies as st
 
-from cvd_risk import score2, score2_diabetes, score2_op
+from cvd_risk import score2, score2_asia_pacific, score2_diabetes, score2_op
 from cvd_risk.score2 import REGIONS
 
 FIXTURES = Path(__file__).parents[2] / "reference" / "score2" / "fixtures"
@@ -31,7 +31,8 @@ def load(variant):
 @pytest.mark.parametrize(
     "variant, fn, cols",
     [("score2", score2, BASE_COLS), ("score2_op", score2_op, BASE_COLS),
-     ("score2_diabetes", score2_diabetes, DM_COLS)],
+     ("score2_diabetes", score2_diabetes, DM_COLS),
+     ("score2_asia_pacific", score2_asia_pacific, BASE_COLS)],
 )
 def test_matches_r_reference(variant, fn, cols):
     p, expected = load(variant)
@@ -153,3 +154,24 @@ def test_finding_score2_risk_can_fall_with_age():
     # - 0.0281*tc_t + 0.0426*hdl_t; negative for extreme diabetic smokers.
     rest = ("male", 1, 175, 9.0, 0.75, 1, "low")
     assert score2(41, *rest) < score2(40, *rest)
+
+
+def test_asia_pacific_shares_score2_core_model():
+    # Same core equation, different recalibration: identical when the scales coincide.
+    from cvd_risk.score2 import coefficients as C
+    from cvd_risk.score2.score2 import recalibrate
+    args = (55, "female", 1, 150, 6.2, 1.1, 0)
+    s1, s2 = C.SCORE2_ASIA_PACIFIC_SCALES["female"][2]
+    t1, t2 = C.SCORE2_SCALES["female"][2]
+    eu = score2(*args, "high")
+    uncal = 1 - np.exp(-np.exp((np.log(-np.log1p(-eu)) - t1) / t2))  # invert EU recalibration
+    np.testing.assert_allclose(score2_asia_pacific(*args, "high"), recalibrate(uncal, s1, s2), rtol=1e-12)
+
+
+def test_finding_asia_pacific_region_order_inverts_at_both_ends():
+    # Very high-risk region gives lower risk than high-risk at the top of the range,
+    # and low gives higher risk than moderate at the bottom (Supplementary Table 5 scales).
+    top = (69, "male", 1, 200, 9.0, 0.7, 1)
+    assert score2_asia_pacific(*top, "very_high") < score2_asia_pacific(*top, "high")
+    bottom = (40, "female", 0, 90, 3.0, 2.5, 0)
+    assert score2_asia_pacific(*bottom, "low") > score2_asia_pacific(*bottom, "moderate")

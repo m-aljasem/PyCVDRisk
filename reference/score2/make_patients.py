@@ -40,6 +40,7 @@ def main():
     rng = np.random.default_rng(20261101)
     base(rng, ages(rng, 40, 69)).to_csv(OUT / "score2_patients.csv", index_label="id")
     base(rng, ages(rng, 70, 89)).to_csv(OUT / "score2_op_patients.csv", index_label="id")
+    base(rng, ages(rng, 40, 69)).to_csv(OUT / "score2_asia_pacific_patients.csv", index_label="id")
     d = base(rng, ages(rng, 40, 69))
     d["age_at_diabetes_diagnosis"] = np.where(
         d.diabetes == 1, rng.uniform(18, d.age).round(0), np.nan)

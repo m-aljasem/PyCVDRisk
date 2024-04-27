@@ -19,6 +19,14 @@ SCORE2_DIABETES_SOURCE = (
     "Eur Heart J 2023;44:2544-2556. doi:10.1093/eurheartj/ehad260 (supplementary methods)"
 )
 
+SCORE2_ASIA_PACIFIC_SOURCE = (
+    "SCORE2 Asia-Pacific writing group. Risk prediction of cardiovascular disease in the "
+    "Asia-Pacific region: the SCORE2 Asia-Pacific model. Eur Heart J 2025. "
+    "doi:10.1093/eurheartj/ehae609, Supplementary Table 5 (rescaling factors); "
+    "core model = SCORE2 (Supplementary Methods, Box 1). Source file saved in "
+    "reference/score2/source/score2_asia_pacific_ehae609_supplement.docx"
+)
+
 REGIONS = ("low", "moderate", "high", "very_high")
 
 # Terms (centred/scaled as in the source):
@@ -46,6 +54,15 @@ SCORE2 = {
 SCORE2_SCALES = {
     "male": ((-0.5699, 0.7476), (-0.1565, 0.8009), (0.3207, 0.9360), (0.5836, 0.8294)),
     "female": ((-0.7380, 0.7019), (-0.3143, 0.7701), (0.5710, 0.9369), (0.9412, 0.8329)),
+}
+
+# SCORE2 Asia-Pacific: SCORE2 core model (SCORE2 above) recalibrated to four
+# Asia-Pacific risk regions. Values as printed (9 decimals) in Supplementary Table 5.
+SCORE2_ASIA_PACIFIC_SCALES = {
+    "male": ((-0.375229965, 0.62020875), (0.284885676, 0.778128607),
+             (0.778231091, 0.844985356), (0.608975204, 0.679014197)),
+    "female": ((-0.986572446, 0.536743779), (0.08278687, 0.718980326),
+               (0.611474287, 0.703624072), (0.502751798, 0.555577072)),
 }
 
 # Terms: age = age - 73;  sbp = sbp - 150;  tc = total_chol - 6;  hdl = hdl - 1.4
@@ -100,4 +117,7 @@ SCORE2_DIABETES = {
 
 # Valid ages in years, half-open [lo, hi) so fractional ages (e.g. 69.9) fall in
 # exactly one variant. SCORE2: 40-69; SCORE2-OP: 70-89 (ESC 2021 guideline).
-AGE_RANGE = {"score2": (40, 70), "score2_op": (70, 90), "score2_diabetes": (40, 70)}
+AGE_RANGE = {
+    "score2": (40, 70), "score2_op": (70, 90), "score2_diabetes": (40, 70),
+    "score2_asia_pacific": (40, 70),
+}

@@ -5,11 +5,12 @@
 #   Rscript reference/score2/run_reference.R
 suppressMessages(library(dplyr))
 pkg <- "reference/vendor/RiskScorescvd"
-for (f in c("rounding.R", "11_SCORE2_func.R", "15_SCORE2-Diabetes_func.R")) {
+for (f in c("rounding.R", "11_SCORE2_func.R", "15_SCORE2-Diabetes_func.R",
+            "16_SCORE2-Asia-Pacific_func.R")) {
   source(file.path(pkg, "R", f))
 }
 round <- function(x, digits = 0) x                    # 11_SCORE2_func.R
-round_to_nearest_digit <- function(number, digits = 0) number  # 15_SCORE2-Diabetes_func.R
+round_to_nearest_digit <- function(number, digits = 0) number  # 15_, 16_
 
 fx <- "reference/score2/fixtures"
 region_r <- c(low = "Low", moderate = "Moderate", high = "High", very_high = "Very high")
@@ -32,6 +33,10 @@ run("score2_diabetes", function(p) mapply(function(r, a, g, s, b, t, h, d, da, a
   SCORE2_Diabetes(r, a, g, s, b, t, h, d, da, a1c, e, classify = FALSE),
   region_r[p$region], p$age, p$sex, p$smoker, p$sbp, p$total_chol, p$hdl_chol,
   p$diabetes, p$age_at_diabetes_diagnosis, p$hba1c, p$egfr))
+
+run("score2_asia_pacific", function(p) mapply(function(r, a, g, s, b, t, h, d)
+  SCORE2_Asia_Pacific(r, a, g, s, b, t, h, d, classify = FALSE),
+  region_r[p$region], p$age, p$sex, p$smoker, p$sbp, p$total_chol, p$hdl_chol, p$diabetes))
 
 writeLines(c(
   "reference: RiskScorescvd (CRAN) — vendored source, see reference/vendor/RiskScorescvd/DESCRIPTION",

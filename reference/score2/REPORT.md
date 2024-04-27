@@ -17,9 +17,10 @@ rounding: disabled (round and round_to_nearest_digit overridden with identity)
 
 | Variant | Patients | NaN | Max abs diff | Max rel diff | Pass (rtol 1e-12) | Time (s) |
 |---|---|---|---|---|---|---|
-| score2 | 20,000 | 0 | 4.44e-16 | 5.56e-14 | yes | 0.011 |
+| score2 | 20,000 | 0 | 4.44e-16 | 5.56e-14 | yes | 0.010 |
 | score2_op | 20,000 | 0 | 4.44e-16 | 4.15e-15 | yes | 0.010 |
-| score2_diabetes | 20,000 | 0 | 6.66e-16 | 6.40e-14 | yes | 0.014 |
+| score2_diabetes | 20,000 | 0 | 5.55e-16 | 1.14e-13 | yes | 0.011 |
+| score2_asia_pacific | 20,000 | 0 | 1.14e-15 | 4.38e-14 | yes | 0.011 |
 
 Patients: seeded synthetic set (`make_patients.py`) covering every sex x region x
 smoker x diabetes combination and every integer age in range, both ends included.
@@ -35,6 +36,7 @@ scale was nudged by one unit in its last published decimal place (e.g. 0.3742 ->
 | score2 | 40 | 40 |
 | score2_op | 42 | 42 |
 | score2_diabetes | 52 | 52 |
+| score2_asia_pacific | 40 | 40 |
 
 ## 3. Behaviour of the published models found by property testing
 
@@ -54,11 +56,20 @@ published equations, not implementation errors. Each is pinned by a
    (0.3524 - 0.0247 x (age - 73) < 0), and risk can fall with age for some
    profiles (1.7% of synthetic 70-88-year-olds).
 
+4. **SCORE2 Asia-Pacific region order inverts at both ends** (uniform synthetic
+   population): *high* exceeds *very high* for 1.4% (high-risk profiles, risks up
+   to ~87%), and *low* exceeds *moderate* for 4.5% (risks up to ~5%). Follows
+   directly from the published rescaling factors.
+
 To do before publication: confirm each against the official ESC risk charts.
 
 ## 4. Coefficient provenance — open items
 
-- Values were transcribed twice independently (this package; RiskScorescvd)
+- SCORE2 Asia-Pacific rescaling factors were transcribed from the primary
+  source (Supplementary Table 5, file in `source/`) and agree exactly with
+  RiskScorescvd. Its *very high* region has a lower intercept than *high* for
+  both sexes, as printed in the source.
+- SCORE2/-OP/-Diabetes values were transcribed twice independently (this package; RiskScorescvd)
   and agree exactly. A human check of every value against the PDF tables
   (page/table numbers to be recorded in `coefficients.py`) is still required
   before this counts as double data entry from the source.
