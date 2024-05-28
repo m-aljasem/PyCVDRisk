@@ -17,10 +17,10 @@ rounding: disabled (round and round_to_nearest_digit overridden with identity)
 
 | Variant | Patients | NaN | Max abs diff | Max rel diff | Pass (rtol 1e-12) | Time (s) |
 |---|---|---|---|---|---|---|
-| score2 | 20,000 | 0 | 4.44e-16 | 5.56e-14 | yes | 0.010 |
+| score2 | 20,000 | 0 | 4.44e-16 | 5.56e-14 | yes | 0.011 |
 | score2_op | 20,000 | 0 | 4.44e-16 | 4.15e-15 | yes | 0.010 |
-| score2_diabetes | 20,000 | 0 | 5.55e-16 | 1.14e-13 | yes | 0.011 |
-| score2_asia_pacific | 20,000 | 0 | 1.14e-15 | 4.38e-14 | yes | 0.011 |
+| score2_diabetes | 20,000 | 0 | 5.55e-16 | 1.14e-13 | yes | 0.016 |
+| score2_asia_pacific | 20,000 | 0 | 1.14e-15 | 4.38e-14 | yes | 0.013 |
 
 Patients: seeded synthetic set (`make_patients.py`) covering every sex x region x
 smoker x diabetes combination and every integer age in range, both ends included.

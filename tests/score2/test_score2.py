@@ -175,3 +175,13 @@ def test_finding_asia_pacific_region_order_inverts_at_both_ends():
     assert score2_asia_pacific(*top, "very_high") < score2_asia_pacific(*top, "high")
     bottom = (40, "female", 0, 90, 3.0, 2.5, 0)
     assert score2_asia_pacific(*bottom, "low") > score2_asia_pacific(*bottom, "moderate")
+
+
+@pytest.mark.parametrize("sex, region, published", [
+    ("male", "low", 5.9), ("male", "very_high", 14.0),
+    ("female", "low", 4.2), ("female", "very_high", 13.7),
+])
+def test_published_worked_example(sex, region, published):
+    # SCORE2 paper (Eur Heart J 2021;42:2439), Results, p.6: 50-year-old smoker,
+    # SBP 140 mmHg, total cholesterol 5.5, HDL 1.3 mmol/L (no diabetes).
+    assert round(100 * float(score2(50, sex, 1, 140, 5.5, 1.3, 0, region)), 1) == published
