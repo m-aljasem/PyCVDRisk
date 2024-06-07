@@ -12,15 +12,16 @@ Regenerate any family: `python reference/<family>/make_patients.py`,
 | SCORE2 Asia-Pacific | verified; scales transcribed from primary source | RiskScorescvd 0.3.1 | B | `score2/REPORT.md` |
 | Globorisk (lab, office, fatal) | verified | authors' R package 1.0.2 | A | `globorisk/REPORT.md` |
 | SCORE2-CKD | **blocked: needs source PDF** | RiskScorescvd (ready) | — | — |
-| PREVENT | **blocked: needs source xlsx**; reference answers ready | preventr 0.12.2 | — | `prevent/README.md` |
+| PREVENT (5 models x 10/30 y x 5 outcomes) | verified; coefficients from primary source | authors' worked examples (100 values); preventr 0.12.2 | C + B | `prevent/REPORT.md` |
 | WHO 2019 | **blocked: needs authors** (recalibration factors unpublished) | — | — | `who2019/README.md` |
 | QRISK3 | **needs a decision** (see below) | ClinRisk code (LGPL) | — | — |
 
 ## Owner actions needed
 
-1. **PREVENT** — your Zotero has only the main article (no coefficients; they
-   are in the supplement). In a browser, open https://pmc.ncbi.nlm.nih.gov/articles/PMC10910659/
-   and save "Supplemental Tables" (xlsx) as `reference/prevent/source/Supplemental_Tables.xlsx`.
+1. **PREVENT HbA1c erratum** — open doi:10.1161/CIR.0000000000001491 (2026-10-14)
+   in a browser, save the PDF to `reference/prevent/source/`, and confirm it swaps
+   the "HbA1c in DM" / "HbA1c no DM" coefficients (inferred from preventr; see
+   `prevent/REPORT.md`).
 2. **SCORE2-CKD** — not in your Zotero library. Add Matsushita K et al., Eur J
    Prev Cardiol 2023, doi:10.1093/eurjpc/zwac176 (PMC9839538) with its supplement.
    Also missing from Zotero: SCORE2-OP (Eur Heart J 2021, doi:10.1093/eurheartj/ehab312).
@@ -30,5 +31,5 @@ Regenerate any family: `python reference/<family>/make_patients.py`,
    accepting LGPL obligations for that module or getting written permission
    from ClinRisk to publish an MIT re-implementation. Your call.
 
-Automated downloads of 1, 2 were refused by the publishers or behind a browser
+Automated downloads of 1 and 2 were refused by the publishers or behind a browser
 challenge; they were not worked around.

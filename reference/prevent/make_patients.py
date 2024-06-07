@@ -28,7 +28,10 @@ def main():
         "bmi": rng.uniform(18.5, 39.9, N).round(1),
         "hba1c": rng.uniform(4.5, 15, N).round(1),          # %
         "uacr": np.exp(rng.uniform(np.log(0.1), np.log(25000), N)).round(1),  # mg/g
+        "sdi": rng.integers(1, 11, N).astype(float),        # SDI decile
     })
+    for col in ("uacr", "hba1c", "sdi"):  # ~10% missing: exercises the "missing" indicator terms
+        d.loc[rng.random(N) < 0.1, col] = np.nan
     d.to_csv(Path(__file__).parent / "fixtures" / "patients.csv", index_label="id")
 
 
