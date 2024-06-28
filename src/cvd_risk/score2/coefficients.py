@@ -121,3 +121,41 @@ AGE_RANGE = {
     "score2": (40, 70), "score2_op": (70, 90), "score2_diabetes": (40, 70),
     "score2_asia_pacific": (40, 70),
 }
+
+SCORE2_CKD_SOURCE = (
+    "Matsushita K, Kaptoge S, Hageman SHJ, et al. Including measures of chronic kidney disease "
+    "to improve cardiovascular risk prediction by SCORE2 and SCORE2-OP. Eur J Prev Cardiol "
+    "2023;30:8-16. doi:10.1093/eurjpc/zwac176, Supplementary Tables A-C"
+)
+
+# CKD add-ons (Supplementary Tables A-C). Applied to SCORE2 (age < 70) or
+# SCORE2-OP (age 70-89):  risk_new = 1 - (1 - risk) ** exp(delta).
+# Expected eGFR and expected log8(ACR) from traditional predictors, SCORE2 centring
+# (a = (age-60)/5, sbp = (sbp-120)/20, tc = total_chol-6, hdl = (hdl-1.3)/0.5).
+CKD_EXPECTED_EGFR = {
+    "constant": 87.8980, "age": -3.7891, "female": -0.7023, "tc": -0.2941, "hdl": 1.0960,
+    "sbp": -0.1364, "diabetes": 0.1205, "smoker": 1.3211, "age_tc": 0.0555, "age_hdl": 0.1717,
+    "age_sbp": 0.0059, "age_diabetes": -0.8994, "age_smoker": 0.2181,
+}
+# log8(expected ACR / 8); also uses the observed-eGFR spline (lt60, 60-90, ge90; per -15).
+CKD_EXPECTED_LOG8_ACR = {
+    "constant": -0.0225, "age": 0.0159, "female": 0.0308, "tc": 0.0185, "hdl": -0.0274,
+    "sbp": 0.1339, "diabetes": 0.2171, "smoker": 0.0629, "age_tc": -0.0062, "age_hdl": 0.0003,
+    "age_sbp": 0.0008, "age_diabetes": -0.0109, "age_smoker": 0.0085,
+    "egfr_lt60": 0.4057, "egfr_60_90": 0.0597, "egfr_ge90": -0.0916,
+}
+# eGFR add-on: log HRs for (observed - expected) eGFR spline segments, and their
+# interactions with age ((age-60)/5 for SCORE2; age-73 for SCORE2-OP). SCORE2 has
+# no >= 90 segment ("not taken into account", Table A footnote).
+CKD_EGFR_ADDON = {
+    "score2": {"lt60": 0.4713, "60_90": 0.0956, "ge90": 0.0,
+               "age_lt60": -0.0802, "age_60_90": 0.0088, "age_ge90": 0.0},
+    "score2_op": {"lt60": 0.3072, "60_90": 0.0942, "ge90": -0.4616,
+                  "age_lt60": -0.0127, "age_60_90": -0.0098, "age_ge90": -0.0075},
+}
+CKD_ACR_ADDON = {"score2": 0.2432, "score2_op": 0.2370}  # per log8(ACR) - log8(expected ACR)
+DIPSTICK = ("negative", "trace", "1+", "2+", "3+")
+CKD_DIPSTICK_ADDON = {  # indexed like DIPSTICK
+    "score2": (0.0, 0.2644, 0.4126, 0.4761, 0.4761),      # "++ or more"
+    "score2_op": (0.0, 0.2517, 0.3872, 0.5458, 0.4207),   # "+++ or more"
+}
