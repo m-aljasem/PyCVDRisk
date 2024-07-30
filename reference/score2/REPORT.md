@@ -17,10 +17,10 @@ rounding: disabled (round and round_to_nearest_digit overridden with identity)
 
 | Variant | Patients | NaN | Max abs diff | Max rel diff | Pass (rtol 1e-12) | Time (s) |
 |---|---|---|---|---|---|---|
-| score2 | 20,000 | 0 | 4.44e-16 | 5.56e-14 | yes | 0.011 |
-| score2_op | 20,000 | 0 | 4.44e-16 | 4.15e-15 | yes | 0.010 |
-| score2_diabetes | 20,000 | 0 | 5.55e-16 | 1.14e-13 | yes | 0.016 |
-| score2_asia_pacific | 20,000 | 0 | 1.14e-15 | 4.38e-14 | yes | 0.013 |
+| score2 | 20,000 | 0 | 4.44e-16 | 5.56e-14 | yes | 0.016 |
+| score2_op | 20,000 | 0 | 4.44e-16 | 4.15e-15 | yes | 0.015 |
+| score2_diabetes | 20,000 | 0 | 5.55e-16 | 1.14e-13 | yes | 0.013 |
+| score2_asia_pacific | 20,000 | 0 | 1.14e-15 | 4.38e-14 | yes | 0.011 |
 
 Patients: seeded synthetic set (`make_patients.py`) covering every sex x region x
 smoker x diabetes combination and every integer age in range, both ends included.
@@ -70,9 +70,9 @@ To do before publication: confirm each against the official ESC risk charts.
   RiskScorescvd. Its *very high* region has a lower intercept than *high* for
   both sexes, as printed in the source.
 - SCORE2/-OP/-Diabetes values were transcribed twice independently (this package; RiskScorescvd)
-  and agree exactly. A human check of every value against the PDF tables
-  (page/table numbers to be recorded in `coefficients.py`) is still required
-  before this counts as double data entry from the source.
+  and agree exactly. `check_coefficients.py` also compares all 116 of them with the
+  supplement text (files in `source/`), located by row label: 116/116 match. It
+  flags a mutated value (checked by hand with four mutations).
 - Not yet compared with the official ESC calculator (HeartScore) or charts
   (evidence level A).
 - No published worked examples have been located yet.

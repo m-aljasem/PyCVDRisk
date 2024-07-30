@@ -2,8 +2,8 @@
 
 Every value is cited to its publication. Transcription status: each value was
 transcribed twice independently (here, and in the third-party R package
-RiskScorescvd 0.3.1) and the two agree exactly; the remaining check against
-the PDF table/page is tracked in reference/score2/REPORT.md.
+RiskScorescvd 0.3.1) and the two agree exactly. reference/score2/check_coefficients.py
+compares every SCORE2, SCORE2-OP and SCORE2-Diabetes value with the supplement text.
 """
 
 SCORE2_SOURCE = (
