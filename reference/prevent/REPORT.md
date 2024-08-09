@@ -14,11 +14,11 @@ All 100 published values are reproduced to rtol 1e-12
 
 **HbA1c erratum (2026-10-14, doi:10.1161/CIR.0000000000001491).** The coefficients
 labelled *HbA1c in DM* and *HbA1c no DM* are swapped in the 10- and 30-year HbA1c
-and full models (40 values). The swap is inferred, not read: the erratum is behind
-publisher bot protection. The evidence is that preventr 0.12.2, which says it
-implements the erratum, differs from S12 in exactly these 40 values and nothing
-else. The S12 worked examples predate the erratum, so they are tested against the
-uncorrected table. **Owner action:** read the erratum PDF and confirm.
+and full models. The erratum text (`source/erratum_CIR.0000000000001491.txt`) states
+that the two row headers were inverted in exactly these four tabs (S12C, S12E, S12H,
+S12J) and in Table 3 of the paper. Independently, preventr 0.12.2 differs from S12
+in exactly these values and nothing else. The S12 worked examples reproduce with the
+values as originally labelled, so they are tested against the uncorrected table.
 
 ## 2. Agreement with the reference
 
@@ -40,17 +40,17 @@ missing-indicator terms are exercised).
 | Model | Years | Patients | Reference NA | Max rel diff (5 outcomes) | Time (s) |
 |---|---|---|---|---|---|
 | base | 10 | 5,000 | 89 | 3.8e-13 | 0.011 |
-| base | 30 | 5,000 | 89 | 3.0e-14 | 0.011 |
-| uacr | 10 | 5,000 | 89 | 6.3e-13 | 0.010 |
-| uacr | 30 | 5,000 | 89 | 5.8e-14 | 0.012 |
-| hba1c | 10 | 5,000 | 89 | 4.2e-13 | 0.010 |
-| hba1c | 30 | 5,000 | 89 | 2.8e-14 | 0.010 |
-| sdi | 10 | 5,000 | 89 | 2.2e-13 | 0.010 |
-| sdi | 30 | 5,000 | 89 | 3.8e-14 | 0.009 |
+| base | 30 | 5,000 | 89 | 3.0e-14 | 0.009 |
+| uacr | 10 | 5,000 | 89 | 6.3e-13 | 0.009 |
+| uacr | 30 | 5,000 | 89 | 5.8e-14 | 0.010 |
+| hba1c | 10 | 5,000 | 89 | 4.2e-13 | 0.009 |
+| hba1c | 30 | 5,000 | 89 | 2.8e-14 | 0.009 |
+| sdi | 10 | 5,000 | 89 | 2.2e-13 | 0.009 |
+| sdi | 30 | 5,000 | 89 | 3.8e-14 | 0.010 |
 | full | 10 | 5,000 | 89 | 1.9e-13 | 0.010 |
-| full | 30 | 5,000 | 89 | 3.1e-14 | 0.011 |
+| full | 30 | 5,000 | 89 | 3.1e-14 | 0.013 |
 
-Scoring 1,000,000 rows (full model, 10-year total CVD): 2.05 s.
+Scoring 1,000,000 rows (full model, 10-year total CVD): 2.35 s.
 
 ## 3. Coefficient mutation check
 
@@ -89,5 +89,4 @@ A nudge counts as caught if the comparison with preventr then fails.
 
 ## 5. Open items
 
-- Read the HbA1c erratum and confirm the swap (owner action).
 - Compare against the AHA online calculator (evidence level A).

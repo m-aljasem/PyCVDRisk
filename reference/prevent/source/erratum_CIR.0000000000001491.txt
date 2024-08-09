@@ -1,0 +1,28 @@
+Correction to: Khan SS et al. Development and Validation of the American Heart Association's
+PREVENT Equations. Circulation. 2024;149:430-449. doi:10.1161/CIRCULATIONAHA.123.067626
+Correction doi:10.1161/CIR.0000000000001491. Text as supplied by the project owner (2026-11-01),
+copied from the publisher's page:
+
+In the article by Khan et al, "Development and Validation of the American Heart Association's
+PREVENT Equations," which published online November 10, 2023, and appeared in the February 6,
+2024, issue of the journal (Circulation. 2024;149:430-449. DOI: 10.1161/CIRCULATIONAHA.123.067626),
+a correction is needed.
+On page 437, Table 3, section entitled "Glycemic Status", the two following row headers were
+inverted. The rows should be named:
+  - HbA1c no DM, per 1%
+  - HbA1c in DM, per 1%
+The table has been updated.
+Also, the Supplemental File entitled File (supplement_tables_for_manuscript_20240126_withcalc.check.xlsx)
+has been updated; specifically, the tabs
+  - Table S3
+  - Table S10
+  - Table 12C A1c 10 yr
+  - Table S12E Full 10 yr
+  - Table 12H A1c 30yr
+  - Table S12J Full 30 yr
+The following two row headers were inverted. The rows should be named:
+  - HbA1c no DM, per 1%
+  - HbA1c in DM, per 1%
+The tables on each of these tabs have been updated.
+This correction to the article and the Supplemental File has been made to the current online
+version of the article.

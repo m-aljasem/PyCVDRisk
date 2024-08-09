@@ -19,14 +19,9 @@ then `Rscript reference/qrisk3/run_reference_cran.R`), `python reference/<family
 
 ## Owner actions needed
 
-1. **PREVENT HbA1c erratum** — open doi:10.1161/CIR.0000000000001491 (2026-10-14)
-   in a browser, save the PDF to `reference/prevent/source/`, and confirm it swaps
-   the "HbA1c in DM" / "HbA1c no DM" coefficients (inferred from preventr; see
-   `prevent/REPORT.md`).
-2. **QRISK3 licence** — the paper does not print the full model, so
+1. **QRISK3 licence** — the paper does not print the full model, so
    `src/cvd_risk/qrisk3/` is built from ClinRisk's LGPL C code and is itself
    LGPL-3.0-or-later (licence texts in that folder); the rest stays MIT. If you
    want the whole package MIT, ask ClinRisk for written permission; otherwise
    declare the package licence as `MIT AND LGPL-3.0-or-later`.
 
-The automated download for 1 was refused by the publisher; it was not worked around.

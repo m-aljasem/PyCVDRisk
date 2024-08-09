@@ -83,9 +83,9 @@ def model_years(title: str) -> tuple[str, int]:
 
 # Erratum, 2026-10-14 (doi:10.1161/CIR.0000000000001491): HbA1c coefficients corrected for the
 # 10- and 30-year HbA1c and full models. Applied as a swap of the "HbA1c in DM" and "HbA1c no DM"
-# rows: preventr 0.12.2, which implements the erratum, differs from S12 in exactly these
-# 40 values and nothing else (reference/prevent/REPORT.md). The erratum text itself has
-# not yet been read (publisher blocks automated access): evidence level B until it is.
+# rows. The erratum (source/erratum_CIR.0000000000001491.txt) says the two row headers were
+# inverted in exactly the tabs S12C/S12E (HbA1c, full; 10 y) and S12H/S12J (30 y). preventr
+# 0.12.2 differs from S12 in exactly these values and nothing else.
 # The worked examples in S12 predate the erratum and are kept as published.
 ERRATUM_MODELS = {"hba1c", "full"}
 ERRATUM_SWAP = {"hba1c_dm": "hba1c_no_dm", "hba1c_no_dm": "hba1c_dm"}
