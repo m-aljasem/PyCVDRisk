@@ -24,6 +24,7 @@ score2(age=[50, 62], sex=["male", "female"], smoker=[1, 0], sbp=[140, 130],
 | QRISK3-2017 | implemented (LGPL-3.0 module), verified vs ClinRisk's own C code and R `QRISK3` |
 | Pooled Cohort Equations (ACC/AHA 2013) | implemented, verified vs the guideline's Table A and R `CVrisk` / `PooledCohort` |
 | Framingham 2008 general CVD (lab, BMI) | implemented, verified vs the Framingham Heart Study's own calculator spreadsheets, the paper's worked examples and R `CVrisk` |
+| SCORE (2003), fatal CVD, total-cholesterol model | implemented, verified vs the 800 cells of the official charts (798 within printed-coefficient precision; 2 chart anomalies documented); no working third-party implementation exists |
 
 ### One call for any country
 

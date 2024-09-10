@@ -18,6 +18,7 @@ then `Rscript reference/qrisk3/run_reference_cran.R`), `python reference/<family
 | QRISK3-2017 | verified; module is LGPL-3.0 (see below) | ClinRisk C source compiled unmodified; QRISK3 0.6.0 (R) | A + B | `qrisk3/REPORT.md` |
 | Pooled Cohort Equations 2013 | verified; 46/46 values vs Table A | guideline worked example; CVrisk 1.2.1; PooledCohort 0.0.2 | C + B | `pce/REPORT.md` |
 | Framingham 2008 (lab, BMI) | verified; 32/32 values vs paper | FHS calculator spreadsheets; paper worked examples; CVrisk 1.2.1 | A + C + B | `framingham/REPORT.md` |
+| SCORE 2003 (total-cholesterol model) | verified; 22/22 values vs paper; 798/800 chart cells within printed precision | official charts (Figs 1-2) | A | `score/REPORT.md` |
 
 ## Owner actions needed
 
