@@ -15,6 +15,7 @@ then `Rscript reference/qrisk3/run_reference_cran.R`), `python reference/<family
 | SCORE2-CKD (eGFR, ACR, dipstick add-ons) | verified; 1 reference bug found | supplement worked example; RiskScorescvd 0.3.1 | C + B | `score2_ckd/REPORT.md` |
 | PREVENT (5 models x 10/30 y x 5 outcomes) | verified; coefficients from primary source | authors' worked examples (100 values); preventr 0.12.2 | C + B | `prevent/REPORT.md` |
 | WHO 2019 (lab, non-lab; 21 regions, 190 countries, 1990-2017) | verified | all 44,100 official chart cells; WHORiskCalculator 1.1.0 | A (charts) + B | `who2019/REPORT.md` |
+| QRISK2-2014 | verified; module is LGPL-3.0 | ClinRisk C source compiled unmodified, incl. its input validation | A | `qrisk2/REPORT.md` |
 | QRISK3-2017 | verified; module is LGPL-3.0 (see below) | ClinRisk C source compiled unmodified; QRISK3 0.6.0 (R) | A + B | `qrisk3/REPORT.md` |
 | Pooled Cohort Equations 2013 | verified; 46/46 values vs Table A | guideline worked example; CVrisk 1.2.1; PooledCohort 0.0.2 | C + B | `pce/REPORT.md` |
 | Framingham 2008 (lab, BMI) | verified; 32/32 values vs paper | FHS calculator spreadsheets; paper worked examples; CVrisk 1.2.1 | A + C + B | `framingham/REPORT.md` |
@@ -22,8 +23,8 @@ then `Rscript reference/qrisk3/run_reference_cran.R`), `python reference/<family
 
 ## Owner actions needed
 
-1. **QRISK3 licence** — the paper does not print the full model, so
-   `src/cvd_risk/qrisk3/` is built from ClinRisk's LGPL C code and is itself
+1. **QRISK licence** — the papers do not print the full models, so
+   `src/cvd_risk/qrisk2/` and `src/cvd_risk/qrisk3/` are built from ClinRisk's LGPL C code and are themselves
    LGPL-3.0-or-later (licence texts in that folder); the rest stays MIT. If you
    want the whole package MIT, ask ClinRisk for written permission; otherwise
    declare the package licence as `MIT AND LGPL-3.0-or-later`.

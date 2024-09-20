@@ -41,7 +41,7 @@ def _linear_predictor(m, age, bmi, x):
     mu = m["means"]
     f = dict(x, age_1=dage ** p1 - mu["age_1"], age_2=dage ** p2 - mu["age_2"],
              bmi_1=dbmi ** -2 - mu["bmi_1"], bmi_2=dbmi ** -2 * np.log(dbmi) - mu["bmi_2"])
-    for k in ("rati", "sbp", "sbps5", "town"):
+    for k in mu.keys() - {"age_1", "age_2", "bmi_1", "bmi_2"}:
         f[k] = x[k] - mu[k]
     lp = np.take(m["ethnicity"], x["ethrisk"]) + np.take(m["smoking"], x["smoke_cat"])
     for parts, coef in m["terms"].items():
