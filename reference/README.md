@@ -20,6 +20,7 @@ then `Rscript reference/qrisk3/run_reference_cran.R`), `python reference/<family
 | Pooled Cohort Equations 2013 | verified; 46/46 values vs Table A | guideline worked example; CVrisk 1.2.1; PooledCohort 0.0.2 | C + B | `pce/REPORT.md` |
 | Framingham 2008 (lab, BMI) | verified; 32/32 values vs paper | FHS calculator spreadsheets; paper worked examples; CVrisk 1.2.1 | A + C + B | `framingham/REPORT.md` |
 | SCORE 2003 (total-cholesterol model) | verified; 22/22 values vs paper; 798/800 chart cells within printed precision | official charts (Figs 1-2) | A | `score/REPORT.md` |
+| SMART-REACH (10-year risk, CVD-free life expectancy) | verified; 24/24 coefficients vs calculator; calculator life-expectancy defect found | authors' calculator spreadsheet recalculated by LibreOffice | A | `smart_reach/REPORT.md` |
 
 ## Owner actions needed
 
@@ -28,4 +29,18 @@ then `Rscript reference/qrisk3/run_reference_cran.R`), `python reference/<family
    LGPL-3.0-or-later (licence texts in that folder); the rest stays MIT. If you
    want the whole package MIT, ask ClinRisk for written permission; otherwise
    declare the package licence as `MIT AND LGPL-3.0-or-later`.
-
+2. **Reynolds Risk Score — sources needed.** Both papers (Ridker 2007 JAMA 297:611; Ridker
+   2008 Circulation 118:2243) return 403 to automated download and are not in Zotero as files,
+   and the official site (reynoldsriskscore.org) is now a parked domain. v1's coefficients do not
+   match the published formula. Please add both PDFs to `Formulas/` or Zotero.
+3. **SMART2 — question for the authors (Hageman, Dorresteijn, Visseren; UMC Utrecht).** The
+   supplement (Table S2) gives the coefficients for uncentred predictors, a 10-year baseline risk
+   of 0.1658 and a "mean linear predictor" of -0.0464. At the derivation cohort's average values
+   (Table 1) the linear predictor is about 2.25, so the printed formula would give an average
+   patient a 10-year risk near 84%, against an observed incidence near 20%. The -0.0464 only makes
+   sense for centred predictors, and the centring values are not published. Question to send:
+   *which value of LP_mean (or which centring constants) should be used with the coefficients
+   in Supplementary Table 2?* U-Prevent.com presumably has the answer.
+4. **SMART-REACH — optional note to the authors.** Their calculator's life expectancy is wrong
+   whenever a person's yearly risks sum to more than 1 at some age (see `smart_reach/REPORT.md`
+   section 3); in some cases it is below the person's current age.
