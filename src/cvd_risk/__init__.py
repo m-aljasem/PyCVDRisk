@@ -2,6 +2,7 @@
 
 from cvd_risk.framingham import framingham
 from cvd_risk.globorisk import globorisk
+from cvd_risk.life_cvd2 import life_cvd2
 from cvd_risk.pce import pce
 from cvd_risk.prevent import prevent
 from cvd_risk.qrisk2 import qrisk2
@@ -12,5 +13,5 @@ from cvd_risk.smart_reach import smart_reach
 from cvd_risk.uniscore import guideline_score, uniscore
 from cvd_risk.who2019 import who2019
 
-__all__ = ["framingham", "globorisk", "pce", "prevent", "qrisk2", "qrisk3", "score", "score2", "score2_asia_pacific", "score2_ckd", "score2_op", "score2_diabetes", "smart_reach", "guideline_score", "uniscore", "who2019"]
+__all__ = ["framingham", "globorisk", "life_cvd2", "pce", "prevent", "qrisk2", "qrisk3", "score", "score2", "score2_asia_pacific", "score2_ckd", "score2_op", "score2_diabetes", "smart_reach", "guideline_score", "uniscore", "who2019"]
 __version__ = "2.0.0.dev0"

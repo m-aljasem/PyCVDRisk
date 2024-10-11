@@ -21,6 +21,7 @@ then `Rscript reference/qrisk3/run_reference_cran.R`), `python reference/<family
 | Framingham 2008 (lab, BMI) | verified; 32/32 values vs paper | FHS calculator spreadsheets; paper worked examples; CVrisk 1.2.1 | A + C + B | `framingham/REPORT.md` |
 | SCORE 2003 (total-cholesterol model) | verified; 22/22 values vs paper; 798/800 chart cells within printed precision | official charts (Figs 1-2) | A | `score/REPORT.md` |
 | SMART-REACH (10-year risk, CVD-free life expectancy) | verified; 24/24 coefficients vs calculator; calculator life-expectancy defect found | authors' calculator spreadsheet recalculated by LibreOffice | A | `smart_reach/REPORT.md` |
+| LIFE-CVD2 (lifetime risk, life expectancy, treatment benefit) | verified; 36/36 coefficients vs supplement; 7,167/7,168 chart cells; centring and chart inputs inferred and pinned by the charts | authors' charts (Appendix 1, 16 charts) | A | `life_cvd2/REPORT.md` |
 
 ## Owner actions needed
 
@@ -44,3 +45,7 @@ then `Rscript reference/qrisk3/run_reference_cran.R`), `python reference/<family
 4. **SMART-REACH — optional note to the authors.** Their calculator's life expectancy is wrong
    whenever a person's yearly risks sum to more than 1 at some age (see `smart_reach/REPORT.md`
    section 3); in some cases it is below the person's current age.
+5. **LIFE-CVD2 — optional note to the authors.** In all 16 charts of Appendix 1 the row
+   "age 65-69, SBP 100-119" is computed at age 62 instead of 67 (see `life_cvd2/REPORT.md`). The
+   supplement also does not state the predictor centring or the chart HDL/LDL values; the report
+   shows which values the charts imply.

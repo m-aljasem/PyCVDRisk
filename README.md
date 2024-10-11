@@ -27,6 +27,7 @@ score2(age=[50, 62], sex=["male", "female"], smoker=[1, 0], sbp=[140, 130],
 | Framingham 2008 general CVD (lab, BMI) | implemented, verified vs the Framingham Heart Study's own calculator spreadsheets, the paper's worked examples and R `CVrisk` |
 | SCORE (2003), fatal CVD, total-cholesterol model | implemented, verified vs the 800 cells of the official charts (798 within printed-coefficient precision; 2 chart anomalies documented); no working third-party implementation exists |
 | SMART-REACH (10-year risk, CVD-free life expectancy) | implemented, verified vs the authors' calculator spreadsheet (600 patients, 3e-15); a defect in the calculator's life expectancy documented |
+| LIFE-CVD2 (lifetime risk to 80, CVD-free life expectancy, treatment benefit; 4 ESC regions) | implemented, verified vs the authors' 16 published charts (7,167/7,168 cells within printed precision); a defective chart row documented |
 
 ### One call for any country
 
