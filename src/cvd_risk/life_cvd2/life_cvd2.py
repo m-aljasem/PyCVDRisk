@@ -25,7 +25,9 @@ from __future__ import annotations
 import numpy as np
 
 from cvd_risk._inputs import as_bool, as_category, as_float, as_sex
+from cvd_risk._lifetable import lifetime_risk, median_age, survival
 from cvd_risk.life_cvd2.coefficients import BASELINE, BETA, SCALES
+from cvd_risk.score2.score2 import recalibrate
 
 REGION_NAMES = ("low", "moderate", "high", "very_high")
 OUTCOMES = ("lifetime_risk", "life_expectancy")
@@ -51,7 +53,7 @@ def _yearly_risks(outcome, sx, reg, x, hr):
     s0 = _S0[:, 0 if outcome == "cvd" else 1, :].T[np.where(sx == 1, 0, 1)]  # (..., age)
     risk = 1 - s0 ** np.exp(lp)
     sc = scales[sx, reg]
-    risk = 1 - np.exp(-np.exp(sc[..., :1] + sc[..., 1:] * np.log(-np.log(1 - risk))))
+    risk = recalibrate(risk, sc[..., :1], sc[..., 1:])
     return 1 - (1 - risk) ** hr[..., None]
 
 
@@ -84,20 +86,9 @@ def life_cvd2(age, sex, smoker, sbp, total_chol, hdl_chol, region, *, outcome="l
         h = _yearly_risks("cvd", sx, reg, x, z(hc, 1.0))
         i = _yearly_risks("non_cvd", sx, reg, x, z(hn, 1.0))
     start = z(a, 35.0)[..., None]
-    live = _AGES >= start
-    step = np.where(_AGES > start, 1 - np.roll(h + i, 1, axis=-1), 1.0)
-    g = np.where(live, np.cumprod(step, axis=-1), 0.0)  # survival at the start of each age 35..100
-
+    ages, g = survival(h, i, _AGES, start)
     if outcome == "lifetime_risk":
-        out = np.sum(np.where(live & (_AGES < 80), g * h, 0.0), axis=-1)
+        out = lifetime_risk(h, g, _AGES, start, 80)
     else:
-        g_end = g[..., -1] * (1 - h[..., -1] - i[..., -1])  # survival at 101
-        g = np.concatenate([g, g_end[..., None]], axis=-1)
-        ages = np.append(_AGES, 101)
-        below = (ages >= start) & (g < 0.5)
-        k = np.argmax(below, axis=-1)  # first age with G < 0.5
-        gk = np.take_along_axis(g, k[..., None], -1)[..., 0]
-        gk0 = np.take_along_axis(g, np.maximum(k - 1, 0)[..., None], -1)[..., 0]
-        with np.errstate(invalid="ignore", divide="ignore"):
-            out = np.where(below.any(axis=-1), ages[k] - 1 + (gk0 - 0.5) / (gk0 - gk), np.inf)
+        out = median_age(g, ages, start)
     return np.where(ok, out, np.nan)
