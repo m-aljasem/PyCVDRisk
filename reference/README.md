@@ -23,6 +23,7 @@ then `Rscript reference/qrisk3/run_reference_cran.R`), `python reference/<family
 | SMART-REACH (10-year risk, CVD-free life expectancy) | verified; 24/24 coefficients vs calculator; calculator life-expectancy defect found | authors' calculator spreadsheet recalculated by LibreOffice | A | `smart_reach/REPORT.md` |
 | LIFE-CVD2 (lifetime risk, life expectancy, treatment benefit) | verified; 36/36 coefficients vs supplement; 7,167/7,168 chart cells; centring and chart inputs inferred and pinned by the charts | authors' charts (Appendix 1, 16 charts) | A | `life_cvd2/REPORT.md` |
 | DIAL2 core model | verified; 56/56 coefficients vs supplement (Word and PDF); weak evidence: 6 printed values | paper worked examples (Figure 3) | C | `dial2/REPORT.md` |
+| WHO/ISH charts 2007 (14 subregions, with/without cholesterol) | verified; 3 whoishRisk transcription errors corrected | guideline's 2 printed charts (768 cells); whoishRisk 1.0 table (10,752 cells) and its R lookup logic (transliterated, not run) | A (2 subregions) + B | `who_ish/REPORT.md` |
 
 ## Owner actions needed
 
@@ -53,3 +54,21 @@ then `Rscript reference/qrisk3/run_reference_cran.R`), `python reference/<family
 6. **DIAL2 — optional note to the authors.** Figure 3B is reproduced with eGFR 90, not the 70 in
    its caption and the text (see `dial2/REPORT.md`). A few model outputs from u-prevent.com
    (or from the authors) would raise DIAL2's evidence from level C to A.
+7. **WHO/ISH 2007: regional charts needed.** The guideline prints only the SEAR-D and EMR-B charts.
+   The other 12 subregions currently rest on whoishRisk's table, which has 3 errors in SEAR-D.
+   The WHO/ISH pocket guidelines (WHO IRIS, 2007; one per subregion) hold the official charts,
+   but IRIS timed out here. Please add the 12 PDFs to `Formulas/WHO/`. The report then checks
+   every cell, including the 10 cells where a higher risk factor gives a lower band.
+8. **Sources blocked, please add to `Formulas/` or Zotero.**
+   - **SMART (2013):** Dorresteijn, Heart 2013, online supplements 2 (calculation sheet) and 6
+     (baseline survival and centring). The paper gives only the coefficients.
+   - **QRISK1:** the paper prints rounded hazard ratios only, with no means or baseline survival.
+     The full model (means, baseline survival) is needed from ClinRisk or the authors.
+   - **QRISK4:** the software is available only under an academic licence from Oxford University
+     Innovations.
+   - **Group 2 papers (from v1):** ASSIGN, PROCAM, REGICOR, Progetto Cuore, FINRISK, PREDICT, Jackson
+     Heart, ARIC, CARDIA, Singapore, Malaysian, Gulf RACE, Dundee, Cambridge, EPIC-Norfolk, Heinz
+     Nixdorf, Rotterdam, INTERHEART, D:A:D, RISC, New Zealand. Europe PMC lists none as open access.
+9. **Redistribution of `reference/*/source/`.** These folders hold copies of papers, supplements,
+   charts and third-party code, e.g. `who_ish/source/whoishRisk/` (GPL-3). Check that you may
+   publish them, or drop them from the public repository and keep only checksums and URLs.
