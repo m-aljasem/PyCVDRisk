@@ -30,6 +30,7 @@ score2(age=[50, 62], sex=["male", "female"], smoker=[1, 0], sbp=[140, 130],
 | LIFE-CVD2 (lifetime risk to 80, CVD-free life expectancy, treatment benefit; 4 ESC regions) | implemented, verified vs the authors' 16 published charts (7,167/7,168 cells within printed precision); a defective chart row documented |
 | DIAL2 core model (type 2 diabetes: 10-year and lifetime risk, CVD-free life expectancy; low/moderate ESC regions) | implemented, verified vs the paper's two worked examples (6/6 printed values; the caption's eGFR for example B is 90, not 70); no calculator or third-party implementation available |
 | WHO/ISH charts (2007; 14 subregions, with and without cholesterol) | implemented as the chart lookup, verified vs every cell of the guideline's two printed charts (768/768) and R `whoishRisk` (10,749/10,752 cells; the 3 others are whoishRisk transcription errors corrected from the guideline) |
+| HEART (chest pain, 0-10) | implemented from the published point rules (18/18), verified vs R `RiskScorescvd` (5,000 patients identical) |
 
 ### One call for any country
 

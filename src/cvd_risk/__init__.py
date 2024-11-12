@@ -3,6 +3,7 @@
 from cvd_risk.dial2 import dial2
 from cvd_risk.framingham import framingham
 from cvd_risk.globorisk import globorisk
+from cvd_risk.heart import heart
 from cvd_risk.life_cvd2 import life_cvd2
 from cvd_risk.pce import pce
 from cvd_risk.prevent import prevent
@@ -15,5 +16,5 @@ from cvd_risk.uniscore import guideline_score, uniscore
 from cvd_risk.who2019 import who2019
 from cvd_risk.who_ish import who_ish
 
-__all__ = ["dial2", "framingham", "globorisk", "life_cvd2", "pce", "prevent", "qrisk2", "qrisk3", "score", "score2", "score2_asia_pacific", "score2_ckd", "score2_op", "score2_diabetes", "smart_reach", "guideline_score", "uniscore", "who2019", "who_ish"]
+__all__ = ["dial2", "framingham", "globorisk", "heart", "life_cvd2", "pce", "prevent", "qrisk2", "qrisk3", "score", "score2", "score2_asia_pacific", "score2_ckd", "score2_op", "score2_diabetes", "smart_reach", "guideline_score", "uniscore", "who2019", "who_ish"]
 __version__ = "2.0.0.dev0"
