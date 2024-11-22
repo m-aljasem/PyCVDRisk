@@ -70,6 +70,12 @@ then `Rscript reference/qrisk3/run_reference_cran.R`), `python reference/<family
    - **Group 2 papers (from v1):** ASSIGN, PROCAM, REGICOR, Progetto Cuore, FINRISK, PREDICT, Jackson
      Heart, ARIC, CARDIA, Singapore, Malaysian, Gulf RACE, Dundee, Cambridge, EPIC-Norfolk, Heinz
      Nixdorf, Rotterdam, INTERHEART, D:A:D, RISC, New Zealand. Europe PMC lists none as open access.
+   - **Point scores (from v1):** TIMI UA/NSTEMI (Antman, JAMA 2000), EDACS (Than, Emerg Med
+     Australas 2014), GRACE (Granger, Arch Intern Med 2003; Fox, BMJ 2006), CHADS2 (Gage, JAMA
+     2001), CHA2DS2-VASc (Lip, Chest 2010), HAS-BLED (Pisters, Chest 2010). None is open access.
+     RiskScorescvd implements TIMI, EDACS and GRACE, but with dataset-specific inputs (fixed
+     hs-troponin I limits, previous PCI/CABG standing in for known CAD). Building from it alone would
+     make the check circular, so these wait for the papers. HEART is done.
 9. **Redistribution of `reference/*/source/`.** These folders hold copies of papers, supplements,
    charts and third-party code, e.g. `who_ish/source/whoishRisk/` (GPL-3). Check that you may
    publish them, or drop them from the public repository and keep only checksums and URLs.
