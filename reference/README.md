@@ -25,6 +25,7 @@ then `Rscript reference/qrisk3/run_reference_cran.R`), `python reference/<family
 | DIAL2 core model | verified; 56/56 coefficients vs supplement (Word and PDF); weak evidence: 6 printed values | paper worked examples (Figure 3) | C | `dial2/REPORT.md` |
 | WHO/ISH charts 2007 (14 subregions, with/without cholesterol) | verified; 3 whoishRisk transcription errors corrected | guideline's 2 printed charts (768 cells); whoishRisk 1.0 table (10,752 cells) and its R lookup logic (transliterated, not run) | A (2 subregions) + B | `who_ish/REPORT.md` |
 | HEART | verified; 18/18 published rules | Melki & Jernberg 2013 (Table 1, Methods); RiskScorescvd 0.3.1 | C + B | `heart/REPORT.md` |
+| CHADS2, CHA2DS2-VASc, HAS-BLED | verified; 32/32 published rules, definitions quoted from the PDFs | Gage 2001; Lip 2010; Pisters 2010 | C | `af/REPORT.md` |
 
 ## Owner actions needed
 
@@ -71,8 +72,7 @@ then `Rscript reference/qrisk3/run_reference_cran.R`), `python reference/<family
      Heart, ARIC, CARDIA, Singapore, Malaysian, Gulf RACE, Dundee, Cambridge, EPIC-Norfolk, Heinz
      Nixdorf, Rotterdam, INTERHEART, D:A:D, RISC, New Zealand. Europe PMC lists none as open access.
    - **Point scores (from v1):** TIMI UA/NSTEMI (Antman, JAMA 2000), EDACS (Than, Emerg Med
-     Australas 2014), GRACE (Granger, Arch Intern Med 2003; Fox, BMJ 2006), CHADS2 (Gage, JAMA
-     2001), CHA2DS2-VASc (Lip, Chest 2010), HAS-BLED (Pisters, Chest 2010). None is open access.
+     Australas 2014), GRACE (Granger, Arch Intern Med 2003; Fox, BMJ 2006), None is open access.
      RiskScorescvd implements TIMI, EDACS and GRACE, but with dataset-specific inputs (fixed
      hs-troponin I limits, previous PCI/CABG standing in for known CAD). Building from it alone would
      make the check circular, so these wait for the papers. HEART is done.
