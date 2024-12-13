@@ -32,6 +32,7 @@ score2(age=[50, 62], sex=["male", "female"], smoker=[1, 0], sbp=[140, 130],
 | WHO/ISH charts (2007; 14 subregions, with and without cholesterol) | implemented as the chart lookup, verified vs every cell of the guideline's two printed charts (768/768) and R `whoishRisk` (10,749/10,752 cells; the 3 others are whoishRisk transcription errors corrected from the guideline) |
 | HEART (chest pain, 0-10) | implemented from the published point rules (18/18), verified vs R `RiskScorescvd` (5,000 patients identical) |
 | CHADS2, CHA2DS2-VASc, HAS-BLED (atrial fibrillation) | implemented from each paper's point table, 32/32 published rules and Gage's worked example; no independent implementation used |
+| TIMI UA/NSTEMI (0-7) | implemented from the paper (11/11 rules), verified vs R `RiskScorescvd` (5,000 patients identical) |
 
 ### One call for any country
 

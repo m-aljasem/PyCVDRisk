@@ -1,0 +1,5 @@
+reference: RiskScorescvd (CRAN), TIMI() - vendored source, see reference/vendor/RiskScorescvd/DESCRIPTION
+package_version: 0.3.1
+R: R version 4.3.3 (2024-02-29)
+dplyr: 1.1.4
+rounding: none (integer points)

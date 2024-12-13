@@ -26,6 +26,7 @@ then `Rscript reference/qrisk3/run_reference_cran.R`), `python reference/<family
 | WHO/ISH charts 2007 (14 subregions, with/without cholesterol) | verified; 3 whoishRisk transcription errors corrected | guideline's 2 printed charts (768 cells); whoishRisk 1.0 table (10,752 cells) and its R lookup logic (transliterated, not run) | A (2 subregions) + B | `who_ish/REPORT.md` |
 | HEART | verified; 18/18 published rules | Melki & Jernberg 2013 (Table 1, Methods); RiskScorescvd 0.3.1 | C + B | `heart/REPORT.md` |
 | CHADS2, CHA2DS2-VASc, HAS-BLED | verified; 32/32 published rules, definitions quoted from the PDFs | Gage 2001; Lip 2010; Pisters 2010 | C | `af/REPORT.md` |
+| TIMI UA/NSTEMI | verified; 11/11 published rules | Antman 2000 (Table 1); RiskScorescvd 0.3.1 | C + B | `timi/REPORT.md` |
 
 ## Owner actions needed
 
