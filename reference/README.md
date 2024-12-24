@@ -27,6 +27,7 @@ then `Rscript reference/qrisk3/run_reference_cran.R`), `python reference/<family
 | HEART | verified; 18/18 published rules | Melki & Jernberg 2013 (Table 1, Methods); RiskScorescvd 0.3.1 | C + B | `heart/REPORT.md` |
 | CHADS2, CHA2DS2-VASc, HAS-BLED | verified; 32/32 published rules, definitions quoted from the PDFs | Gage 2001; Lip 2010; Pisters 2010 | C | `af/REPORT.md` |
 | TIMI UA/NSTEMI | verified; 11/11 published rules | Antman 2000 (Table 1); RiskScorescvd 0.3.1 | C + B | `timi/REPORT.md` |
+| EDACS | verified; 29/29 published rules | Than 2014 (Box 3); RiskScorescvd 0.3.1 | C + B | `edacs/REPORT.md` |
 
 ## Owner actions needed
 
