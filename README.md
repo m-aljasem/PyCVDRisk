@@ -34,6 +34,7 @@ score2(age=[50, 62], sex=["male", "female"], smoker=[1, 0], sbp=[140, 130],
 | CHADS2, CHA2DS2-VASc, HAS-BLED (atrial fibrillation) | implemented from each paper's point table, 32/32 published rules and Gage's worked example; no independent implementation used |
 | TIMI UA/NSTEMI (0-7) | implemented from the paper (11/11 rules), verified vs R `RiskScorescvd` (5,000 patients identical) |
 | EDACS (chest pain) | implemented from the paper (29/29 rules), verified vs R `RiskScorescvd` (5,000 patients identical) |
+| GRACE in-hospital (Granger 2003) and 6-month post-discharge (Eagle 2004) | implemented from the published nomograms, 78/78 bands checked at both ends against the PDFs; Granger's worked examples disagree with its own table (documented) |
 
 ### One call for any country
 

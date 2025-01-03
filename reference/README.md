@@ -28,6 +28,7 @@ then `Rscript reference/qrisk3/run_reference_cran.R`), `python reference/<family
 | CHADS2, CHA2DS2-VASc, HAS-BLED | verified; 32/32 published rules, definitions quoted from the PDFs | Gage 2001; Lip 2010; Pisters 2010 | C | `af/REPORT.md` |
 | TIMI UA/NSTEMI | verified; 11/11 published rules | Antman 2000 (Table 1); RiskScorescvd 0.3.1 | C + B | `timi/REPORT.md` |
 | EDACS | verified; 29/29 published rules | Than 2014 (Box 3); RiskScorescvd 0.3.1 | C + B | `edacs/REPORT.md` |
+| GRACE in-hospital, 6-month | verified; 78/78 bands vs the printed nomograms; worked-example discrepancy documented | Granger 2003 (Fig 4); Eagle 2004 (Fig 2) | C | `grace/REPORT.md` |
 
 ## Owner actions needed
 
@@ -81,3 +82,6 @@ then `Rscript reference/qrisk3/run_reference_cran.R`), `python reference/<family
 9. **Redistribution of `reference/*/source/`.** These folders hold copies of papers, supplements,
    charts and third-party code, e.g. `who_ish/source/whoishRisk/` (GPL-3). Check that you may
    publish them, or drop them from the public repository and keep only checksums and URLs.
+10. **GRACE: optional note to the authors.** In Granger 2003 Figure 4, both worked examples score a
+    value on a band's printed lower edge in the band below (SBP 100: 53, not 43; creatinine 0.4: 1,
+    not 4), and example 1's terms add to 195, not 196. The package follows the printed table.
