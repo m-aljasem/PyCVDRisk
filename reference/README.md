@@ -23,6 +23,7 @@ then `Rscript reference/qrisk3/run_reference_cran.R`), `python reference/<family
 | SMART-REACH (10-year risk, CVD-free life expectancy) | verified; 24/24 coefficients vs calculator; calculator life-expectancy defect found | authors' calculator spreadsheet recalculated by LibreOffice | A | `smart_reach/REPORT.md` |
 | LIFE-CVD2 (lifetime risk, life expectancy, treatment benefit) | verified; 36/36 coefficients vs supplement; 7,167/7,168 chart cells; centring and chart inputs inferred and pinned by the charts | authors' charts (Appendix 1, 16 charts) | A | `life_cvd2/REPORT.md` |
 | DIAL2 core model | verified; 56/56 coefficients vs supplement (Word and PDF); weak evidence: 6 printed values | paper worked examples (Figure 3) | C | `dial2/REPORT.md` |
+| Reynolds Risk Score (model B, women and men) | verified; 19/19 formula terms vs PDFs; 17/17 worked examples within printed precision (14 exact) | Ridker 2007 (Table 6); Ridker 2008 (Clinical Examples) | C | `reynolds/REPORT.md` |
 | WHO/ISH charts 2007 (14 subregions, with/without cholesterol) | verified; 3 whoishRisk transcription errors corrected | guideline's 2 printed charts (768 cells); whoishRisk 1.0 table (10,752 cells) and its R lookup logic (transliterated, not run) | A (2 subregions) + B | `who_ish/REPORT.md` |
 | HEART | verified; 18/18 published rules | Melki & Jernberg 2013 (Table 1, Methods); RiskScorescvd 0.3.1 | C + B | `heart/REPORT.md` |
 | CHADS2, CHA2DS2-VASc, HAS-BLED | verified; 32/32 published rules, definitions quoted from the PDFs | Gage 2001; Lip 2010; Pisters 2010 | C | `af/REPORT.md` |
@@ -37,10 +38,8 @@ then `Rscript reference/qrisk3/run_reference_cran.R`), `python reference/<family
    LGPL-3.0-or-later (licence texts in that folder); the rest stays MIT. If you
    want the whole package MIT, ask ClinRisk for written permission; otherwise
    declare the package licence as `MIT AND LGPL-3.0-or-later`.
-2. **Reynolds Risk Score — sources needed.** Both papers (Ridker 2007 JAMA 297:611; Ridker
-   2008 Circulation 118:2243) return 403 to automated download and are not in Zotero as files,
-   and the official site (reynoldsriskscore.org) is now a parked domain. v1's coefficients do not
-   match the published formula. Please add both PDFs to `Formulas/` or Zotero.
+2. **Reynolds Risk Score — done** (papers added). v1's coefficients did not match the
+   published formula; v2 follows the papers. Evidence is level C only (worked examples).
 3. **SMART2 — question for the authors (Hageman, Dorresteijn, Visseren; UMC Utrecht).** The
    supplement (Table S2) gives the coefficients for uncentred predictors, a 10-year baseline risk
    of 0.1658 and a "mean linear predictor" of -0.0464. At the derivation cohort's average values
