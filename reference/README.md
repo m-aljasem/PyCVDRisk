@@ -25,6 +25,7 @@ then `Rscript reference/qrisk3/run_reference_cran.R`), `python reference/<family
 | DIAL2 core model | verified; 56/56 coefficients vs supplement (Word and PDF); weak evidence: 6 printed values | paper worked examples (Figure 3) | C | `dial2/REPORT.md` |
 | Reynolds Risk Score (model B, women and men) | verified; 19/19 formula terms vs PDFs; 17/17 worked examples within printed precision (14 exact) | Ridker 2007 (Table 6); Ridker 2008 (Clinical Examples) | C | `reynolds/REPORT.md` |
 | PROCAM score | verified; 30/30 bands and Table 4 vs PDF | Assmann 2002 (Tables 3-4) | C | `procam/REPORT.md` |
+| REGICOR (Gerona and Framingham calibrations) | verified transcription; 39/39 table rows and 40/40 bands vs PDF; worked example has 2 arithmetic slips | Marrugat 2003 (Tables 1-2, Appendix) | C (weak) | `regicor/REPORT.md` |
 | WHO/ISH charts 2007 (14 subregions, with/without cholesterol) | verified; 3 whoishRisk transcription errors corrected | guideline's 2 printed charts (768 cells); whoishRisk 1.0 table (10,752 cells) and its R lookup logic (transliterated, not run) | A (2 subregions) + B | `who_ish/REPORT.md` |
 | HEART | verified; 18/18 published rules | Melki & Jernberg 2013 (Table 1, Methods); RiskScorescvd 0.3.1 | C + B | `heart/REPORT.md` |
 | CHADS2, CHA2DS2-VASc, HAS-BLED | verified; 32/32 published rules, definitions quoted from the PDFs | Gage 2001; Lip 2010; Pisters 2010 | C | `af/REPORT.md` |
@@ -64,24 +65,27 @@ then `Rscript reference/qrisk3/run_reference_cran.R`), `python reference/<family
    The WHO/ISH pocket guidelines (WHO IRIS, 2007; one per subregion) hold the official charts,
    but IRIS timed out here. Please add the 12 PDFs to `Formulas/WHO/`. The report then checks
    every cell, including the 10 cells where a higher risk factor gives a lower band.
-8. **Sources blocked, please add to `Formulas/` or Zotero.**
+8. **Sources still blocked, please add to `Formulas/` or Zotero.**
    - **SMART (2013):** Dorresteijn, Heart 2013, online supplements 2 (calculation sheet) and 6
      (baseline survival and centring). The paper gives only the coefficients.
-   - **QRISK1:** the paper prints rounded hazard ratios only, with no means or baseline survival.
-     The full model (means, baseline survival) is needed from ClinRisk or the authors.
+   - **ASSIGN:** Woodward, Heart 2007, online Appendix 1 (beta coefficients and formulas;
+     heart.bmj.com supplementary material). The PDF itself has no coefficients.
+   - **QRISK1:** the paper (Hippisley-Cox, BMJ 2007, Table 3) prints hazard ratios to 3 decimals but no
+     centring means and no baseline survival. The full model is needed from ClinRisk or the authors.
    - **QRISK4:** the software is available only under an academic licence from Oxford University
      Innovations.
-   - **Group 2 papers (from v1):** ASSIGN, PROCAM, REGICOR, Progetto Cuore, FINRISK, PREDICT, Jackson
-     Heart, ARIC, CARDIA, Singapore, Malaysian, Gulf RACE, Dundee, Cambridge, EPIC-Norfolk, Heinz
-     Nixdorf, Rotterdam, INTERHEART, D:A:D, RISC, New Zealand. Europe PMC lists none as open access.
-   - **Point scores (from v1):** TIMI UA/NSTEMI (Antman, JAMA 2000), EDACS (Than, Emerg Med
-     Australas 2014), GRACE (Granger, Arch Intern Med 2003; Fox, BMJ 2006), None is open access.
-     RiskScorescvd implements TIMI, EDACS and GRACE, but with dataset-specific inputs (fixed
-     hs-troponin I limits, previous PCI/CABG standing in for known CAD). Building from it alone would
-     make the check circular, so these wait for the papers. HEART is done.
+   - **Group 2 papers (from v1):** Progetto Cuore, FINRISK, PREDICT, Jackson Heart, ARIC, CARDIA,
+     Singapore, Malaysian, Gulf RACE, Dundee, Cambridge, EPIC-Norfolk, Heinz Nixdorf, Rotterdam,
+     INTERHEART, D:A:D, RISC, New Zealand. Europe PMC lists none as open access.
+   - **GRACE 2.0 / Fox 2006 (BMJ):** not yet provided; GRACE here is Granger 2003 and Eagle 2004.
 9. **Redistribution of `reference/*/source/`.** These folders hold copies of papers, supplements,
    charts and third-party code, e.g. `who_ish/source/whoishRisk/` (GPL-3). Check that you may
    publish them, or drop them from the public repository and keep only checksums and URLs.
 10. **GRACE: optional note to the authors.** In Granger 2003 Figure 4, both worked examples score a
     value on a band's printed lower edge in the band below (SBP 100: 53, not 43; creatinine 0.4: 1,
     not 4), and example 1's terms add to 195, not 196. The package follows the printed table.
+11. **REGICOR: optional note to the authors (Marrugat, IMIM).** In the Appendix example, the written-out
+    terms of sum(b*Xmean) add up to 3.67 (Framingham) and 4.12 (Gerona), not the printed 3.84 and 4.32
+    (both fit an age coefficient of 0.0536, not Table 1's 0.05), and 1 - 0.965^0.741 is 0.026, not the
+    printed 0.047. Unrounded coefficients, or outputs from the official REGICOR calculator, would raise
+    the evidence from weak C (see `regicor/REPORT.md`).
