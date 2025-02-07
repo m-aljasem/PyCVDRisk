@@ -2,4 +2,4 @@
 Contributors
 ============
 
-* Mohamad <m-aljasem@outlook.com>
+* Mohamad AlJasem <m-aljasem@outlook.com>

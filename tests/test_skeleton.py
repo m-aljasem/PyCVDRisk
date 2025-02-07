@@ -2,8 +2,8 @@ import pytest
 
 from pycvdrisk.skeleton import fib, main
 
-__author__ = "Mohamad"
-__copyright__ = "Mohamad"
+__author__ = "Mohamad AlJasem"
+__copyright__ = "Mohamad AlJasem"
 __license__ = "MIT"
 
 

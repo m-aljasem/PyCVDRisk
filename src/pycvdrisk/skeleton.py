@@ -26,8 +26,8 @@ import sys
 
 from pycvdrisk import __version__
 
-__author__ = "Mohamad"
-__copyright__ = "Mohamad"
+__author__ = "Mohamad AlJasem"
+__copyright__ = "Mohamad AlJasem"
 __license__ = "MIT"
 
 _logger = logging.getLogger(__name__)
