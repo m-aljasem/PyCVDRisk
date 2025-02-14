@@ -24,6 +24,7 @@ then `Rscript reference/qrisk3/run_reference_cran.R`), `python reference/<family
 | LIFE-CVD2 (lifetime risk, life expectancy, treatment benefit) | verified; 36/36 coefficients vs supplement; 7,167/7,168 chart cells; centring and chart inputs inferred and pinned by the charts | authors' charts (Appendix 1, 16 charts) | A | `life_cvd2/REPORT.md` |
 | DIAL2 core model | verified; 56/56 coefficients vs supplement (Word and PDF); weak evidence: 6 printed values | paper worked examples (Figure 3) | C | `dial2/REPORT.md` |
 | Reynolds Risk Score (model B, women and men) | verified; 19/19 formula terms vs PDFs; 17/17 worked examples within printed precision (14 exact) | Ridker 2007 (Table 6); Ridker 2008 (Clinical Examples) | C | `reynolds/REPORT.md` |
+| PREDICT (NZ): 2018 primary prevention, BMI, VARIANZ policy, T2D, bleeding, post-CVD, post-ACS | coefficients identical to the authors' R source (7/7 models); 49/49 paper rows; 2/2 worked examples; R run pending owner permission | PredictRiskScores 0.9 (VIEW team, parsed); Pylypchuk 2018; Selak 2019 | A (code, static) + C | `predict/REPORT.md` |
 | PROCAM score | verified; 30/30 bands and Table 4 vs PDF | Assmann 2002 (Tables 3-4) | C | `procam/REPORT.md` |
 | REGICOR (Gerona and Framingham calibrations) | verified transcription; 39/39 table rows and 40/40 bands vs PDF; worked example has 2 arithmetic slips | Marrugat 2003 (Tables 1-2, Appendix) | C (weak) | `regicor/REPORT.md` |
 | WHO/ISH charts 2007 (14 subregions, with/without cholesterol) | verified; 3 whoishRisk transcription errors corrected | guideline's 2 printed charts (768 cells); whoishRisk 1.0 table (10,752 cells) and its R lookup logic (transliterated, not run) | A (2 subregions) + B | `who_ish/REPORT.md` |
@@ -60,18 +61,13 @@ then `Rscript reference/qrisk3/run_reference_cran.R`), `python reference/<family
 6. **DIAL2 — optional note to the authors.** Figure 3B is reproduced with eGFR 90, not the 70 in
    its caption and the text (see `dial2/REPORT.md`). A few model outputs from u-prevent.com
    (or from the authors) would raise DIAL2's evidence from level C to A.
-7. **WHO/ISH 2007: regional charts needed.** The guideline prints only the SEAR-D and EMR-B charts.
-   The other 12 subregions currently rest on whoishRisk's table, which has 3 errors in SEAR-D.
-   The WHO/ISH pocket guidelines (WHO IRIS, 2007; one per subregion) hold the official charts,
-   but IRIS timed out here. Please add the 12 PDFs to `Formulas/WHO/`. The report then checks
-   every cell, including the 10 cells where a higher risk factor gives a lower band.
+7. **Dropped by the owner:** models older than about two decades are not pursued further (WHO/ISH
+   regional charts, QRISK1). Implemented ones stay as they are.
 8. **Sources still blocked, please add to `Formulas/` or Zotero.**
    - **SMART (2013):** Dorresteijn, Heart 2013, online supplements 2 (calculation sheet) and 6
      (baseline survival and centring). The paper gives only the coefficients.
    - **ASSIGN:** Woodward, Heart 2007, online Appendix 1 (beta coefficients and formulas;
      heart.bmj.com supplementary material). The PDF itself has no coefficients.
-   - **QRISK1:** the paper (Hippisley-Cox, BMJ 2007, Table 3) prints hazard ratios to 3 decimals but no
-     centring means and no baseline survival. The full model is needed from ClinRisk or the authors.
    - **QRISK4:** the software is available only under an academic licence from Oxford University
      Innovations.
    - **Group 2 papers (from v1):** Progetto Cuore, FINRISK, PREDICT, Jackson Heart, ARIC, CARDIA,
@@ -89,3 +85,12 @@ then `Rscript reference/qrisk3/run_reference_cran.R`), `python reference/<family
     (both fit an age coefficient of 0.0536, not Table 1's 0.05), and 1 - 0.965^0.741 is 0.026, not the
     printed 0.047. Unrounded coefficients, or outputs from the official REGICOR calculator, would raise
     the evidence from weak C (see `regicor/REPORT.md`).
+12. **PREDICT: permission to run the authors' R code.** The auto-mode classifier blocks running downloaded
+    third-party code. To finish the patient-level comparison, run `Rscript reference/predict/run_reference.R`
+    yourself (it sources the vendored, unmodified `reference/vendor/PredictRiskScores/R/*.R`), or allow it,
+    then `python reference/predict/report.py`; the tests then compare all 21,000 patients automatically.
+13. **PREDICT papers.** The Zotero attachment for Pylypchuk 2021 (Lancet, diabetes) is a different article
+    (Cacciari, *Nomes de lugar: confim*, JSTOR). Please replace it. Mehta 2018 (VARIANZ, IJE) and Poppe 2017/2019
+    (Heart; post-CVD, post-ACS) would let those models be checked against print too.
+14. **PREDICT: optional note to the VIEW team** listing the R defects in `predict/REPORT.md` section 4
+    (integer-sequence BMI/HbA1c/creatinine bands, `sex` case in the post-event models, the `acr` scoping bug).
