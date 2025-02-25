@@ -24,6 +24,7 @@ then `Rscript reference/qrisk3/run_reference_cran.R`), `python reference/<family
 | LIFE-CVD2 (lifetime risk, life expectancy, treatment benefit) | verified; 36/36 coefficients vs supplement; 7,167/7,168 chart cells; centring and chart inputs inferred and pinned by the charts | authors' charts (Appendix 1, 16 charts) | A | `life_cvd2/REPORT.md` |
 | DIAL2 core model | verified; 56/56 coefficients vs supplement (Word and PDF); weak evidence: 6 printed values | paper worked examples (Figure 3) | C | `dial2/REPORT.md` |
 | Reynolds Risk Score (model B, women and men) | verified; 19/19 formula terms vs PDFs; 17/17 worked examples within printed precision (14 exact) | Ridker 2007 (Table 6); Ridker 2008 (Clinical Examples) | C | `reynolds/REPORT.md` |
+| FINRISK 2016 (CHD, stroke, CVD) | 4/4 equations vs PDF; Figure 1: 29/30 bars exact, 1 within 0.01 (HDL inferred; 4 bars drawn at SBP 180 against the caption) | Vartiainen 2016 (Table 2, Figure 1) | C | `finrisk/REPORT.md` |
 | PREDICT (NZ): 2018 primary prevention, BMI, VARIANZ policy, T2D, bleeding, post-CVD, post-ACS | coefficients identical to the authors' R source (7/7 models); 49/49 paper rows; 2/2 worked examples; R run pending owner permission | PredictRiskScores 0.9 (VIEW team, parsed); Pylypchuk 2018; Selak 2019 | A (code, static) + C | `predict/REPORT.md` |
 | PROCAM score | verified; 30/30 bands and Table 4 vs PDF | Assmann 2002 (Tables 3-4) | C | `procam/REPORT.md` |
 | REGICOR (Gerona and Framingham calibrations) | verified transcription; 39/39 table rows and 40/40 bands vs PDF; worked example has 2 arithmetic slips | Marrugat 2003 (Tables 1-2, Appendix) | C (weak) | `regicor/REPORT.md` |
@@ -70,7 +71,7 @@ then `Rscript reference/qrisk3/run_reference_cran.R`), `python reference/<family
      heart.bmj.com supplementary material). The PDF itself has no coefficients.
    - **QRISK4:** the software is available only under an academic licence from Oxford University
      Innovations.
-   - **Group 2 papers (from v1):** Progetto Cuore, FINRISK, PREDICT, Jackson Heart, ARIC, CARDIA,
+   - **Group 2 papers (from v1):** Progetto Cuore, Jackson Heart, ARIC, CARDIA,
      Singapore, Malaysian, Gulf RACE, Dundee, Cambridge, EPIC-Norfolk, Heinz Nixdorf, Rotterdam,
      INTERHEART, D:A:D, RISC, New Zealand. Europe PMC lists none as open access.
    - **GRACE 2.0 / Fox 2006 (BMJ):** not yet provided; GRACE here is Granger 2003 and Eagle 2004.
