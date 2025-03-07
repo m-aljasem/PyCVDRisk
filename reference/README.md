@@ -25,6 +25,7 @@ then `Rscript reference/qrisk3/run_reference_cran.R`), `python reference/<family
 | DIAL2 core model | verified; 56/56 coefficients vs supplement (Word and PDF); weak evidence: 6 printed values | paper worked examples (Figure 3) | C | `dial2/REPORT.md` |
 | Reynolds Risk Score (model B, women and men) | verified; 19/19 formula terms vs PDFs; 17/17 worked examples within printed precision (14 exact) | Ridker 2007 (Table 6); Ridker 2008 (Clinical Examples) | C | `reynolds/REPORT.md` |
 | FINRISK 2016 (CHD, stroke, CVD) | 4/4 equations vs PDF; Figure 1: 29/30 bars exact, 1 within 0.01 (HDL inferred; 4 bars drawn at SBP 180 against the caption) | Vartiainen 2016 (Table 2, Figure 1) | C | `finrisk/REPORT.md` |
+| ADRS (Abu Dhabi 2024; ASCVD, CAD, stroke) | 32/32 terms: Data S1 syntax = Table 2; GFR mean, MAP and stroke mean score checked against Table 1 | JAHA 2024 Table 2, Data S1 (PMC11681588) | C (weak) | `adrs/REPORT.md` |
 | PREDICT (NZ): 2018 primary prevention, BMI, VARIANZ policy, T2D, bleeding, post-CVD, post-ACS | coefficients identical to the authors' R source (7/7 models); 49/49 paper rows; 2/2 worked examples; R run pending owner permission | PredictRiskScores 0.9 (VIEW team, parsed); Pylypchuk 2018; Selak 2019 | A (code, static) + C | `predict/REPORT.md` |
 | PROCAM score | verified; 30/30 bands and Table 4 vs PDF | Assmann 2002 (Tables 3-4) | C | `procam/REPORT.md` |
 | REGICOR (Gerona and Framingham calibrations) | verified transcription; 39/39 table rows and 40/40 bands vs PDF; worked example has 2 arithmetic slips | Marrugat 2003 (Tables 1-2, Appendix) | C (weak) | `regicor/REPORT.md` |
@@ -95,3 +96,5 @@ then `Rscript reference/qrisk3/run_reference_cran.R`), `python reference/<family
     (Heart; post-CVD, post-ACS) would let those models be checked against print too.
 14. **PREDICT: optional note to the VIEW team** listing the R defects in `predict/REPORT.md` section 4
     (integer-sequence BMI/HbA1c/creatinine bands, `sex` case in the post-event models, the `acr` scoping bug).
+15. **ADRS: optional note to the authors.** Ask them to confirm the cohort GFR mean (111.4, derived from
+    Table 1), which of the two stroke formulas in Data S1 is intended, and for a few calculated risks.
