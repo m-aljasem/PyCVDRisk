@@ -1,0 +1,234 @@
+{
+ "germany": {
+  "file": "germany.jpg",
+  "title": "Brandenburger Tor morgens.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Brandenburger_Tor_morgens.jpg",
+  "license": "CC BY-SA 3.0",
+  "artist": "Thomas Wolf, www.foto-tw.de",
+  "caption": "Brandenburg Gate, Berlin"
+ },
+ "asia_pacific": {
+  "file": "asia_pacific.jpg",
+  "title": "Asia topic image Satellite image.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Asia_topic_image_Satellite_image.jpg",
+  "license": "Public domain",
+  "artist": "NASA/Goddard Space Flight Center",
+  "caption": "Asia from orbit (NASA)"
+ },
+ "global": {
+  "file": "global.jpg",
+  "title": "The Blue Marble, AS17-148-22727.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:The_Blue_Marble,_AS17-148-22727.jpg",
+  "license": "Public domain",
+  "artist": "Harrison Schmitt / Apollo 17",
+  "caption": "The Blue Marble, Apollo 17"
+ },
+ "elderly": {
+  "file": "elderly.jpg",
+  "title": "Senior-3336451 1920.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Senior-3336451_1920.jpg",
+  "license": "CC0",
+  "artist": "https://pixabay.com/users/pasja1000-6355831/",
+  "caption": "Older couple walking"
+ },
+ "glucose": {
+  "file": "glucose.jpg",
+  "title": "(20250417) Blood glucose meter 09.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:(20250417)_Blood_glucose_meter_09.jpg",
+  "license": "CC BY-SA 4.0",
+  "artist": "Roy Zuo",
+  "caption": "Blood glucose meter"
+ },
+ "kidney": {
+  "file": "kidney.jpg",
+  "title": "Kidney anatomy model.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Kidney_anatomy_model.jpg",
+  "license": "CC0",
+  "artist": "Rayhana Alhour",
+  "caption": "Anatomical model of the kidney"
+ },
+ "utrecht": {
+  "file": "utrecht.jpg",
+  "title": "Utrecht, de Domtoren (RM36075) vanaf de Oudegracht 230 ongeveer foto5 2015-11-01 08.56.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Utrecht,_de_Domtoren_(RM36075)_vanaf_de_Oudegracht_230_ongeveer_foto5_2015-11-01_08.56.jpg",
+  "license": "CC BY-SA 4.0",
+  "artist": "Michielverbeek",
+  "caption": "Dom Tower over the Oudegracht, Utrecht"
+ },
+ "hourglass": {
+  "file": "hourglass.jpg",
+  "title": "3 Hourglasses Wellcome L0011331.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:3_Hourglasses_Wellcome_L0011331.jpg",
+  "license": "CC BY 4.0",
+  "artist": "",
+  "caption": "Hourglasses"
+ },
+ "stroke_ct": {
+  "file": "stroke_ct.jpg",
+  "title": "Brain CT Scan for Stroke Diagnosis.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Brain_CT_Scan_for_Stroke_Diagnosis.jpg",
+  "license": "CC BY 4.0",
+  "artist": "Goleisureintl",
+  "caption": "Brain CT in acute stroke"
+ },
+ "ecg": {
+  "file": "ecg.jpg",
+  "title": "18 years old boy normal ECG.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:18_years_old_boy_normal_ECG.jpg",
+  "license": "CC BY-SA 4.0",
+  "artist": "Mahdi2ha",
+  "caption": "Electrocardiogram"
+ },
+ "blood_bag": {
+  "file": "blood_bag.jpg",
+  "title": "\"Quarterhorse\" medics conduct blood transfusion training (7158386).jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:%22Quarterhorse%22_medics_conduct_blood_transfusion_training_(7158386).jpg",
+  "license": "Public domain",
+  "artist": "U.S. Army National Guard photo by Spc. Hassani Ribera Soto",
+  "caption": "Blood bag"
+ },
+ "who_flag": {
+  "file": "who_flag.jpg",
+  "title": "World Health Organization Flag.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:World_Health_Organization_Flag.jpg",
+  "license": "CC BY 2.0",
+  "artist": "United States Mission Geneva",
+  "caption": "The WHO flag"
+ },
+ "us_flag": {
+  "file": "us_flag.jpg",
+  "title": "American Flag Waving on a Flag Pole.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:American_Flag_Waving_on_a_Flag_Pole.jpg",
+  "license": "CC BY-SA 4.0",
+  "artist": "Noah Wulf",
+  "caption": "The flag of the United States"
+ },
+ "generations": {
+  "file": "generations.jpg",
+  "title": "Grandparents - The cradle of love!!.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Grandparents_-_The_cradle_of_love!!.jpg",
+  "license": "CC BY-SA 4.0",
+  "artist": "PR Kavitha",
+  "caption": "Three generations of a family"
+ },
+ "blood_sample": {
+  "file": "blood_sample.jpg",
+  "title": "Checking Blood Sample (9955279835).jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Checking_Blood_Sample_(9955279835).jpg",
+  "license": "CC BY 2.0",
+  "artist": "National Eye Institute",
+  "caption": "A blood sample, as drawn for hsCRP"
+ },
+ "uk_flag": {
+  "file": "uk_flag.jpg",
+  "title": "Flag of the United Kingdom flying in Gibraltar.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Flag_of_the_United_Kingdom_flying_in_Gibraltar.jpg",
+  "license": "CC BY-SA 4.0",
+  "artist": "Qwexcxewq",
+  "caption": "The flag of the United Kingdom"
+ },
+ "nhs": {
+  "file": "nhs.jpg",
+  "title": "Ladywell Unit, Lewisham Hospital.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Ladywell_Unit,_Lewisham_Hospital.jpg",
+  "license": "CC BY-SA 3.0",
+  "artist": "SLaMNHSFT",
+  "caption": "NHS sign, Lewisham Hospital, London"
+ },
+ "finland_flag": {
+  "file": "finland_flag.jpg",
+  "title": "Finland flag in wind on a flagpole.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Finland_flag_in_wind_on_a_flagpole.jpg",
+  "license": "CC BY-SA 4.0",
+  "artist": "MAKY.OREL",
+  "caption": "The flag of Finland"
+ },
+ "burj_al_arab": {
+  "file": "burj_al_arab.jpg",
+  "title": "Madinat Jumeirah-Dubai3303.JPG",
+  "page": "https://commons.wikimedia.org/wiki/File:Madinat_Jumeirah-Dubai3303.JPG",
+  "license": "CC BY-SA 4.0",
+  "artist": "Diego Delso",
+  "caption": "Burj Al Arab, Dubai"
+ },
+ "spain_flag": {
+  "file": "spain_flag.jpg",
+  "title": "Spain flag waving.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Spain_flag_waving.jpg",
+  "license": "CC BY 2.0",
+  "artist": "Catherine K\u00f5rtsmik from Tallinn, Estonia",
+  "caption": "The flag of Spain"
+ },
+ "nz_flag": {
+  "file": "nz_flag.jpg",
+  "title": "New Zealand flag at Auckland Airport.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:New_Zealand_flag_at_Auckland_Airport.jpg",
+  "license": "Public domain",
+  "artist": "Jayswipe",
+  "caption": "The flag of New Zealand, Auckland Airport"
+ },
+ "insulin": {
+  "file": "insulin.jpg",
+  "title": "Improperly Discarded \u2018Sharps\u2019 Can Be Dangerous (6321875537).jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Improperly_Discarded_%E2%80%98Sharps%E2%80%99_Can_Be_Dangerous_(6321875537).jpg",
+  "license": "Public domain",
+  "artist": "The U.S. Food and Drug Administration",
+  "caption": "Insulin pens and syringes"
+ },
+ "heart_attack": {
+  "file": "heart_attack.jpg",
+  "title": "Depiction of a person suffering from a heart attack (Myocardial Infarction).png",
+  "page": "https://commons.wikimedia.org/wiki/File:Depiction_of_a_person_suffering_from_a_heart_attack_(Myocardial_Infarction).png",
+  "license": "CC BY-SA 4.0",
+  "artist": "https://www.myupchar.com/en",
+  "caption": "Illustration of a heart attack"
+ },
+ "chest_pain": {
+  "file": "chest_pain.jpg",
+  "title": "Heartache-1846050 1920.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Heartache-1846050_1920.jpg",
+  "license": "CC0",
+  "artist": "freestocks.org",
+  "caption": "Chest pain"
+ },
+ "emergency": {
+  "file": "emergency.jpg",
+  "title": "A hospital emergency department entrance in the United States.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:A_hospital_emergency_department_entrance_in_the_United_States.jpg",
+  "license": "CC BY 4.0",
+  "artist": "Harrison Keely",
+  "caption": "A hospital emergency department entrance"
+ },
+ "ambulance": {
+  "file": "ambulance.jpg",
+  "title": "New York Fire Department Ambulance at Pulaski Day Parade, 20231001 1350 1160.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:New_York_Fire_Department_Ambulance_at_Pulaski_Day_Parade,_20231001_1350_1160.jpg",
+  "license": "CC BY 4.0",
+  "artist": "Jakub Ha\u0142un",
+  "caption": "An FDNY ambulance, New York"
+ },
+ "score2_map": {
+  "file": "score2_regions.jpg",
+  "title": "scripts/make_maps.py",
+  "page": "https://commons.wikimedia.org/wiki/File:Whole_world_-_land_and_oceans.jpg",
+  "license": "Public domain",
+  "artist": "PyCVDRisk; satellite mosaic NASA, borders Natural Earth",
+  "caption": "SCORE2 risk regions (ESC Figure 5) on a satellite map: green low, yellow moderate, orange high, red very high"
+ },
+ "score_map": {
+  "file": "score_cohorts.jpg",
+  "title": "scripts/make_maps.py",
+  "page": "https://commons.wikimedia.org/wiki/File:Whole_world_-_land_and_oceans.jpg",
+  "license": "Public domain",
+  "artist": "PyCVDRisk; satellite mosaic NASA, borders Natural Earth",
+  "caption": "The 11 countries of the 12 SCORE cohorts (Conroy 2003) on a satellite map"
+ },
+ "framingham_sign": {
+  "file": "framingham_sign.jpg",
+  "title": "scripts/make_sign.py",
+  "page": "https://github.com/m-aljasem/PyCVDRisk/blob/HEAD/website/scripts/make_sign.py",
+  "license": "Public domain",
+  "artist": "PyCVDRisk (illustration)",
+  "caption": "Framingham town-line sign (illustration)"
+ }
+}

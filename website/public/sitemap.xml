@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>https://pycvdrisk.aljasem.eu.org</loc></url>
+  <url><loc>https://pycvdrisk.aljasem.eu.org/about</loc></url>
+  <url><loc>https://pycvdrisk.aljasem.eu.org/credits</loc></url>
+  <url><loc>https://pycvdrisk.aljasem.eu.org/docs/models/score2</loc></url>
+  <url><loc>https://pycvdrisk.aljasem.eu.org/docs/models/score2-op</loc></url>
+  <url><loc>https://pycvdrisk.aljasem.eu.org/docs/models/score2-diabetes</loc></url>
+  <url><loc>https://pycvdrisk.aljasem.eu.org/docs/models/score2-ckd</loc></url>
+  <url><loc>https://pycvdrisk.aljasem.eu.org/docs/models/score2-asia-pacific</loc></url>
+  <url><loc>https://pycvdrisk.aljasem.eu.org/docs/models/score</loc></url>
+  <url><loc>https://pycvdrisk.aljasem.eu.org/docs/models/globorisk</loc></url>
+  <url><loc>https://pycvdrisk.aljasem.eu.org/docs/models/who2019</loc></url>
+  <url><loc>https://pycvdrisk.aljasem.eu.org/docs/models/prevent</loc></url>
+  <url><loc>https://pycvdrisk.aljasem.eu.org/docs/models/pce</loc></url>
+  <url><loc>https://pycvdrisk.aljasem.eu.org/docs/models/framingham</loc></url>
+  <url><loc>https://pycvdrisk.aljasem.eu.org/docs/models/reynolds</loc></url>
+  <url><loc>https://pycvdrisk.aljasem.eu.org/docs/models/qrisk3</loc></url>
+  <url><loc>https://pycvdrisk.aljasem.eu.org/docs/models/qrisk2</loc></url>
+  <url><loc>https://pycvdrisk.aljasem.eu.org/docs/models/finrisk</loc></url>
+  <url><loc>https://pycvdrisk.aljasem.eu.org/docs/models/adrs</loc></url>
+  <url><loc>https://pycvdrisk.aljasem.eu.org/docs/models/procam</loc></url>
+  <url><loc>https://pycvdrisk.aljasem.eu.org/docs/models/regicor</loc></url>
+  <url><loc>https://pycvdrisk.aljasem.eu.org/docs/models/predict</loc></url>
+  <url><loc>https://pycvdrisk.aljasem.eu.org/docs/models/smart-reach</loc></url>
+  <url><loc>https://pycvdrisk.aljasem.eu.org/docs/models/life-cvd2</loc></url>
+  <url><loc>https://pycvdrisk.aljasem.eu.org/docs/models/dial2</loc></url>
+  <url><loc>https://pycvdrisk.aljasem.eu.org/docs/models/cha2ds2-vasc</loc></url>
+  <url><loc>https://pycvdrisk.aljasem.eu.org/docs/models/chads2</loc></url>
+  <url><loc>https://pycvdrisk.aljasem.eu.org/docs/models/has-bled</loc></url>
+  <url><loc>https://pycvdrisk.aljasem.eu.org/docs/models/heart</loc></url>
+  <url><loc>https://pycvdrisk.aljasem.eu.org/docs/models/timi</loc></url>
+  <url><loc>https://pycvdrisk.aljasem.eu.org/docs/models/edacs</loc></url>
+  <url><loc>https://pycvdrisk.aljasem.eu.org/docs/models/grace</loc></url>
+</urlset>

@@ -1,12 +1,10 @@
-# cvd-risk v2
+# cvd-risk
 
 Verified, vectorised Python implementations of cardiovascular risk scores.
 
 Every score is implemented from its original publication, every coefficient
 cites its source, and every score is checked against an independent reference
 implementation before it is released. See `reference/<score>/REPORT.md`.
-
-> v2 is under development. v1 (0.1.x) remains on PyPI and on the `master` branch.
 
 ```python
 from cvd_risk import score2
