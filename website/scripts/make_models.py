@@ -162,7 +162,7 @@ def main():
     print(len(out), "models ->", dest)
     # sitemap and robots.txt: the site's pages plus one page per model
     site = "https://pycvdrisk.aljasem.eu.org"
-    paths = ["/", "/about", "/credits"] + [f"/docs/models/{m['slug']}" for m in out]
+    paths = ["/", "/demo", "/about", "/credits"] + [f"/docs/models/{m['slug']}" for m in out]
     public = Path(__file__).parents[1] / "public"
     (public / "sitemap.xml").write_text('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
                                         + "".join(f"  <url><loc>{site}{p if p != '/' else ''}</loc></url>\n" for p in paths) + "</urlset>\n")

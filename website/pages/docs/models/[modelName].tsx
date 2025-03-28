@@ -12,6 +12,7 @@ import {
   GlobeAltIcon,
   ChartBarIcon,
   CheckBadgeIcon,
+  PlayIcon,
 } from '@heroicons/react/24/outline'
 
 export async function getStaticPaths() {
@@ -114,6 +115,11 @@ export default function ModelDocumentation({ model }: { model: Model }) {
             </div>
 
             <aside className="space-y-8 min-w-0">
+              <Link href={`/demo?model=${model.slug}`} className="btn-primary flex items-center justify-center w-full">
+                <PlayIcon className="h-5 w-5 mr-2" />
+                Try {model.name} online
+              </Link>
+
               <div className="bg-white rounded-xl shadow-lg p-6">
                 <h3 className="text-xl font-bold text-gray-900 mb-4">Model information</h3>
                 <dl className="space-y-3">
