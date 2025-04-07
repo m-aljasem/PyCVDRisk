@@ -1,5 +1,5 @@
 """Build reference/score2/REPORT.md: agreement with the R reference and a
-coefficient mutation check. Run from the repo root: python reference/score2/report.py
+coefficient mutation check and the official ESC charts. Run from the repo root: python reference/score2/report.py
 """
 
 from __future__ import annotations
@@ -15,6 +15,10 @@ import pandas as pd
 
 from cvd_risk.score2 import coefficients as C
 import importlib
+import sys
+
+sys.path.insert(0, str(Path(__file__).parent))
+import chart_check  # noqa: E402
 
 mod = importlib.import_module("cvd_risk.score2.score2")  # the module, not the same-named function
 
@@ -82,6 +86,14 @@ def main():
                     setattr(C, name, original)
                 mut_rows.append((variant, label, caught))
 
+    charts = chart_check.summary()
+    ap = chart_check.ap_summary()
+    hdl_grid = [1.0, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6]
+    fitted = chart_check.fit(np.array(hdl_grid))
+    om = charts[(charts.sex == "male") & (charts.age_band == "85-89")].pivot_table(
+        index=["region", "sbp_band", "nonhdl_band"], columns="smoker", values="risk_pct")
+    assert (om[1] <= om[0]).all()
+    old_smoke = (int((om[1] < om[0]).sum()), len(om))
     mut = pd.DataFrame(mut_rows, columns=["variant", "coefficient", "caught"])
     version = (FX / "VERSION").read_text().strip()
     lines = [
@@ -141,7 +153,9 @@ def main():
         "   to ~87%), and *low* exceeds *moderate* for 4.5% (risks up to ~5%). Follows",
         "   directly from the published rescaling factors.",
         "",
-        "To do before publication: confirm each against the official ESC risk charts.",
+        "Finding 3 shows in the official charts (section 5): for men aged 85-89 the smoker",
+        f"cell is never above the non-smoker cell ({old_smoke[0]} of {old_smoke[1]} cells lower, the rest equal).",
+        "Findings 1, 2 and 4 involve profiles or regions the charts do not print.",
         "",
         "## 4. Coefficient provenance — open items",
         "",
@@ -153,9 +167,70 @@ def main():
         "  and agree exactly. `check_coefficients.py` also compares all 116 of them with the",
         "  supplement text (files in `source/`), located by row label: 116/116 match. It",
         "  flags a mutated value (checked by hand with four mutations).",
-        "- Not yet compared with the official ESC calculator (HeartScore) or charts",
-        "  (evidence level A).",
-        "- No published worked examples have been located yet.",
+        "- SCORE2 and SCORE2-OP agree with the official charts (section 5, evidence level A).",
+        "  SCORE2-Diabetes has no printed charts; it shares SCORE2's core terms (covered by",
+        "  section 5) but its diabetes coefficients rest on RiskScorescvd and the worked examples below.",
+        "- SCORE2-Diabetes worked examples (published paper, PMC10361012, Results; file in",
+        "  `source/`): 7/8 printed values reproduced to 1 decimal (evidence level C). The eighth,",
+        "  the favourable-profile woman in the moderate region, is printed 7.9%; the model gives",
+        "  7.6% (RiskScorescvd agrees) while her three unfavourable-profile values match, so it is",
+        "  taken as a misprint. The accepted manuscript also printed 8.4% and 31.3% where the",
+        "  published version (and the model) give 9.8% and 31.2%. Tests:",
+        "  `test_score2_diabetes_published_worked_examples`, `test_finding_score2_diabetes_worked_example_misprint`.",
+        "- SCORE2 Asia-Pacific agrees with its official charts (section 6, evidence level A).",
+        "",
+        "## 5. Official ESC 2021 risk charts (evidence level A)",
+        "",
+        "Source: 2021 ESC Guidelines on CVD prevention (Visseren, Eur Heart J 2021;42:3227),",
+        "Figure 3, all four risk regions (`source/visseren2021_esc_prevention_guideline.pdf`,",
+        "pp. 20-23), parsed by `parse_charts.py`. The SCORE2-OP part equals, cell for cell, the",
+        "authors' second print (SCORE2-OP supplement, Suppl. Fig. 8; 1,024/1,024 cells).",
+        "",
+        "Chart inputs are not printed; they are inferred and pinned by the charts: band midpoints",
+        "for age, SBP and non-HDL cholesterol, HDL 1.4 mmol/L (women) and 1.2 (men). Exact agreement",
+        "of the SCORE2 cells by chart HDL value:",
+        "",
+        "| HDL (mmol/L) | " + " | ".join(f"{h:.1f}" for h in hdl_grid) + " |",
+        "|---|" + "---|" * len(hdl_grid),
+        *[f"| {sex} | " + " | ".join(f"{fitted[sex, h]:.1%}" for h in hdl_grid) + " |" for sex in ("female", "male")],
+        "",
+        "Printed coefficients are rounded (SCORE2-OP scales to 2 decimals) and the charts come",
+        "from unrounded values, so each cell is also checked against the risk interval the printed",
+        "precision allows (`chart_check.py`).",
+        "",
+        "| Variant | Cells | Exact (rounded %) | Within printed precision | Max abs diff (points) | Median interval width |",
+        "|---|---|---|---|---|---|",
+        *[f"| {v} | {len(g):,} | {int(g.exact.sum()):,} | {int(g.within.sum()):,} | "
+          f"{np.max(np.abs(np.floor(g.p + 0.5) - g.risk_pct)):.0f} | {g.width.median():.2f} |"
+          for v, g in charts.groupby("variant", sort=False)],
+        "",
+        "SCORE2-OP cells that are not exact are all within the interval: the printed 4-decimal",
+        "per-year and per-mmHg coefficients, multiplied by up to 15 years and 40 mmHg off-centre,",
+        "move risk by about one point at age 85-89. Cells outside the interval (all four in the",
+        "non-HDL 4.0-4.9 column; treated as print slips, pinned in `KNOWN_ANOMALIES`):",
+        "",
+        *[f"- {r.region}, {r.sex}, {'smoker' if r.smoker else 'non-smoker'}, age {r.age_band}, SBP {r.sbp_band},"
+          f" non-HDL {r.nonhdl_band}: chart {r.risk_pct}%, model {r.p:.2f}% (interval {r.lo:.2f}-{r.hi:.2f})"
+          for r in charts[~charts.within].itertuples()],
+        "",
+        "## 6. Official SCORE2 Asia-Pacific risk charts (evidence level A)",
+        "",
+        "Source: Hageman et al., Eur Heart J 2025 (PMC11842970), Figure 3, four Asia-Pacific risk",
+        "regions. The charts are raster images (accepted manuscript, Cambridge repository,",
+        "`source/score2_asia_pacific_accepted_manuscript.pdf`, pp. 25-28), transcribed by eye into",
+        "`fixtures/asia_pacific_charts_transcribed.txt` before any model value was computed. Same",
+        "chart inputs as the ESC charts (they pin HDL at 1.4 / 1.2 here too); the rescaling factors",
+        "are printed to 9 decimals, so cells are compared exactly.",
+        "",
+        f"Cells: {len(ap):,}; exact (rounded %): {int(ap.exact.sum()):,}. Not exact:",
+        "",
+        *[f"- {r.region}, {r.sex}, {'smoker' if r.smoker else 'non-smoker'}, age {r.age_band}, SBP {r.sbp_band},"
+          f" non-HDL {r.nonhdl_band}: chart {r.risk_pct}%, model {r.p:.2f}% (printed 1 between neighbours 3, 4, 4;"
+          " checked on a zoomed crop; treated as a print slip)"
+          for r in ap[~ap.exact].itertuples()],
+        "",
+        "A transcription error would show up as a mismatch unless it happened to equal the model's",
+        "value, so the 1,535 exact cells also confirm the transcription.",
     ]
     (HERE / "REPORT.md").write_text("\n".join(lines) + "\n")
     print("\n".join(lines[:30]))

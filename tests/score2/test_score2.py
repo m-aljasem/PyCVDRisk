@@ -3,6 +3,8 @@
 1. Agreement with the R reference (RiskScorescvd, unrounded) on 80 000 synthetic patients.
 2. Properties every valid implementation must satisfy.
 3. Input handling and range edges.
+4. All 2,560 cells of the official ESC 2021 charts (SCORE2, SCORE2-OP) and all 1,536 of the
+   SCORE2 Asia-Pacific charts; published worked examples (SCORE2, SCORE2-Diabetes).
 """
 
 from pathlib import Path
@@ -185,3 +187,62 @@ def test_published_worked_example(sex, region, published):
     # SCORE2 paper (Eur Heart J 2021;42:2439), Results, p.6: 50-year-old smoker,
     # SBP 140 mmHg, total cholesterol 5.5, HDL 1.3 mmol/L (no diabetes).
     assert round(100 * float(score2(50, sex, 1, 140, 5.5, 1.3, 0, region)), 1) == published
+
+
+def test_official_esc_charts_within_printed_precision():
+    """All 2,560 cells of the ESC 2021 charts (SCORE2 + SCORE2-OP, 4 regions); 4 known print slips."""
+    import importlib.util
+    import sys
+
+    ref = FIXTURES.parent
+    sys.path.insert(0, str(ref))
+    spec = importlib.util.spec_from_file_location("chart_check", ref / "chart_check.py")
+    cc = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(cc)
+    d = cc.summary()
+    assert len(d) == 2560
+    bad = {(r.region, r.sex, r.smoker, r.age_band, r.sbp_band, r.nonhdl_band) for r in d[~d.within].itertuples()}
+    assert bad == cc.KNOWN_ANOMALIES
+    assert d.exact[d.variant == "score2"].sum() >= 1529
+
+
+# SCORE2-Diabetes paper (Eur Heart J 2023;44:2544, PMC10361012), Results: 60-year-old non-smoker,
+# SBP 140, total cholesterol 5.5, HDL 1.3; favourable = HbA1c 50, eGFR 90, diagnosed at 60;
+# unfavourable = HbA1c 70, eGFR 60, diagnosed at 50.
+DM_FAV, DM_UNFAV = (60, 50, 90), (50, 70, 60)
+DM_EXAMPLES = [("male", "moderate", DM_FAV, 11.0), ("male", "moderate", DM_UNFAV, 17.2),
+               ("female", "moderate", DM_UNFAV, 12.7), ("male", "low", DM_UNFAV, 12.9),
+               ("female", "low", DM_UNFAV, 9.8), ("male", "very_high", DM_UNFAV, 31.2),
+               ("female", "very_high", DM_UNFAV, 34.0)]
+
+
+def _dm(sex, region, diag):
+    agediag, hba1c, egfr = diag
+    return round(100 * float(score2_diabetes(60, sex, 0, 140, 5.5, 1.3, 1, agediag, hba1c, egfr, region)), 1)
+
+
+@pytest.mark.parametrize("sex, region, diag, published", DM_EXAMPLES)
+def test_score2_diabetes_published_worked_examples(sex, region, diag, published):
+    assert _dm(sex, region, diag) == published
+
+
+def test_finding_score2_diabetes_worked_example_misprint():
+    # The paper prints 7.9% for the favourable woman (moderate region); the model gives 7.6%
+    # (RiskScorescvd agrees), while her three unfavourable-profile values above all match.
+    assert _dm("female", "moderate", DM_FAV) == 7.6
+
+
+def test_official_asia_pacific_charts():
+    """All 1,536 cells of the SCORE2 Asia-Pacific charts (transcribed); 1 known print slip."""
+    import importlib.util
+    import sys
+
+    ref = FIXTURES.parent
+    sys.path.insert(0, str(ref))
+    spec = importlib.util.spec_from_file_location("chart_check", ref / "chart_check.py")
+    cc = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(cc)
+    d = cc.ap_summary()
+    assert len(d) == 1536
+    bad = {(r.region, r.sex, r.smoker, r.age_band, r.sbp_band, r.nonhdl_band) for r in d[~d.exact].itertuples()}
+    assert bad == cc.AP_KNOWN_ANOMALIES

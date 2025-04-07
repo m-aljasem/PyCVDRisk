@@ -17,8 +17,8 @@ rounding: disabled (round and round_to_nearest_digit overridden with identity)
 
 | Variant | Patients | NaN | Max abs diff | Max rel diff | Pass (rtol 1e-12) | Time (s) |
 |---|---|---|---|---|---|---|
-| score2 | 20,000 | 0 | 4.44e-16 | 5.56e-14 | yes | 0.016 |
-| score2_op | 20,000 | 0 | 4.44e-16 | 4.15e-15 | yes | 0.015 |
+| score2 | 20,000 | 0 | 4.44e-16 | 5.56e-14 | yes | 0.011 |
+| score2_op | 20,000 | 0 | 4.44e-16 | 4.15e-15 | yes | 0.012 |
 | score2_diabetes | 20,000 | 0 | 5.55e-16 | 1.14e-13 | yes | 0.013 |
 | score2_asia_pacific | 20,000 | 0 | 1.14e-15 | 4.38e-14 | yes | 0.011 |
 
@@ -61,7 +61,9 @@ published equations, not implementation errors. Each is pinned by a
    to ~87%), and *low* exceeds *moderate* for 4.5% (risks up to ~5%). Follows
    directly from the published rescaling factors.
 
-To do before publication: confirm each against the official ESC risk charts.
+Finding 3 shows in the official charts (section 5): for men aged 85-89 the smoker
+cell is never above the non-smoker cell (12 of 64 cells lower, the rest equal).
+Findings 1, 2 and 4 involve profiles or regions the charts do not print.
 
 ## 4. Coefficient provenance — open items
 
@@ -73,6 +75,65 @@ To do before publication: confirm each against the official ESC risk charts.
   and agree exactly. `check_coefficients.py` also compares all 116 of them with the
   supplement text (files in `source/`), located by row label: 116/116 match. It
   flags a mutated value (checked by hand with four mutations).
-- Not yet compared with the official ESC calculator (HeartScore) or charts
-  (evidence level A).
-- No published worked examples have been located yet.
+- SCORE2 and SCORE2-OP agree with the official charts (section 5, evidence level A).
+  SCORE2-Diabetes has no printed charts; it shares SCORE2's core terms (covered by
+  section 5) but its diabetes coefficients rest on RiskScorescvd and the worked examples below.
+- SCORE2-Diabetes worked examples (published paper, PMC10361012, Results; file in
+  `source/`): 7/8 printed values reproduced to 1 decimal (evidence level C). The eighth,
+  the favourable-profile woman in the moderate region, is printed 7.9%; the model gives
+  7.6% (RiskScorescvd agrees) while her three unfavourable-profile values match, so it is
+  taken as a misprint. The accepted manuscript also printed 8.4% and 31.3% where the
+  published version (and the model) give 9.8% and 31.2%. Tests:
+  `test_score2_diabetes_published_worked_examples`, `test_finding_score2_diabetes_worked_example_misprint`.
+- SCORE2 Asia-Pacific agrees with its official charts (section 6, evidence level A).
+
+## 5. Official ESC 2021 risk charts (evidence level A)
+
+Source: 2021 ESC Guidelines on CVD prevention (Visseren, Eur Heart J 2021;42:3227),
+Figure 3, all four risk regions (`source/visseren2021_esc_prevention_guideline.pdf`,
+pp. 20-23), parsed by `parse_charts.py`. The SCORE2-OP part equals, cell for cell, the
+authors' second print (SCORE2-OP supplement, Suppl. Fig. 8; 1,024/1,024 cells).
+
+Chart inputs are not printed; they are inferred and pinned by the charts: band midpoints
+for age, SBP and non-HDL cholesterol, HDL 1.4 mmol/L (women) and 1.2 (men). Exact agreement
+of the SCORE2 cells by chart HDL value:
+
+| HDL (mmol/L) | 1.0 | 1.1 | 1.2 | 1.3 | 1.4 | 1.5 | 1.6 |
+|---|---|---|---|---|---|---|---|
+| female | 19.3% | 29.2% | 45.8% | 68.8% | 99.5% | 70.7% | 47.7% |
+| male | 31.9% | 62.5% | 99.6% | 65.9% | 36.6% | 20.3% | 10.8% |
+
+Printed coefficients are rounded (SCORE2-OP scales to 2 decimals) and the charts come
+from unrounded values, so each cell is also checked against the risk interval the printed
+precision allows (`chart_check.py`).
+
+| Variant | Cells | Exact (rounded %) | Within printed precision | Max abs diff (points) | Median interval width |
+|---|---|---|---|---|---|
+| score2_op | 1,024 | 852 | 1,024 | 1 | 1.21 |
+| score2 | 1,536 | 1,529 | 1,532 | 1 | 0.03 |
+
+SCORE2-OP cells that are not exact are all within the interval: the printed 4-decimal
+per-year and per-mmHg coefficients, multiplied by up to 15 years and 40 mmHg off-centre,
+move risk by about one point at age 85-89. Cells outside the interval (all four in the
+non-HDL 4.0-4.9 column; treated as print slips, pinned in `KNOWN_ANOMALIES`):
+
+- low, female, smoker, age 55-59, SBP 120-139, non-HDL 4.0-4.9: chart 6%, model 5.29% (interval 5.28-5.31)
+- moderate, female, smoker, age 60-64, SBP 120-139, non-HDL 4.0-4.9: chart 9%, model 8.47% (interval 8.45-8.49)
+- high, male, non-smoker, age 60-64, SBP 160-179, non-HDL 4.0-4.9: chart 13%, model 14.15% (interval 14.11-14.18)
+- high, female, non-smoker, age 40-44, SBP 160-179, non-HDL 4.0-4.9: chart 2%, model 2.57% (interval 2.56-2.58)
+
+## 6. Official SCORE2 Asia-Pacific risk charts (evidence level A)
+
+Source: Hageman et al., Eur Heart J 2025 (PMC11842970), Figure 3, four Asia-Pacific risk
+regions. The charts are raster images (accepted manuscript, Cambridge repository,
+`source/score2_asia_pacific_accepted_manuscript.pdf`, pp. 25-28), transcribed by eye into
+`fixtures/asia_pacific_charts_transcribed.txt` before any model value was computed. Same
+chart inputs as the ESC charts (they pin HDL at 1.4 / 1.2 here too); the rescaling factors
+are printed to 9 decimals, so cells are compared exactly.
+
+Cells: 1,536; exact (rounded %): 1,535. Not exact:
+
+- high, female, non-smoker, age 40-44, SBP 100-119, non-HDL 3.0-3.9: chart 1%, model 2.84% (printed 1 between neighbours 3, 4, 4; checked on a zoomed crop; treated as a print slip)
+
+A transcription error would show up as a mismatch unless it happened to equal the model's
+value, so the 1,535 exact cells also confirm the transcription.

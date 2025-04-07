@@ -7,10 +7,10 @@ then `Rscript reference/qrisk3/run_reference_cran.R`), `python reference/<family
 
 | Score | Status | Reference | Evidence | Report |
 |---|---|---|---|---|
-| SCORE2 | verified | RiskScorescvd 0.3.1 (R); paper worked example | B + C | `score2/REPORT.md` |
-| SCORE2-OP | verified | RiskScorescvd 0.3.1 | B | `score2/REPORT.md` |
-| SCORE2-Diabetes | verified | RiskScorescvd 0.3.1 | B | `score2/REPORT.md` |
-| SCORE2 Asia-Pacific | verified; scales transcribed from primary source | RiskScorescvd 0.3.1 | B | `score2/REPORT.md` |
+| SCORE2 | verified; 1,532/1,536 official chart cells within printed precision (1,529 exact) | ESC 2021 guideline charts (4 regions); RiskScorescvd 0.3.1 (R); paper worked example | A + B + C | `score2/REPORT.md` |
+| SCORE2-OP | verified; 1,024/1,024 official chart cells within printed precision (852 exact) | ESC 2021 guideline charts = authors' supplement print; RiskScorescvd 0.3.1 | A + B | `score2/REPORT.md` |
+| SCORE2-Diabetes | verified; 7/8 printed worked examples (1 misprint documented) | RiskScorescvd 0.3.1; paper worked examples | B + C | `score2/REPORT.md` |
+| SCORE2 Asia-Pacific | verified; 1,535/1,536 official chart cells exact (1 print slip) | authors' charts (Figure 3, 4 regions); RiskScorescvd 0.3.1 | A + B | `score2/REPORT.md` |
 | Globorisk (lab, office, fatal) | verified | authors' R package 1.0.2 | A | `globorisk/REPORT.md` |
 | SCORE2-CKD (eGFR, ACR, dipstick add-ons) | verified; 1 reference bug found | supplement worked example; RiskScorescvd 0.3.1 | C + B | `score2_ckd/REPORT.md` |
 | PREVENT (5 models x 10/30 y x 5 outcomes) | verified; coefficients from primary source | authors' worked examples (100 values); preventr 0.12.2 | C + B | `prevent/REPORT.md` |
