@@ -90,17 +90,13 @@ lower-case sex) with `dp = 12`.
 
 | Model | Patients | Max abs difference | |
 |---|---:|---:|---|
-| cvd | not run | | |
-| cvd_bmi | not run | | |
-| cvd_policy | not run | | |
-| t2d | not run | | |
-| bleed | not run | | |
-| post_cvd | not run | | |
-| post_acs | not run | | |
-
-**Not run yet.** Executing the downloaded R code needs the owner's permission (see
-`reference/README.md`). Until then the evidence for the T2D, BMI, policy and post-event models is the
-parsed coefficients only; the 2018 and bleeding models also rest on their papers.
+| cvd | 3000 | 5.0e-13 | ok |
+| cvd_bmi | 3000 | 5.0e-13 | ok |
+| cvd_policy | 3000 | 5.0e-13 | ok |
+| t2d | 3000 | 5.0e-13 | ok |
+| bleed | 3000 | 5.0e-13 | ok |
+| post_cvd | 3000 | 5.0e-13 | ok |
+| post_acs | 3000 | 5.0e-13 | ok |
 
 ## 4. Defects in the R code (found by reading it)
 

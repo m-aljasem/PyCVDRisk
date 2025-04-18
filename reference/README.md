@@ -26,7 +26,7 @@ then `Rscript reference/qrisk3/run_reference_cran.R`), `python reference/<family
 | Reynolds Risk Score (model B, women and men) | verified; 19/19 formula terms vs PDFs; 17/17 worked examples within printed precision (14 exact) | Ridker 2007 (Table 6); Ridker 2008 (Clinical Examples) | C | `reynolds/REPORT.md` |
 | FINRISK 2016 (CHD, stroke, CVD) | 4/4 equations vs PDF; Figure 1: 29/30 bars exact, 1 within 0.01 (HDL inferred; 4 bars drawn at SBP 180 against the caption) | Vartiainen 2016 (Table 2, Figure 1) | C | `finrisk/REPORT.md` |
 | ADRS (Abu Dhabi 2024; ASCVD, CAD, stroke) | 32/32 terms: Data S1 syntax = Table 2; GFR mean, MAP and stroke mean score checked against Table 1 | JAHA 2024 Table 2, Data S1 (PMC11681588) | C (weak) | `adrs/REPORT.md` |
-| PREDICT (NZ): 2018 primary prevention, BMI, VARIANZ policy, T2D, bleeding, post-CVD, post-ACS | coefficients identical to the authors' R source (7/7 models); 49/49 paper rows; 2/2 worked examples; R run pending owner permission | PredictRiskScores 0.9 (VIEW team, parsed); Pylypchuk 2018; Selak 2019 | A (code, static) + C | `predict/REPORT.md` |
+| PREDICT (NZ): 2018 primary prevention, BMI, VARIANZ policy, T2D, bleeding, post-CVD, post-ACS | verified; coefficients identical to the authors' R source (7/7 models); authors' R code run unmodified: 21,000 patients, max diff 5e-13; 49/49 paper rows; 2/2 worked examples | PredictRiskScores 0.9 (VIEW team); Pylypchuk 2018; Selak 2019 | A + C | `predict/REPORT.md` |
 | PROCAM score | verified; 30/30 bands and Table 4 vs PDF | Assmann 2002 (Tables 3-4) | C | `procam/REPORT.md` |
 | REGICOR (Gerona and Framingham calibrations) | verified transcription; 39/39 table rows and 40/40 bands vs PDF; worked example has 2 arithmetic slips | Marrugat 2003 (Tables 1-2, Appendix) | C (weak) | `regicor/REPORT.md` |
 | WHO/ISH charts 2007 (14 subregions, with/without cholesterol) | verified; 3 whoishRisk transcription errors corrected | guideline's 2 printed charts (768 cells); whoishRisk 1.0 table (10,752 cells) and its R lookup logic (transliterated, not run) | A (2 subregions) + B | `who_ish/REPORT.md` |
@@ -87,14 +87,10 @@ then `Rscript reference/qrisk3/run_reference_cran.R`), `python reference/<family
     (both fit an age coefficient of 0.0536, not Table 1's 0.05), and 1 - 0.965^0.741 is 0.026, not the
     printed 0.047. Unrounded coefficients, or outputs from the official REGICOR calculator, would raise
     the evidence from weak C (see `regicor/REPORT.md`).
-12. **PREDICT: permission to run the authors' R code.** The auto-mode classifier blocks running downloaded
-    third-party code. To finish the patient-level comparison, run `Rscript reference/predict/run_reference.R`
-    yourself (it sources the vendored, unmodified `reference/vendor/PredictRiskScores/R/*.R`), or allow it,
-    then `python reference/predict/report.py`; the tests then compare all 21,000 patients automatically.
-13. **PREDICT papers.** The Zotero attachment for Pylypchuk 2021 (Lancet, diabetes) is a different article
+12. **PREDICT papers.** The Zotero attachment for Pylypchuk 2021 (Lancet, diabetes) is a different article
     (Cacciari, *Nomes de lugar: confim*, JSTOR). Please replace it. Mehta 2018 (VARIANZ, IJE) and Poppe 2017/2019
     (Heart; post-CVD, post-ACS) would let those models be checked against print too.
-14. **PREDICT: optional note to the VIEW team** listing the R defects in `predict/REPORT.md` section 4
+13. **PREDICT: optional note to the VIEW team** listing the R defects in `predict/REPORT.md` section 4
     (integer-sequence BMI/HbA1c/creatinine bands, `sex` case in the post-event models, the `acr` scoping bug).
-15. **ADRS: optional note to the authors.** Ask them to confirm the cohort GFR mean (111.4, derived from
+14. **ADRS: optional note to the authors.** Ask them to confirm the cohort GFR mean (111.4, derived from
     Table 1), which of the two stroke formulas in Data S1 is intended, and for a few calculated risks.
