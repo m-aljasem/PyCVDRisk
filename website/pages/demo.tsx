@@ -13,14 +13,25 @@ export default function Demo() {
   const slug = typeof query.model === 'string' && models.some(m => m.slug === query.model) ? query.model : 'score2'
   // The app reports its content height (demo/streamlit_app.py), so the frame grows with it and never scrolls.
   const [height, setHeight] = useState(1600)
+  // Load the app itself (/~/+/), skipping Streamlit Cloud's wrapper page and its border and "Built with Streamlit"
+  // bar. If the app has not reported in after 20 s it is probably asleep; only the wrapper can wake it, so fall back.
+  const [direct, setDirect] = useState(true)
 
   useEffect(() => {
+    let reported = false
     const onMessage = (e: MessageEvent) => {
       const h = e.data?.pycvdriskHeight
-      if (e.origin === DEMO_ORIGIN && typeof h === 'number' && h > 200 && h < 20000) setHeight(Math.ceil(h))
+      if (e.origin === DEMO_ORIGIN && typeof h === 'number' && h > 200 && h < 20000) {
+        reported = true
+        setHeight(Math.ceil(h))
+      }
     }
     window.addEventListener('message', onMessage)
-    return () => window.removeEventListener('message', onMessage)
+    const fallback = setTimeout(() => reported || setDirect(false), 20000)
+    return () => {
+      window.removeEventListener('message', onMessage)
+      clearTimeout(fallback)
+    }
   }, [])
 
   return (
@@ -44,8 +55,8 @@ export default function Demo() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-12">
           {isReady && (
             <iframe
-              key={slug}
-              src={`${DEMO_URL}/?model=${slug}&site=1&embed=true`}
+              key={`${slug}-${direct}`}
+              src={`${DEMO_URL}/${direct ? '~/+/' : ''}?model=${slug}&site=1&embed=true`}
               title="PyCVDRisk risk calculator"
               style={{ height, border: 0, colorScheme: 'light' }}
               className="block w-full bg-transparent overflow-hidden"
