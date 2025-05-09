@@ -93,3 +93,20 @@ def test_other_race_uses_white_equations():
                                 {"total_chol": np.nan}, {"hdl_chol": 0}, {"sbp": -1}, {"smoker": 2}])
 def test_invalid_rows_are_nan(kw):
     assert np.isnan(pce(**{**BASE, **kw}))
+
+
+def test_acc_calculator_code_has_the_guideline_equations():
+    """Official ACC CVD Risk Estimator+ code, parsed statically: same terms, constants round to Table A."""
+    assert _load("check_acc").main() == 0
+
+
+def test_matches_acc_calculator_run(ref, monkeypatch):
+    """Output of the ACC code itself (reference/pce/run_acc.js), with its constants substituted."""
+    out = REF / "fixtures" / "acc_reference.csv"
+    if not out.exists():
+        pytest.skip("ACC code not run yet (node reference/pce/run_acc.js)")
+    p, _, got = ref
+    acc = pd.read_csv(out)
+    assert (acc.id == p.id).all()
+    monkeypatch.setattr(mod, "MODELS", _load("check_acc").parse())
+    np.testing.assert_allclose(got(), acc.risk, rtol=1e-12, atol=1e-15)

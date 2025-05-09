@@ -43,13 +43,43 @@ treated and untreated SBP, within CVrisk's accepted lipid and SBP ranges).
    differ. Their provenance (presumably the ACC/AHA spreadsheet) is not documented; this
    package uses the published values.
 
-Scoring 20,000 rows: 0.019 s; 1,000,000 rows: 1.97 s.
+Scoring 20,000 rows: 0.021 s; 1,000,000 rows: 2.37 s.
 
 ## 3. Mutation check
 
 Every value in Table A, +1 in its last printed digit: 46/46 caught by CVrisk.
 
-## 4. Open items
+## 4. Official ACC calculator code (evidence level A, static)
 
-- Compare against the official ACC/AHA ASCVD Risk Estimator (evidence level A); its
-  site did not respond to automated requests.
+The ACC CVD Risk Estimator+ (tools.acc.org/CVD-Risk-Estimator-Plus) computes the PCE in
+`assets/js/riskformulas.js`, saved unmodified in `source/`.
+`check_acc.py` parses it without running it:
+
+```
+ACC constants: 46 compared; same terms in 4/4 equations; 46 agree with the guideline at its printed precision; 14 carry more decimals:
+  female white s0: ACC 0.96652, guideline 0.9665
+  female african_american ln_age: ACC 17.1141, guideline 17.114
+  female african_american ln_tc: ACC 0.9396, guideline 0.94
+  female african_american ln_hdl: ACC -18.9196, guideline -18.92
+  female african_american ln_age_hdl: ACC 4.4748, guideline 4.475
+  female african_american ln_sbp_treated: ACC 29.2907, guideline 29.291
+  female african_american ln_age_sbp_treated: ACC -6.4321, guideline -6.432
+  female african_american ln_sbp_untreated: ACC 27.8197, guideline 27.82
+  female african_american ln_age_sbp_untreated: ACC -6.0873, guideline -6.087
+  female african_american smoker: ACC 0.6908, guideline 0.691
+  female african_american diabetes: ACC 0.8738, guideline 0.874
+  female african_american s0: ACC 0.95334, guideline 0.9533
+  male white s0: ACC 0.91436, guideline 0.9144
+  male african_american s0: ACC 0.89536, guideline 0.8954
+```
+
+So the calculator uses the guideline's equations with more decimals for the baseline
+survivals and the African American women's coefficients (its means are the printed ones).
+Effect on the 20,000 patients: max relative difference 1.5% (median 0.04%),
+max 0.58 percentage points; 3 patients change side of the 7.5% threshold.
+This package keeps the published values.
+
+`run_acc.js` runs the ACC file itself on the same patients (stubbing only its form
+getters); `tests/pce` then requires agreement to 1e-12 with the ACC constants substituted.
+Not yet run: executing downloaded code needs the owner's permission
+(`node reference/pce/run_acc.js`).
