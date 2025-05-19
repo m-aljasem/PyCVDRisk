@@ -28,7 +28,7 @@ then `Rscript reference/qrisk3/run_reference_cran.R`), `python reference/<family
 | ADRS (Abu Dhabi 2024; ASCVD, CAD, stroke) | 32/32 terms: Data S1 syntax = Table 2; GFR mean, MAP and stroke mean score checked against Table 1 | JAHA 2024 Table 2, Data S1 (PMC11681588) | C (weak) | `adrs/REPORT.md` |
 | PREDICT (NZ): 2018 primary prevention, BMI, VARIANZ policy, T2D, bleeding, post-CVD, post-ACS | verified; coefficients identical to the authors' R source (7/7 models); authors' R code run unmodified: 21,000 patients, max diff 5e-13; 49/49 paper rows; 2/2 worked examples | PredictRiskScores 0.9 (VIEW team); Pylypchuk 2018; Selak 2019 | A + C | `predict/REPORT.md` |
 | PROCAM score | verified; 30/30 bands and Table 4 vs PDF | Assmann 2002 (Tables 3-4) | C | `procam/REPORT.md` |
-| REGICOR (Gerona and Framingham calibrations) | verified transcription; 39/39 table rows and 40/40 bands vs PDF; worked example has 2 arithmetic slips | Marrugat 2003 (Tables 1-2, Appendix) | C (weak) | `regicor/REPORT.md` |
+| REGICOR (Gerona and Framingham calibrations) | verified transcription; 39/39 table rows and 40/40 bands vs PDF; worked example has 2 arithmetic slips; **official REGICOR charts not reproduced** (the paper's 2-decimal table: 165/400 cells; full-precision Wilson + Rev Esp Cardiol 2003 calibration: 371/400) | Marrugat 2003 (Tables 1-2, Appendix); official charts (regicor.cat) | C (weak) | `regicor/REPORT.md` |
 | WHO/ISH charts 2007 (14 subregions, with/without cholesterol) | verified; 3 whoishRisk transcription errors corrected | guideline's 2 printed charts (768 cells); whoishRisk 1.0 table (10,752 cells) and its R lookup logic (transliterated, not run) | A (2 subregions) + B | `who_ish/REPORT.md` |
 | HEART | verified; 18/18 published rules | Melki & Jernberg 2013 (Table 1, Methods); RiskScorescvd 0.3.1 | C + B | `heart/REPORT.md` |
 | CHADS2, CHA2DS2-VASc, HAS-BLED | verified; 32/32 published rules, definitions quoted from the PDFs | Gage 2001; Lip 2010; Pisters 2010 | C | `af/REPORT.md` |
@@ -82,11 +82,12 @@ then `Rscript reference/qrisk3/run_reference_cran.R`), `python reference/<family
 10. **GRACE: optional note to the authors.** In Granger 2003 Figure 4, both worked examples score a
     value on a band's printed lower edge in the band below (SBP 100: 53, not 43; creatinine 0.4: 1,
     not 4), and example 1's terms add to 195, not 196. The package follows the printed table.
-11. **REGICOR: optional note to the authors (Marrugat, IMIM).** In the Appendix example, the written-out
-    terms of sum(b*Xmean) add up to 3.67 (Framingham) and 4.12 (Gerona), not the printed 3.84 and 4.32
-    (both fit an age coefficient of 0.0536, not Table 1's 0.05), and 1 - 0.965^0.741 is 0.026, not the
-    printed 0.047. Unrounded coefficients, or outputs from the official REGICOR calculator, would raise
-    the evidence from weak C (see `regicor/REPORT.md`).
+11. **REGICOR: the published table does not reproduce REGICOR's own charts.** The package follows
+    Marrugat 2003 (JECH) exactly, but its 2-decimal coefficients match only 165/400 cells of the official
+    regicor.cat charts; Wilson 1998's full-precision coefficients with the Spanish calibration of Marrugat 2003
+    (Rev Esp Cardiol 56:253) match 371/400 (men 198/200). Please add both papers (Wilson, Circulation
+    1998;97:1837; Marrugat, Rev Esp Cardiol 2003;56:253) so that function can be checked and added (level A).
+    Earlier note still stands: the Appendix example's sums add to 3.67/4.12, not 3.84/4.32 (see `regicor/REPORT.md`).
 12. **PCE: permission to run the ACC calculator code.** The auto-mode classifier blocks executing the
     downloaded ACC file. Run `node reference/pce/run_acc.js` yourself (it runs the saved, unmodified
     `reference/pce/source/acc_cvd_risk_estimator_riskformulas.js` on the 20,000 test patients), then

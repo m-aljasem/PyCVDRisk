@@ -101,3 +101,28 @@ Circulation 1998;97:1837-47, which the function comes from).
   The package uses >=, so no value falls between bands.
 - v1 of this package used continuous ln-coefficients and a constant that do not appear in this paper.
 
+## 5. Official Framingham-REGICOR charts
+
+Source: regicor.cat, "Taules de Framingham-REGICOR calibrades per al seu us a la poblacio catalana"
+(non-diabetic; `source/regicor_official_charts_catalonia.jpg`), 400 cells transcribed by eye into
+`fixtures/official_charts_transcribed.txt`. Chart inputs are not printed, so `chart_check.py` searches
+the age within band, HDL category and rounding rule that fit best for each function:
+
+| Function | Men exact | Women exact | Best inputs (men; women) |
+|---|---|---|---|
+| package (JECH 2003 Table 1) | 100/200 | 65/200 | band start + 6.5, HDL cat. 1, ceil; band start + 8.5, HDL cat. 0, ceil |
+| cvrcalc (Wilson 1998 + Rev Esp Cardiol 2003) | 198/200 | 173/200 | band start + 5.0, HDL cat. 3, ceil; band start + 4.5, HDL cat. 2, ceil |
+
+**Finding.** The official charts are not reproduced by the function this package implements (Marrugat
+2003 JECH, coefficients printed to 2 decimals): at best half the men's cells and a third of the women's.
+They are reproduced for men (198/200, ages 40/50/60/70, HDL 50-59, risk rounded up) by Wilson 1998's
+full-precision coefficients with the Spanish calibration of Marrugat 2003 (Rev Esp Cardiol 56:253),
+as coded in the third-party R package cvrcalc 3.0. The printed women's age terms (0.17, -0.001) put
+peak risk near age 85, while Wilson's (0.33766, -0.00268) put it at 63; the charts' 55-64 and 65-74
+panels for women are identical, as the age-63 peak implies. Women still match only 173/200 with any
+single choice of inputs, so the women's chart is not pinned.
+Evidence for this package therefore stays C (weak): it follows its paper exactly, and that paper's
+rounded table does not reproduce REGICOR's own charts.
+Owner action: obtain Marrugat 2003 Rev Esp Cardiol 56:253 and Wilson 1998 (Circulation 97:1837) so the
+full-precision function can be checked against its sources and added; then these charts give level A.
+

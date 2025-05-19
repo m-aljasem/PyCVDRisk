@@ -124,6 +124,12 @@ def example(t):
 
 
 def main():
+    import sys
+
+    sys.path.insert(0, str(HERE))
+    import chart_check
+
+    cc = chart_check.main()
     t = text()
     trows = table_rows()
     found = [(d, bool(re.search(rx, t))) for d, rx in trows]
@@ -181,7 +187,29 @@ def main():
          "- Women's age coefficients are printed as 0.17 and -0.001 only, and the paper has no example for women.",
          "- Table 1 writes the top bands as \">280\" and \"S>160\"/\"D>100\"; Table 2 writes \">=280\" and \">=160\"/\">=100\".",
          "  The package uses >=, so no value falls between bands.",
-         "- v1 of this package used continuous ln-coefficients and a constant that do not appear in this paper.", ""]
+         "- v1 of this package used continuous ln-coefficients and a constant that do not appear in this paper.", "",
+         "## 5. Official Framingham-REGICOR charts", "",
+         "Source: regicor.cat, \"Taules de Framingham-REGICOR calibrades per al seu us a la poblacio catalana\"",
+         "(non-diabetic; `source/regicor_official_charts_catalonia.jpg`), 400 cells transcribed by eye into",
+         "`fixtures/official_charts_transcribed.txt`. Chart inputs are not printed, so `chart_check.py` searches",
+         "the age within band, HDL category and rounding rule that fit best for each function:", "",
+         "| Function | Men exact | Women exact | Best inputs (men; women) |", "|---|---|---|---|",
+         *[f"| {name} | {cc[name, 'male'][0]}/200 | {cc[name, 'female'][0]}/200 | "
+           f"band start + {cc[name, 'male'][1]}, HDL cat. {cc[name, 'male'][2]}, {cc[name, 'male'][3]}; "
+           f"band start + {cc[name, 'female'][1]}, HDL cat. {cc[name, 'female'][2]}, {cc[name, 'female'][3]} |"
+           for name in dict.fromkeys(k[0] for k in cc)], "",
+         "**Finding.** The official charts are not reproduced by the function this package implements (Marrugat",
+         "2003 JECH, coefficients printed to 2 decimals): at best half the men's cells and a third of the women's.",
+         "They are reproduced for men (198/200, ages 40/50/60/70, HDL 50-59, risk rounded up) by Wilson 1998's",
+         "full-precision coefficients with the Spanish calibration of Marrugat 2003 (Rev Esp Cardiol 56:253),",
+         "as coded in the third-party R package cvrcalc 3.0. The printed women's age terms (0.17, -0.001) put",
+         "peak risk near age 85, while Wilson's (0.33766, -0.00268) put it at 63; the charts' 55-64 and 65-74",
+         "panels for women are identical, as the age-63 peak implies. Women still match only 173/200 with any",
+         "single choice of inputs, so the women's chart is not pinned.",
+         "Evidence for this package therefore stays C (weak): it follows its paper exactly, and that paper's",
+         "rounded table does not reproduce REGICOR's own charts.",
+         "Owner action: obtain Marrugat 2003 Rev Esp Cardiol 56:253 and Wilson 1998 (Circulation 97:1837) so the",
+         "full-precision function can be checked against its sources and added; then these charts give level A.", ""]
     (HERE / "REPORT.md").write_text("\n".join(L) + "\n")
     nf = sum(f for _, f in found)
     print(f"rows {nf}/{len(found)}; bands {bok}/{bn}; example ok {ex_ok}; "
