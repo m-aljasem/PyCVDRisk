@@ -99,3 +99,26 @@ then `Rscript reference/qrisk3/run_reference_cran.R`), `python reference/<family
     (integer-sequence BMI/HbA1c/creatinine bands, `sex` case in the post-event models, the `acr` scoping bug).
 15. **ADRS: optional note to the authors.** Ask them to confirm the cohort GFR mean (111.4, derived from
     Table 1), which of the two stroke formulas in Data S1 is intended, and for a few calculated risks.
+16. **PREVENT: accept the AHA source-code licence.** The official PREVENT code is in a private GitHub repository
+    (AHA-DS-Analytics/PREVENT), released free to researchers after accepting the licence at heart.org/PREVENT.
+    With it, PREVENT can be run against the official code (level A); the AHA online calculator is not reachable
+    by automated requests.
+17. **FINRISK: the THL calculator** (thl.fi/finriski) blocks automated requests. Saving its page and scripts from a
+    browser would allow a static check like the PCE one.
+
+## Evidence ceiling per score
+
+Why the scores below A stay where they are:
+
+| Score | Level | What would raise it |
+|---|---|---|
+| SCORE2-Diabetes | B + C | No official chart exists (the ESC uses a calculator only); outputs of the ESC app or the authors' code. |
+| PREVENT | C + B | Owner action 16 (AHA licence). |
+| DIAL2 | C | U-Prevent computes server-side behind a login; outputs from the authors (owner action 6). |
+| Reynolds | C | The official site (reynoldsriskscore.org) is now a parked domain; the papers' examples are the only official outputs. |
+| FINRISK 2016 | C | Owner action 17. |
+| PROCAM 2002 (points) | C | The Assmann-Stiftung online test runs a newer, continuous PROCAM model (it also scores women), so it cannot check the 2002 point score. |
+| REGICOR | C (weak) | Owner action 11: the official charts exist but disagree with the published table. |
+| ADRS | C (weak) | No calculator or charts found; owner action 15. |
+| GRACE (Granger 2003, Eagle 2004) | C | The printed nomograms are the authors' tool and are reproduced; today's online GRACE is GRACE 2.0, a different model. |
+| HEART, TIMI, EDACS, CHADS2, CHA2DS2-VASc, HAS-BLED | C (+ B) | Point scores: the published rules are the definition, so C is the ceiling. |
