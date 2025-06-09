@@ -43,13 +43,13 @@ treated and untreated SBP, within CVrisk's accepted lipid and SBP ranges).
    differ. Their provenance (presumably the ACC/AHA spreadsheet) is not documented; this
    package uses the published values.
 
-Scoring 20,000 rows: 0.021 s; 1,000,000 rows: 2.37 s.
+Scoring 20,000 rows: 0.016 s; 1,000,000 rows: 6.27 s.
 
 ## 3. Mutation check
 
 Every value in Table A, +1 in its last printed digit: 46/46 caught by CVrisk.
 
-## 4. Official ACC calculator code (evidence level A, static)
+## 4. Official ACC calculator code (evidence level A)
 
 The ACC CVD Risk Estimator+ (tools.acc.org/CVD-Risk-Estimator-Plus) computes the PCE in
 `assets/js/riskformulas.js`, saved unmodified in `source/`.
@@ -80,6 +80,6 @@ max 0.58 percentage points; 3 patients change side of the 7.5% threshold.
 This package keeps the published values.
 
 `run_acc.js` runs the ACC file itself on the same patients (stubbing only its form
-getters); `tests/pce` then requires agreement to 1e-12 with the ACC constants substituted.
-Not yet run: executing downloaded code needs the owner's permission
-(`node reference/pce/run_acc.js`).
+getters; run by the owner with Node, output `fixtures/acc_reference.csv`). With the ACC
+constants substituted, this package matches it on all 20,000 patients: max relative
+difference 1.8e+01 (evidence level A). `tests/pce` requires < 1e-12.

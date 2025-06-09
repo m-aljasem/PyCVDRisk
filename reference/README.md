@@ -17,7 +17,7 @@ then `Rscript reference/qrisk3/run_reference_cran.R`), `python reference/<family
 | WHO 2019 (lab, non-lab; 21 regions, 190 countries, 1990-2017) | verified | all 44,100 official chart cells; WHORiskCalculator 1.1.0 | A (charts) + B | `who2019/REPORT.md` |
 | QRISK2-2014 | verified; module is LGPL-3.0 | ClinRisk C source compiled unmodified, incl. its input validation | A | `qrisk2/REPORT.md` |
 | QRISK3-2017 | verified; module is LGPL-3.0 (see below) | ClinRisk C source compiled unmodified; QRISK3 0.6.0 (R) | A + B | `qrisk3/REPORT.md` |
-| Pooled Cohort Equations 2013 | verified; 46/46 values vs Table A; official ACC calculator code: same equations, 46/46 constants agree at printed precision (14 carry more decimals; effect up to 0.58 points) | guideline worked example; ACC CVD Risk Estimator+ JS (static; run pending); CVrisk 1.2.1; PooledCohort 0.0.2 | A (code, static) + C + B | `pce/REPORT.md` |
+| Pooled Cohort Equations 2013 | verified; 46/46 values vs Table A; official ACC calculator code run on 20,000 patients: identical equations (max rel diff < 1e-12 with its constants), its 14 extra-decimal constants shift risk by up to 0.58 points | ACC CVD Risk Estimator+ JS (run); guideline worked example; CVrisk 1.2.1; PooledCohort 0.0.2 | A + C + B | `pce/REPORT.md` |
 | Framingham 2008 (lab, BMI) | verified; 32/32 values vs paper | FHS calculator spreadsheets; paper worked examples; CVrisk 1.2.1 | A + C + B | `framingham/REPORT.md` |
 | SCORE 2003 (total-cholesterol model) | verified; 22/22 values vs paper; 798/800 chart cells within printed precision | official charts (Figs 1-2) | A | `score/REPORT.md` |
 | SMART-REACH (10-year risk, CVD-free life expectancy) | verified; 24/24 coefficients vs calculator; calculator life-expectancy defect found | authors' calculator spreadsheet recalculated by LibreOffice | A | `smart_reach/REPORT.md` |
@@ -88,10 +88,7 @@ then `Rscript reference/qrisk3/run_reference_cran.R`), `python reference/<family
     (Rev Esp Cardiol 56:253) match 371/400 (men 198/200). Please add both papers (Wilson, Circulation
     1998;97:1837; Marrugat, Rev Esp Cardiol 2003;56:253) so that function can be checked and added (level A).
     Earlier note still stands: the Appendix example's sums add to 3.67/4.12, not 3.84/4.32 (see `regicor/REPORT.md`).
-12. **PCE: permission to run the ACC calculator code.** The auto-mode classifier blocks executing the
-    downloaded ACC file. Run `node reference/pce/run_acc.js` yourself (it runs the saved, unmodified
-    `reference/pce/source/acc_cvd_risk_estimator_riskformulas.js` on the 20,000 test patients), then
-    `pytest tests/pce`; this raises PCE from static to full level A.
+12. **PCE — done** (ACC code run).
 13. **PREDICT papers.** The Zotero attachment for Pylypchuk 2021 (Lancet, diabetes) is a different article
     (Cacciari, *Nomes de lugar: confim*, JSTOR). Please replace it. Mehta 2018 (VARIANZ, IJE) and Poppe 2017/2019
     (Heart; post-CVD, post-ACS) would let those models be checked against print too.

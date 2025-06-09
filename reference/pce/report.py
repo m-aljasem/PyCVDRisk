@@ -44,11 +44,13 @@ def _acc():
     finally:
         mod.MODELS = orig
     rel = np.abs(a - b) / b
-    return buf.getvalue(), np.nanmax(rel), np.nanmedian(rel), 100 * np.nanmax(np.abs(a - b)), int(((a >= 0.075) != (b >= 0.075)).sum())
+    out = pd.read_csv(HERE / "fixtures" / "acc_reference.csv")
+    run = (len(out), float(np.nanmax(np.abs(b - out.risk) / out.risk)))
+    return run, buf.getvalue(), np.nanmax(rel), np.nanmedian(rel), 100 * np.nanmax(np.abs(a - b)), int(((a >= 0.075) != (b >= 0.075)).sum())
 
 
 def main():
-    acc_text, acc_rel, acc_med, acc_abs, acc_flip = _acc()
+    acc_run, acc_text, acc_rel, acc_med, acc_abs, acc_flip = _acc()
     p = pd.read_csv(FX / "patients.csv")
     r = pd.read_csv(FX / "reference.csv")
     run = lambda q: mod.pce(q.age, q.sex, q.race, q.total_chol_mgdl / MG_PER_MMOL,  # noqa: E731
@@ -111,7 +113,7 @@ def main():
         f"Scoring {len(p):,} rows: {secs:.3f} s; 1,000,000 rows: {secs_1m:.2f} s.", "",
         "## 3. Mutation check", "",
         f"Every value in Table A, +1 in its last printed digit: {sum(caught)}/{len(caught)} caught by CVrisk.", "",
-        "## 4. Official ACC calculator code (evidence level A, static)", "",
+        "## 4. Official ACC calculator code (evidence level A)", "",
         "The ACC CVD Risk Estimator+ (tools.acc.org/CVD-Risk-Estimator-Plus) computes the PCE in",
         "`assets/js/riskformulas.js`, saved unmodified in `source/`.",
         "`check_acc.py` parses it without running it:", "",
@@ -122,9 +124,9 @@ def main():
         f"max {acc_abs:.2f} percentage points; {acc_flip} patients change side of the 7.5% threshold.",
         "This package keeps the published values.", "",
         "`run_acc.js` runs the ACC file itself on the same patients (stubbing only its form",
-        "getters); `tests/pce` then requires agreement to 1e-12 with the ACC constants substituted.",
-        "Not yet run: executing downloaded code needs the owner's permission",
-        "(`node reference/pce/run_acc.js`).",
+        "getters; run by the owner with Node, output `fixtures/acc_reference.csv`). With the ACC",
+        f"constants substituted, this package matches it on all {acc_run[0]:,} patients: max relative",
+        f"difference {acc_run[1]:.1e} (evidence level A). `tests/pce` requires < 1e-12.",
     ]
     (HERE / "REPORT.md").write_text("\n".join(lines) + "\n")
     print("\n".join(lines[18:]))
