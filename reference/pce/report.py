@@ -35,7 +35,7 @@ def _acc():
     with contextlib.redirect_stdout(buf):
         assert check_acc.main() == 0
     p = pd.read_csv(HERE / "fixtures" / "patients.csv")
-    f = lambda: mod.pce(p.age, p.sex, p.race, p.total_chol_mgdl, p.hdl_chol_mgdl, p.sbp,  # noqa: E731
+    f = lambda: mod.pce(p.age, p.sex, p.race, p.total_chol_mgdl / MG_PER_MMOL, p.hdl_chol_mgdl / MG_PER_MMOL, p.sbp,  # noqa: E731
                         p.bp_treated, p.smoker, p.diabetes)
     a, orig = f(), mod.MODELS
     mod.MODELS = check_acc.parse()

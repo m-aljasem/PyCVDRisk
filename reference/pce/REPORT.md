@@ -43,7 +43,7 @@ treated and untreated SBP, within CVrisk's accepted lipid and SBP ranges).
    differ. Their provenance (presumably the ACC/AHA spreadsheet) is not documented; this
    package uses the published values.
 
-Scoring 20,000 rows: 0.016 s; 1,000,000 rows: 6.27 s.
+Scoring 20,000 rows: 0.018 s; 1,000,000 rows: 1.82 s.
 
 ## 3. Mutation check
 
@@ -75,11 +75,11 @@ ACC constants: 46 compared; same terms in 4/4 equations; 46 agree with the guide
 
 So the calculator uses the guideline's equations with more decimals for the baseline
 survivals and the African American women's coefficients (its means are the printed ones).
-Effect on the 20,000 patients: max relative difference 1.5% (median 0.04%),
-max 0.58 percentage points; 3 patients change side of the 7.5% threshold.
+Effect on the 20,000 patients: max relative difference 1.2% (median 0.05%),
+max 0.49 percentage points; 12 patients change side of the 7.5% threshold.
 This package keeps the published values.
 
 `run_acc.js` runs the ACC file itself on the same patients (stubbing only its form
 getters; run by the owner with Node, output `fixtures/acc_reference.csv`). With the ACC
 constants substituted, this package matches it on all 20,000 patients: max relative
-difference 1.8e+01 (evidence level A). `tests/pce` requires < 1e-12.
+difference 2.6e-13 (evidence level A). `tests/pce` requires < 1e-12.
