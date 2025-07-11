@@ -100,8 +100,13 @@ then `Rscript reference/qrisk3/run_reference_cran.R`), `python reference/<family
     (AHA-DS-Analytics/PREVENT), released free to researchers after accepting the licence at heart.org/PREVENT.
     With it, PREVENT can be run against the official code (level A); the AHA online calculator is not reachable
     by automated requests.
-17. **FINRISK: the THL calculator** (thl.fi/finriski) blocks automated requests. Saving its page and scripts from a
-    browser would allow a static check like the PCE one.
+17. **FINRISK: run `python reference/finrisk/run_calculator.py`.** The official Duodecim calculator
+    (forms.ebmedscloud.org/en-GB/questionnaire/finriski) computes on its server (`/api/analysis/predict`); the
+    script sends 300 seeded patients and saves the responses. Its page combines risks as 1-(1-CHD)(1-stroke),
+    not CHD + stroke as in the paper (`finrisk/source/duodecim_finriski_result_chunk.js`).
+18. **PROCAM 2007: add Assmann, Eur J Clin Invest 2007;37:925 (and any supplement).** The owner chose to replace
+    the 2002 point score with the newer Weibull model (men and women); its coefficients are needed. The
+    Assmann-Stiftung API can then check it (owner-run script, as for FINRISK).
 
 ## Evidence ceiling per score
 
@@ -113,7 +118,7 @@ Why the scores below A stay where they are:
 | PREVENT | C + B | Owner action 16 (AHA licence). |
 | DIAL2 | C | U-Prevent computes server-side behind a login; outputs from the authors (owner action 6). |
 | Reynolds | C | The official site (reynoldsriskscore.org) is now a parked domain; the papers' examples are the only official outputs. |
-| FINRISK 2016 | C | Owner action 17. |
+| FINRISK 2016 | C | Owner action 17 (run the calculator script; level A). |
 | PROCAM 2002 (points) | C | The Assmann-Stiftung online test runs a newer, continuous PROCAM model (it also scores women), so it cannot check the 2002 point score. |
 | REGICOR | C (weak) | Owner action 11: the official charts exist but disagree with the published table. |
 | ADRS | C (weak) | No calculator or charts found; owner action 15. |
