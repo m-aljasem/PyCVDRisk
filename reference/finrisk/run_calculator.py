@@ -6,8 +6,9 @@ page's JS: chunk 0qw1eimuiy70~.js, module 39375). Field ids, from the page's FHI
 (1 decimal), 3779 HDL mmol/L (2 decimals), 3780 SBP, 3781 diabetes, 3782 parent MI, 3783 parent stroke.
 The page shows CHD and stroke risk (absoluteRisk, fractions) and combined = 1 - (1 - CHD)(1 - stroke).
 
-Sends N seeded patients, one request per 0.5 s, and saves inputs + the raw responses to
-fixtures/calculator_reference.jsonl. Run by the owner from repo root: python reference/finrisk/run_calculator.py
+Sends N seeded patients, one request per 0.5 s, and appends inputs + the raw responses to
+fixtures/calculator_reference.jsonl; rerunning skips patients already saved (the server sometimes stalls:
+press Ctrl+C and run again). Run by the owner from repo root: python reference/finrisk/run_calculator.py
 """
 
 import json
@@ -40,20 +41,23 @@ def answers(p):
 def post(body):
     req = urllib.request.Request(URL, json.dumps(body).encode(), {"Content-Type": "application/json",
                                                                     "User-Agent": "PyCVDRisk-validation"})
-    with urllib.request.urlopen(req, timeout=30) as r:
+    with urllib.request.urlopen(req, timeout=15) as r:
         return json.load(r)
 
 
 def main():
     OUT.parent.mkdir(exist_ok=True)
-    with OUT.open("w") as f:
+    done = {json.loads(ln)["id"] for ln in OUT.read_text().splitlines()} if OUT.exists() else set()
+    with OUT.open("a") as f:
         for p in patients():
+            if p["id"] in done:
+                continue
             resp = post(answers(p))
-            if p["id"] == 0:
-                print("first response:", json.dumps(resp)[:500])
             f.write(json.dumps({**p, "response": resp}) + "\n")
+            f.flush()
+            print(f"{p['id'] + 1}/{N}", end="\r", flush=True)
             time.sleep(0.5)
-    print(f"wrote {N} rows to {OUT}")
+    print(f"{OUT}: {N} rows")
 
 
 if __name__ == "__main__":

@@ -182,7 +182,7 @@ FORMS: dict[str, list[Variant]] = {
         flag("erectile_dysfunction", "Erectile dysfunction"), flag("migraine", "Migraine"),
         flag("severe_mental_illness", "Severe mental illness"), flag("sle", "Systemic lupus erythematosus")))],
     "qrisk2": [Variant("QRISK2", cr.qrisk2, QRISK_CORE + QRISK_TAIL)],
-    "finrisk": [Variant(label, cr.finrisk, (AGE(55, 30, 64), SEX, SMOKER, TC, HDL, SBP, DIABETES,
+    "finrisk": [Variant(label, cr.finrisk, (AGE(55, 30, 74), SEX, SMOKER, TC, HDL, SBP, DIABETES,
                         flag("parent_mi", "Parent had a heart attack"), flag("parent_stroke", "Parent had a stroke")),
                         fixed={"outcome": outcome})
                 for label, outcome in (("CVD", "cvd"), ("CHD", "chd"), ("Stroke", "stroke"))],
