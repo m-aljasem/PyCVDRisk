@@ -65,7 +65,7 @@ def summary():
     oo, po = np.array([x["official_optimal"] for x in c]), np.array([x["package_optimal"] for x in c])
     floored = off == oo  # the calculator shows the optimal-profile risk when the person's own risk is lower
     return dict(n_patients=len(c) // 2, n=len(c), floored=int(floored.sum()),
-                floored_below=bool(np.all(pk[floored] < po[floored])),
+                floored_below=bool(np.all(pk[floored] <= po[floored])),
                 rel=float(np.max(np.abs(pk[~floored] - off[~floored]) / off[~floored])),
                 rel_optimal=float(np.max(np.abs(po - oo) / oo)))
 
@@ -92,7 +92,7 @@ def main():
          "and sex.", "",
          f"- {s['n'] - s['floored']} values: max relative difference {s['rel']:.1e}.",
          f"- {s['floored']} values: the calculator shows the optimal-profile risk instead of the person's own; the",
-         f"  package's risk is {'lower than that in every one' if s['floored_below'] else 'NOT always lower'}. So the",
+         f"  package's risk is {'at most that in every one' if s['floored_below'] else 'NOT always lower'}. So the",
          "  calculator floors its display at the optimal profile; this is not in the article, and the package does not.",
          f"- Optimal profile: non-smoker, total cholesterol 4.0, HDL 1.5 mmol/L, SBP 110, no diabetes or family",
          f"  history (solved from the calculator's values; not documented): max relative difference {s['rel_optimal']:.1e}.",

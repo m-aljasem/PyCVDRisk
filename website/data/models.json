@@ -240,7 +240,7 @@
    "group": "primary",
    "outcome": "10-year CHD, stroke and combined risk, ages 30-74",
    "paperUrl": "https://www.laakarilehti.fi/tieteessa/alkuperaistutkimukset/sepelvaltimotaudin-ja-aivohalvauksen-riskin-arviointi-finriski-2.0-laskurilla/en",
-   "verification": "Equations equal Table 1 (4/4); matches the official Finnish calculator on 214 values (max relative difference 2e-16).",
+   "verification": "Equations equal Table 1 (4/4); matches the official Finnish calculator on 560 values (max relative difference 3e-16; 40 more are floored by its display).",
    "evidence": "A",
    "example": "from cvd_risk import finrisk\n\nfinrisk(age=50, sex=\"male\", smoker=1, total_chol=6.0, hdl_chol=1.3, sbp=140,\n        diabetes=0, parent_mi=1, parent_stroke=0, outcome=\"cvd\")",
    "result": "0.1048"
@@ -265,17 +265,17 @@
    "slug": "procam",
    "report": "https://github.com/m-aljasem/PyCVDRisk/blob/HEAD/reference/procam/REPORT.md",
    "name": "PROCAM",
-   "fullName": "PROCAM score",
-   "year": "2002",
+   "fullName": "PROCAM scores (2007)",
+   "year": "2007",
    "region": "Germany",
    "photo": "germany",
    "group": "primary",
-   "outcome": "10-year acute coronary events in men 35-65 (points and risk table)",
-   "paperUrl": "https://doi.org/10.1161/hc0302.102575",
-   "verification": "Implemented from the paper's Tables 3-4 (30/30 bands checked at both ends).",
+   "outcome": "10-year major coronary event category (men and women 20-75) and ischaemic stroke/TIA risk (35-65)",
+   "paperUrl": "https://doi.org/10.1111/j.1365-2362.2007.01888.x",
+   "verification": "Tables 2-4 and 6-7 checked against the PDF (50/50 point bands, 95/95 risk-table rows, 39/39 stroke risks); 1 printed overlap documented.",
    "evidence": "C",
    "example": "from cvd_risk import procam\n\nprocam(age=50, sex=\"male\", ldl_chol=4.4, hdl_chol=1.0, triglycerides=2.0, sbp=140,\n       smoker=1, diabetes=0, family_history=0)",
-   "result": "54"
+   "result": "42"
   },
   {
    "slug": "regicor",

@@ -25,13 +25,13 @@ Combined risk is 1 - (1 - CHD risk)(1 - stroke risk) (Table 1; also the calculat
 
 ## 2. Official calculator
 
-`run_calculator.py` sent 107 seeded patients (ages 30-64, both sexes) to the calculator's
-server; it returns CHD and stroke risk (214 values) and the risk of an "optimal" profile of the same age
+`run_calculator.py` sent 300 seeded patients (ages 30-64, both sexes) to the calculator's
+server; it returns CHD and stroke risk (600 values) and the risk of an "optimal" profile of the same age
 and sex.
 
-- 199 values: max relative difference 1.9e-16.
-- 15 values: the calculator shows the optimal-profile risk instead of the person's own; the
-  package's risk is lower than that in every one. So the
+- 560 values: max relative difference 2.9e-16.
+- 40 values: the calculator shows the optimal-profile risk instead of the person's own; the
+  package's risk is at most that in every one. So the
   calculator floors its display at the optimal profile; this is not in the article, and the package does not.
 - Optimal profile: non-smoker, total cholesterol 4.0, HDL 1.5 mmol/L, SBP 110, no diabetes or family
   history (solved from the calculator's values; not documented): max relative difference 2.8e-16.

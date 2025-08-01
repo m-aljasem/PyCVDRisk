@@ -11,13 +11,16 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from typing import Any, Callable
 
+import math
+
 import cvd_risk as cr
 from cvd_risk.dial2 import REGION_NAMES as DIAL2_REGIONS
 from cvd_risk.life_cvd2 import REGION_NAMES as LIFE_REGIONS
 from cvd_risk.pce import RACES
 from cvd_risk.predict import ACS_TYPE, ETHNICITY as NZ_ETHNICITY, POLICY_ETHNICITY, SMOKING as NZ_SMOKING
 from cvd_risk.prevent import OUTCOMES as PREVENT_OUTCOMES
-from cvd_risk.procam.procam import RISK_PERCENT as PROCAM_RISK
+from cvd_risk.procam import CATEGORIES as PROCAM_CATEGORIES
+from cvd_risk.procam import STROKE_RISK as PROCAM_STROKE_RISK
 from cvd_risk.qrisk3 import DIABETES as Q_DIABETES, ETHNICITY as Q_ETHNICITY, SMOKING as Q_SMOKING
 from cvd_risk.score.coefficients import REGIONS as SCORE_REGIONS
 from cvd_risk.score2 import REGIONS as ESC_REGIONS
@@ -56,7 +59,7 @@ class Variant:
     output: str = "risk"  # "risk" (fraction), "points" or "age" (CVD-free life expectancy)
     max_points: int | None = None
     fixed: dict = field(default_factory=dict)  # arguments passed without showing an input
-    points_to_risk: Callable[[float], str | None] | None = None
+    points_to_risk: Callable[[float, dict], str | None] | None = None  # (points, inputs) -> risk text
 
 
 def num(name, label, default, unit="", lo=None, hi=None, step=1.0, help=""):
@@ -105,13 +108,18 @@ PREDICT_MEDS = (flag("bp_meds", "Blood-pressure medication"), flag("lipid_meds",
                 flag("antithrombotic", "Antiplatelet or anticoagulant"))
 
 
-def _procam_risk(points: float) -> str | None:
+def _procam_risk(points: float, args: dict) -> str | None:
+    c = cr.procam(**{**args, "output": "category"})
+    return None if math.isnan(c) else PROCAM_CATEGORIES[int(c)]
+
+
+def _procam_stroke_risk(points: float, args: dict) -> str | None:
     p = int(points)
-    if p < min(PROCAM_RISK):
-        return f"< {PROCAM_RISK[min(PROCAM_RISK)]}%"
-    if p > max(PROCAM_RISK):
-        return f"> {PROCAM_RISK[max(PROCAM_RISK)]}%"
-    return f"{PROCAM_RISK[p]}%"
+    if p < min(PROCAM_STROKE_RISK):
+        return "<= 0.1%"
+    if p > max(PROCAM_STROKE_RISK):
+        return "> 10.0%"
+    return f"{PROCAM_STROKE_RISK[p]}%"
 
 
 FORMS: dict[str, list[Variant]] = {
@@ -190,11 +198,13 @@ FORMS: dict[str, list[Variant]] = {
                      flag("hypertension", "Hypertension"), BP_TREATED,
                      num("vitamin_d", "Vitamin D", 25.0, "ng/mL", 1.0, 150.0, 0.5), EGFR), fixed={"outcome": outcome})
              for label, outcome in (("ASCVD", "ascvd"), ("Hard CAD", "cad"), ("Stroke", "stroke"))],
-    "procam": [Variant("PROCAM", cr.procam, (AGE(50, 20, 80), choice("sex", "Sex", ("male",), help="Derived in men only."),
+    "procam": [Variant("Coronary", cr.procam, (AGE(50, 20, 75), SEX,
                        num("ldl_chol", "LDL cholesterol", 3.5, "mmol/L", 0.5, 15.0, 0.1), HDL,
                        num("triglycerides", "Triglycerides", 1.7, "mmol/L", 0.2, 30.0, 0.1), SBP, SMOKER, DIABETES,
                        flag("family_history", "MI in a 1st-degree relative before 60")),
-                       output="points", points_to_risk=_procam_risk)],
+                       output="points", points_to_risk=_procam_risk),
+               Variant("Stroke", cr.procam_stroke, (AGE(50, 35, 65), SEX, SMOKER, DIABETES, SBP),
+                       output="points", points_to_risk=_procam_stroke_risk)],
     "regicor": [Variant(label, cr.regicor, (AGE(55, 35, 74), SEX, TC, HDL, SBP, DBP, DIABETES, SMOKER),
                         fixed={"calibration": cal})
                 for label, cal in (("REGICOR (Girona)", "gerona"), ("Original Framingham", "framingham"))],

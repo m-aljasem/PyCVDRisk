@@ -1,5 +1,5 @@
-"""PROCAM score (Assmann et al. 2002)."""
+"""PROCAM coronary and stroke scores (Assmann et al. 2007)."""
 
-from cvd_risk.procam.procam import RISK_PERCENT, procam
+from cvd_risk.procam.procam import CATEGORIES, STROKE_RISK, procam, procam_stroke
 
-__all__ = ["RISK_PERCENT", "procam"]
+__all__ = ["CATEGORIES", "STROKE_RISK", "procam", "procam_stroke"]

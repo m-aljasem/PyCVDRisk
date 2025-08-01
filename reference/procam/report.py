@@ -1,8 +1,11 @@
 """Build reference/procam/REPORT.md. Run from repo root: python reference/procam/report.py
 
-Each band of Table 3 must occur in the PDF text and give its points at both ends (inputs given in
-mg/dL and converted, so the unit round trip is tested at every edge). Table 4 is checked against the
-PDF the same way.
+Source: Assmann et al., Eur J Clin Invest 2007 (source/assmann2007.pdf).
+1. Table 2 (coronary points): each band, transcribed by eye, occurs in the PDF text and the package
+   gives its points at both ends (inputs in mg/dL, converted, so the unit round trip is tested).
+2. Tables 3-4 (points -> 10-year risk category by age) are parsed from the PDF and compared row by row.
+3. Tables 6-7 (stroke points and risk) as in 1, and Table 7 value by value.
+4. Table 6 points against the Table 5 Cox coefficients (consistency of the paper, not a pass/fail check).
 """
 
 from __future__ import annotations
@@ -14,76 +17,160 @@ from pathlib import Path
 
 import pypdf
 
-from cvd_risk import procam
+from cvd_risk import procam, procam_stroke
 from cvd_risk.prevent.prevent import MG_PER_MMOL
-from cvd_risk.procam import RISK_PERCENT
-from cvd_risk.procam.procam import TG_MG_PER_MMOL
+from cvd_risk.procam import STROKE_RISK
+from cvd_risk.procam.procam import CORONARY_TABLES, TG_MG_PER_MMOL
 
 HERE = Path(__file__).parent
+PDF = HERE / "source" / "assmann2007.pdf"
 logging.getLogger("pypdf").setLevel(logging.ERROR)
-GLYPHS = {"/H11021": "<", "/H11350": "≥", "–": "-"}
+MAX_POINTS = 71
+# all-zero person: LDL 90, HDL 60, TG 90 mg/dL, SBP 100, no smoking/diabetes/family history
+BASE = dict(age=50, sex="male", ldl_chol=90, hdl_chol=60, triglycerides=90, sbp=100, smoker=0, diabetes=0,
+            family_history=0)
+# Table 2 as printed: (input, printed band, low, high, points); high is the band's last value in mg/dL
+_LDL = [("ldl_chol", "≤ 100", 50, 100.99, 0)] + [
+    ("ldl_chol", f"{lo}–{lo + 4}", lo, lo + 4.99, i + 1) for i, lo in enumerate(range(101, 192, 5))] + [
+    ("ldl_chol", "≥ 196", 196, 300, 20)]
+_HDL = [("hdl_chol", "≤ 35", 20, 35.99, 11)] + [
+    ("hdl_chol", f"{lo}–{lo + 1}", lo, lo + 1.99, 10 - i) for i, lo in enumerate(range(36, 55, 2))] + [
+    ("hdl_chol", "> 55", 56, 100, 0)]
+_SBP = [("sbp", "< 110", 90, 109.99, 0)] + [
+    ("sbp", f"{lo}–{lo + 9}", lo, lo + 9.99, i + 1) for i, lo in enumerate(range(110, 171, 10))] + [
+    ("sbp", "≥ 180", 180, 250, 8)]
+_TG = [("triglycerides", "< 100", 50, 99.99, 0), ("triglycerides", "100–149", 100, 149.99, 2),
+       ("triglycerides", "150–199", 150, 199.99, 3), ("triglycerides", "≥ 200", 200, 500, 4)]
+TABLE2 = _LDL + _HDL + _SBP + _TG
+FLAGS = [("smoker", "Y es 12", "male", 12), ("family_history", "Y es 5", "male", 5),
+         ("diabetes", "Y es (men) 9", "male", 9), ("diabetes", "Y es (women) 11", "female", 11)]
+TABLE6_SBP = [("< 140 mmHg 0", 120, 139.99, 0)] + [
+    (f"{lo}–{lo + 4} mmHg {i + 1}", lo, lo + 4.99, i + 1) for i, lo in enumerate(range(140, 176, 5))] + [
+    ("> 180 mmHg 9", 180, 220, 9)]
+TABLE5 = {"female": -0.626, "age": 0.109, "smoker": 0.852, "sbp": 0.022, "diabetes": 0.615}
 
 
-def text():
-    t = " ".join(p.extract_text() or "" for p in pypdf.PdfReader(HERE / "source" / "assmann2002.pdf").pages)
-    for k, v in GLYPHS.items():
-        t = t.replace(k, v)
+def pages():
+    return [p.extract_text() or "" for p in pypdf.PdfReader(PDF).pages]
+
+
+def flat(t):
     return re.sub(r"\s+", " ", t)
 
 
-# all-zero man: age 35, LDL 90, HDL 60, TG 90 mg/dL, SBP 110, no smoking/diabetes/family history
-BASE = {"age": 35, "sex": "male", "ldl_chol": 90, "hdl_chol": 60, "triglycerides": 90, "sbp": 110,
-        "smoker": 0, "diabetes": 0, "family_history": 0}
-TABLE3 = [
-    ("age", "Age, y 35-39 0 40-44 6 45-49 11 50-54 16 55-59 21 60-65 26", [0, 6, 11, 16, 21, 26],
-     [(35, 39.99), (40, 44.99), (45, 49.99), (50, 54.99), (55, 59.99), (60, 65.99)]),
-    ("ldl_chol", "LDL cholesterol, mg/dL <100 0 100-129 5 130-159 10 160-189 14 ≥190 20", [0, 5, 10, 14, 20],
-     [(50, 99.99), (100, 129.99), (130, 159.99), (160, 189.99), (190, 300)]),
-    ("hdl_chol", "HDL cholesterol, mg/dL <35 11 35-44 8 45-54 5 ≥55 0", [11, 8, 5, 0],
-     [(20, 34.99), (35, 44.99), (45, 54.99), (55, 100)]),
-    ("triglycerides", "Triglycerides, mg/dL <100 0 100-149 2 150-199 3 ≥200 4", [0, 2, 3, 4],
-     [(50, 99.99), (100, 149.99), (150, 199.99), (200, 500)]),
-    ("smoker", "Smoker No 0 Yes 8", [0, 8], [(0, 0), (1, 1)]),
-    ("diabetes", "Diabetes mellitus No 0 Yes 6", [0, 6], [(0, 0), (1, 1)]),
-    ("family_history", "MI in family history No 0 Yes 4", [0, 4], [(0, 0), (1, 1)]),
-    ("sbp", "Systolic blood pressure, mm Hg <120 0 120-129 2 130-139 3 140-159 5 ≥160 8", [0, 2, 3, 5, 8],
-     [(100, 119.99), (120, 129.99), (130, 139.99), (140, 159.99), (160, 220)]),
-]
-FACTOR = {"ldl_chol": MG_PER_MMOL, "hdl_chol": MG_PER_MMOL, "triglycerides": TG_MG_PER_MMOL}
+def _mg(var, v):
+    return v / MG_PER_MMOL if var in ("ldl_chol", "hdl_chol") else v / TG_MG_PER_MMOL if var == "triglycerides" else v
 
 
-def score(**kw):
-    return float(procam(**{k: v / FACTOR.get(k, 1) if k in FACTOR else v for k, v in kw.items()}))
+def table2_rows(t):
+    """(input, band, points, found in PDF, package points at low, at high)."""
+    out, base = [], {k: _mg(k, v) for k, v in BASE.items()}
+    for var, band, lo, hi, pts in TABLE2:
+        got = [float(procam(**{**base, var: _mg(var, v)})) for v in (lo, hi)]
+        out.append((var, band, pts, f"{band} {pts}" in t, *got))
+    for var, band, sex, pts in FLAGS:
+        got = float(procam(**{**base, "sex": sex, var: 1}))
+        out.append((var, band, pts, band in t, got, got))
+    return out
+
+
+def risk_rows(page):
+    """({sex: {first age: (upper bounds, printed "<")}}, [(sex, row) not tiling]) parsed from Tables 3-4 (page 5).
+    A category starting before the previous one ends (a misprint) takes the later category's start."""
+    women, men = page.split("Table 3 Ten-year")
+    out, slips = {}, []
+    for sex, part in (("female", women), ("male", men)):
+        rows = {}
+        for ln in part.splitlines():
+            m = re.match(r"^(\d\d)(?:–\d\d)? (≤|<) (\d+)(.*)$", ln.strip())
+            if not m:
+                continue
+            bounds, prev = [int(m[3])], int(m[3])
+            for tok in re.findall(r"(\d+)–(\d+)|=+ (\d+)|(\d+)", m[4]):
+                a, b, ge, bare = tok
+                start = int(a or ge or bare)
+                if start != prev + 1:  # rows tile the points when "<" is read as "<="
+                    slips.append((sex, ln.strip()))
+                    bounds[-1] = start - 1
+                if a:
+                    bounds.append(int(b))
+                    prev = int(b)
+            if bounds[-1] == MAX_POINTS:
+                bounds.pop()  # a range ending at the maximum is the open last category
+            rows[int(m[1])] = (tuple(bounds), m[2] == "<")
+        out[sex] = rows
+    return out, slips
+
+
+def table7_rows(t):
+    printed = dict((int(p), float(r.replace("·", "."))) for p, r in re.findall(r"(\d\d) (\d+·\d)", t)
+                   if 42 <= int(p) <= 80)
+    for lo, hi, r in re.findall(r"(\d\d)–(\d\d) (\d·\d)", t):
+        for p in range(int(lo), int(hi) + 1):
+            printed[p] = float(r.replace("·", "."))
+    return printed
 
 
 def main():
-    t = text()
-    base = score(**BASE)
-    rows, ok, n, found = [], 0, 0, 0
-    for name, printed, pts, ranges in TABLE3:
-        hit = printed in t
-        found += hit
-        for i, (p, (lo, hi)) in enumerate(zip(pts, ranges)):
-            got = [score(**{**BASE, name: v}) - base for v in (lo, hi)]  # the base man scores 0 on every item
-            n += 1
-            ok += got == [p, p]
-            note = f" \"{printed}\" {'found' if hit else 'NOT FOUND'}" if i == 0 else ""
-            rows.append(f"| {name} | {lo}-{hi} | {got[0]:g} / {got[1]:g} | {p} |{note} |")
-    t4 = " ".join(f"{k} {v:.1f}" for k, v in RISK_PERCENT.items())
-    t4_found = t4 in t
-    L = ["# PROCAM score: verification report", "", f"Generated by `reference/procam/report.py`.", "",
-         "Evidence level C: Assmann et al., Circulation 2002 (`source/assmann2002.pdf`), Table 3 (points)",
-         "and Table 4 (points -> 10-year risk). The paper gives no worked example and no independent",
-         "implementation was available. Inputs are entered in mg/dL and converted, so each band edge also",
-         "tests the mmol/L round trip.", "",
-         "| Input | Band (low-high, source units) | Points at low / high | Printed | |", "|---|---|---|---:|---|",
-         *rows, "",
-         f"{ok}/{n} bands give the printed points at both ends; {found}/{len(TABLE3)} printed rows found in the PDF.",
-         f"Table 4 (points 21-59) found in the PDF as transcribed: {'yes' if t4_found else 'NO'}.", "",
-         "Not implemented: the full Cox model (Table 2). The paper gives no example to check it against."]
+    pg = pages()
+    t2 = table2_rows(flat(pg[3]))
+    t2_ok = sum(found and lo == p == hi for _, _, p, found, lo, hi in t2)
+    parsed, slips = risk_rows(pg[4])
+    rr = {sex: sum(parsed[sex][a][0] == CORONARY_TABLES[sex].get(a, ()) for a in parsed[sex]) for sex in parsed}
+    lt = sum(lt for sex in parsed for _, lt in parsed[sex].values())
+    t6 = flat(pg[5])
+    s_rows = []
+    for band, lo, hi, pts in TABLE6_SBP:
+        got = [float(procam_stroke(35, "female", 0, 0, v)) - 35 for v in (lo, hi)]
+        s_rows.append((band, pts, band.replace("Y es", "Yes") in t6, *got))
+    s_ok = sum(found and a == p == b for _, p, found, a, b in s_rows)
+    flags6 = [("Male 6", procam_stroke(35, "male", 0, 0, 120) - 35, 6), ("Y es 9", procam_stroke(35, "f", 1, 0, 120) - 35, 9),
+              ("Yes7", procam_stroke(35, "f", 0, 1, 120) - 35, 7), ("Age* 1 per year", procam_stroke(36, "f", 0, 0, 120) - 35, 1)]
+    f6_ok = sum(lbl in t6 and float(v) == p for lbl, v, p in flags6)
+    t7 = table7_rows(t6)
+    t7_ok = sum(t7.get(p) == r for p, r in STROKE_RISK.items())
+    ratio = {k: v / TABLE5["age"] for k, v in TABLE5.items()}
+    L = ["# PROCAM: verification report", "", f"Generated by `reference/procam/report.py`.", "",
+         "Model: PROCAM 2007 (Assmann, Schulte, Cullen, Seedorf; Eur J Clin Invest 2007;37:925), the Weibull coronary",
+         "score for men and women aged 20-75 and the cerebral ischaemic event score (35-65). It replaced the package's",
+         "2002 point score (Circulation 2002;105:310, men 35-65; its checks are in this file's git history).", "",
+         "Evidence level C: the paper's printed tables (`source/assmann2007.pdf`). The paper refers the full Weibull",
+         "function to an annex that is not part of the article, so the published point score is implemented. The",
+         "Assmann-Stiftung online test (assmann-stiftung.de) returns a continuous risk, presumably from the full",
+         "function; it cannot check the point score cell by cell.", "",
+         "## 1. Table 2: coronary points", "",
+         "| Input | Printed band | Points | In PDF | Package at low / high end |", "|---|---|---:|---|---|",
+         *[f"| {v} | {b} | {p} | {'yes' if f else 'NO'} | {lo:g} / {hi:g} |" for v, b, p, f, lo, hi in t2],
+         "", f"{t2_ok}/{len(t2)} bands found in the PDF with the package giving their points at both ends.", "",
+         "## 2. Tables 3-4: points to 10-year risk category", "",
+         f"Parsed from the PDF: men {len(parsed['male'])} rows, women {len(parsed['female'])} rows. Equal to the package:",
+         f"men {rr['male']}/{len(parsed['male'])}, women {rr['female']}/{len(parsed['female'])}.", "",
+         f"Each row prints the first category as \"< n\" ({lt} rows) and the next as \"n+1-...\", so the value n itself",
+         "belongs to no printed category. The package reads \"<\" as \"≤\"; under that reading every row covers 0-71",
+         "points without a gap or overlap (asserted while parsing). The first row of each table does print \"≤ 71\",",
+         "and Table 2 prints both \"≤\" and \"<\", so the \"<\" may be a typesetting slip; at the boundary value (one",
+         "point total per row) the category is ambiguous.", "",
+         f"Rows that do not tile ({len(slips)}): " + "; ".join(f"{sx} \"{r}\"" for sx, r in slips) + ". The 20-29%",
+         "range overlaps the \">= 30%\" one; the package gives the overlap to \">= 30%\" (its printed start), as the",
+         "neighbouring rows imply (age 45: 65-69, >= 70; age 47: 61-66, >= 67).", "",
+         "## 3. Tables 6-7: stroke score", "",
+         "| Printed SBP band | Points | In PDF | Package at low / high end |", "|---|---:|---|---|",
+         *[f"| {b} | {p} | {'yes' if f else 'NO'} | {a:g} / {c:g} |" for b, p, f, a, c in s_rows],
+         "", f"SBP {s_ok}/{len(s_rows)}; sex, smoking, diabetes and age points {f6_ok}/{len(flags6)}. Table 6 prints the",
+         "top band as \"> 180\" after \"175-179\"; the package gives 180 itself 9 points.",
+         f"Table 7: {t7_ok}/{len(STROKE_RISK)} point totals (42-80) equal the printed risk.", "",
+         "## 4. Table 6 points vs the Table 5 Cox coefficients", "",
+         "With one point per year of age (β 0.109), the other points should be about β/0.109 per unit:", "",
+         f"- male sex: {-ratio['female']:.1f} (printed 6); smoking: {ratio['smoker']:.1f} (printed 9); diabetes:",
+         f"  {ratio['diabetes']:.1f} (printed 7); SBP per 5 mmHg: {5 * ratio['sbp']:.1f} (printed 1).", "",
+         "Smoking and diabetes get more points than their coefficients imply; the paper does not say how the",
+         "points were derived. Reported, not used as a check.", ""]
     (HERE / "REPORT.md").write_text("\n".join(L) + "\n")
-    print(f"bands {ok}/{n}; rows found {found}/{len(TABLE3)}; table 4 {t4_found}")
-    assert ok == n and found == len(TABLE3) and t4_found
+    print(f"table2 {t2_ok}/{len(t2)}; tables3-4 men {rr['male']}/{len(parsed['male'])} women "
+          f"{rr['female']}/{len(parsed['female'])}; stroke sbp {s_ok}/{len(s_rows)} flags {f6_ok}/4 table7 {t7_ok}/39")
+    assert t2_ok == len(t2) and rr["male"] == len(parsed["male"]) == 52 and rr["female"] == len(parsed["female"]) == 43
+    assert slips == [("female", "46 < 44 45–53 54–62 63–69 = 68")]
+    assert s_ok == len(s_rows) and f6_ok == 4 and t7_ok == 39
 
 
 if __name__ == "__main__":

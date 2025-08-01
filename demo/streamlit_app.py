@@ -164,7 +164,7 @@ def result_html() -> str:
     else:
         big, unit = f"{value:g}", "pts" if variant.max_points is None else f"/ {variant.max_points}"
         frac = value / variant.max_points if variant.max_points else None
-        caption = f"Equivalent 10-year risk: {variant.points_to_risk(value)}" if variant.points_to_risk else "Score points"
+        caption = f"Equivalent 10-year risk: {variant.points_to_risk(value, args)}" if variant.points_to_risk else "Score points"
     gauge = ring(frac) if frac is not None else ""
     return (f'<div class="result"><div class="gauge">{gauge}<div class="value"><span class="big">{big}</span>'
             f'<span class="unit">{unit}</span></div></div><p class="caption">{caption}</p></div>')

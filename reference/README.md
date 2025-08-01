@@ -24,10 +24,10 @@ then `Rscript reference/qrisk3/run_reference_cran.R`), `python reference/<family
 | LIFE-CVD2 (lifetime risk, life expectancy, treatment benefit) | verified; 36/36 coefficients vs supplement; 7,167/7,168 chart cells; centring and chart inputs inferred and pinned by the charts | authors' charts (Appendix 1, 16 charts) | A | `life_cvd2/REPORT.md` |
 | DIAL2 core model | verified; 56/56 coefficients vs supplement (Word and PDF); weak evidence: 6 printed values | paper worked examples (Figure 3) | C | `dial2/REPORT.md` |
 | Reynolds Risk Score (model B, women and men) | verified; 19/19 formula terms vs PDFs; 17/17 worked examples within printed precision (14 exact) | Ridker 2007 (Table 6); Ridker 2008 (Clinical Examples) | C | `reynolds/REPORT.md` |
-| FINRISKI 2.0 (CHD, stroke, combined) | 4/4 equations vs Table 1; official calculator: 214 values, max rel diff 2e-16 (15 values floored by the calculator's display at its optimal profile); replaces FINRISK 2016 | Duodecim calculator (server, run by the owner); Vartiainen 2020 Table 1 | A + C | `finrisk/REPORT.md` |
+| FINRISKI 2.0 (CHD, stroke, combined) | 4/4 equations vs Table 1; official calculator: 300 patients, 560 values at max rel diff 3e-16 (40 more floored by the calculator's display at its optimal profile); replaces FINRISK 2016 | Duodecim calculator (server, run by the owner); Vartiainen 2020 Table 1 | A + C | `finrisk/REPORT.md` |
 | ADRS (Abu Dhabi 2024; ASCVD, CAD, stroke) | 32/32 terms: Data S1 syntax = Table 2; GFR mean, MAP and stroke mean score checked against Table 1 | JAHA 2024 Table 2, Data S1 (PMC11681588) | C (weak) | `adrs/REPORT.md` |
 | PREDICT (NZ): 2018 primary prevention, BMI, VARIANZ policy, T2D, bleeding, post-CVD, post-ACS | verified; coefficients identical to the authors' R source (7/7 models); authors' R code run unmodified: 21,000 patients, max diff 5e-13; 49/49 paper rows; 2/2 worked examples | PredictRiskScores 0.9 (VIEW team); Pylypchuk 2018; Selak 2019 | A + C | `predict/REPORT.md` |
-| PROCAM score | verified; 30/30 bands and Table 4 vs PDF | Assmann 2002 (Tables 3-4) | C | `procam/REPORT.md` |
+| PROCAM 2007 (coronary Weibull score, men and women; stroke score) | verified; 50/50 Table 2 bands, 95/95 rows of Tables 3-4, 39/39 Table 7 values vs PDF; 1 printed overlap (Table 4, women 46) and the "<" boundaries documented; replaces PROCAM 2002 | Assmann 2007 (Tables 2-7) | C | `procam/REPORT.md` |
 | REGICOR (Gerona and Framingham calibrations) | verified transcription; 39/39 table rows and 40/40 bands vs PDF; worked example has 2 arithmetic slips; **official REGICOR charts not reproduced** (the paper's 2-decimal table: 165/400 cells; full-precision Wilson + Rev Esp Cardiol 2003 calibration: 371/400) | Marrugat 2003 (Tables 1-2, Appendix); official charts (regicor.cat) | C (weak) | `regicor/REPORT.md` |
 | WHO/ISH charts 2007 (14 subregions, with/without cholesterol) | verified; 3 whoishRisk transcription errors corrected | guideline's 2 printed charts (768 cells); whoishRisk 1.0 table (10,752 cells) and its R lookup logic (transliterated, not run) | A (2 subregions) + B | `who_ish/REPORT.md` |
 | HEART | verified; 18/18 published rules | Melki & Jernberg 2013 (Table 1, Methods); RiskScorescvd 0.3.1 | C + B | `heart/REPORT.md` |
@@ -100,12 +100,11 @@ then `Rscript reference/qrisk3/run_reference_cran.R`), `python reference/<family
     (AHA-DS-Analytics/PREVENT), released free to researchers after accepting the licence at heart.org/PREVENT.
     With it, PREVENT can be run against the official code (level A); the AHA online calculator is not reachable
     by automated requests.
-17. **FINRISK — done** (official calculator run, 107 patients). The package now implements FINRISKI 2.0
-    (Vartiainen, Suomen Lääkärilehti 2020;75:2778), the calculator's model. Optional: rerun
-    `python reference/finrisk/run_calculator.py` to complete all 300 patients (it resumes).
-18. **PROCAM 2007: add Assmann, Eur J Clin Invest 2007;37:925 (and any supplement).** The owner chose to replace
-    the 2002 point score with the newer Weibull model (men and women); its coefficients are needed. The
-    Assmann-Stiftung API can then check it (owner-run script, as for FINRISK).
+17. **FINRISK — done** (official calculator run, 300 patients). The package now implements FINRISKI 2.0
+    (Vartiainen, Suomen Lääkärilehti 2020;75:2778), the calculator's model.
+18. **PROCAM 2007 — done** (paper added; the package now implements its point scores). Optional
+    question for the Assmann-Stiftung: the paper's annex with the full Weibull function (not printed), whether
+    Tables 3-4's "<" means "<=", and the overlapping Table 4 row (women 46: "63-69" and ">= 68").
 
 ## Evidence ceiling per score
 
@@ -117,7 +116,7 @@ Why the scores below A stay where they are:
 | PREVENT | C + B | Owner action 16 (AHA licence). |
 | DIAL2 | C | U-Prevent computes server-side behind a login; outputs from the authors (owner action 6). |
 | Reynolds | C | The official site (reynoldsriskscore.org) is now a parked domain; the papers' examples are the only official outputs. |
-| PROCAM 2002 (points) | C | The Assmann-Stiftung online test runs a newer, continuous PROCAM model (it also scores women), so it cannot check the 2002 point score. |
+| PROCAM 2007 (points) | C | The full Weibull function is in an unpublished annex; the Assmann-Stiftung online test returns its continuous risk, which cannot check the point score cell by cell. Owner action 18. |
 | REGICOR | C (weak) | Owner action 11: the official charts exist but disagree with the published table. |
 | ADRS | C (weak) | No calculator or charts found; owner action 15. |
 | GRACE (Granger 2003, Eagle 2004) | C | The printed nomograms are the authors' tool and are reproduced; today's online GRACE is GRACE 2.0, a different model. |
