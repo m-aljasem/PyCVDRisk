@@ -28,7 +28,7 @@ then `Rscript reference/qrisk3/run_reference_cran.R`), `python reference/<family
 | ADRS (Abu Dhabi 2024; ASCVD, CAD, stroke) | 32/32 terms: Data S1 syntax = Table 2; GFR mean, MAP and stroke mean score checked against Table 1 | JAHA 2024 Table 2, Data S1 (PMC11681588) | C (weak) | `adrs/REPORT.md` |
 | PREDICT (NZ): 2018 primary prevention, BMI, VARIANZ policy, T2D, bleeding, post-CVD, post-ACS | verified; coefficients identical to the authors' R source (7/7 models); authors' R code run unmodified: 21,000 patients, max diff 5e-13; 49/49 paper rows; 2/2 worked examples | PredictRiskScores 0.9 (VIEW team); Pylypchuk 2018; Selak 2019 | A + C | `predict/REPORT.md` |
 | PROCAM 2007 (coronary Weibull score, men and women; stroke score) | verified; 50/50 Table 2 bands, 95/95 rows of Tables 3-4, 39/39 Table 7 values vs PDF; 1 printed overlap (Table 4, women 46) and the "<" boundaries documented; replaces PROCAM 2002 | Assmann 2007 (Tables 2-7) | C | `procam/REPORT.md` |
-| REGICOR (Gerona and Framingham calibrations) | verified transcription; 39/39 table rows and 40/40 bands vs PDF; worked example has 2 arithmetic slips; **official REGICOR charts not reproduced** (the paper's 2-decimal table: 165/400 cells; full-precision Wilson + Rev Esp Cardiol 2003 calibration: 371/400) | Marrugat 2003 (Tables 1-2, Appendix); official charts (regicor.cat) | C (weak) | `regicor/REPORT.md` |
+| REGICOR (Wilson 1998 + Girona calibration, Rev Esp Cardiol 2003) | **official charts reproduced for men** (198/200, misses within 0.01 points); women within 1 point in every cell (their 65-74 panel repeats 55-64); Wilson Table 6 verbatim; Rev Esp Table 1 18/19 rows (men's optimal-BP sign differs, Wilson followed); 40/40 bands; Wilson and Rev Esp worked examples | Wilson 1998 (Table 6, Appendix); Marrugat, Rev Esp Cardiol 2003 (Table 1, Appendix); official charts (regicor.cat) |
 | WHO/ISH charts 2007 (14 subregions, with/without cholesterol) | verified; 3 whoishRisk transcription errors corrected | guideline's 2 printed charts (768 cells); whoishRisk 1.0 table (10,752 cells) and its R lookup logic (transliterated, not run) | A (2 subregions) + B | `who_ish/REPORT.md` |
 | HEART | verified; 18/18 published rules | Melki & Jernberg 2013 (Table 1, Methods); RiskScorescvd 0.3.1 | C + B | `heart/REPORT.md` |
 | CHADS2, CHA2DS2-VASc, HAS-BLED | verified; 32/32 published rules, definitions quoted from the PDFs | Gage 2001; Lip 2010; Pisters 2010 | C | `af/REPORT.md` |
@@ -82,12 +82,11 @@ then `Rscript reference/qrisk3/run_reference_cran.R`), `python reference/<family
 10. **GRACE: optional note to the authors.** In Granger 2003 Figure 4, both worked examples score a
     value on a band's printed lower edge in the band below (SBP 100: 53, not 43; creatinine 0.4: 1,
     not 4), and example 1's terms add to 195, not 196. The package follows the printed table.
-11. **REGICOR: the published table does not reproduce REGICOR's own charts.** The package follows
-    Marrugat 2003 (JECH) exactly, but its 2-decimal coefficients match only 165/400 cells of the official
-    regicor.cat charts; Wilson 1998's full-precision coefficients with the Spanish calibration of Marrugat 2003
-    (Rev Esp Cardiol 56:253) match 371/400 (men 198/200). Please add both papers (Wilson, Circulation
-    1998;97:1837; Marrugat, Rev Esp Cardiol 2003;56:253) so that function can be checked and added (level A).
-    Earlier note still stands: the Appendix example's sums add to 3.67/4.12, not 3.84/4.32 (see `regicor/REPORT.md`).
+11. **REGICOR — done.** Switched to the full-precision function of the official charts (Wilson 1998 + Rev Esp
+    Cardiol 2003). Optional note to the REGICOR authors: Rev Esp Cardiol Table 1 prints men's optimal blood
+    pressure as +0.0023 (Wilson: -0.00226), the Appendix step "4.496 - 3.489 = 0.986" should read 1.007, and the
+    women's 65-74 chart panel is identical to 55-64. Optional: the shiny app (regicor.shinyapps.io/regicor2) for a
+    continuous check of women.
 12. **PCE — done** (ACC code run).
 13. **PREDICT papers.** The Zotero attachment for Pylypchuk 2021 (Lancet, diabetes) is a different article
     (Cacciari, *Nomes de lugar: confim*, JSTOR). Please replace it. Mehta 2018 (VARIANZ, IJE) and Poppe 2017/2019
@@ -117,7 +116,6 @@ Why the scores below A stay where they are:
 | DIAL2 | C | U-Prevent computes server-side behind a login; outputs from the authors (owner action 6). |
 | Reynolds | C | The official site (reynoldsriskscore.org) is now a parked domain; the papers' examples are the only official outputs. |
 | PROCAM 2007 (points) | C | The full Weibull function is in an unpublished annex; the Assmann-Stiftung online test returns its continuous risk, which cannot check the point score cell by cell. Owner action 18. |
-| REGICOR | C (weak) | Owner action 11: the official charts exist but disagree with the published table. |
 | ADRS | C (weak) | No calculator or charts found; owner action 15. |
 | GRACE (Granger 2003, Eagle 2004) | C | The printed nomograms are the authors' tool and are reproduced; today's online GRACE is GRACE 2.0, a different model. |
 | HEART, TIMI, EDACS, CHADS2, CHA2DS2-VASc, HAS-BLED | C (+ B) | Point scores: the published rules are the definition, so C is the ceiling. |

@@ -2,14 +2,13 @@
 
 The charts (regicor.cat, "calibrades per al seu ús a la població catalana", non-diabetic) print 400
 cells: sex x smoking x age band 35-44..65-74 x 5 blood-pressure x 5 total-cholesterol categories.
-Two functions are compared:
-1. this package (Marrugat 2003 JECH, Table 1 coefficients printed to 2 decimals, Gerona calibration);
-2. Wilson 1998 full-precision categorical coefficients with the Spanish calibration of Marrugat 2003
-   (Rev Esp Cardiol 56:253; G = 3.4881 / 10.2973, S10 = 0.9510 / 0.9780), as coded in the third-party
-   R package cvrcalc 3.0 (r-forge/cvrcalc, pkg/R/cvrcalc.R, function regicor; GPL >= 2). Neither the
-   Rev Esp Cardiol paper nor Wilson 1998 was available to check these constants.
-Chart inputs are not printed; for each function the age within band, HDL category and rounding rule
-that give the most exact cells are searched (`fit`).
+Rev Esp Cardiol 2003 states how they were computed: HDL 47.5 mg/dL (the Girona men's mean; category
+45-49) and risk "rounded to the nearest integer, always up" (ceil). The age within each band is not
+stated; `stated` searches it. Two functions are compared:
+1. this package (Wilson 1998 Table 6 + Girona calibration, Rev Esp Cardiol 2003);
+2. the third-party R package cvrcalc 3.0 (r-forge/cvrcalc, pkg/R/cvrcalc.R, function regicor; GPL >= 2),
+   which differs only in the sign of men's optimal-blood-pressure coefficient (+0.00226, as Rev Esp
+   Cardiol prints it; Wilson prints -0.00226) and in its constant G (3.4881 / 10.2973).
 Run from repo root: python reference/regicor/chart_check.py
 """
 
@@ -67,12 +66,27 @@ def fit(fn, sex):
     return best
 
 
+def stated(fn, sex, hdl=2):
+    """At the stated inputs (HDL 45-49, ceil): (exact cells, age offset, largest miss in points beyond the
+    printed cell's interval (v - 1, v], bands' exact counts) for the best single age offset."""
+    cs = [c for c in cells() if c[0] == sex]
+    best = None
+    for off in np.arange(0, 10, 0.5):
+        r = [(b, fn(sex, int(b[:2]) + off, bp, tc, hdl, sm), v) for _, sm, b, bp, tc, v in cs]
+        ok = sum(np.ceil(p) == v for _, p, v in r)
+        miss = max(max(v - 1 - p, p - v, 0) for _, p, v in r)
+        per = {band: sum(np.ceil(p) == v for b, p, v in r if b == band) for band in BANDS}
+        if best is None or ok > best[0]:
+            best = (int(ok), float(off), float(miss), per)
+    return best
+
+
 def main():
     out = {}
-    for name, fn in (("package (JECH 2003 Table 1)", package), ("cvrcalc (Wilson 1998 + Rev Esp Cardiol 2003)", cvrcalc)):
+    for name, fn in (("package", package), ("cvrcalc", cvrcalc)):
         for sex in ("male", "female"):
-            ok, off, hdl, rnd = out[name, sex] = fit(fn, sex)
-            print(f"{name}, {sex}: {ok}/200 exact (age = band start + {off}, HDL category {hdl}, {rnd})")
+            out[name, sex] = fit(fn, sex), stated(fn, sex)
+            print(name, sex, *out[name, sex])
     return out
 
 

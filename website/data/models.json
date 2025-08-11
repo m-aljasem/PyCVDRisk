@@ -287,11 +287,11 @@
    "photo": "spain_flag",
    "group": "primary",
    "outcome": "10-year coronary events, ages 35-74",
-   "paperUrl": "https://doi.org/10.1136/jech.57.8.634",
-   "verification": "Implemented from the paper's Tables 1-2 (39/39 rows, 40/40 bands); worked-example slips documented.",
-   "evidence": "C",
+   "paperUrl": "https://doi.org/10.1016/s0300-8932(03)76861-4",
+   "verification": "Official REGICOR charts reproduced for men (198/200 cells, misses within 0.01 points; women within 1 point); Wilson 1998 Table 6 verbatim; both worked examples.",
+   "evidence": "A",
    "example": "from cvd_risk import regicor\n\nregicor(age=55, sex=\"male\", total_chol=6.0, hdl_chol=1.15, sbp=145, dbp=90,\n        diabetes=0, smoker=1)",
-   "result": "0.08878"
+   "result": "0.09013"
   },
   {
    "slug": "predict",
