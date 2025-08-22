@@ -100,7 +100,11 @@ then `Rscript reference/qrisk3/run_reference_cran.R`), `python reference/<family
     With it, PREVENT can be run against the official code (level A); the AHA online calculator is not reachable
     by automated requests.
 17. **FINRISK — done** (official calculator run, 300 patients). The package now implements FINRISKI 2.0
-    (Vartiainen, Suomen Lääkärilehti 2020;75:2778), the calculator's model.
+    (Vartiainen, Suomen Lääkärilehti 2020;75:2778), the calculator's model. FINRISK 3.0 (Elonheimo, Eur J Public
+    Health 2025;35 Suppl 4:ckaf161.018; Fine-Gray, LDL option, 30-year risk) is a conference abstract without
+    coefficients; the calculator (en-GB and fi-FI are the same questionnaire and API) took total
+    cholesterol only, gave 10-year risk only, and matched 2.0 to 3e-16, so it still ran 2.0. Re-run
+    `finrisk/run_calculator.py` before submission; if values change, 3.0 has gone live and needs its paper.
 18. **PROCAM 2007 — done** (paper added; the package now implements its point scores). Optional
     question for the Assmann-Stiftung: the paper's annex with the full Weibull function (not printed), whether
     Tables 3-4's "<" means "<=", and the overlapping Table 4 row (women 46: "63-69" and ">= 68").
