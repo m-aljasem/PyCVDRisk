@@ -32,10 +32,23 @@ expectancy plus the rounded gain in both examples, so we compare it that way.
   least one of the six printed numbers in 4/72 cases. Six one-decimal numbers are weak
   evidence; there is no published chart or calculator output to compare against.
 
-## 3. Reference implementations
+## 3. Official calculator (evidence level A)
 
-The official calculator is the web tool at u-prevent.com, which cannot be queried offline. No
-open-source implementation was found.
+U-Prevent (u-prevent.com), DIAL2 page, filled in by a browser assistant for the 20 patients of
+`uprevent.py` (`fixtures/uprevent_patients.json`; low region entered as the Netherlands, moderate as
+Germany). The page also requires LDL cholesterol, which the core model does not use; it was set to
+the middle of the allowed range. Results: `fixtures/uprevent_results.jsonl`.
+
+- **58/60 displayed values agree** (10-year risk and lifetime risk with one decimal, life
+  expectancy in whole years), when the package's value is rounded half-up to two decimals and then
+  to the displayed precision. Rounding once gives 2 more misses (9.448 shown as 9.5, 33.949 as 34.0),
+  so the calculator evidently rounds twice.
+- Patient 18: life expectancy shown 82, package 69.94.
+- Patient 19: life expectancy shown 70, package 74.98.
+  Each equals the package's value for the patient before (17: 82.35; 18: 69.94): the assistant
+  copied the previous patient's life expectancy. Their other four values agree. Re-read by hand.
+
+No open-source implementation was found.
 
 ## 4. Scope
 

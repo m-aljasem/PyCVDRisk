@@ -104,7 +104,7 @@ M = [
      'life_cvd2(age=50, sex="female", smoker=1, sbp=150, total_chol=6.0, hdl_chol=1.4,\n          region="moderate", outcome="lifetime_risk")'),
     ("dial2", "DIAL2", "DIAL2 (type 2 diabetes)", "2023", "Europe (derived in Sweden)", "insulin", "conditions",
      "10-year and lifetime CVD risk and CVD-free life expectancy in type 2 diabetes", PM + "Ostergaard+DIAL2+Eur+J+Prev+Cardiol+2023",
-     "Checked against the paper's two worked examples (6/6 printed values).", "C",
+     "Checked against the official U-Prevent calculator (58/60 displayed values, 20 patients) and the paper's two worked examples.", "A",
      'dial2(age=60, sex="male", smoker=0, sbp=140, total_chol=5.0, hdl_chol=1.1, hba1c=58,\n      egfr=80, age_at_diagnosis=55, region="moderate", outcome="lifetime_risk")'),
     ("cha2ds2-vasc", "CHA2DS2-VASc", "CHA2DS2-VASc (stroke in AF)", "2010", "Europe", "stroke_ct", "conditions",
      "Stroke risk points in atrial fibrillation (0-9)", DOI + "10.1378/chest.09-1584",

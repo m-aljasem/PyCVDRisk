@@ -5,14 +5,15 @@
     python reference/dial2/uprevent.py compare    # reads fixtures/uprevent_results.jsonl and prints
                                                   # the package's values next to U-Prevent's
 
-U-Prevent shows risks rounded to whole percent and life expectancy to whole years (at best one
-decimal), so agreement is judged to that display precision.
+U-Prevent shows risks with one decimal and life expectancy in whole years, apparently rounded to two
+decimals first (shown()); agreement is judged at that display precision.
 """
 
 from __future__ import annotations
 
 import json
 import sys
+from decimal import ROUND_HALF_UP, Decimal
 from pathlib import Path
 
 import numpy as np
@@ -63,18 +64,22 @@ When done, paste all output lines into reference/dial2/fixtures/uprevent_results
 """
 
 
+def shown(v, q):
+    """U-Prevent's display: rounded half-up to 2 decimals, then to the shown precision (9.448 -> 9.45 -> 9.5)."""
+    return Decimal(str(v)).quantize(Decimal("0.01"), ROUND_HALF_UP).quantize(Decimal(q), ROUND_HALF_UP)
+
+
 def compare():
+    """(id, outcome, U-Prevent's string, package value, agrees) for every value in RESULTS."""
     ps = {p["id"]: p for p in json.loads(PATIENTS.read_text())}
-    print(f"{'id':>3} {'outcome':16} {'U-Prevent':>10} {'package':>10}")
+    out = []
     for ln in RESULTS.read_text().splitlines():
-        if not ln.strip():
-            continue
-        r = json.loads(ln)
-        args = {k: ps[r["id"]][k] for k in FIELDS}
-        for o in ("risk10", "lifetime_risk", "life_expectancy"):
-            v = float(dial2(**args, outcome=o))
-            v = v if o == "life_expectancy" else 100 * v
-            print(f"{r['id']:>3} {o:16} {r[o]:>10} {v:10.2f}  {r.get('notes', '')}")
+        if ln.strip():
+            r = json.loads(ln)
+            for o, q, scale in (("risk10", "0.1", 100), ("lifetime_risk", "0.1", 100), ("life_expectancy", "1", 1)):
+                v = scale * float(dial2(**{k: ps[r["id"]][k] for k in FIELDS}, outcome=o))
+                out.append((r["id"], o, r[o], v, shown(v, q) == Decimal(r[o].rstrip("%"))))
+    return out
 
 
 if __name__ == "__main__":
@@ -85,6 +90,7 @@ if __name__ == "__main__":
         PROMPT.write_text(prompt(ps))
         print(f"wrote {PATIENTS} and {PROMPT}")
     elif sys.argv[1:] == ["compare"]:
-        compare()
+        for row in compare():
+            print(*row[:3], f"{row[3]:.3f}", "" if row[4] else "DIFFERENT")
     else:
         sys.exit(__doc__)

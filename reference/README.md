@@ -22,7 +22,7 @@ then `Rscript reference/qrisk3/run_reference_cran.R`), `python reference/<family
 | SCORE 2003 (total-cholesterol model) | verified; 22/22 values vs paper; 798/800 chart cells within printed precision | official charts (Figs 1-2) | A | `score/REPORT.md` |
 | SMART-REACH (10-year risk, CVD-free life expectancy) | verified; 24/24 coefficients vs calculator; calculator life-expectancy defect found | authors' calculator spreadsheet recalculated by LibreOffice | A | `smart_reach/REPORT.md` |
 | LIFE-CVD2 (lifetime risk, life expectancy, treatment benefit) | verified; 36/36 coefficients vs supplement; 7,167/7,168 chart cells; centring and chart inputs inferred and pinned by the charts | authors' charts (Appendix 1, 16 charts) | A | `life_cvd2/REPORT.md` |
-| DIAL2 core model | verified; 56/56 coefficients vs supplement (Word and PDF); weak evidence: 6 printed values | paper worked examples (Figure 3) | C | `dial2/REPORT.md` |
+| DIAL2 core model | verified; 56/56 coefficients vs supplement (Word and PDF); U-Prevent calculator 58/60 displayed values (20 patients; 2 mis-copied); 6/6 printed values | U-Prevent (browser run by the owner); paper worked examples (Figure 3) | A + C | `dial2/REPORT.md` |
 | Reynolds Risk Score (model B, women and men) | verified; 19/19 formula terms vs PDFs; 17/17 worked examples within printed precision (14 exact) | Ridker 2007 (Table 6); Ridker 2008 (Clinical Examples) | C | `reynolds/REPORT.md` |
 | FINRISKI 2.0 (CHD, stroke, combined) | 4/4 equations vs Table 1; official calculator: 300 patients, 560 values at max rel diff 3e-16 (40 more floored by the calculator's display at its optimal profile); replaces FINRISK 2016 | Duodecim calculator (server, run by the owner); Vartiainen 2020 Table 1 | A + C | `finrisk/REPORT.md` |
 | ADRS (Abu Dhabi 2024; ASCVD, CAD, stroke) | 32/32 terms: Data S1 syntax = Table 2; GFR mean, MAP and stroke mean score checked against Table 1 | JAHA 2024 Table 2, Data S1 (PMC11681588) | C (weak) | `adrs/REPORT.md` |
@@ -61,8 +61,8 @@ then `Rscript reference/qrisk3/run_reference_cran.R`), `python reference/<family
    supplement also does not state the predictor centring or the chart HDL/LDL values; the report
    shows which values the charts imply.
 6. **DIAL2 — optional note to the authors.** Figure 3B is reproduced with eGFR 90, not the 70 in
-   its caption and the text (see `dial2/REPORT.md`). A few model outputs from u-prevent.com
-   (or from the authors) would raise DIAL2's evidence from level C to A.
+   its caption and the text (see `dial2/REPORT.md`). U-Prevent run done (level A); re-read the life
+   expectancy of patients 18 and 19 by hand (the browser assistant copied the previous patient's).
 7. **Dropped by the owner:** models older than about two decades are not pursued further (WHO/ISH
    regional charts, QRISK1). Implemented ones stay as they are.
 8. **Sources still blocked, please add to `Formulas/` or Zotero.**
@@ -117,7 +117,6 @@ Why the scores below A stay where they are:
 |---|---|---|
 | SCORE2-Diabetes | B + C | No official chart exists (the ESC uses a calculator only); outputs of the ESC app or the authors' code. |
 | PREVENT | C + B | Owner action 16 (AHA licence). |
-| DIAL2 | C | U-Prevent computes server-side behind a login; outputs from the authors (owner action 6). |
 | Reynolds | C | The official site (reynoldsriskscore.org) is now a parked domain; the papers' examples are the only official outputs. |
 | PROCAM 2007 (points) | C | The full Weibull function is in an unpublished annex; the Assmann-Stiftung online test returns its continuous risk, which cannot check the point score cell by cell. Owner action 18. |
 | ADRS | C (weak) | No calculator or charts found; owner action 15. |

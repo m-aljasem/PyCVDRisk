@@ -352,8 +352,8 @@
    "group": "conditions",
    "outcome": "10-year and lifetime CVD risk and CVD-free life expectancy in type 2 diabetes",
    "paperUrl": "https://pubmed.ncbi.nlm.nih.gov/?term=Ostergaard+DIAL2+Eur+J+Prev+Cardiol+2023",
-   "verification": "Checked against the paper's two worked examples (6/6 printed values).",
-   "evidence": "C",
+   "verification": "Checked against the official U-Prevent calculator (58/60 displayed values, 20 patients) and the paper's two worked examples.",
+   "evidence": "A",
    "example": "from cvd_risk import dial2\n\ndial2(age=60, sex=\"male\", smoker=0, sbp=140, total_chol=5.0, hdl_chol=1.1, hba1c=58,\n      egfr=80, age_at_diagnosis=55, region=\"moderate\", outcome=\"lifetime_risk\")",
    "result": "0.4582"
   },
