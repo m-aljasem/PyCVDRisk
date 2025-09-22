@@ -27,6 +27,7 @@ then `Rscript reference/qrisk3/run_reference_cran.R`), `python reference/<family
 | FINRISKI 2.0 (CHD, stroke, combined) | 4/4 equations vs Table 1; official calculator: 300 patients, 560 values at max rel diff 3e-16 (40 more floored by the calculator's display at its optimal profile); replaces FINRISK 2016 | Duodecim calculator (server, run by the owner); Vartiainen 2020 Table 1 | A + C | `finrisk/REPORT.md` |
 | ADRS (Abu Dhabi 2024; ASCVD, CAD, stroke) | 32/32 terms: Data S1 syntax = Table 2; GFR mean, MAP and stroke mean score checked against Table 1 | JAHA 2024 Table 2, Data S1 (PMC11681588) | C (weak) | `adrs/REPORT.md` |
 | PREDICT (NZ): 2018 primary prevention, BMI, VARIANZ policy, T2D, bleeding, post-CVD, post-ACS | verified; coefficients identical to the authors' R source (7/7 models); authors' R code run unmodified: 21,000 patients, max diff 5e-13; 49/49 paper rows; 2/2 worked examples | PredictRiskScores 0.9 (VIEW team); Pylypchuk 2018; Selak 2019 | A + C | `predict/REPORT.md` |
+| ASSIGN 1.0 and 2.0 | verified; v2.0 **official calculator: 200/200 displayed scores reproduced**, its 32 constants equal ours; v1.0 constants vs the 2007 appendix; printed 0.2286 is a typo (calculator uses 0.22286) | Woodward 2007; Welsh 2025; rightdecisions.scot.nhs.uk | A (v2), C (v1) | `assign/REPORT.md` |
 | PROCAM 2007 (coronary Weibull score, men and women; stroke score) | verified; 50/50 Table 2 bands, 95/95 rows of Tables 3-4, 39/39 Table 7 values vs PDF; 1 printed overlap (Table 4, women 46) and the "<" boundaries documented; replaces PROCAM 2002 | Assmann 2007 (Tables 2-7) | C | `procam/REPORT.md` |
 | REGICOR (Wilson 1998 + Girona calibration, Rev Esp Cardiol 2003) | **official charts reproduced for men** (198/200, misses within 0.01 points); women within 1 point in every cell (their 65-74 panel repeats 55-64); Wilson Table 6 verbatim; Rev Esp Table 1 18/19 rows (men's optimal-BP sign differs, Wilson followed); 40/40 bands; Wilson and Rev Esp worked examples | Wilson 1998 (Table 6, Appendix); Marrugat, Rev Esp Cardiol 2003 (Table 1, Appendix); official charts (regicor.cat) |
 | WHO/ISH charts 2007 (14 subregions, with/without cholesterol) | verified; 3 whoishRisk transcription errors corrected | guideline's 2 printed charts (768 cells); whoishRisk 1.0 table (10,752 cells) and its R lookup logic (transliterated, not run) | A (2 subregions) + B | `who_ish/REPORT.md` |
@@ -68,8 +69,6 @@ then `Rscript reference/qrisk3/run_reference_cran.R`), `python reference/<family
 8. **Sources still blocked, please add to `Formulas/` or Zotero.**
    - **SMART (2013):** Dorresteijn, Heart 2013, online supplements 2 (calculation sheet) and 6
      (baseline survival and centring). The paper gives only the coefficients.
-   - **ASSIGN:** Woodward, Heart 2007, online Appendix 1 (beta coefficients and formulas;
-     heart.bmj.com supplementary material). The PDF itself has no coefficients.
    - **QRISK4:** the software is available only under an academic licence from Oxford University
      Innovations.
    - **Group 2 papers (from v1):** Progetto Cuore, Jackson Heart, ARIC, CARDIA,

@@ -1,0 +1,44 @@
+ASSIGN equations
+Risk score equations
+
+Variable Definitions:
+sex: Biological sex (1 = male, 0 = female)
+age: Age at recruitment (years, continuous)
+chol: Total cholesterol (mmol/L, continuous)
+hdl: HDL cholesterol (mmol/L, continuous)
+sbp: Systolic blood pressure (mmHg, continuous)
+dm: Diabetes mellitus (binary: 1 = yes, 0 = no)
+fhxcvd: Family history of CVD in mother, father, or sibling (binary: 1 = yes, 0 = no)
+ncig: Number of cigarettes smoked per day (continuous)
+simdscore10: Scottish Index of Multiple Deprivation (SIMD) score divided by 10 (continuous).
+
+1. Original ASSIGN (ASSIGN version 1.0)
+asm = 0.05698*Age + 0.22286*chol - 0.53684*hdl + 0.01183*sbp + 0.81558*dm + 0.275*fhxcvd +
+0.02005*ncig + 0.06296*simdscore10 if sex==1
+asf = 0.07203*Age + 0.12720*chol - 0.55836*hdl + 0.01064*sbp + 0.97727*dm + 0.492*fhxcvd +
+0.02724*ncig + 0.09386*simdscore10 if sex==0
+lbarm = 0.05698*48.8706 + 0.2286*6.2252 - 0.53684*1.35042 + 0.01183*133.810 +
+0.81558*0.0152905 + 0.275*0.263762 + 0.02005*7.95841 + 0.06296*2.74038 if sex==1
+lbarf = 0.07203*48.7959 + 0.1272*6.40706 - 0.55836*1.62837 + 0.01064*130.115 +
+0.97727*0.0127275 + 0.492*0.326328 + 0.02724*6.44058 + 0.09386*2.82470 if sex==0
+maleA = (asm-lbarm)
+femA = (asf-lbarf)
+maleB = exp(maleA)
+femB = exp(femA)
+Original ASSIGN (males) = 100*(1-(0.8831^maleB))
+Original ASSIGN (females) = 100*(1-(0.9365^femB))
+
+
+2. Recalibrated ASSIGN (ASSIGN version 2.0)
+Original ASSIGN score beta coefficients - equation recentred using observations from derivation
+cohort, as well as updated baseline hazards from the derivation cohort
+gen lbarm2 = 0.05698*55.3999 + 0.2286*5.5488 - 0.53684*1.2944 + 0.01183*141.5754 +
+0.81558*0.0481 + 0.275*0.5620 + 0.02005*2.0560 + 0.06296*1.4701 if sex==1
+gen lbarf2 = 0.07203*55.1321 + 0.1272*5.8199 - 0.55836*1.6086 + 0.01064*135.2402 +
+0.97727*0.0268 + 0.492*0.6129 + 0.02724*1.6107 + 0.09386*1.4740 if sex==0
+maleA2 = (asm-lbarm2)
+femA2 = (asf-lbarf2)
+maleB2 = exp(maleA2)
+femB2 = exp(femA2)
+Recalibrated ASSIGN (ASSIGN2) (males) = 100*(1-(0.9130^maleB2))
+Recalibrated ASSIGN (ASSIGN2) (females) = 100*(1-(0.9666^femB2))
