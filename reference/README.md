@@ -23,6 +23,7 @@ then `Rscript reference/qrisk3/run_reference_cran.R`), `python reference/<family
 | SMART-REACH (10-year risk, CVD-free life expectancy) | verified; 24/24 coefficients vs calculator; calculator life-expectancy defect found | authors' calculator spreadsheet recalculated by LibreOffice | A | `smart_reach/REPORT.md` |
 | LIFE-CVD2 (lifetime risk, life expectancy, treatment benefit) | verified; 36/36 coefficients vs supplement; 7,167/7,168 chart cells; centring and chart inputs inferred and pinned by the charts | authors' charts (Appendix 1, 16 charts) | A | `life_cvd2/REPORT.md` |
 | DIAL2 core model | verified; 56/56 coefficients vs supplement (Word and PDF); U-Prevent calculator 58/60 displayed values (20 patients; 2 mis-copied); 6/6 printed values | U-Prevent (browser run by the owner); paper worked examples (Figure 3) | A + C | `dial2/REPORT.md` |
+| SMART2 (10-year recurrent ASCVD risk) | verified; coefficients, baselines and region ratios from Supplementary Table 2; U-Prevent calculator 50/50 comparable patients (2 runs; 2 more use treatment options outside SMART2); SBP per 10 mmHg and a missing constant of 0.211 recovered from the calculator | U-Prevent (browser run by the owner); Hageman 2022 Supplementary Table 2 | A | `smart2/REPORT.md` |
 | Reynolds Risk Score (model B, women and men) | verified; 19/19 formula terms vs PDFs; 17/17 worked examples within printed precision (14 exact) | Ridker 2007 (Table 6); Ridker 2008 (Clinical Examples) | C | `reynolds/REPORT.md` |
 | FINRISKI 2.0 (CHD, stroke, combined) | 4/4 equations vs Table 1; official calculator: 300 patients, 560 values at max rel diff 3e-16 (40 more floored by the calculator's display at its optimal profile); replaces FINRISK 2016 | Duodecim calculator (server, run by the owner); Vartiainen 2020 Table 1 | A + C | `finrisk/REPORT.md` |
 | ADRS (Abu Dhabi 2024; ASCVD, CAD, stroke) | 32/32 terms: Data S1 syntax = Table 2; GFR mean, MAP and stroke mean score checked against Table 1 | JAHA 2024 Table 2, Data S1 (PMC11681588) | C (weak) | `adrs/REPORT.md` |
@@ -46,14 +47,11 @@ then `Rscript reference/qrisk3/run_reference_cran.R`), `python reference/<family
    declare the package licence as `MIT AND LGPL-3.0-or-later`.
 2. **Reynolds Risk Score — done** (papers added). v1's coefficients did not match the
    published formula; v2 follows the papers. Evidence is level C only (worked examples).
-3. **SMART2 — question for the authors (Hageman, Dorresteijn, Visseren; UMC Utrecht).** The
-   supplement (Table S2) gives the coefficients for uncentred predictors, a 10-year baseline risk
-   of 0.1658 and a "mean linear predictor" of -0.0464. At the derivation cohort's average values
-   (Table 1) the linear predictor is about 2.25, so the printed formula would give an average
-   patient a 10-year risk near 84%, against an observed incidence near 20%. The -0.0464 only makes
-   sense for centred predictors, and the centring values are not published. Question to send:
-   *which value of LP_mean (or which centring constants) should be used with the coefficients
-   in Supplementary Table 2?* U-Prevent.com presumably has the answer.
+3. **SMART2 — done; optional confirmation from the authors (Hageman, Dorresteijn, Visseren; UMC Utrecht).**
+   The supplement's Table S2 does not reproduce U-Prevent as printed: the SBP coefficient is per 10 mmHg,
+   and the linear predictor needs a further 0.211 (0.2104-0.2111 fits all 30 round-1 patients), which
+   equals -ln(0.81), the antithrombotic offset. Both recovered from two U-Prevent runs (see
+   `smart2/REPORT.md`).
 4. **SMART-REACH — optional note to the authors.** Their calculator's life expectancy is wrong
    whenever a person's yearly risks sum to more than 1 at some age (see `smart_reach/REPORT.md`
    section 3); in some cases it is below the person's current age.

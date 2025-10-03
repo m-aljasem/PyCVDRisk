@@ -1,0 +1,22 @@
+{"id": 100, "risk10": "26.1%", "other": {"reduction_due_to_treatment": "0.0%"}, "notes": "Baseline/consistency check: identical inputs to round-1 patient 0 (diabetes=0, no hba1c needed); result matches exactly (26.1%)."}
+{"id": 101, "risk10": "34.0%", "other": {"reduction_due_to_treatment": "0.0%"}, "notes": "hba1c=33 mmol/mol (lower boundary) entered and accepted without error."}
+{"id": 102, "risk10": "34.0%", "other": {"reduction_due_to_treatment": "0.0%"}, "notes": "hba1c=42 mmol/mol entered and accepted without error."}
+{"id": 103, "risk10": "34.0%", "other": {"reduction_due_to_treatment": "0.0%"}, "notes": "hba1c=53 mmol/mol entered and accepted without error."}
+{"id": 104, "risk10": "34.0%", "other": {"reduction_due_to_treatment": "0.0%"}, "notes": "hba1c=64 mmol/mol entered and accepted without error."}
+{"id": 105, "risk10": "34.0%", "other": {"reduction_due_to_treatment": "0.0%"}, "notes": "hba1c=75 mmol/mol entered and accepted without error."}
+{"id": 106, "risk10": "34.0%", "other": {"reduction_due_to_treatment": "0.0%"}, "notes": "hba1c=90 mmol/mol entered and accepted without error."}
+{"id": 107, "risk10": "34.0%", "other": {"reduction_due_to_treatment": "0.0%"}, "notes": "hba1c=108 mmol/mol (upper boundary) entered and accepted without error. Patients 101-107 all share identical other inputs and all returned exactly 34.0% regardless of hba1c value (33 through 108) — this indicates HbA1c does not change the primary 10-year risk estimate in this calculator (it appears to feed only the treatment-benefit/'Future treatment' panel, similar to LDL-cholesterol)."}
+{"id": 108, "risk10": "66.2%", "other": {"reduction_due_to_treatment": "0.0%"}, "notes": "hba1c=42 mmol/mol entered and accepted without error."}
+{"id": 109, "risk10": "66.2%", "other": {"reduction_due_to_treatment": "0.0%"}, "notes": "hba1c=86 mmol/mol entered and accepted without error. Identical to patient 108's result apart from hba1c, again consistent with hba1c not affecting the primary risk score."}
+{"id": 110, "risk10": "18.3%", "other": {"reduction_due_to_treatment": "0.0%"}, "notes": "age=40 (lower boundary) entered and accepted without error."}
+{"id": 111, "risk10": "50.5%", "other": {"reduction_due_to_treatment": "0.0%"}, "notes": "age=80 (upper boundary) entered and accepted without error."}
+{"id": 112, "risk10": "48.4%", "other": {"reduction_due_to_treatment": "0.0%"}, "notes": "egfr=30 mL/min/1.73m2 (lower boundary) entered and accepted without error."}
+{"id": 113, "risk10": "29.9%", "other": {"reduction_due_to_treatment": "0.0%"}, "notes": "egfr=120 mL/min/1.73m2 (upper boundary) entered and accepted without error."}
+{"id": 114, "risk10": "17.5%", "other": {"reduction_due_to_treatment": "0.0%"}, "notes": "hscrp=0.1 mg/L (lower boundary) entered and accepted without error."}
+{"id": 115, "risk10": "33.7%", "other": {"reduction_due_to_treatment": "0.0%"}, "notes": "hscrp=15.0 mg/L (upper boundary) entered and accepted without error."}
+{"id": 116, "risk10": "22.3%", "other": {"reduction_due_to_treatment": "0.0%"}, "notes": "years_since_diagnosis=30 (upper boundary) entered and accepted without error."}
+{"id": 117, "risk10": "24.7%", "other": {"reduction_due_to_treatment": "0.0%"}, "notes": "sbp=95 mmHg entered and accepted without error."}
+{"id": 118, "risk10": "29.2%", "other": {"reduction_due_to_treatment": "0.0%"}, "notes": "sbp=200 mmHg (upper boundary) entered and accepted without error."}
+{"id": 119, "risk10": "35.2%", "other": {"reduction_due_to_treatment": "0.0%"}, "notes": "total_chol=8.0, hdl_chol=0.6, ldl_chol=6.9 mmol/L (combined edge case, all given directly, no placeholder) entered and accepted without error — no floating-point validation issue encountered since real values were used directly rather than a computed placeholder."}
+{"id": 120, "risk10": "17.4%", "other": {"reduction_due_to_treatment": "0.0%"}, "notes": "antithrombotic='dual_antiplatelet' selected (button-select option index 2). Same base inputs as patient 100 (antithrombotic=0, 26.1%); selecting dual antiplatelet therapy lowered the displayed current risk to 17.4%."}
+{"id": 121, "risk10": "17.0%", "other": {"reduction_due_to_treatment": "0.0%"}, "notes": "antithrombotic='aspirin_plus_low_dose_doac' selected (button-select option index 3). Same base inputs as patient 100 (antithrombotic=0, 26.1%); selecting aspirin + low dose DOAC lowered the displayed current risk to 17.0%."}
