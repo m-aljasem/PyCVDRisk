@@ -36,7 +36,7 @@ then `Rscript reference/qrisk3/run_reference_cran.R`), `python reference/<family
 | CHADS2, CHA2DS2-VASc, HAS-BLED | verified; 32/32 published rules, definitions quoted from the PDFs | Gage 2001; Lip 2010; Pisters 2010 | C | `af/REPORT.md` |
 | TIMI UA/NSTEMI | verified; 11/11 published rules | Antman 2000 (Table 1); RiskScorescvd 0.3.1 | C + B | `timi/REPORT.md` |
 | EDACS | verified; 29/29 published rules | Than 2014 (Box 3); RiskScorescvd 0.3.1 | C + B | `edacs/REPORT.md` |
-| GRACE in-hospital, 6-month | verified; 78/78 bands vs the printed nomograms; worked-example discrepancy documented | Granger 2003 (Fig 4); Eagle 2004 (Fig 2) | C | `grace/REPORT.md` |
+| GRACE in-hospital, 6-month | verified; 78/78 bands vs the printed nomograms; worked-example discrepancy confirmed by the authors (table correct) | Granger 2003 (Fig 4); Eagle 2004 (Fig 2) | C | `grace/REPORT.md` |
 
 ## Owner actions needed
 
@@ -76,9 +76,10 @@ then `Rscript reference/qrisk3/run_reference_cran.R`), `python reference/<family
 9. **Redistribution of `reference/*/source/`.** These folders hold copies of papers, supplements,
    charts and third-party code, e.g. `who_ish/source/whoishRisk/` (GPL-3). Check that you may
    publish them, or drop them from the public repository and keep only checksums and URLs.
-10. **GRACE: optional note to the authors.** In Granger 2003 Figure 4, both worked examples score a
+10. **GRACE: done.** In Granger 2003 Figure 4, both worked examples score a
     value on a band's printed lower edge in the band below (SBP 100: 53, not 43; creatinine 0.4: 1,
-    not 4), and example 1's terms add to 195, not 196. The package follows the printed table.
+    not 4), and example 1's terms add to 195, not 196. The package follows the printed table, and the
+    authors confirmed the table is correct (personal communication).
 11. **REGICOR — done.** Switched to the full-precision function of the official charts (Wilson 1998 + Rev Esp
     Cardiol 2003). Optional note to the REGICOR authors: Rev Esp Cardiol Table 1 prints men's optimal blood
     pressure as +0.0023 (Wilson: -0.00226), the Appendix step "4.496 - 3.489 = 0.986" should read 1.007, and the

@@ -8,7 +8,8 @@ plot (Eagle). Creatinine is in mg/dL (umol/L / 88.4).
 Band edges. Eagle prints closed bands (<=49.9, 50-69.9, ...). Granger prints overlapping ones
 (<=80, 80-99, 100-119, ...; 0-0.39, 0.40-0.79, ...; >4.0): the explicit "<=" bands include their edge,
 every other band is [lower, next lower), and creatinine 4.0 scores 28. Granger's own worked examples
-put SBP 100 and creatinine 0.4 in the band below (see reference/grace/REPORT.md).
+put SBP 100 and creatinine 0.4 in the band below; the authors confirmed the table is correct
+(personal communication; see reference/grace/REPORT.md).
 """
 
 from __future__ import annotations

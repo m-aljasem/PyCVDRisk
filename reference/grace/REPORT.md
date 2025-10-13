@@ -63,7 +63,10 @@ The examples are quoted from the PDF (2/2 found). They do not follow the printed
 example 1 gives SBP 100 53 points (table: 100-119 = 43) and its terms add to 195, not 196;
 example 2 gives creatinine 0.4 1 point (table: 0.40-0.79 = 4). Both examples put a value on a
 band's printed lower edge into the band below. With that reading they give 195 and 103.
-We follow the table, whose 0.40 is explicit; this is a note for the authors.
+We follow the table, whose 0.40 is explicit.
+
+**Confirmed by the authors:** asked whether the table or the examples is the intended rule,
+the authors confirmed that the table is correct (personal communication).
 
 ## 2. 6-month post-discharge death (Eagle 2004, Figure 2)
 
