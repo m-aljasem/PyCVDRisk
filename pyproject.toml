@@ -13,7 +13,7 @@ authors = [{name = "Mohamad AlJasem", email = "mohamad@aljasem.eu.org"}]
 dependencies = ["numpy>=1.24"]
 
 [project.optional-dependencies]
-test = ["pytest>=7.4", "hypothesis>=6.80", "pandas>=2.0"]
+test = ["pytest>=7.4", "hypothesis>=6.80", "pandas>=2.0", "pypdf>=4"]
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/cvd_risk"]

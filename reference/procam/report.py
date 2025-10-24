@@ -42,8 +42,8 @@ _SBP = [("sbp", "< 110", 90, 109.99, 0)] + [
 _TG = [("triglycerides", "< 100", 50, 99.99, 0), ("triglycerides", "100–149", 100, 149.99, 2),
        ("triglycerides", "150–199", 150, 199.99, 3), ("triglycerides", "≥ 200", 200, 500, 4)]
 TABLE2 = _LDL + _HDL + _SBP + _TG
-FLAGS = [("smoker", "Y es 12", "male", 12), ("family_history", "Y es 5", "male", 5),
-         ("diabetes", "Y es (men) 9", "male", 9), ("diabetes", "Y es (women) 11", "female", 11)]
+FLAGS = [("smoker", "Yes 12", "male", 12), ("family_history", "Yes 5", "male", 5),
+         ("diabetes", "Yes (men) 9", "male", 9), ("diabetes", "Yes (women) 11", "female", 11)]
 TABLE6_SBP = [("< 140 mmHg 0", 120, 139.99, 0)] + [
     (f"{lo}–{lo + 4} mmHg {i + 1}", lo, lo + 4.99, i + 1) for i, lo in enumerate(range(140, 176, 5))] + [
     ("> 180 mmHg 9", 180, 220, 9)]
@@ -70,7 +70,8 @@ def table2_rows(t):
         out.append((var, band, pts, f"{band} {pts}" in t, *got))
     for var, band, sex, pts in FLAGS:
         got = float(procam(**{**base, "sex": sex, var: 1}))
-        out.append((var, band, pts, band in t, got, got))
+        # pypdf < 7 splits the kerned "Yes" into "Y es"; accept either extraction
+        out.append((var, band, pts, band in t.replace("Y es", "Yes"), got, got))
     return out
 
 

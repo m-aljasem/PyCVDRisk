@@ -61,10 +61,10 @@ function; it cannot check the point score cell by cell.
 | triglycerides | 100–149 | 2 | yes | 2 / 2 |
 | triglycerides | 150–199 | 3 | yes | 3 / 3 |
 | triglycerides | ≥ 200 | 4 | yes | 4 / 4 |
-| smoker | Y es 12 | 12 | yes | 12 / 12 |
-| family_history | Y es 5 | 5 | yes | 5 / 5 |
-| diabetes | Y es (men) 9 | 9 | yes | 9 / 9 |
-| diabetes | Y es (women) 11 | 11 | yes | 11 / 11 |
+| smoker | Yes 12 | 12 | yes | 12 / 12 |
+| family_history | Yes 5 | 5 | yes | 5 / 5 |
+| diabetes | Yes (men) 9 | 9 | yes | 9 / 9 |
+| diabetes | Yes (women) 11 | 11 | yes | 11 / 11 |
 
 50/50 bands found in the PDF with the package giving their points at both ends.
 
