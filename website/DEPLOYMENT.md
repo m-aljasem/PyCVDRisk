@@ -2,15 +2,13 @@
 
 This guide will help you deploy the CVD Risk Calculator website to Vercel.
 
-## Prerequisites
+## ✅ Fixed Configuration
 
-1. A GitHub account
-2. A Vercel account (free tier works)
-3. Your code pushed to GitHub
+The website is now configured to work properly with Vercel's Next.js deployment.
 
-## Deployment Steps
+## Quick Deploy
 
-### Option 1: Deploy via Vercel Dashboard (Recommended)
+### Option 1: Via Vercel Dashboard (Recommended)
 
 1. **Go to Vercel**
    - Visit [vercel.com](https://vercel.com)
@@ -19,28 +17,24 @@ This guide will help you deploy the CVD Risk Calculator website to Vercel.
 2. **Import Your Project**
    - Click "Add New Project"
    - Select your GitHub repository
-   - Choose the repository containing the `website` folder
+   - **IMPORTANT**: In project settings, set **Root Directory** to `website`
+   
+3. **Vercel Auto-Detection**
+   - Vercel will automatically detect Next.js
+   - Framework Preset: Next.js (auto-detected)
+   - Build Command: `npm run build` (default)
+   - Output Directory: `.next` (auto-detected)
+   - Install Command: `npm install` (default)
 
-3. **Configure Project**
-   - **Root Directory**: Set to `website`
-   - **Framework Preset**: Next.js (auto-detected)
-   - **Build Command**: `npm run build` (default)
-   - **Output Directory**: `.next` (default)
-   - **Install Command**: `npm install` (default)
-
-4. **Environment Variables**
-   - Add any environment variables if needed
-   - For now, none are required
-
-5. **Deploy**
+4. **Deploy**
    - Click "Deploy"
    - Wait for the build to complete
-   - Your site will be live!
+   - Your site will be live! 🎉
 
-### Option 2: Deploy via Vercel CLI
+### Option 2: Via Vercel CLI
 
 ```bash
-# Install Vercel CLI
+# Install Vercel CLI (globally)
 npm i -g vercel
 
 # Navigate to website directory
@@ -49,8 +43,8 @@ cd website
 # Login to Vercel
 vercel login
 
-# Deploy
-vercel
+# Deploy (for production)
+vercel --prod
 
 # Follow the prompts:
 # - Set up and deploy? Yes
@@ -60,68 +54,105 @@ vercel
 # - In which directory is your code located? ./
 ```
 
-### Option 3: GitHub Integration
+## Important Settings in Vercel Dashboard
 
-1. **Enable GitHub Integration**
-   - In Vercel dashboard, go to Settings > Git
-   - Connect your GitHub account if not already connected
+When importing the project:
 
-2. **Auto Deployments**
-   - Every push to `main` branch will trigger a deployment
-   - Pull requests get preview deployments automatically
+1. **Root Directory**: Set to `website`
+   - This tells Vercel where your Next.js app is located
 
-## Configuration
+2. **Framework Preset**: Should auto-detect as "Next.js"
+   - If not, manually select "Next.js"
 
-The website is configured for static export (see `next.config.js`):
-- Uses `output: 'export'` for static site generation
-- Optimized for Vercel's platform
+3. **Build Settings**: Leave as default
+   - Build Command: `npm run build`
+   - Output Directory: `.next` (auto-detected by Vercel)
+   - Install Command: `npm install`
+
+## Configuration Files
+
+The project uses:
+- **next.config.js** - Standard Next.js config (no static export)
+- **vercel.json** - Minimal config (Vercel auto-detects most settings)
+- **package.json** - Standard npm scripts
+
+## Troubleshooting
+
+### Error: routes-manifest.json not found
+
+✅ **FIXED**: This was caused by using `output: 'export'` in next.config.js. 
+The config has been updated to work with Vercel's serverless functions.
+
+### Build Fails
+
+1. **Check Node Version**
+   - Vercel uses Node 18.x by default
+   - You can specify in `package.json`:
+     ```json
+     "engines": {
+       "node": ">=18.0.0"
+     }
+     ```
+
+2. **Check Build Logs**
+   - View detailed logs in Vercel dashboard
+   - Look for dependency or TypeScript errors
+
+3. **Verify Dependencies**
+   - Ensure all dependencies are in `package.json`
+   - Run `npm install` locally to test
+
+### Site Not Loading
+
+1. **Check Root Directory**
+   - Must be set to `website` in Vercel project settings
+
+2. **Check Framework Detection**
+   - Should show "Next.js" as framework
+
+3. **Redeploy**
+   - Sometimes a fresh deploy fixes issues
+
+## Environment Variables
+
+Currently, no environment variables are needed. If you add API keys or secrets later:
+
+1. Go to Project Settings > Environment Variables
+2. Add your variables
+3. Redeploy
 
 ## Custom Domain
 
 1. Go to your project in Vercel dashboard
-2. Navigate to Settings > Domains
+2. Navigate to **Settings > Domains**
 3. Add your custom domain
 4. Follow DNS configuration instructions
 
-## Build Configuration
-
-The project uses:
-- **Framework**: Next.js 14
-- **Build Command**: `npm run build`
-- **Output Directory**: `out` (static export)
-- **Node Version**: 18.x or higher (auto-detected)
-
-## Troubleshooting
-
-### Build Fails
-
-1. Check build logs in Vercel dashboard
-2. Ensure all dependencies are in `package.json`
-3. Verify Node version (should be 18+)
-
-### Site Not Updating
-
-1. Check if GitHub integration is enabled
-2. Verify you're pushing to the correct branch
-3. Check Vercel dashboard for deployment status
-
-### Styling Issues
-
-1. Ensure Tailwind CSS is properly configured
-2. Check that `styles/globals.css` is imported in `_app.tsx`
-
 ## Performance
 
-- The site uses Next.js static export for optimal performance
-- Images should be optimized (add to `public/` folder)
-- Consider adding analytics (Google Analytics, Vercel Analytics)
+The site is optimized with:
+- Next.js automatic optimizations
+- Image optimization
+- Automatic code splitting
+- Server-side rendering where beneficial
 
-## Next Steps
+## Continuous Deployment
 
-After deployment:
-1. Update GitHub links in the website code
-2. Add real API endpoints if implementing backend
-3. Add analytics
-4. Set up custom domain
-5. Configure SEO metadata
+By default, Vercel will:
+- ✅ Deploy on every push to `main` branch
+- ✅ Create preview deployments for pull requests
+- ✅ Show build status in GitHub
 
+## Next Steps After Deployment
+
+1. ✅ Update GitHub links in the website code
+2. ✅ Add real favicon
+3. ✅ Configure custom domain (optional)
+4. ✅ Add analytics (optional)
+5. ✅ Test all links and functionality
+
+## Need Help?
+
+- Check Vercel documentation: https://vercel.com/docs
+- View build logs in Vercel dashboard
+- Check Next.js deployment guide: https://nextjs.org/docs/deployment
