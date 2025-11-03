@@ -17,10 +17,10 @@ rounding: disabled (round and round_to_nearest_digit overridden with identity)
 
 | Variant | Patients | NaN | Max abs diff | Max rel diff | Pass (rtol 1e-12) | Time (s) |
 |---|---|---|---|---|---|---|
-| score2 | 20,000 | 0 | 4.44e-16 | 5.56e-14 | yes | 0.011 |
+| score2 | 20,000 | 0 | 4.44e-16 | 5.56e-14 | yes | 0.013 |
 | score2_op | 20,000 | 0 | 4.44e-16 | 4.15e-15 | yes | 0.012 |
-| score2_diabetes | 20,000 | 0 | 5.55e-16 | 1.14e-13 | yes | 0.013 |
-| score2_asia_pacific | 20,000 | 0 | 1.14e-15 | 4.38e-14 | yes | 0.011 |
+| score2_diabetes | 20,000 | 0 | 5.55e-16 | 1.14e-13 | yes | 0.015 |
+| score2_asia_pacific | 20,000 | 0 | 1.14e-15 | 4.38e-14 | yes | 0.012 |
 
 Patients: seeded synthetic set (`make_patients.py`) covering every sex x region x
 smoker x diabetes combination and every integer age in range, both ends included.
@@ -137,3 +137,14 @@ Cells: 1,536; exact (rounded %): 1,535. Not exact:
 
 A transcription error would show up as a mismatch unless it happened to equal the model's
 value, so the 1,535 exact cells also confirm the transcription.
+
+## 7. SCORE2-Diabetes vs the official U-Prevent calculator (evidence level A)
+
+u-prevent.com, SCORE2-Diabetes form, filled in by a browser assistant (`uprevent_diabetes.py`):
+a base patient, one-change variants (every predictor, every region) and random patients. The form accepts
+ages 55-90 only, so 10 of 32 patients (all under 55) were rejected. U-Prevent shows one decimal after
+rounding to two (as for DIAL2).
+
+Accepted patients reproduced at display precision: 21/22; largest difference 0.055 points. Not reproduced:
+
+- patient 17: shown 19.1%, package 19.0447%, 0.0003 points from the edge where U-Prevent's two-step rounding turns up (19.045)

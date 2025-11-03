@@ -1,0 +1,33 @@
+{"fields": [{"name": "Risk of geographic region", "unit": null, "options": ["Low risk", "Moderate risk", "High risk", "Very high risk"], "required": true}, {"name": "Gender", "unit": null, "options": ["Male", "Female"], "required": true}, {"name": "Age", "unit": "years", "range": "55 - 90", "required": true}, {"name": "Age of diabetes diagnosis", "unit": "years", "range": "0 - 90", "required": true}, {"name": "Current smoking", "unit": null, "type": "switch", "default": "off", "required": false}, {"name": "Mediterranean diet", "unit": null, "type": "switch", "default": "off", "required": false}, {"name": "Step count", "unit": "steps", "range": "1500 - 30000", "required": false}, {"name": "Systolic blood pressure", "unit": "mmHg", "range": "60 - 300", "required": true}, {"name": "HbA1c", "unit": "mmol/mol (or %)", "range": "9 - 200", "required": true}, {"name": "eGFR", "unit": "mL/min", "range": ">= 30", "required": true}, {"name": "Cholesterol unit selector", "unit": null, "options": ["mmol/L", "mg/dL"], "default": "mmol/L", "required": false}, {"name": "Total cholesterol", "unit": "mmol/L", "range": "0 - 15", "required": true}, {"name": "HDL-cholesterol", "unit": "mmol/L", "range": "0 - 3", "required": true}, {"name": "LDL-cholesterol", "unit": "mmol/L", "range": "0 - 10", "required": true}, {"name": "Statin", "unit": null, "options": ["No statin", "Atorvastatin", "Fluvastatin", "Lovastatin", "Pravastatin", "Rosuvastatin", "Simvastatin"], "default": "No statin", "required": true}, {"name": "Ezetimibe", "type": "switch", "default": "off", "required": false}, {"name": "Bempedoic acid", "type": "switch", "default": "off", "required": false}, {"name": "PCSK9-inhibitor", "options": ["No PCSK9-inhibitor", "Alirocumab or evolocumab", "Inclisiran"], "default": "No PCSK9-inhibitor", "required": true}, {"name": "Antithrombotic treatment", "type": "switch", "default": "off", "required": false}, {"name": "GLP1-receptor agonist", "type": "switch", "default": "off", "required": false}, {"name": "SGLT2-inhibitor", "type": "switch", "default": "off", "required": false}]}
+{"id": 0, "risk10": "10.3%", "other": {"Reduction due to treatment": "0.0%"}, "notes": ""}
+{"id": 1, "risk10": null, "other": {}, "notes": "Age: \"Enter a value higher or equal to 55\"; Age of diabetes diagnosis: \"Enter a value lower or equal to 40\"; form: \"Data is still missing or out of range.\""}
+{"id": 2, "risk10": "22.5%", "other": {"Reduction due to treatment": "0.0%"}, "notes": ""}
+{"id": 3, "risk10": "7.0%", "other": {"Reduction due to treatment": "0.0%"}, "notes": ""}
+{"id": 4, "risk10": "15.5%", "other": {"Reduction due to treatment": "0.0%"}, "notes": ""}
+{"id": 5, "risk10": "8.6%", "other": {"Reduction due to treatment": "0.0%"}, "notes": ""}
+{"id": 6, "risk10": "13.1%", "other": {"Reduction due to treatment": "0.0%"}, "notes": ""}
+{"id": 7, "risk10": "12.5%", "other": {"Reduction due to treatment": "0.0%"}, "notes": ""}
+{"id": 8, "risk10": "9.2%", "other": {"Reduction due to treatment": "0.0%"}, "notes": ""}
+{"id": 9, "risk10": "12.9%", "other": {"Reduction due to treatment": "0.0%"}, "notes": ""}
+{"id": 10, "risk10": "9.5%", "other": {"Reduction due to treatment": "0.0%"}, "notes": ""}
+{"id": 11, "risk10": "9.0%", "other": {"Reduction due to treatment": "0.0%"}, "notes": ""}
+{"id": 12, "risk10": "14.0%", "other": {"Reduction due to treatment": "0.0%"}, "notes": ""}
+{"id": 13, "risk10": "14.1%", "other": {"Reduction due to treatment": "0.0%"}, "notes": ""}
+{"id": 14, "risk10": "9.4%", "other": {"Reduction due to treatment": "0.0%"}, "notes": ""}
+{"id": 15, "risk10": "7.9%", "other": {"Reduction due to treatment": "0.0%"}, "notes": ""}
+{"id": 16, "risk10": "11.6%", "other": {"Reduction due to treatment": "0.0%"}, "notes": ""}
+{"id": 17, "risk10": "19.1%", "other": {"Reduction due to treatment": "0.0%"}, "notes": ""}
+{"id": 18, "risk10": null, "other": {}, "notes": "Age: \"Enter a value higher or equal to 55\"; form: \"Data is still missing or out of range.\""}
+{"id": 19, "risk10": "6.6%", "other": {"Reduction due to treatment": "0.0%"}, "notes": ""}
+{"id": 20, "risk10": null, "other": {}, "notes": "Age: \"Enter a value higher or equal to 55\"; form: \"Data is still missing or out of range.\""}
+{"id": 21, "risk10": "37.1%", "other": {"Reduction due to treatment": "0.0%"}, "notes": ""}
+{"id": 22, "risk10": null, "other": {}, "notes": "Age: \"Enter a value higher or equal to 55\"; form: \"Data is still missing or out of range.\""}
+{"id": 23, "risk10": "20.1%", "other": {"Reduction due to treatment": "0.0%"}, "notes": ""}
+{"id": 24, "risk10": null, "other": {}, "notes": "Age: \"Enter a value higher or equal to 55\"; form: \"Data is still missing or out of range.\""}
+{"id": 25, "risk10": null, "other": {}, "notes": "Age: \"Enter a value higher or equal to 55\"; form: \"Data is still missing or out of range.\""}
+{"id": 26, "risk10": null, "other": {}, "notes": "Age: \"Enter a value higher or equal to 55\"; form: \"Data is still missing or out of range.\""}
+{"id": 27, "risk10": null, "other": {}, "notes": "Age: \"Enter a value higher or equal to 55\"; form: \"Data is still missing or out of range.\""}
+{"id": 28, "risk10": "16.7%", "other": {"Reduction due to treatment": "0.0%"}, "notes": ""}
+{"id": 29, "risk10": null, "other": {}, "notes": "Age: \"Enter a value higher or equal to 55\"; form: \"Data is still missing or out of range.\""}
+{"id": 30, "risk10": "9.7%", "other": {"Reduction due to treatment": "0.0%"}, "notes": ""}
+{"id": 31, "risk10": null, "other": {}, "notes": "Age: \"Enter a value higher or equal to 55\"; form: \"Data is still missing or out of range.\""}

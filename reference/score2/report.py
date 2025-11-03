@@ -19,6 +19,7 @@ import sys
 
 sys.path.insert(0, str(Path(__file__).parent))
 import chart_check  # noqa: E402
+import uprevent_diabetes  # noqa: E402
 
 mod = importlib.import_module("cvd_risk.score2.score2")  # the module, not the same-named function
 
@@ -88,6 +89,9 @@ def main():
 
     charts = chart_check.summary()
     ap = chart_check.ap_summary()
+    dm = uprevent_diabetes.compare()
+    n_dm = len(uprevent_diabetes.patients())
+    n_rej = n_dm - len(dm)
     hdl_grid = [1.0, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6]
     fitted = chart_check.fit(np.array(hdl_grid))
     om = charts[(charts.sex == "male") & (charts.age_band == "85-89")].pivot_table(
@@ -231,6 +235,20 @@ def main():
         "",
         "A transcription error would show up as a mismatch unless it happened to equal the model's",
         "value, so the 1,535 exact cells also confirm the transcription.",
+        "",
+        "## 7. SCORE2-Diabetes vs the official U-Prevent calculator (evidence level A)",
+        "",
+        "u-prevent.com, SCORE2-Diabetes form, filled in by a browser assistant (`uprevent_diabetes.py`):",
+        "a base patient, one-change variants (every predictor, every region) and random patients. The form accepts",
+        f"ages 55-90 only, so {n_rej} of {n_dm} patients (all under 55) were rejected. U-Prevent shows one decimal after",
+        "rounding to two (as for DIAL2).",
+        "",
+        f"Accepted patients reproduced at display precision: {sum(a for *_, a in dm)}/{len(dm)}; largest difference"
+        f" {max(abs(v - float(s.rstrip('%'))) for _, s, v, _ in dm):.3f} points. Not reproduced:",
+        "",
+        *[f"- patient {i}: shown {s}, package {v:.4f}%, {abs(v - (np.floor(v * 10) / 10 + 0.045)):.4f} points from the"
+          f" edge where U-Prevent's two-step rounding turns up ({np.floor(v * 10) / 10 + 0.045:.3f})"
+          for i, s, v, a in dm if not a],
     ]
     (HERE / "REPORT.md").write_text("\n".join(lines) + "\n")
     print("\n".join(lines[:30]))

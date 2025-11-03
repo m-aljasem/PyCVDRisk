@@ -9,7 +9,7 @@ then `Rscript reference/qrisk3/run_reference_cran.R`), `python reference/<family
 |---|---|---|---|---|
 | SCORE2 | verified; 1,532/1,536 official chart cells within printed precision (1,529 exact) | ESC 2021 guideline charts (4 regions); RiskScorescvd 0.3.1 (R); paper worked example | A + B + C | `score2/REPORT.md` |
 | SCORE2-OP | verified; 1,024/1,024 official chart cells within printed precision (852 exact) | ESC 2021 guideline charts = authors' supplement print; RiskScorescvd 0.3.1 | A + B | `score2/REPORT.md` |
-| SCORE2-Diabetes | verified; 7/8 printed worked examples (1 misprint documented) | RiskScorescvd 0.3.1; paper worked examples | B + C | `score2/REPORT.md` |
+| SCORE2-Diabetes | verified; U-Prevent calculator 21/22 displayed values (the other 0.0003 points from a rounding edge; its form accepts ages 55-90 only); 7/8 printed worked examples (1 misprint documented) | U-Prevent (browser run by the owner); RiskScorescvd 0.3.1; paper worked examples | A + B + C | `score2/REPORT.md` |
 | SCORE2 Asia-Pacific | verified; 1,535/1,536 official chart cells exact (1 print slip) | authors' charts (Figure 3, 4 regions); RiskScorescvd 0.3.1 | A + B | `score2/REPORT.md` |
 | Globorisk (lab, office, fatal) | verified | authors' R package 1.0.2 | A | `globorisk/REPORT.md` |
 | SCORE2-CKD (eGFR, ACR, dipstick add-ons) | verified; 1 reference bug found | supplement worked example; RiskScorescvd 0.3.1 | C + B | `score2_ckd/REPORT.md` |
@@ -113,7 +113,6 @@ Why the scores below A stay where they are:
 
 | Score | Level | What would raise it |
 |---|---|---|
-| SCORE2-Diabetes | B + C | No official chart exists (the ESC uses a calculator only); outputs of the ESC app or the authors' code. |
 | PREVENT | C + B | Owner action 16 (AHA licence). |
 | Reynolds | C | The official site (reynoldsriskscore.org) is now a parked domain; the papers' examples are the only official outputs. |
 | PROCAM 2007 (points) | C | The full Weibull function is in an unpublished annex; the Assmann-Stiftung online test returns its continuous risk, which cannot check the point score cell by cell. Owner action 18. |
