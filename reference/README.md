@@ -13,7 +13,7 @@ then `Rscript reference/qrisk3/run_reference_cran.R`), `python reference/<family
 | SCORE2 Asia-Pacific | verified; 1,535/1,536 official chart cells exact (1 print slip) | authors' charts (Figure 3, 4 regions); RiskScorescvd 0.3.1 | A + B | `score2/REPORT.md` |
 | Globorisk (lab, office, fatal) | verified | authors' R package 1.0.2 | A | `globorisk/REPORT.md` |
 | SCORE2-CKD (eGFR, ACR, dipstick add-ons) | verified; 1 reference bug found | supplement worked example; RiskScorescvd 0.3.1 | C + B | `score2_ckd/REPORT.md` |
-| PREVENT (5 models x 10/30 y x 5 outcomes) | verified; coefficients from primary source | authors' worked examples (100 values); preventr 0.12.2 | C + B | `prevent/REPORT.md` |
+| PREVENT (5 models x 10/30 y x 5 outcomes) | verified; coefficients from primary source; AHA online calculator 189/189 displayed risks (34 patients; base, UACR, HbA1c and full equations) | AHA online calculator (browser run by the owner); authors' worked examples (100 values); preventr 0.12.2 | A + C + B | `prevent/REPORT.md` |
 | WHO 2019 (lab, non-lab; 21 regions, 190 countries, 1990-2017) | verified | all 44,100 official chart cells; WHORiskCalculator 1.1.0 | A (charts) + B | `who2019/REPORT.md` |
 | QRISK2-2014 | verified; module is LGPL-3.0 | ClinRisk C source compiled unmodified, incl. its input validation | A | `qrisk2/REPORT.md` |
 | QRISK3-2017 | verified; module is LGPL-3.0 (see below) | ClinRisk C source compiled unmodified; QRISK3 0.6.0 (R) | A + B | `qrisk3/REPORT.md` |
@@ -95,8 +95,8 @@ then `Rscript reference/qrisk3/run_reference_cran.R`), `python reference/<family
     Table 1), which of the two stroke formulas in Data S1 is intended, and for a few calculated risks.
 16. **PREVENT: accept the AHA source-code licence.** The official PREVENT code is in a private GitHub repository
     (AHA-DS-Analytics/PREVENT), released free to researchers after accepting the licence at heart.org/PREVENT.
-    With it, PREVENT can be run against the official code (level A); the AHA online calculator is not reachable
-    by automated requests.
+    With it, PREVENT can be run against the official code at full precision; level A is already reached through
+    the AHA online calculator (189/189 displayed risks), which refuses automated requests.
 17. **FINRISK — done** (official calculator run, 300 patients). The package now implements FINRISKI 2.0
     (Vartiainen, Suomen Lääkärilehti 2020;75:2778), the calculator's model. FINRISK 3.0 (Elonheimo, Eur J Public
     Health 2025;35 Suppl 4:ckaf161.018; Fine-Gray, LDL option, 30-year risk) is a conference abstract without
@@ -113,7 +113,6 @@ Why the scores below A stay where they are:
 
 | Score | Level | What would raise it |
 |---|---|---|
-| PREVENT | C + B | Owner action 16 (AHA licence). |
 | Reynolds | C | The official site (reynoldsriskscore.org) is now a parked domain; the papers' examples are the only official outputs. |
 | PROCAM 2007 (points) | C | The full Weibull function is in an unpublished annex; the Assmann-Stiftung online test returns its continuous risk, which cannot check the point score cell by cell. Owner action 18. |
 | ADRS | C (weak) | No calculator or charts found; owner action 15. |

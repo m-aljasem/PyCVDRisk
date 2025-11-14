@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import datetime as dt
 import importlib
+import importlib.util
 import time
 from decimal import Decimal
 from pathlib import Path
@@ -30,6 +31,10 @@ def last_digit(v: float) -> float:
 
 
 def main():
+    spec = importlib.util.spec_from_file_location("aha_calculator", HERE / "aha_calculator.py")
+    aha_mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(aha_mod)
+    aha = aha_mod.compare()
     p = pd.read_csv(FX / "patients.csv").set_index("id")
     r = pd.read_csv(FX / "reference.csv")
     original = mod._table()
@@ -118,13 +123,26 @@ def main():
         "   including preventr <= 0.12.0, gives wrong HbA1c-model risks: up to 30%",
         "   relative error in 10-year total CVD on this synthetic set.",
         "3. **preventr's ranges differ from the source's.** Source: eGFR 15-150, HbA1c 3-15%,",
-        "   BMI 18.5 to <40. preventr: eGFR 15-140, HbA1c 4.5-15, BMI 18.5-39.9. This package",
-        "   follows the source.",
+        "   BMI 18.5 to <40. preventr: eGFR 15-140, HbA1c 4.5-15, BMI 18.5-39.9; the AHA online",
+        "   calculator also takes eGFR 15-140 and BMI 18.5-39.9. This package follows the source.",
         "4. **The original (2023) S12 tables label HDL-C \"per 1 mml/L\"**, but the term is",
         "   (HDL - 1.3)/0.3. The revised supplement's own formulas and worked examples use",
         "   0.3, and so does this package.", "",
-        "## 5. Open items", "",
-        "- Compare against the AHA online calculator (evidence level A).",
+        "## 5. AHA online calculator (evidence level A)", "",
+        "professional.heart.org PREVENT calculator, filled in by a browser assistant (`aha_calculator.py`):",
+        f"{len({i for i, *_ in aha})} patients (a base patient, one-change variants of every input including",
+        "UACR and HbA1c alone and together, and random patients), ZIP code left empty. The calculator",
+        "names the equations it used; for every patient they are the ones the given optional inputs imply",
+        "(base, UACR, HbA1c, or full with SDI missing). It shows one decimal, and 30-year risks only for ages 30-59.", "",
+        "| Equations | Patients | Displayed risks | Reproduced |", "|---|---|---|---|",
+        *[f"| {mo} | {len({i for i, m2, *_ in aha if m2 == mo})} | {sum(m2 == mo for _, m2, *_ in aha)} | "
+          f"{sum(ok for _, m2, *_, ok in aha if m2 == mo)} |" for mo in ("base", "uacr", "hba1c", "full")],
+        "",
+        f"All: {sum(ok for *_, ok in aha)}/{len(aha)} displayed 10- and 30-year risks of total CVD, ASCVD and heart",
+        "failure reproduced at 1 decimal. PREVENT-Age and the 30-year percentile, which the calculator",
+        "also shows, are not part of the published equations and are not compared.", "",
+        "## 6. Open items", "",
+        "- Run the official R code (AHA licence, owner action 16) on the synthetic set, for full precision.",
     ]
     (HERE / "REPORT.md").write_text("\n".join(lines) + "\n")
     print("\n".join(lines[20:45]))

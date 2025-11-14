@@ -17,7 +17,7 @@ score2(age=[50, 62], sex=["male", "female"], smoker=[1, 0], sbp=[140, 130],
 |---|---|
 | SCORE2, SCORE2-OP, SCORE2-Diabetes, SCORE2 Asia-Pacific, SCORE2-CKD | implemented, verified vs R `RiskScorescvd` (and published worked examples) |
 | Globorisk (lab, office, fatal; 182 countries) | implemented, verified vs the authors' R package |
-| PREVENT (base, UACR, HbA1c, SDI, full; 10/30-year; 5 outcomes) | implemented, verified vs the authors' worked examples and R `preventr` |
+| PREVENT (base, UACR, HbA1c, SDI, full; 10/30-year; 5 outcomes) | implemented, verified vs the official AHA online calculator (34 patients, 189/189 displayed risks), the authors' worked examples and R `preventr` |
 | WHO 2019 (lab, non-lab; 21 regions / 190 countries) | implemented, verified vs every cell of the official WHO charts and R `WHORiskCalculator` |
 | QRISK2-2014 | implemented (LGPL-3.0 module), verified vs ClinRisk's own C code, validation included (30,000 patients, 2.9e-13) |
 | QRISK3-2017 | implemented (LGPL-3.0 module), verified vs ClinRisk's own C code and R `QRISK3` |

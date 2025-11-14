@@ -7,6 +7,7 @@
 """
 
 import importlib
+import importlib.util
 from pathlib import Path
 
 import numpy as np
@@ -149,3 +150,18 @@ def test_bad_arguments_raise():
     for kw in ({"model": "nope"}, {"years": 20}, {"outcome": "death"}):
         with pytest.raises(ValueError):
             prevent(**BASE, **kw)
+
+
+def test_matches_aha_online_calculator():
+    """34 patients from the AHA PREVENT calculator: every displayed risk (1 decimal) reproduced, using the
+    equations the calculator names, which are those implied by the optional inputs given."""
+    import json
+    spec = importlib.util.spec_from_file_location("aha_calculator", FIXTURES.parent / "aha_calculator.py")
+    aha = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(aha)
+    rows = aha.compare()
+    assert len(rows) == 189 and all(ok for *_, ok in rows)
+    ps = {p["id"]: p for p in json.loads((FIXTURES / "aha_patients.json").read_text())}
+    for i, model, *_ in rows:
+        has_u, has_h = ps[i]["uacr"] is not None, ps[i]["hba1c"] is not None
+        assert model == {(0, 0): "base", (1, 0): "uacr", (0, 1): "hba1c", (1, 1): "full"}[has_u, has_h]
