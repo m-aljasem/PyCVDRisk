@@ -12,7 +12,7 @@ then `Rscript reference/qrisk3/run_reference_cran.R`), `python reference/<family
 | SCORE2-Diabetes | verified; U-Prevent calculator 21/22 displayed values (the other 0.0003 points from a rounding edge; its form accepts ages 55-90 only); 7/8 printed worked examples (1 misprint documented) | U-Prevent (browser run by the owner); RiskScorescvd 0.3.1; paper worked examples | A + B + C | `score2/REPORT.md` |
 | SCORE2 Asia-Pacific | verified; 1,535/1,536 official chart cells exact (1 print slip) | authors' charts (Figure 3, 4 regions); RiskScorescvd 0.3.1 | A + B | `score2/REPORT.md` |
 | Globorisk (lab, office, fatal) | verified | authors' R package 1.0.2 | A | `globorisk/REPORT.md` |
-| SCORE2-CKD (eGFR, ACR, dipstick add-ons) | verified; 1 reference bug found | supplement worked example; RiskScorescvd 0.3.1 | C + B | `score2_ckd/REPORT.md` |
+| SCORE2-CKD (eGFR, ACR, dipstick add-ons) | verified; 1 reference bug found; the developers' calculator drops the SCORE2-OP eGFR >= 90 term | CKD-PC online calculator (568 add-on values, eGFR and ACR add-ons; 71 patients); supplement worked example; RiskScorescvd 0.3.1 | A + C + B | `score2_ckd/REPORT.md` |
 | PREVENT (5 models x 10/30 y x 5 outcomes) | verified; coefficients from primary source; AHA online calculator 189/189 displayed risks (34 patients; base, UACR, HbA1c and full equations) | AHA online calculator (browser run by the owner); authors' worked examples (100 values); preventr 0.12.2 | A + C + B | `prevent/REPORT.md` |
 | WHO 2019 (lab, non-lab; 21 regions, 190 countries, 1990-2017) | verified | all 44,100 official chart cells; WHORiskCalculator 1.1.0 | A (charts) + B | `who2019/REPORT.md` |
 | QRISK2-2014 | verified; module is LGPL-3.0 | ClinRisk C source compiled unmodified, incl. its input validation | A | `qrisk2/REPORT.md` |
@@ -106,6 +106,11 @@ then `Rscript reference/qrisk3/run_reference_cran.R`), `python reference/<family
 18. **PROCAM 2007 — done** (paper added; the package now implements its point scores). Optional
     question for the Assmann-Stiftung: the paper's annex with the full Weibull function (not printed), whether
     Tables 3-4's "<" means "<=", and the overlapping Table 4 row (women 46: "63-69" and ">= 68").
+19. **SCORE2-CKD: question for the authors (K. Matsushita, CKD-PC).** Their online calculator
+    (ckdpcrisk.org/ckdpatchscore2) leaves out the SCORE2-OP eGFR >= 90 term that the
+    supplement's equation prints (-0.4616, age x -0.0075); at age >= 70 and eGFR >= 90 it gives up to 28.9
+    points less. Which is intended? The package follows the paper. Also: patient A's base 1.96% (the calculator
+    itself shows 2.5%). The dipstick add-on is not in the calculator, so it stays at C + B.
 
 ## Evidence ceiling per score
 

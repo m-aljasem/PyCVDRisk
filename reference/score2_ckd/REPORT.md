@@ -45,7 +45,27 @@ The uncaught values are the SCORE2-OP dipstick coefficients, which the reference
 not implement (finding 1). `check_coefficients.py` checks them, and every other add-on
 coefficient, against the text of its own equation in the supplement.
 
-## 5. Findings
+## 5. Developers' online calculator (evidence level A)
+
+The CKD Prognosis Consortium calculator (ckdpcrisk.org/ckdpatchscore2) returns SCORE2 / SCORE2-OP and
+the add-on risk for the four risk regions, rounded to 0.1%, from its server (`scorepatch.php`).
+`ckdpc_calculator.py` queried it for 71 patients (patient A, a base patient, one-change variants
+across the eGFR knots and the SCORE2-OP ages, 40 random patients; dropdown ranges only), each with
+the eGFR add-on and with eGFR + ACR. The calculator has no dipstick option. Fixture:
+`fixtures/ckdpc_results.jsonl` (every query with its response).
+
+| Values | n | Agree at 0.1% | Max abs diff (points) | Agree, eGFR >= 90 segment dropped | Max abs diff |
+|---|---|---|---|---|---|
+| SCORE2 / SCORE2-OP | 284 | 280 | 0.052 | 280 | 0.052 |
+| add-on, all other patients | 504 | 483 | 0.068 | 483 | 0.068 |
+| add-on, age >= 70 and eGFR >= 90 | 64 | 0 | 28.865 | 61 | 0.057 |
+
+Outside the cells of finding 5 every value agrees to within 0.07 points; the values that do not
+match the display lie within 0.02 points of a rounding edge (the server's arithmetic differs from
+ours at about 1e-4 relative; rounding the base risk or the linear predictors does not explain it).
+For patient A the calculator shows 2.5% (low-risk region), as the package does (finding 2).
+
+## 6. Findings
 
 1. **RiskScorescvd uses the SCORE2 dipstick coefficients for SCORE2-OP.** The
    supplement (Table C) gives separate SCORE2-OP values (trace 0.2517, + 0.3872,
@@ -61,3 +81,9 @@ coefficient, against the text of its own equation in the supplement.
    equation. The equation is followed.
 4. The SCORE2 eGFR add-on has no eGFR >= 90 segment (Table A footnote); the SCORE2-OP
    add-on does. Both implemented as published.
+5. **The developers' calculator drops the SCORE2-OP eGFR >= 90 segment.** The supplement's
+   SCORE2-OP equation includes -0.4616 x (max(eGFR - 90, 0) / -15 - ...) and its age interaction
+   (-0.0075); the calculator returns the risk without them (all 64 such values reproduced when the
+   two terms are set to zero, none with them; up to 28.9 points lower at eGFR 105, age 78). The
+   package follows the published equation, as RiskScorescvd does; which one the developers intend
+   is open (owner action 19). `test_finding_ckdpc_calculator_drops_score2_op_egfr_ge90_segment`.

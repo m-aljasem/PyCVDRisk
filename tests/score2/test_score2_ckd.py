@@ -96,3 +96,38 @@ def test_invalid_core_input_is_nan(i, v):
 def test_bad_addon_raises():
     with pytest.raises(ValueError):
         score2_ckd(*ARGS, addon="urine")
+
+
+def _ckdpc():
+    import importlib.util
+    spec = importlib.util.spec_from_file_location("ckdpc", FX.parent / "ckdpc_calculator.py")
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    return mod
+
+
+def test_matches_ckdpc_online_calculator():
+    # The developers' calculator (CKD-PC, ckdpcrisk.org), 71 patients x 4 regions, eGFR and eGFR + ACR
+    # add-ons, shown to 0.1%. Misses are within 0.02 points of a rounding edge (server-side precision).
+    m = _ckdpc()
+    ps = {p["id"]: p for p in m.patients()}
+    rows = m.compare()
+    op_ge90 = lambda r: ps[r[0]]["age"] >= 70 and ps[r[0]]["egfr"] >= 90  # noqa: E731
+    base = [r for r in rows if r[2] == "base"]
+    ckd = [r for r in rows if r[2] == "ckd" and not op_ge90(r)]
+    assert len(base) == 284 and len(ckd) == 504
+    assert all(abs(r[4] - r[5]) < 0.053 for r in base) and sum(m.agrees(r[4], r[5]) for r in base) == 280
+    assert all(abs(r[4] - r[5]) < 0.07 for r in ckd) and sum(m.agrees(r[4], r[5]) for r in ckd) == 483
+    # Patient A: the calculator gives 2.5% (low region) like the package, not the supplement's 1.96%.
+    assert [r[4] for r in base if r[0] == 0][0] == 2.5
+
+
+def test_finding_ckdpc_calculator_drops_score2_op_egfr_ge90_segment():
+    # The supplement's SCORE2-OP equation has an eGFR >= 90 term (-0.4616, age x -0.0075); the
+    # calculator leaves it out (as the SCORE2 add-on does by design), lowering risk at age >= 70.
+    m = _ckdpc()
+    ps = {p["id"]: p for p in m.patients()}
+    rows = [r for r in m.compare() if r[2] == "ckd" and ps[r[0]]["age"] >= 70 and ps[r[0]]["egfr"] >= 90]
+    assert len(rows) == 64
+    assert not any(m.agrees(r[4], r[5]) for r in rows) and max(r[5] - r[4] for r in rows) > 28
+    assert all(abs(r[4] - r[6]) < 0.06 for r in rows) and sum(m.agrees(r[4], r[6]) for r in rows) == 61

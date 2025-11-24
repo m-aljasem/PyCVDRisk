@@ -146,7 +146,8 @@ CKD_EXPECTED_LOG8_ACR = {
 }
 # eGFR add-on: log HRs for (observed - expected) eGFR spline segments, and their
 # interactions with age ((age-60)/5 for SCORE2; age-73 for SCORE2-OP). SCORE2 has
-# no >= 90 segment ("not taken into account", Table A footnote).
+# no >= 90 segment ("not taken into account", Table A footnote). The developers' online calculator
+# also drops the SCORE2-OP >= 90 terms; we follow the printed equation (reference/score2_ckd/REPORT.md).
 CKD_EGFR_ADDON = {
     "score2": {"lt60": 0.4713, "60_90": 0.0956, "ge90": 0.0,
                "age_lt60": -0.0802, "age_60_90": 0.0088, "age_ge90": 0.0},
