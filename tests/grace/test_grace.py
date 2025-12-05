@@ -27,3 +27,57 @@ def test_six_month_items_and_edges():
 def test_invalid_rows_are_nan():
     assert np.isnan(grace_hospital([5, 1, 1], [120, -1, 120], 80, 60, [1, 1, np.nan], 0, 0, 0)).all()
     assert np.isnan(grace_6month([-1, 60], 0, 0, 80, 120, 0, 1, 0, [1, 2])).all()
+
+
+def _calculator():
+    import json
+    from pathlib import Path
+    return json.loads((Path(__file__).parents[2] / "reference/grace/fixtures/calculator_tables.json").read_text())
+
+
+def _ends(label):
+    """Both ends of a dropdown band as the calculator labels it: '<50', '50-69', '>=200'."""
+    if label.startswith("<"):
+        return 0.0, float(label[1:]) - 0.01
+    if label.startswith(">="):
+        return float(label[2:]), float(label[2:]) * 2
+    lo, hi = label.split("-")
+    return float(lo), float(hi)
+
+
+def test_6month_matches_developers_calculator():
+    # The "At Discharge" calculator of the developers' GRACE tool (reference/grace/calculator.py):
+    # every combination of the 8 x 7 x 7 x 7 bands and 5 yes/no items, at both ends of each band.
+    cal = _calculator()
+    lab, dd, cb = cal["labels"], cal["dropdowns"], cal["checkboxes"]
+    assert cal["totals"]["5"] == ["agePoint5", "SBPPoint5", "HRPoint5", "creatPoint5", "chfPoint5", "historymiPoint5",
+                                  "inhospitalpciPoint5", "STPoint5", "enzymesPoint5"]
+    bands = [("age", "age2_cb", "agePoint5"), ("heart_rate", "hr2_cb", "HRPoint5"), ("sbp", "sbp2_cb", "SBPPoint5"),
+             ("creatinine", "creatinine2_cb", "creatPoint5")]
+    flags = [("chf_cb", "chfPoint5"), ("historymi_cb", "historymiPoint5"), ("stsegment2_cb", "STPoint5"),
+             ("enzymes2_cb", "enzymesPoint5"), ("inhospitalpci_cb", "inhospitalpciPoint5")]
+    sizes = [len(lab[n]) - 1 for n, _, _ in bands] + [2] * len(flags)
+    idx = [g.ravel() for g in np.indices(sizes)]
+    for end in (0, 1):
+        x = [np.array([_ends(t)[end] for t in lab[n][1:]])[i] for (n, _, _), i in zip(bands, idx[:4])]
+        tool = sum(np.array(dd[box][var][1:])[i] for (_, box, var), i in zip(bands, idx[:4]))
+        tool = tool + sum(np.array(cb[box][var])[1 - i] for (box, var), i in zip(flags, idx[4:]))  # [ticked, not]
+        chf, mi, st, enz, pci = idx[4:]
+        got = grace_6month(x[0], chf, mi, x[1], x[2], st, x[3], enz, pci)
+        assert len(got) == 87_808
+        np.testing.assert_array_equal(got, tool)
+
+
+def test_finding_developers_calculator_uses_a_revised_in_hospital_nomogram():
+    # The tool's "At Admission" in-hospital death score is not Granger 2003 Figure 4 in any of its eight items
+    # (Fox et al. 2006 describe the tool's simplified model); the 2004 Pocket PC build has the same tables.
+    cal = _calculator()
+    dd, cb = cal["dropdowns"], cal["checkboxes"]
+    assert dd["chf_cb"]["CHFPoint1"][1:] == [0, 21, 43, 64]                     # Killip; Granger 0, 20, 39, 59
+    assert dd["age_cb"]["agePoint1"][1:] == [0, 0, 18, 36, 55, 73, 91, 100]      # Granger 0, 8, 25, 41, 58, ...
+    assert dd["hr_cb"]["HRPoint1"][1:] == [0, 0, 7, 13, 23, 36, 46]              # Granger 0, 3, 9, 15, 24, 38, 46
+    assert dd["sbp_cb"]["SBPPoint1"][1:] == [63, 58, 47, 37, 26, 11, 0]          # Granger 58, 53, 43, 34, 24, 10, 0
+    assert dd["creatinine_cb"]["creatPoint1"][1:] == [2, 5, 8, 11, 14, 23, 31]   # Granger 1, 4, 7, 10, 13, 21, 28
+    assert [cb[b][v][0] for b, v in (("cardiac_cb", "arrestPoint1"), ("stsegment_cb", "STPoint1"),
+                                     ("enzymes_cb", "enzymesPoint1"))] == [43, 30, 15]  # Granger 39, 28, 14
+    assert grace_hospital(2, 90, 80, 45, 1.0, 1, 1, 1) == 20 + 53 + 9 + 25 + 7 + 39 + 28 + 14

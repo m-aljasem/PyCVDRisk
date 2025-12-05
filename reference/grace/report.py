@@ -106,7 +106,27 @@ def main():
          "## 2. 6-month post-discharge death (Eagle 2004, Figure 2)", "", *head, *mrows, "",
          f"{mok}/{mn} bands give the printed points at both ends; {mf}/{len(SIX_MONTH)} printed rows found in the PDF.",
          "Figure 2 also prints a stray \"1\" under SBP >=200; it belongs to no row and is ignored.",
-         "The paper gives no worked example."]
+         "The paper gives no worked example.", "",
+         "## 3. The developers' calculator (evidence level A for the 6-month score)", "",
+         "The GRACE \"ACS Risk Model\" tool of the University of Massachusetts Center for Outcomes Research",
+         "(Fox et al., BMJ 2006, Figure 2) survives as Wayback Machine captures of",
+         "www.outcomes-umassmed.org/grace/acs_risk/: the Flash version (2013 capture, `source/grace_acs_risk_2013.swf`)",
+         "and a Pocket PC build dated August 2004 (`acs_risk.cab`, not stored; identical tables). `calculator.py`",
+         "disassembles its ActionScript (`as2.py`) into `fixtures/calculator_tables.json`: the points of every",
+         "dropdown entry and checkbox, the items each total adds, the points-to-probability tables and the labels.", "",
+         "- **6-month post-discharge death (\"At Discharge\")**: the tool's total is the sum of the nine Eagle",
+         "  2004 items, and `grace_6month` equals it for all 87,808 combinations of the bands and yes/no items, at",
+         "  both ends of every labelled band (`test_6month_matches_developers_calculator`). The labels also fix",
+         "  the band edges (\"<80\", \"80-99\", ..., \">=4\"), as implemented.",
+         "- **In-hospital death (\"At Admission\")**: the tool does not use Granger 2003 Figure 4. All eight items",
+         "  carry other points (Killip 0/21/43/64 against 0/20/39/59; cardiac arrest 43 against 39; age 40-49",
+         "  18 against 25). Fox et al. 2006 describe the tool as computing risk from their simplified model,",
+         "  whose points the abridged BMJ paper does not print. The package keeps Figure 4 (the published model,",
+         "  confirmed by its authors), which stays at level C; which nomogram other software calls \"the GRACE",
+         "  score\" was not checked.",
+         "  `test_finding_developers_calculator_uses_a_revised_in_hospital_nomogram`.",
+         "- The tool's other outcomes (in-hospital death or MI, death and death or MI from admission to 6",
+         "  months, death or MI after discharge) are not implemented."]
     (HERE / "REPORT.md").write_text("\n".join(L) + "\n")
     print(f"hospital {hok}/{hn} found {hf}/{len(HOSPITAL)}; 6-month {mok}/{mn} found {mf}/{len(SIX_MONTH)}; "
           f"examples {ex1:g} {ex2:g} quotes {qf}/2")

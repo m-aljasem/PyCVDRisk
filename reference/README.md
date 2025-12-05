@@ -36,7 +36,7 @@ then `Rscript reference/qrisk3/run_reference_cran.R`), `python reference/<family
 | CHADS2, CHA2DS2-VASc, HAS-BLED | verified; 32/32 published rules, definitions quoted from the PDFs | Gage 2001; Lip 2010; Pisters 2010 | C | `af/REPORT.md` |
 | TIMI UA/NSTEMI | verified; 11/11 published rules | Antman 2000 (Table 1); RiskScorescvd 0.3.1 | C + B | `timi/REPORT.md` |
 | EDACS | verified; 29/29 published rules | Than 2014 (Box 3); RiskScorescvd 0.3.1 | C + B | `edacs/REPORT.md` |
-| GRACE in-hospital, 6-month | verified; 78/78 bands vs the printed nomograms; worked-example discrepancy confirmed by the authors (table correct) | Granger 2003 (Fig 4); Eagle 2004 (Fig 2) | C | `grace/REPORT.md` |
+| GRACE in-hospital, 6-month | verified; 78/78 bands vs the printed nomograms; worked-example discrepancy confirmed by the authors (table correct); 6-month score equals the developers' GRACE tool (2004/2013 builds, archived) on all 87,808 band combinations; the tool's in-hospital score is a different, later nomogram | Granger 2003 (Fig 4); Eagle 2004 (Fig 2); developers' ACS Risk Model tool | 6-month A + C; in-hospital C | `grace/REPORT.md` |
 
 ## Owner actions needed
 
@@ -72,7 +72,7 @@ then `Rscript reference/qrisk3/run_reference_cran.R`), `python reference/<family
    - **Group 2 papers (from v1):** Progetto Cuore, Jackson Heart, ARIC, CARDIA,
      Singapore, Malaysian, Gulf RACE, Dundee, Cambridge, EPIC-Norfolk, Heinz Nixdorf, Rotterdam,
      INTERHEART, D:A:D, RISC, New Zealand. Europe PMC lists none as open access.
-   - **GRACE 2.0 / Fox 2006 (BMJ):** not yet provided; GRACE here is Granger 2003 and Eagle 2004.
+   - **GRACE 2.0:** not provided; GRACE here is Granger 2003 and Eagle 2004 (Fox 2006 is in Zotero).
 9. **Redistribution of `reference/*/source/`.** These folders hold copies of papers, supplements,
    charts and third-party code, e.g. `who_ish/source/whoishRisk/` (GPL-3). Check that you may
    publish them, or drop them from the public repository and keep only checksums and URLs.
@@ -121,5 +121,5 @@ Why the scores below A stay where they are:
 | Reynolds | C | The official site (reynoldsriskscore.org) is now a parked domain; the papers' examples are the only official outputs. |
 | PROCAM 2007 (points) | C | The full Weibull function is in an unpublished annex; the Assmann-Stiftung online test returns its continuous risk, which cannot check the point score cell by cell. Owner action 18. |
 | ADRS | C (weak) | No calculator or charts found; owner action 15. |
-| GRACE (Granger 2003, Eagle 2004) | C | The printed nomograms are the authors' tool and are reproduced; today's online GRACE is GRACE 2.0, a different model. |
+| GRACE in-hospital (Granger 2003) | C | The developers' archived calculator (2004-2013) uses a later in-hospital nomogram, not Figure 4; today's online GRACE is GRACE 2.0, a different model. The 6-month score (Eagle 2004) is at A. |
 | HEART, TIMI, EDACS, CHADS2, CHA2DS2-VASc, HAS-BLED | C (+ B) | Point scores: the published rules are the definition, so C is the ceiling. |
