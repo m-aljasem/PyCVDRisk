@@ -1,0 +1,51 @@
+patient_id,age,sex,systolic_bp,total_cholesterol,hdl_cholesterol,smoking,region,diabetes,ethnicity,bmi,family_history,antihypertensive,edge_case_type,description
+boundary_age_18_male,18,male,120.0,5.0,1.3,False,moderate,False,white,25.0,False,False,boundary_age,Age boundary: 18 years
+boundary_age_18_female,18,female,120.0,5.0,1.3,False,moderate,False,white,25.0,False,False,boundary_age,Age boundary: 18 years
+boundary_age_120_male,120,male,120.0,5.0,1.3,False,moderate,False,white,25.0,False,False,boundary_age,Age boundary: 120 years
+boundary_age_120_female,120,female,120.0,5.0,1.3,False,moderate,False,white,25.0,False,False,boundary_age,Age boundary: 120 years
+boundary_bp_50.0,55,male,50.0,5.0,1.3,False,moderate,False,white,25.0,False,False,boundary_bp,Systolic BP boundary: 50.0 mmHg
+boundary_bp_250.0,55,male,250.0,5.0,1.3,False,moderate,False,white,25.0,False,False,boundary_bp,Systolic BP boundary: 250.0 mmHg
+boundary_chol_1.0_0.3,55,male,120.0,1.0,0.3,False,moderate,False,white,25.0,False,False,boundary_cholesterol,"Cholesterol boundary: TC=1.0, HDL=0.3"
+boundary_chol_1.0_5.0,55,male,120.0,1.0,5.0,False,moderate,False,white,25.0,False,False,boundary_cholesterol,"Cholesterol boundary: TC=1.0, HDL=5.0"
+boundary_chol_15.0_0.3,55,male,120.0,15.0,0.3,False,moderate,False,white,25.0,False,False,boundary_cholesterol,"Cholesterol boundary: TC=15.0, HDL=0.3"
+boundary_chol_15.0_5.0,55,male,120.0,15.0,5.0,False,moderate,False,white,25.0,False,False,boundary_cholesterol,"Cholesterol boundary: TC=15.0, HDL=5.0"
+boundary_bmi_10.0,55,male,120.0,5.0,1.3,False,moderate,False,white,10.0,False,False,boundary_bmi,BMI boundary: 10.0
+boundary_bmi_60.0,55,male,120.0,5.0,1.3,False,moderate,False,white,60.0,False,False,boundary_bmi,BMI boundary: 60.0
+extreme_all_risks,70,male,200.0,12.0,0.5,True,very_high,True,south_asian,40.0,True,True,extreme_risk_max,All risk factors maximized
+extreme_no_risks,30,female,100.0,3.0,2.5,False,low,False,white,20.0,False,False,extreme_risk_min,All risk factors minimized
+extreme_young_high_risk,25,male,180.0,10.0,0.8,True,very_high,True,south_asian,35.0,True,True,extreme_young_risk,Young age with maximum risk factors
+anomaly_hdl_higher_tc,55,male,120.0,4.0,5.0,False,moderate,False,white,25.0,False,False,biological_anomaly,HDL > Total cholesterol (biologically impossible)
+anomaly_extreme_ratios,55,male,120.0,10.0,0.4,True,high,True,white,30.0,True,False,biological_anomaly,Extreme TC/HDL ratio
+precision_tiny_values,55,male,120.000001,5.0000001,1.30000001,False,moderate,False,white,25.000001,False,False,precision_tiny,Very small decimal values
+precision_many_decimals,55,male,120.123456789,5.123456789,1.123456789,False,moderate,False,white,25.123456789,False,False,precision_many_decimals,Many decimal places
+precision_near_zero,55,male,50.0001,1.0001,0.3001,False,moderate,False,white,10.0001,False,False,precision_near_zero,Values very close to minimum bounds
+score2_age_edge_39,39,male,140.0,6.0,1.2,True,moderate,False,white,25.0,False,False,model_specific_score2,SCORE2 age boundary: 39 (optimal range 40-69)
+score2_age_edge_40,40,male,140.0,6.0,1.2,True,moderate,False,white,25.0,False,False,model_specific_score2,SCORE2 age boundary: 40 (optimal range 40-69)
+score2_age_edge_69,69,male,140.0,6.0,1.2,True,moderate,False,white,25.0,False,False,model_specific_score2,SCORE2 age boundary: 69 (optimal range 40-69)
+score2_age_edge_70,70,male,140.0,6.0,1.2,True,moderate,False,white,25.0,False,False,model_specific_score2,SCORE2 age boundary: 70 (optimal range 40-69)
+qrisk3_ethnicity_white,55,male,140.0,6.0,1.0,True,moderate,True,white,35.0,True,True,model_specific_qrisk3,QRISK3 ethnicity: white with high risk factors
+qrisk3_ethnicity_south_asian,55,male,140.0,6.0,1.0,True,moderate,True,south_asian,35.0,True,True,model_specific_qrisk3,QRISK3 ethnicity: south_asian with high risk factors
+qrisk3_ethnicity_black,55,male,140.0,6.0,1.0,True,moderate,True,black,35.0,True,True,model_specific_qrisk3,QRISK3 ethnicity: black with high risk factors
+qrisk3_ethnicity_chinese,55,male,140.0,6.0,1.0,True,moderate,True,chinese,35.0,True,True,model_specific_qrisk3,QRISK3 ethnicity: chinese with high risk factors
+qrisk3_ethnicity_mixed,55,male,140.0,6.0,1.0,True,moderate,True,mixed,35.0,True,True,model_specific_qrisk3,QRISK3 ethnicity: mixed with high risk factors
+qrisk3_ethnicity_other,55,male,140.0,6.0,1.0,True,moderate,True,other,35.0,True,True,model_specific_qrisk3,QRISK3 ethnicity: other with high risk factors
+random_extreme_00,25,male,200.0,2.5,0.8,True,low,True,mixed,55.0,True,True,random_extreme,Random combination of extreme values #1
+random_extreme_01,25,male,70.0,2.0,0.8,False,moderate,False,mixed,45.0,True,True,random_extreme,Random combination of extreme values #2
+random_extreme_02,85,female,200.0,2.5,0.8,False,low,True,chinese,15.0,False,False,random_extreme,Random combination of extreme values #3
+random_extreme_03,90,female,60.0,14.0,0.5,False,low,False,other,45.0,True,True,random_extreme,Random combination of extreme values #4
+random_extreme_04,25,male,200.0,2.0,0.8,True,very_high,False,chinese,45.0,True,False,random_extreme,Random combination of extreme values #5
+random_extreme_05,80,male,200.0,2.0,0.8,True,moderate,False,chinese,45.0,True,False,random_extreme,Random combination of extreme values #6
+random_extreme_06,25,male,60.0,12.0,4.5,False,low,True,mixed,45.0,True,False,random_extreme,Random combination of extreme values #7
+random_extreme_07,85,female,70.0,12.0,0.8,True,high,False,mixed,55.0,False,True,random_extreme,Random combination of extreme values #8
+random_extreme_08,30,female,60.0,2.0,0.5,True,moderate,False,mixed,15.0,False,False,random_extreme,Random combination of extreme values #9
+random_extreme_09,90,female,200.0,2.0,0.5,False,high,True,black,55.0,True,False,random_extreme,Random combination of extreme values #10
+random_extreme_10,25,female,70.0,2.0,4.0,True,moderate,False,south_asian,15.0,False,False,random_extreme,Random combination of extreme values #11
+random_extreme_11,25,male,200.0,12.0,0.8,True,moderate,True,white,55.0,True,True,random_extreme,Random combination of extreme values #12
+random_extreme_12,30,female,70.0,12.0,4.5,True,moderate,False,chinese,45.0,False,False,random_extreme,Random combination of extreme values #13
+random_extreme_13,25,male,70.0,2.0,4.0,True,moderate,True,white,15.0,True,True,random_extreme,Random combination of extreme values #14
+random_extreme_14,25,male,200.0,2.0,0.8,False,very_high,True,mixed,18.0,False,True,random_extreme,Random combination of extreme values #15
+random_extreme_15,85,female,70.0,2.0,0.5,False,high,False,chinese,55.0,True,True,random_extreme,Random combination of extreme values #16
+random_extreme_16,25,female,200.0,2.0,0.8,True,moderate,False,south_asian,55.0,True,False,random_extreme,Random combination of extreme values #17
+random_extreme_17,85,male,60.0,14.0,0.5,True,low,True,south_asian,18.0,False,False,random_extreme,Random combination of extreme values #18
+random_extreme_18,85,male,220.0,2.0,0.8,False,low,False,black,55.0,False,False,random_extreme,Random combination of extreme values #19
+random_extreme_19,90,female,70.0,2.5,4.0,True,low,True,other,45.0,True,True,random_extreme,Random combination of extreme values #20

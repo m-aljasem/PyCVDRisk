@@ -1,0 +1,138 @@
+name: Build Wheels
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version to build (leave empty for development build)'
+        required: false
+        type: string
+
+jobs:
+  build_wheels:
+    name: Build wheels on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        python-version: ["3.10", "3.11", "3.12"]
+        architecture: [x64]
+        include:
+          # Add ARM64 builds for macOS and Ubuntu
+          - os: macos-latest
+            python-version: "3.10"
+            architecture: arm64
+          - os: ubuntu-latest
+            python-version: "3.10"
+            architecture: arm64
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up QEMU
+        if: matrix.architecture == 'arm64' && matrix.os == 'ubuntu-latest'
+        uses: docker/setup-qemu-action@v3
+        with:
+          platforms: arm64
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          architecture: ${{ matrix.architecture }}
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install build
+
+      - name: Update version for development builds
+        if: github.event.inputs.version == ''
+        run: |
+          # For development builds, add dev suffix with timestamp
+          TIMESTAMP=$(date +%Y%m%d%H%M%S)
+          sed -i "s/version = \"0\.1\.0\"/version = \"0.1.0.dev$TIMESTAMP\"/" pyproject.toml
+
+      - name: Update version for tagged builds
+        if: github.event.inputs.version != ''
+        run: |
+          sed -i "s/version = \"0\.1\.0\"/version = \"${{ github.event.inputs.version }}\"/" pyproject.toml
+
+      - name: Build wheels
+        run: python -m build --wheel
+
+      - name: Build source distribution
+        if: matrix.os == 'ubuntu-latest' && matrix.python-version == '3.10' && matrix.architecture == 'x64'
+        run: python -m build --sdist
+
+      - name: Upload wheels
+        uses: actions/upload-artifact@v4
+        with:
+          name: wheels-${{ matrix.os }}-${{ matrix.python-version }}-${{ matrix.architecture }}
+          path: dist/*.whl
+          retention-days: 30
+
+      - name: Upload source distribution
+        if: matrix.os == 'ubuntu-latest' && matrix.python-version == '3.10' && matrix.architecture == 'x64'
+        uses: actions/upload-artifact@v4
+        with:
+          name: source-distribution
+          path: dist/*.tar.gz
+          retention-days: 30
+
+  test_wheels:
+    name: Test wheels on ${{ matrix.os }}
+    needs: build_wheels
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        python-version: ["3.10", "3.11", "3.12"]
+
+    steps:
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Download wheels
+        uses: actions/download-artifact@v4
+        with:
+          name: wheels-${{ matrix.os }}-${{ matrix.python-version }}-x64
+          path: dist/
+
+      - name: Install wheel
+        run: |
+          # Find the wheel file (should be the only .whl file)
+          WHEEL_FILE=$(ls dist/*.whl)
+          pip install "$WHEEL_FILE"
+
+      - name: Test installation
+        run: |
+          python -c "import cvd_risk_calculator; print('✓ Package imported successfully')"
+          python -c "from cvd_risk_calculator.models.score2 import SCORE2; print('✓ SCORE2 model imported successfully')"
+
+      - name: Run basic functionality test
+        run: |
+          python -c "
+          from cvd_risk_calculator.models.score2 import SCORE2
+          from cvd_risk_calculator.core.validation import PatientData
+
+          # Test with a simple patient
+          patient = PatientData(
+              age=55,
+              sex='male',
+              systolic_bp=140.0,
+              total_cholesterol=6.0,
+              hdl_cholesterol=1.2,
+              smoking=True,
+              region='moderate'
+          )
+
+          model = SCORE2()
+          result = model.calculate(patient)
+
+          print(f'✓ Risk calculation successful: {result.risk_score:.1f}%')
+          assert 5.0 <= result.risk_score <= 50.0, f'Unexpected risk score: {result.risk_score}'
+          print('✓ All tests passed')
+          "

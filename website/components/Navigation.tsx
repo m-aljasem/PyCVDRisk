@@ -18,7 +18,7 @@ export default function Navigation() {
             <a href="#features" className="text-gray-600 hover:text-gray-900 transition-colors">Features</a>
             <a href="#models" className="text-gray-600 hover:text-gray-900 transition-colors">Models</a>
             <a href="#demo" className="text-gray-600 hover:text-gray-900 transition-colors">Demo</a>
-            <a href="https://github.com/yourusername/cvd-risk-calculator" className="btn-secondary">
+            <a href="https://github.com/m-aljasem/PyCVDRisk" className="btn-secondary">
               GitHub
             </a>
           </div>
@@ -63,7 +63,7 @@ export default function Navigation() {
               Demo
             </a>
             <a
-              href="https://github.com/yourusername/cvd-risk-calculator"
+              href="https://github.com/m-aljasem/PyCVDRisk"
               className="block px-4 py-2 btn-secondary text-center"
               onClick={() => setMobileMenuOpen(false)}
             >

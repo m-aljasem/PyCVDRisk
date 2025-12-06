@@ -1,13 +1,13 @@
 cff-version: 1.2.0
 message: "If you use this software, please cite it as below."
 authors:
-  - given-names: CVD Risk Calculator
-    family-names: Contributors
+  - given-names: Mohamad
+    family-names: AlJasem
 title: "CVD Risk Calculator: Production-grade cardiovascular risk assessment in Python"
 version: 0.1.0
 date-released: 2024-01-01
-repository-code: "https://github.com/yourusername/cvd-risk-calculator"
-url: "https://github.com/yourusername/cvd-risk-calculator"
+repository-code: "https://github.com/m-aljasem/PyCVDRisk"
+url: "https://pycvdrisk.aljasem.eu.org"
 license: MIT
 keywords:
   - cardiovascular disease
@@ -22,6 +22,6 @@ preferred-citation:
   title: "CVD Risk Calculator: Production-grade cardiovascular risk assessment in Python"
   type: software
   authors:
-    - given-names: CVD Risk Calculator
-      family-names: Contributors
+    - given-names: Mohamad
+      family-names: AlJasem
 

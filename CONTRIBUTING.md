@@ -9,7 +9,7 @@ By participating in this project, you agree to maintain a respectful and inclusi
 ## Getting Started
 
 1. Fork the repository
-2. Clone your fork: `git clone https://github.com/yourusername/cvd-risk-calculator.git`
+2. Clone your fork: `git clone https://github.com/m-aljasem/PyCVDRisk.git`
 3. Create a virtual environment: `python -m venv venv`
 4. Activate it: `source venv/bin/activate` (Linux/Mac) or `venv\Scripts\activate` (Windows)
 5. Install in development mode: `pip install -e ".[dev]"`
