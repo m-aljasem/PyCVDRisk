@@ -55,7 +55,7 @@ Then navigate to the appropriate notebook directory and open the `.ipynb` file.
 ## Requirements
 
 All notebooks require:
-- `cvd-risk-calculator` package installed
+- `cvd-risk` package installed
 - `pandas`, `matplotlib`, `seaborn` for data manipulation and visualization
 - `numpy` for numerical operations
 
