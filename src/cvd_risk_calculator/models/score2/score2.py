@@ -38,53 +38,57 @@ from cvd_risk_calculator.core.validation import PatientData, RiskResult
 
 logger = logging.getLogger(__name__)
 
-# SCORE2 region-specific baseline survival probabilities at 10 years
-# Values are approximations based on SCORE2 publication
+# SCORE2 baseline survival probabilities at 10 years
+# Exact values from SCORE2 publication
 _SCORE2_BASELINE_SURVIVAL = {
-    "low": {"male": 0.97, "female": 0.99},
-    "moderate": {"male": 0.96, "female": 0.98},
-    "high": {"male": 0.94, "female": 0.96},
-    "very_high": {"male": 0.92, "female": 0.94},
+    "male": 0.9605,
+    "female": 0.9776,
 }
 
-# SCORE2 sex-specific coefficients (mean-centered)
-# These are approximations; exact coefficients should be obtained from publication
+# SCORE2 region and sex-specific calibration scales
+# Exact values from SCORE2 publication
+_SCORE2_CALIBRATION_SCALES = {
+    "male": {
+        "low": {"scale1": -0.5699, "scale2": 0.7476},
+        "moderate": {"scale1": -0.1565, "scale2": 0.8009},
+        "high": {"scale1": 0.3207, "scale2": 0.9360},
+        "very_high": {"scale1": 0.5836, "scale2": 0.8294},
+    },
+    "female": {
+        "low": {"scale1": -0.7380, "scale2": 0.7019},
+        "moderate": {"scale1": -0.3143, "scale2": 0.7701},
+        "high": {"scale1": 0.5710, "scale2": 0.9369},
+        "very_high": {"scale1": 0.9412, "scale2": 0.8329},
+    },
+}
+
+# SCORE2 sex-specific coefficients with transformations
+# Exact coefficients from SCORE2 publication
 _SCORE2_COEFFICIENTS = {
     "male": {
-        "age": 0.060,
-        "age_squared": 0.000,
-        "total_cholesterol": 0.189,
-        "systolic_bp": 0.019,
-        "smoking": 0.530,
-        "hdl_cholesterol": -0.220,
+        "cage": 0.3742,  # age: cage = (age - 60) / 5
+        "smoking": 0.6012,
+        "csbp": 0.2777,  # sbp: csbp = (sbp - 120) / 20
+        "ctchol": 0.1458,  # tchol: ctchol = tchol - 6
+        "chdl": -0.2698,  # hdl: chdl = (hdl - 1.3) / 0.5
+        "smoking_cage": -0.0755,  # smoking × cage interaction
+        "csbp_cage": -0.0255,  # csbp × cage interaction
+        "ctchol_cage": -0.0281,  # ctchol × cage interaction
+        "chdl_cage": 0.0426,  # chdl × cage interaction
     },
     "female": {
-        "age": 0.075,
-        "age_squared": 0.000,
-        "total_cholesterol": 0.189,
-        "systolic_bp": 0.019,
-        "smoking": 0.530,
-        "hdl_cholesterol": -0.220,
+        "cage": 0.4648,
+        "smoking": 0.7744,
+        "csbp": 0.3131,
+        "ctchol": 0.1002,
+        "chdl": -0.2606,
+        "smoking_cage": -0.1088,
+        "csbp_cage": -0.0277,
+        "ctchol_cage": -0.0226,
+        "chdl_cage": 0.0613,
     },
 }
 
-# Mean risk factor profiles in derivation cohort (for centering)
-_SCORE2_MEANS = {
-    "male": {
-        "age": 54.0,
-        "total_cholesterol": 5.7,
-        "systolic_bp": 138.0,
-        "hdl_cholesterol": 1.3,
-        "smoking": 0.3,  # Proportion
-    },
-    "female": {
-        "age": 54.0,
-        "total_cholesterol": 5.9,
-        "systolic_bp": 132.0,
-        "hdl_cholesterol": 1.6,
-        "smoking": 0.2,  # Proportion
-    },
-}
 
 
 class SCORE2(RiskModel):
@@ -224,23 +228,46 @@ class SCORE2(RiskModel):
         if patient.region is None:
             raise ValueError("Region is required for SCORE2")
 
-        # Get sex-specific coefficients and means
+        # Get sex-specific coefficients
         coeffs = _SCORE2_COEFFICIENTS[patient.sex]
-        means = _SCORE2_MEANS[patient.sex]
-        baseline_survival = _SCORE2_BASELINE_SURVIVAL[patient.region][patient.sex]
+        baseline_survival = _SCORE2_BASELINE_SURVIVAL[patient.sex]
+        calibration_scales = _SCORE2_CALIBRATION_SCALES[patient.sex][patient.region]
 
-        # Calculate linear predictor (mean-centered)
+        # Transform risk factors according to SCORE2 formula
+        cage = (patient.age - 60) / 5
+        smoking = float(patient.smoking)
+        csbp = (patient.systolic_bp - 120) / 20
+        ctchol = patient.total_cholesterol - 6
+        chdl = (patient.hdl_cholesterol - 1.3) / 0.5
+
+        # Calculate linear predictor with main effects and interactions
         linear_predictor = (
-            coeffs["age"] * (patient.age - means["age"])
-            + coeffs["total_cholesterol"] * (patient.total_cholesterol - means["total_cholesterol"])
-            + coeffs["systolic_bp"] * (patient.systolic_bp - means["systolic_bp"])
-            + coeffs["hdl_cholesterol"] * (patient.hdl_cholesterol - means["hdl_cholesterol"])
-            + coeffs["smoking"] * (float(patient.smoking) - means["smoking"])
+            coeffs["cage"] * cage
+            + coeffs["smoking"] * smoking
+            + coeffs["csbp"] * csbp
+            + coeffs["ctchol"] * ctchol
+            + coeffs["chdl"] * chdl
+            + coeffs["smoking_cage"] * smoking * cage
+            + coeffs["csbp_cage"] * csbp * cage
+            + coeffs["ctchol_cage"] * ctchol * cage
+            + coeffs["chdl_cage"] * chdl * cage
         )
 
-        # Calculate 10-year risk using Weibull survival model
-        # R = 1 - S_0(t)^exp(linear_predictor)
-        risk_percentage = (1.0 - (baseline_survival ** np.exp(linear_predictor))) * 100.0
+        # Calculate uncalibrated 10-year risk
+        # 10-year risk = 1 - (baseline survival)^exp(x)
+        uncalibrated_risk = 1.0 - (baseline_survival ** np.exp(linear_predictor))
+
+        # Apply region-specific calibration
+        # Calibrated 10-year risk = 1 - exp(-exp(scale1 + scale2 * ln(-ln(1 - uncalibrated_risk))))
+        if uncalibrated_risk <= 0 or uncalibrated_risk >= 1:
+            calibrated_risk = uncalibrated_risk
+        else:
+            ln_neg_ln_uncalibrated = np.log(-np.log(1 - uncalibrated_risk))
+            exp_term = np.exp(calibration_scales["scale1"] + calibration_scales["scale2"] * ln_neg_ln_uncalibrated)
+            calibrated_risk = 1.0 - np.exp(-exp_term)
+
+        # Convert to percentage
+        risk_percentage = calibrated_risk * 100.0
 
         # Ensure risk is in valid range [0, 100]
         risk_percentage = np.clip(risk_percentage, 0.0, 100.0)
