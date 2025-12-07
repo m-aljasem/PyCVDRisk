@@ -13,15 +13,13 @@ jobs:
     name: Build wheels on ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     strategy:
+      fail-fast: false  # Don't cancel all jobs if one fails
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
         python-version: ["3.10", "3.11", "3.12"]
         architecture: [x64]
         include:
-          # Add ARM64 builds for macOS and Ubuntu
-          - os: macos-latest
-            python-version: "3.10"
-            architecture: arm64
+          # Add ARM64 builds for Ubuntu only (macOS ARM64 has issues)
           - os: ubuntu-latest
             python-version: "3.10"
             architecture: arm64
@@ -36,6 +34,12 @@ jobs:
           sudo apt-get install -y qemu-user-static binfmt-support
           sudo update-binfmts --enable qemu-arm
           sudo update-binfmts --enable qemu-aarch64
+
+      - name: Install macOS dependencies
+        if: matrix.os == 'macos-latest'
+        run: |
+          brew install gettext
+          brew link gettext --force
 
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v5
