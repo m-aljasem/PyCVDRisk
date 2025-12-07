@@ -1,7 +1,7 @@
 Core Module
 ===========
 
-.. automodule:: cvd_risk_calculator.core
+.. automodule:: cvd_risk.core
    :members:
    :undoc-members:
    :show-inheritance:
@@ -9,18 +9,18 @@ Core Module
 Base Classes
 ------------
 
-.. autoclass:: cvd_risk_calculator.core.base.RiskModel
+.. autoclass:: cvd_risk.core.base.RiskModel
    :members:
    :special-members:
 
 Validation Models
 ----------------
 
-.. autoclass:: cvd_risk_calculator.core.validation.PatientData
+.. autoclass:: cvd_risk.core.validation.PatientData
    :members:
    :special-members:
 
-.. autoclass:: cvd_risk_calculator.core.validation.RiskResult
+.. autoclass:: cvd_risk.core.validation.RiskResult
    :members:
    :special-members:
 

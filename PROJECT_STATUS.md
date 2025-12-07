@@ -71,8 +71,8 @@ make docs
 ## 📝 Example Usage
 
 ```python
-from cvd_risk_calculator.models import SCORE2
-from cvd_risk_calculator.core.validation import PatientData
+from cvd_risk.models import SCORE2
+from cvd_risk.core.validation import PatientData
 
 patient = PatientData(
     age=55, sex="male", systolic_bp=140.0,

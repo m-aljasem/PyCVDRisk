@@ -25,7 +25,7 @@ import pandas as pd
 # Add src to path for imports
 sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
 
-from cvd_risk_calculator.models.score2 import SCORE2
+from cvd_risk.models.score2 import SCORE2
 
 
 def load_edge_case_patients(csv_path: str = "data/edge_case_patients.csv") -> pd.DataFrame:
@@ -191,7 +191,7 @@ def main():
         model_results.append(score2_result)
 
         # TODO: Add other models here as they become available
-        # from cvd_risk_calculator.models.framingham import Framingham
+        # from cvd_risk.models.framingham import Framingham
         # framingham_result = test_model_with_edge_cases(Framingham, "Framingham", df)
         # model_results.append(framingham_result)
 

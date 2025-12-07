@@ -3,8 +3,8 @@
 import pandas as pd
 import pytest
 
-from cvd_risk_calculator.core.base import RiskModel
-from cvd_risk_calculator.core.validation import PatientData, RiskResult
+from cvd_risk.core.base import RiskModel
+from cvd_risk.core.validation import PatientData, RiskResult
 
 
 class MockRiskModel(RiskModel):

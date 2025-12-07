@@ -3,8 +3,8 @@
 import pandas as pd
 import pytest
 
-from cvd_risk_calculator.core.validation import PatientData
-from cvd_risk_calculator.models.score2 import SCORE2
+from cvd_risk.core.validation import PatientData
+from cvd_risk.models.score2 import SCORE2
 
 
 class TestSCORE2Batch:
