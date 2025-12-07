@@ -65,6 +65,9 @@ jobs:
         if: matrix.os == 'ubuntu-latest' && matrix.python-version == '3.10' && matrix.architecture == 'x64'
         run: python -m build --sdist
 
+      - name: Verify build artifacts
+        run: ls -la dist/
+
       - name: Upload wheels
         uses: actions/upload-artifact@v4
         with:
