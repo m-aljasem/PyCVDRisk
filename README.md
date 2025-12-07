@@ -9,7 +9,7 @@
 [![PyPI version](https://badge.fury.io/py/cvd-risk.svg)](https://pypi.org/project/cvd-risk/)
 [![Python versions](https://img.shields.io/pypi/pyversions/cvd-risk)](https://pypi.org/project/cvd-risk/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![CI](https://github.com/m-aljasem/PyCVDRisk/workflows/CI/badge.svg)](https://github.com/m-aljasem/PyCVDRisk/actions)
+[![CI](https://github.com/m-aljasem/PyCVDRisk/actions/workflows/ci.yml/badge.svg)](https://github.com/m-aljasem/PyCVDRisk/actions)
 
 [📖 Documentation](https://pycvdrisk.aljasem.eu.org) • [🚀 Quick Start](#installation) • [💬 Discussions](https://github.com/m-aljasem/PyCVDRisk/discussions)
 
@@ -46,21 +46,22 @@ That's it! PyCVDRisk is now ready to use.
 ### Calculate Risk for One Patient
 
 ```python
-from cvd_risk import SCORE2
+from cvd_risk import SCORE2, PatientData
 
 # Create a patient profile
-patient = {
-    'age': 55,
-    'sex': 'male',
-    'systolic_bp': 140,
-    'total_cholesterol': 6.0,
-    'hdl_cholesterol': 1.2,
-    'smoking': True,
-    'region': 'moderate'
-}
+patient = PatientData(
+    age=55,
+    sex='male',
+    systolic_bp=140,
+    total_cholesterol=6.0,
+    hdl_cholesterol=1.2,
+    smoking=True,
+    region='moderate'
+)
 
 # Calculate 10-year CVD risk
-result = SCORE2(**patient)
+model = SCORE2()
+result = model.calculate(patient)
 
 print(f"Risk Score: {result.risk_score:.1f}%")
 print(f"Risk Category: {result.risk_category}")
@@ -90,13 +91,11 @@ df = pd.DataFrame({
 })
 
 # Calculate risks for all patients
-results = SCORE2.batch_calculate(**df)
+model = SCORE2()
+results_df = model.calculate_batch(df)
 
-# Add results to your dataframe
-df['cvd_risk_10y'] = results['risk_score']
-df['risk_category'] = results['risk_category']
-
-print(df)
+# Results are added to the original dataframe
+print(results_df[['age', 'sex', 'risk_score', 'risk_category']])
 ```
 
 ---
@@ -122,20 +121,23 @@ print(df)
 ### Clinical Integration
 
 ```python
-from cvd_risk import SCORE2, ASCVD
+from cvd_risk import SCORE2, ASCVD, PatientData
 
 # Compare multiple models for the same patient
-patient = {
-    'age': 65, 'sex': 'male', 'systolic_bp': 150,
-    'total_cholesterol': 6.5, 'hdl_cholesterol': 1.1,
-    'smoking': False, 'region': 'high'
-}
+patient = PatientData(
+    age=65, sex='male', systolic_bp=150,
+    total_cholesterol=6.5, hdl_cholesterol=1.1,
+    smoking=False, region='high'
+)
 
-score2_risk = SCORE2(**patient).risk_score
-ascvd_risk = ASCVD(**patient).risk_score
+score2_model = SCORE2()
+ascvd_model = ASCVD()
 
-print(f"SCORE2: {score2_risk:.1f}%")
-print(f"ASCVD: {ascvd_risk:.1f}%")
+score2_result = score2_model.calculate(patient)
+ascvd_result = ascvd_model.calculate(patient)
+
+print(f"SCORE2: {score2_result.risk_score:.1f}%")
+print(f"ASCVD: {ascvd_result.risk_score:.1f}%")
 ```
 
 ### Epidemiological Research
@@ -148,10 +150,11 @@ from cvd_risk import SCORE2
 biobank_data = pd.read_csv('large_cohort.csv')  # 100K+ patients
 
 # Calculate risks (takes ~1 second for large datasets)
-risks = SCORE2.batch_calculate(**biobank_data)
+model = SCORE2()
+results_df = model.calculate_batch(biobank_data)
 
 # Statistical analysis
-high_risk = (risks['risk_score'] > 10).sum()
+high_risk = (results_df['risk_score'] > 10).sum()
 total_patients = len(biobank_data)
 high_risk_percentage = (high_risk / total_patients) * 100
 
@@ -162,20 +165,43 @@ print(f"High-risk patients: {high_risk:,} ({high_risk_percentage:.1f}%)")
 
 ```python
 from cvd_risk import SCORE2, Framingham, QRISK3
+import pandas as pd
 import numpy as np
 
 # Compare model predictions across a population
-ages = np.random.normal(55, 10, 1000)
-# ... generate synthetic population data ...
+np.random.seed(42)
+n_patients = 100
 
-results = {
-    'SCORE2': SCORE2.batch_calculate(age=ages, ...),
-    'Framingham': Framingham.batch_calculate(age=ages, ...),
-    'QRISK3': QRISK3.batch_calculate(age=ages, ...)
+# Generate synthetic population data
+population_df = pd.DataFrame({
+    'age': np.random.normal(55, 10, n_patients).clip(40, 80).astype(int),
+    'sex': np.random.choice(['male', 'female'], n_patients),
+    'systolic_bp': np.random.normal(130, 20, n_patients).clip(90, 200),
+    'total_cholesterol': np.random.normal(5.5, 1.2, n_patients).clip(3, 10),
+    'hdl_cholesterol': np.random.normal(1.3, 0.4, n_patients).clip(0.5, 2.5),
+    'smoking': np.random.choice([True, False], n_patients, p=[0.2, 0.8]),
+    'region': np.random.choice(['low', 'moderate', 'high'], n_patients)
+})
+
+# Calculate risks with different models
+score2_model = SCORE2()
+framingham_model = Framingham()
+qrisk3_model = QRISK3()
+
+score2_results = score2_model.calculate_batch(population_df)
+framingham_results = framingham_model.calculate_batch(population_df)
+qrisk3_results = qrisk3_model.calculate_batch(population_df)
+
+# Compare average risks
+avg_risks = {
+    'SCORE2': score2_results['risk_score'].mean(),
+    'Framingham': framingham_results['risk_score'].mean(),
+    'QRISK3': qrisk3_results['risk_score'].mean()
 }
 
-# Analyze agreement between models
-# Statistical analysis code here...
+print("Average 10-year CVD risk by model:")
+for model, risk in avg_risks.items():
+    print(f"{model}: {risk:.1f}%")
 ```
 
 ---
