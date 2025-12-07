@@ -54,6 +54,7 @@ jobs:
 
       - name: Update version for development builds
         if: github.event.inputs.version == ''
+        shell: bash
         run: |
           # For development builds, add dev suffix with timestamp
           TIMESTAMP=$(date +%Y%m%d%H%M%S)
@@ -65,6 +66,7 @@ jobs:
 
       - name: Update version for tagged builds
         if: github.event.inputs.version != ''
+        shell: bash
         run: |
           if [[ "$RUNNER_OS" == "Windows" ]]; then
             sed -i "s/version = \"0\.1\.0\"/version = \"${{ github.event.inputs.version }}\"/" pyproject.toml
