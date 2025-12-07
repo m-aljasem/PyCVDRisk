@@ -1,6 +1,18 @@
 name: Build Wheels
 
 on:
+  push:
+    branches: [main, develop]
+    paths:
+      - 'src/**'
+      - 'pyproject.toml'
+      - '.github/workflows/build-wheels.yml'
+  pull_request:
+    branches: [main, develop]
+    paths:
+      - 'src/**'
+      - 'pyproject.toml'
+      - '.github/workflows/build-wheels.yml'
   workflow_dispatch:
     inputs:
       version:
