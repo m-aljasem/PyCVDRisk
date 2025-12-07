@@ -67,6 +67,9 @@ python build.py test    # Run tests with coverage
 
 # Build locally
 python build.py build
+
+# See all available commands
+python build.py --help
 ```
 
 ### Multi-Environment Testing

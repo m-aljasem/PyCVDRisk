@@ -27,7 +27,7 @@
 
 **The Challenge:** Existing CVD risk calculators are scattered across platforms, lack transparency, and can't handle modern biobank-scale datasets efficiently.
 
-**Our Solution:** The first **comprehensive**, **validated**, and **high-performance** Python implementation of major cardiovascular risk models—built for both clinical practice and cutting-edge research.
+**Our Solution:** A **comprehensive** Python package implementing major cardiovascular risk models for research and clinical applications.
 
 ### ✨ What Sets Us Apart
 
@@ -37,19 +37,18 @@
 
 #### 🏆 **Academic Rigor**
 - ✅ Comprehensive **16-model collection** covering major CVD risk algorithms
-- ✅ Validated against **847 published test cases** (production models)
-- ✅ **r > 0.999** agreement with original papers
-- ✅ **98.7%** test coverage
-- ✅ Published validation study ([read paper](https://doi.org/xxx))
+- ✅ Thoroughly tested against published examples
+- ✅ Good test coverage with ongoing validation
+- ✅ Transparent implementation based on peer-reviewed literature
 
 </td>
 <td width="50%">
 
 #### ⚡ **Production Performance**
-- ✅ **100,000+ calculations/second**
-- ✅ Processes **1M+ patients** efficiently  
-- ✅ Memory-optimized for biobank analysis
-- ✅ Benchmarked against R implementations
+- ✅ Efficient batch processing for large datasets
+- ✅ Memory-optimized for epidemiological studies
+- ✅ Vectorized operations using NumPy/Pandas
+- ✅ Suitable for biobank-scale analysis
 
 </td>
 </tr>
@@ -150,10 +149,10 @@ Clinical action: Consider lipid-lowering therapy and lifestyle intervention
 import pandas as pd
 from cvd_risk import SCORE2
 
-# Load your cohort (100,000 patients? No problem!)
+# Load your cohort data
 cohort = pd.read_csv('my_biobank_data.csv')
 
-# Calculate risks for entire cohort in <1 second
+# Calculate risks for entire cohort efficiently
 results = SCORE2.batch_calculate(
     age=cohort['age'],
     sex=cohort['sex'],
@@ -175,66 +174,56 @@ print(f"High-risk patients: {len(high_risk):,} ({len(high_risk)/len(cohort)*100:
 
 ---
 
-## 📊 Validation & Accuracy
+## 📊 Validation & Testing
 
-### Our Validation is *Obsessive* (in a good way)
+### Our Approach to Quality Assurance
 
-We didn't just implement the formulas—we **proved** they work.
+We implement established cardiovascular risk algorithms with careful attention to accuracy and reliability.
 
-#### 🎯 Level 1: Analytical Validation
-**Reproduced every published example we could find**
-
-<div align="center">
-
-![Bland-Altman Plot](https://via.placeholder.com/800x400/3498db/ffffff?text=Bland-Altman+Plot%3A+Perfect+Agreement)
-
-*Bland-Altman analysis showing 99.8% of cases within ±0.5% agreement*
-
-</div>
-
-```
-✅ SCORE2:  87 test cases → MAE = 0.03% → r = 0.9998
-✅ SMART2: 124 test cases → MAE = 0.05% → r = 0.9997  
-✅ WHO CVD: 156 test cases → MAE = 0.04% → r = 0.9998
-... (847 total validation cases across all models)
-```
-
-#### 🔬 Level 2: Cross-Implementation Validation
-**Compared with validated R packages and web calculators**
-
-We ran 10,000 synthetic patients through both our implementation and reference software:
-
-| Comparison | Lin's CCC | Mean Difference | Agreement |
-|------------|-----------|-----------------|-----------|
-| Our SCORE2 vs. HeartScore (ESC) | 0.9997 | 0.02% | 99.8% within ±0.5% |
-| Our Framingham vs. R `CVrisk` | 0.9996 | 0.03% | 99.7% within ±0.5% |
-| Our QRISK3 vs. Official Calculator | 0.9995 | 0.04% | 99.6% within ±0.5% |
-
-**Translation:** Our calculator gives virtually identical results to the official implementations.
-
-#### ⚡ Level 3: Performance Validation
-**Optimized for real-world epidemiological studies**
-
-<div align="center">
-
-![Performance Benchmark](https://via.placeholder.com/800x400/2ecc71/ffffff?text=Linear+Scalability%3A+100K%2Bs+calcs%2Fsecond)
-
-*Computational performance scales linearly with dataset size*
-
-</div>
+#### 🎯 Implementation Validation
+**Tested against published examples and reference cases**
 
 ```python
-# Benchmark on 2023 MacBook Pro M2
-100 patients     → 0.8 ms   (80 μs per patient)
-1,000 patients   → 8.3 ms   (8.3 μs per patient)  
-10,000 patients  → 83 ms    (8.3 μs per patient)
-100,000 patients → 830 ms   (8.3 μs per patient)
-1,000,000 patients → 8.3 sec (8.3 μs per patient)
+# Basic validation example
+from cvd_risk import SCORE2
 
-# That's 120,000+ calculations per second 🚀
+# Test against known reference values
+patient = {
+    'age': 55, 'sex': 'male', 'systolic_bp': 140,
+    'total_cholesterol': 6.0, 'hdl_cholesterol': 1.2,
+    'smoking': True, 'region': 'moderate'
+}
+
+result = SCORE2(**patient)
+print(f"Risk: {result.risk_percentage:.1f}%")
 ```
 
-**For comparison:** The official QRISK3 web calculator times out at ~50 patients.
+#### 🔬 Quality Standards
+**Comprehensive testing and code quality measures**
+
+- Unit tests for all implemented models
+- Input validation and error handling
+- Type checking with mypy
+- Code formatting with black and ruff
+- Continuous integration testing
+
+#### ⚡ Performance Characteristics
+**Designed for efficient computation**
+
+```python
+# Batch processing example
+import pandas as pd
+from cvd_risk import SCORE2
+
+# Process multiple patients efficiently
+patients_df = pd.read_csv('cohort_data.csv')
+risks = SCORE2.batch_calculate(
+    age=patients_df['age'],
+    sex=patients_df['sex'],
+    systolic_bp=patients_df['sbp'],
+    # ... other parameters
+)
+```
 
 ---
 
@@ -355,18 +344,6 @@ If you use this package in your research, please cite:
 ```
 
 **DOI:** `10.5281/zenodo.xxxxx` | **ORCID:** `0000-0000-0000-0000`
-
-#### 🏆 Used In Published Research
-
-<div align="center">
-
-| Study | Journal | Sample Size | Models Used |
-|-------|---------|-------------|-------------|
-| Smith et al. 2024 | *Lancet* | 500K | SCORE2, QRISK3 |
-| Johnson et al. 2024 | *Circulation* | 1.2M | Framingham, ASCVD |
-| *Your study here?* | *Submit a PR!* | - | - |
-
-</div>
 
 ---
 
@@ -491,45 +468,15 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for detailed guidelines.
 
 ---
 
-## 🏅 Recognition
-
-<div align="center">
-
-### Awards & Recognition
-
-🏆 **Best Software Package** - European Society of Cardiology Congress 2024  
-⭐ **Featured Package** - Journal of Open Source Software  
-🎓 **Recommended Tool** - Harvard School of Public Health  
-📊 **Top 10 Python Packages** - Towards Data Science (Cardiology AI)
-
-### Trusted By
-
-<table>
-<tr>
-<td align="center">🏥 <b>Mayo Clinic</b><br><sub>Clinical Research</sub></td>
-<td align="center">🎓 <b>Harvard Medical School</b><br><sub>Epidemiology Dept</sub></td>
-<td align="center">🔬 <b>UK Biobank</b><br><sub>Data Analysis</sub></td>
-<td align="center">🏛️ <b>WHO</b><br><sub>Global CVD Program</sub></td>
-</tr>
-</table>
-
-*[Add your institution? Let us know!](https://github.com/m-aljasem/PyCVDRisk/discussions)*
-
-</div>
-
----
-
 ## 📊 Package Statistics
 
 <div align="center">
 
-![PyPI Downloads](https://img.shields.io/pypi/dm/cvd-risk?style=for-the-badge&logo=python&logoColor=white)
 ![GitHub Stars](https://img.shields.io/github/stars/m-aljasem/PyCVDRisk?style=for-the-badge&logo=github)
 ![GitHub Forks](https://img.shields.io/github/forks/m-aljasem/PyCVDRisk?style=for-the-badge&logo=github)
 ![GitHub Issues](https://img.shields.io/github/issues/m-aljasem/PyCVDRisk?style=for-the-badge&logo=github)
 
-**13,400+** monthly downloads • **847** validation test cases • **98.7%** test coverage  
-**120,000+** calculations/second • **16** risk models • **100%** type coverage
+Comprehensive test suite • **16** risk models • Type-safe implementation
 
 </div>
 
@@ -570,6 +517,9 @@ python build.py check
 
 # Build package locally
 python build.py build
+
+# See all available commands
+python build.py --help
 ```
 
 #### Creating a Release
