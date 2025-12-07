@@ -112,13 +112,13 @@ jobs:
         run: |
           set -e  # Exit on any error
 
-          echo "🧪 Running wheel tests..."
+          echo "Running wheel tests..."
 
           echo "Testing basic import..."
-          python -c "import cvd_risk_calculator; print('✅ Package imported successfully')"
+          python -c "import cvd_risk_calculator; print('Package imported successfully')"
 
           echo "Testing SCORE2 import..."
-          python -c "from cvd_risk_calculator.models.score2 import SCORE2; print('✅ SCORE2 imported successfully')"
+          python -c "from cvd_risk_calculator.models.score2 import SCORE2; print('SCORE2 imported successfully')"
 
           echo "Testing basic functionality..."
           python -c "
@@ -138,14 +138,14 @@ jobs:
 
           # Validate result
           risk_score = result.risk_score
-          print(f'✅ Risk calculation successful: {risk_score:.1f}%')
+          print(f'Risk calculation successful: {risk_score:.1f}%')
 
           if not (0 <= risk_score <= 100):
-              print(f'❌ Invalid risk score: {risk_score}')
+              print(f'Invalid risk score: {risk_score}')
               import sys
               sys.exit(1)
 
-          print('✅ All tests passed successfully!')
+          print('All tests passed successfully!')
           "
 
-          echo "🎉 All wheel tests completed successfully!"
+          echo "All wheel tests completed successfully!"
