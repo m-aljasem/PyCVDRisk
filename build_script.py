@@ -6,7 +6,7 @@ This script provides convenient commands for building, testing, and publishing
 the package locally.
 
 Usage:
-    python build.py [command]
+    python build_script.py [command]
 
 Commands:
     build         - Build source distribution and wheels

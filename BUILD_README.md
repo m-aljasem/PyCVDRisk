@@ -10,7 +10,7 @@ This document explains the automated build and release system for the CVD Risk C
 - **`.github/workflows/build-wheels.yml`** - Multi-platform wheel building
 
 ### Build Scripts
-- **`build.py`** - Local development build utilities
+- **`build_script.py`** - Local development build utilities
 - **`release.py`** - Version management and release preparation
 - **`tox.ini`** - Multi-environment testing configuration
 
@@ -59,17 +59,17 @@ pip install -e .[dev]
 
 ```bash
 # All checks
-python build.py check
+python build_script.py check
 
 # Individual checks
-python build.py lint    # Code formatting and linting
-python build.py test    # Run tests with coverage
+python build_script.py lint    # Code formatting and linting
+python build_script.py test    # Run tests with coverage
 
 # Build locally
-python build.py build
+python build_script.py build
 
 # See all available commands
-python build.py --help
+python build_script.py --help
 ```
 
 ### Multi-Environment Testing

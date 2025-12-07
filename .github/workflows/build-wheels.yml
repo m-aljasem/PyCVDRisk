@@ -51,12 +51,20 @@ jobs:
         run: |
           # For development builds, add dev suffix with timestamp
           TIMESTAMP=$(date +%Y%m%d%H%M%S)
-          sed -i "s/version = \"0\.1\.0\"/version = \"0.1.0.dev$TIMESTAMP\"/" pyproject.toml
+          if [[ "$RUNNER_OS" == "Windows" ]]; then
+            sed -i "s/version = \"0\.1\.0\"/version = \"0.1.0.dev$TIMESTAMP\"/" pyproject.toml
+          else
+            sed -i.bak "s/version = \"0\.1\.0\"/version = \"0.1.0.dev$TIMESTAMP\"/" pyproject.toml
+          fi
 
       - name: Update version for tagged builds
         if: github.event.inputs.version != ''
         run: |
-          sed -i "s/version = \"0\.1\.0\"/version = \"${{ github.event.inputs.version }}\"/" pyproject.toml
+          if [[ "$RUNNER_OS" == "Windows" ]]; then
+            sed -i "s/version = \"0\.1\.0\"/version = \"${{ github.event.inputs.version }}\"/" pyproject.toml
+          else
+            sed -i.bak "s/version = \"0\.1\.0\"/version = \"${{ github.event.inputs.version }}\"/" pyproject.toml
+          fi
 
       - name: Build wheels
         run: python -m build --wheel
