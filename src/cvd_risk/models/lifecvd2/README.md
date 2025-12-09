@@ -1,55 +1,63 @@
 # LifeCVD2
 
-LifeCVD2 is a comprehensive cardiovascular disease risk prediction model that incorporates lifetime risk assessment alongside 10-year risk prediction. It provides both short-term and long-term cardiovascular risk estimates.
+LifeCVD2 is a comprehensive lifetime cardiovascular disease risk prediction model that estimates both 10-year and lifetime CVD risk using competing risk methodology with age-specific baseline hazards and region-specific recalibration.
 
 ## Overview
 
-LifeCVD2 extends traditional 10-year risk models by incorporating lifetime risk assessment, providing a more comprehensive view of cardiovascular risk over a patient's expected lifespan. The model combines traditional risk factors with novel biomarkers and risk enhancers.
+LifeCVD2 provides a comprehensive assessment of cardiovascular risk by estimating both short-term (10-year) and long-term (lifetime) CVD risk. The model uses competing risk methodology, accounting for both CVD and non-CVD mortality, with region-specific recalibration for global applicability.
 
 ## Risk Factors
 
-- **Age**: Full adult age range
+- **Age**: 35-99 years
 - **Sex**: Male/Female
+- **Region**: Low, Moderate, High, Very High CVD risk regions
 - **Systolic Blood Pressure**: mmHg
 - **Total Cholesterol**: mmol/L
 - **HDL Cholesterol**: mmol/L
-- **Smoking Status**: Current/former/never
-- **Diabetes**: Presence and type
-- **Family History**: CVD family history
-- **Biomarkers**: Novel cardiovascular biomarkers
-- **Risk Enhancers**: Additional risk factors
+- **Smoking Status**: Current/never
+- **Diabetes**: Presence/absence
 
 ## Mathematical Formulation
 
-LifeCVD2 combines multiple modeling approaches:
+LifeCVD2 uses a competing risk framework with:
 
-1. **10-year risk**: Traditional logistic regression
-2. **Lifetime risk**: Age-specific risk accumulation
-3. **Integrated risk**: Combined short- and long-term assessment
+1. **Linear predictors**: Sex-specific coefficients for CVD and non-CVD mortality
+2. **Age interactions**: All risk factors interact with age
+3. **Baseline hazards**: Age-specific 1-year baseline survival probabilities
+4. **Recalibration**: Region-specific Weibull recalibration for global validity
+5. **Lifetime accumulation**: Year-by-year risk accumulation using life table methods
 
 ## Risk Categories
 
 ### 10-Year Risk
 - **Low Risk**: <5%
-- **Borderline Risk**: 5-7.5%
-- **Intermediate Risk**: 7.5-20%
-- **High Risk**: ≥20%
+- **Moderate Risk**: 5-10%
+- **High Risk**: 10-20%
+- **Very High Risk**: ≥20%
 
 ### Lifetime Risk
-- **Low Risk**: <39%
-- **Intermediate Risk**: 39-49%
-- **High Risk**: ≥50%
+- **Low Risk**: <20%
+- **Moderate Risk**: 20-30%
+- **High Risk**: 30-40%
+- **Very High Risk**: ≥40%
+
+## Additional Outputs
+
+- **CVD-free life expectancy**: Years of life free from CVD
+- **Median survival age**: Age at which 50% of individuals have survived CVD-free
+- **Lifetime risk**: Cumulative CVD risk from current age to age 100
 
 ## Reference
 
-Lloyd-Jones DM, Braun LT, Ndumele CE, et al. Use of risk assessment tools to guide decision-making in the primary prevention of atherosclerotic cardiovascular disease: A special report from the American Heart Association and American College of Cardiology. *Journal of the American College of Cardiology*. 2019;73(24):3153-3167.
+Hageman SHJ, et al. Prediction of individual lifetime cardiovascular risk and potential treatment benefit: development and recalibration of the LIFE-CVD2 model to four European risk regions. *European Journal of Preventive Cardiology*. 2024.
 
-DOI: [10.1016/j.jacc.2019.02.016](https://doi.org/10.1016/j.jacc.2019.02.016)
+DOI: [10.1093/eurjpc/zwae174](https://academic.oup.com/eurjpc/article-lookup/doi/10.1093/eurjpc/zwae174)
 
 ## Implementation Notes
 
-- Combines 10-year and lifetime risk assessment
-- Incorporates novel risk factors and biomarkers
-- Provides comprehensive risk communication
-- This is a placeholder - full implementation pending
-- Suitable for both clinical and research applications
+- Valid for ages 35-99 years
+- Requires diabetes status as mandatory input
+- Uses region-specific recalibration (Low/Moderate/High/Very High)
+- Provides both 10-year and lifetime risk assessment
+- Suitable for clinical decision-making and research applications
+- Based on competing risk methodology with age-specific hazards

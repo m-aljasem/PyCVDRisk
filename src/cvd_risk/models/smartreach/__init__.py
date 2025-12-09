@@ -1,6 +1,6 @@
 """SMART-REACH cardiovascular risk model package."""
 
-from .smartreach import SmartReach
+from .smartreach import SMART_REACH
 
-__all__ = ["SmartReach"]
+__all__ = ["SMART_REACH"]
 

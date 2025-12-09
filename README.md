@@ -23,7 +23,7 @@ PyCVDRisk is a **production-ready Python package** that implements major cardiov
 
 ### 🎯 Key Features
 
-- **7 Production-Ready Models**: SCORE2, ASCVD, Framingham, QRISK3, SMART2, WHO CVD, Globorisk
+- **22 Production-Ready Models**: Comprehensive coverage of primary/secondary prevention, diabetes, CKD, ACS, and emergency medicine
 - **Batch Processing**: Handle thousands of patients efficiently with vectorized operations
 - **Type-Safe**: Full type hints and validation with Pydantic
 - **Well-Tested**: Comprehensive test suite with high code coverage
@@ -102,17 +102,67 @@ print(results_df[['age', 'sex', 'risk_score', 'risk_category']])
 
 ## 🏥 Available Models
 
+### Primary Prevention Models
+
 | Model | Population | Primary Use | Status |
 |-------|------------|-------------|--------|
 | **SCORE2** | European adults (40-69) | Primary prevention | ✅ Production Ready |
 | **ASCVD** | US/International adults | Primary prevention | ✅ Production Ready |
 | **Framingham** | US adults | Primary prevention | ✅ Production Ready |
+| **QRISK2** | UK adults | Primary prevention | ✅ Production Ready |
 | **QRISK3** | UK primary care | Primary prevention | ✅ Production Ready |
-| **SMART2** | Secondary prevention | Recurrent CVD risk | ✅ Production Ready |
+| **SCORE** | European adults | Primary prevention | ✅ Production Ready |
 | **WHO CVD** | Global populations | Primary prevention | ✅ Production Ready |
 | **Globorisk** | 182 countries | Primary prevention | ✅ Production Ready |
+| **PREVENT** | US adults (40-79) | Primary prevention | ✅ Production Ready |
 
-*More models coming soon: SCORE2-OP, PREVENT, LifeCVD2, and others*
+### Secondary Prevention Models
+
+| Model | Population | Primary Use | Status |
+|-------|------------|-------------|--------|
+| **SMART2** | Established CVD patients | Recurrent CVD risk | ✅ Production Ready |
+| **SMART-REACH** | Established CVD patients | Recurrent CVD risk | ✅ Production Ready |
+
+### Diabetes-Specific Models
+
+| Model | Population | Primary Use | Status |
+|-------|------------|-------------|--------|
+| **DIAL2** | Type 2 diabetes patients | Lifetime CVD risk | ✅ Production Ready |
+| **SCORE2-DM** | Diabetes patients | CVD risk assessment | ✅ Production Ready |
+
+### CKD-Specific Models
+
+| Model | Population | Primary Use | Status |
+|-------|------------|-------------|--------|
+| **SCORE2-CKD** | CKD patients | CVD risk assessment | ✅ Production Ready |
+| **SCORE2-OP** | Older persons | CVD risk assessment | ✅ Production Ready |
+
+### Region-Specific Models
+
+| Model | Population | Primary Use | Status |
+|-------|------------|-------------|--------|
+| **ASSIGN** | Scottish adults | Primary prevention | ✅ Production Ready |
+| **SCORE2-Asia CKD** | Asian CKD patients | CVD risk assessment | ✅ Production Ready |
+
+### Lifetime Risk Models
+
+| Model | Population | Primary Use | Status |
+|-------|------------|-------------|--------|
+| **LifeCVD2** | General population | Lifetime CVD risk | ✅ Production Ready |
+
+### Acute Coronary Syndrome Models
+
+| Model | Population | Primary Use | Status |
+|-------|------------|-------------|--------|
+| **GRACE2** | ACS patients | 6-month mortality | ✅ Production Ready |
+| **TIMI** | UA/NSTEMI patients | Short-term risk | ✅ Production Ready |
+
+### Emergency Department Models
+
+| Model | Population | Primary Use | Status |
+|-------|------------|-------------|--------|
+| **EDACS** | Chest pain patients | MACE risk stratification | ✅ Production Ready |
+| **HEART** | Chest pain patients | MACE risk stratification | ✅ Production Ready |
 
 ---
 
