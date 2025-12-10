@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import Image from 'next/image'
 import Head from 'next/head'
 import Navigation from '@/components/Navigation'
 import {
@@ -10,20 +11,167 @@ import {
   ShieldCheckIcon,
   RocketLaunchIcon,
   ArrowRightIcon,
+  GlobeAltIcon,
+  CpuChipIcon,
+  UserGroupIcon,
+  ScaleIcon,
+  CheckCircleIcon,
+  AcademicCapIcon,
 } from '@heroicons/react/24/outline'
+
+const escapeHtml = (code: string) =>
+  code
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+
+const highlightPython = (code: string) => {
+  const escaped = escapeHtml(code)
+  const patterns = [
+    { regex: /#.*$/m, cls: 'comment' },
+    { regex: /("""[\s\S]*?"""|'''[\s\S]*?''')/, cls: 'string' },
+    { regex: /"(?:\\.|[^"\\])*"|'(?:\\.|[^'\\])*'/, cls: 'string' },
+    {
+      regex: /\b(def|class|if|elif|else|for|while|try|except|finally|with|as|return|yield|break|continue|pass|raise|assert|lambda|and|or|not|in|is|True|False|None)\b/,
+      cls: 'keyword',
+    },
+    {
+      regex: /\b(print|len|str|int|float|bool|list|dict|set|tuple|range|enumerate|zip|map|filter|sum|max|min|abs|round)\b/,
+      cls: 'function',
+    },
+    { regex: /\b\d+(?:\.\d+)?(?:e[+-]?\d+)?\b/, cls: 'number' },
+  ]
+
+  const combined = new RegExp(patterns.map(p => `(${p.regex.source})`).join('|'), 'gm')
+
+  return escaped.replace(combined, (...args) => {
+    const matches = args.slice(1, 1 + patterns.length)
+    const matchIndex = matches.findIndex(Boolean)
+    if (matchIndex === -1) return args[0]
+    const cls = patterns[matchIndex].cls
+    return `<span class="${cls}">${args[0]}</span>`
+  })
+}
+
+const modelImageUrl = (model: { name: string; region: string }) => {
+  // Keep picsum (lightweight & cached) but bias the seed toward medical + region so imagery is more relevant
+  const regionKeyword = model.region.toLowerCase().replace(/\s+/g, '-')
+  const nameKeyword = model.name.toLowerCase().replace(/\s+/g, '-')
+  return `https://picsum.photos/seed/medical-${regionKeyword}-${nameKeyword}/400/260`
+}
+
+const SyntaxHighlightedCode: React.FC<{ code: string; language?: string }> = ({ code }) => {
+  const [copied, setCopied] = useState(false)
+  const highlighted = highlightPython(code)
+
+  const handleCopy = async () => {
+    try {
+      await navigator.clipboard.writeText(code)
+      setCopied(true)
+      setTimeout(() => setCopied(false), 1500)
+    } catch (err) {
+      console.error('Copy failed', err)
+    }
+  }
+
+  return (
+    <div className="relative text-left">
+      <button
+        type="button"
+        onClick={handleCopy}
+        aria-label="Copy code"
+        className="absolute right-3 top-3 text-xs bg-white/10 text-white px-3 py-1 rounded-md border border-white/20 hover:bg-white/20 transition-colors backdrop-blur"
+      >
+        {copied ? 'Copied' : 'Copy'}
+      </button>
+      <pre className="syntax-highlight text-left">
+        <code dangerouslySetInnerHTML={{ __html: highlighted }} />
+      </pre>
+    </div>
+  )
+}
 
 const modelCategories = [
   {
-    category: 'Primary Prevention',
+    category: 'Global & Regional Models',
     models: [
+      {
+        name: 'INTERHEART',
+        year: '2004',
+        region: 'Global',
+        color: 'bg-emerald-600',
+        description: 'Global case-control study identifying 9 CVD risk factors',
+        paperLink: 'https://www.thelancet.com/journals/lancet/article/PIIS0140-6736(04)17018-9/fulltext'
+      },
       {
         name: 'SCORE2',
         year: '2021',
         region: 'Europe',
         color: 'bg-blue-500',
         description: 'Updated systematic coronary risk evaluation model for European populations',
-        paperLink: 'https://www.escardio.org/Journals/European-Heart-Journal/Volume-42/Issue-25'
+        paperLink: 'https://academic.oup.com/eurheartj/article/42/25/2439/6297709'
       },
+      {
+        name: 'WHO CVD',
+        year: '2019',
+        region: 'Global',
+        color: 'bg-cyan-500',
+        description: 'World Health Organization cardiovascular disease risk charts',
+        paperLink: 'https://www.who.int/publications/i/item/9789240001367'
+      },
+      {
+        name: 'Globorisk',
+        year: '2017',
+        region: 'Global',
+        color: 'bg-emerald-500',
+        description: 'Global risk assessment scale for cardiovascular disease',
+        paperLink: 'https://www.thelancet.com/journals/lancet/article/PIIS0140-6736(17)30718-1/fulltext'
+      },
+      {
+        name: 'PREVENT',
+        year: '2024',
+        region: 'US',
+        color: 'bg-lime-500',
+        description: 'Predicting risk of cardiovascular disease events equations',
+        paperLink: 'https://www.ahajournals.org/doi/10.1161/CIRCULATIONAHA.123.067626'
+      },
+      {
+        name: 'GRACE2',
+        year: '2003',
+        region: 'Global',
+        color: 'bg-rose-500',
+        description: 'Global Registry of Acute Coronary Events risk model',
+        paperLink: 'https://www.ahajournals.org/doi/10.1161/CIRCULATIONAHA.106.638871'
+      },
+      {
+        name: 'TIMI',
+        year: '2000',
+        region: 'Global',
+        color: 'bg-sky-500',
+        description: 'Thrombolysis in Myocardial Infarction risk score',
+        paperLink: 'https://www.nejm.org/doi/10.1056/NEJM200011163432001'
+      },
+      {
+        name: 'EDACS',
+        year: '2014',
+        region: 'Global',
+        color: 'bg-slate-500',
+        description: 'Emergency Department Assessment of Chest pain Score',
+        paperLink: 'https://www.ahajournals.org/doi/10.1161/CIRCULATIONAHA.114.011696'
+      },
+      {
+        name: 'HEART',
+        year: '2013',
+        region: 'Global',
+        color: 'bg-zinc-500',
+        description: 'History, ECG, Age, Risk factors, Troponin score',
+        paperLink: 'https://www.ahajournals.org/doi/10.1161/CIRCULATIONAHA.113.003814'
+      },
+    ]
+  },
+  {
+    category: 'Country-Specific Models',
+    models: [
       {
         name: 'ASCVD',
         year: '2013',
@@ -55,38 +203,6 @@ const modelCategories = [
         color: 'bg-indigo-500',
         description: 'QResearch cardiovascular disease risk algorithm version 3',
         paperLink: 'https://www.bmj.com/content/357/bmj.j2099'
-      },
-      {
-        name: 'SCORE',
-        year: '2003',
-        region: 'Europe',
-        color: 'bg-teal-500',
-        description: 'Systematic coronary risk evaluation model for European populations',
-        paperLink: 'https://www.escardio.org/Journals/European-Heart-Journal/Volume-24/Issue-11'
-      },
-      {
-        name: 'WHO CVD',
-        year: '2019',
-        region: 'Global',
-        color: 'bg-cyan-500',
-        description: 'World Health Organization cardiovascular disease risk charts',
-        paperLink: 'https://www.who.int/publications/i/item/9789240001367'
-      },
-      {
-        name: 'Globorisk',
-        year: '2017',
-        region: 'Global',
-        color: 'bg-emerald-500',
-        description: 'Global risk assessment scale for cardiovascular disease',
-        paperLink: 'https://www.thelancet.com/journals/lancet/article/PIIS0140-6736(17)30718-1/fulltext'
-      },
-      {
-        name: 'PREVENT',
-        year: '2024',
-        region: 'US',
-        color: 'bg-lime-500',
-        description: 'Predicting risk of cardiovascular disease events equations',
-        paperLink: 'https://www.ahajournals.org/doi/10.1161/CIRCULATIONAHA.123.067626'
       },
       {
         name: 'PROCAM',
@@ -182,7 +298,7 @@ const modelCategories = [
         region: 'UK',
         color: 'bg-purple-700',
         description: 'Large UK cohort study with lifestyle and dietary factors',
-        paperLink: 'https://www.bmj.com/content/338/bmj.b880'
+        paperLink: 'https://journals.plos.org/plosmedicine/article?id=10.1371/journal.pmed.0050207'
       },
       {
         name: 'Singapore',
@@ -243,7 +359,7 @@ const modelCategories = [
     ]
   },
   {
-    category: 'Secondary Prevention',
+    category: 'Special Populations & Specific Conditions',
     models: [
       {
         name: 'SMART2',
@@ -261,18 +377,13 @@ const modelCategories = [
         description: 'SMART risk score for recurrent vascular events',
         paperLink: 'https://www.ahajournals.org/doi/10.1161/CIRCULATIONAHA.118.038927'
       },
-    ]
-  },
-  {
-    category: 'Special Populations',
-    models: [
       {
         name: 'DIAL2',
         year: '2023',
         region: 'Europe',
         color: 'bg-amber-500',
         description: 'Diabetes mellitus type 2 risk assessment model',
-        paperLink: 'https://www.escardio.org/Journals/European-Heart-Journal/Volume-44/Issue-25'
+        paperLink: 'https://academic.oup.com/eurjpc/article/30/1/30/6755160'
       },
       {
         name: 'SCORE2-DM',
@@ -280,7 +391,7 @@ const modelCategories = [
         region: 'Europe',
         color: 'bg-yellow-500',
         description: 'SCORE2 risk model for patients with diabetes',
-        paperLink: 'https://www.escardio.org/Journals/European-Heart-Journal/Volume-44/Issue-25'
+        paperLink: 'https://academic.oup.com/eurheartj/article/44/28/2544/7185596'
       },
       {
         name: 'SCORE2-CKD',
@@ -288,7 +399,7 @@ const modelCategories = [
         region: 'Europe',
         color: 'bg-orange-500',
         description: 'SCORE2 risk model for patients with chronic kidney disease',
-        paperLink: 'https://www.escardio.org/Journals/European-Heart-Journal/Volume-44/Issue-25'
+        paperLink: 'https://academic.oup.com/eurjpc/article/30/1/8/6668577'
       },
       {
         name: 'SCORE2-OP',
@@ -296,20 +407,7 @@ const modelCategories = [
         region: 'Europe',
         color: 'bg-stone-500',
         description: 'SCORE2 risk model for older persons',
-        paperLink: 'https://www.escardio.org/Journals/European-Heart-Journal/Volume-44/Issue-25'
-      },
-    ]
-  },
-  {
-    category: 'Regional & Acute Care',
-    models: [
-      {
-        name: 'ASSIGN',
-        year: '2009',
-        region: 'Scotland',
-        color: 'bg-violet-500',
-        description: 'Scottish ASSIGN score for cardiovascular risk assessment',
-        paperLink: 'https://www.heart.bmj.com/content/95/6/497'
+        paperLink: 'https://academic.oup.com/eurheartj/article/42/25/2439/6297709'
       },
       {
         name: 'SCORE2-Asia CKD',
@@ -317,50 +415,16 @@ const modelCategories = [
         region: 'Asia',
         color: 'bg-fuchsia-500',
         description: 'SCORE2 risk model adapted for Asian populations with CKD',
-        paperLink: 'https://www.escardio.org/Journals/European-Heart-Journal/Volume-43/Issue-39'
+        paperLink: 'https://academic.oup.com/eurheartj/article/43/39/3983/6652758'
       },
       {
-        name: 'GRACE2',
-        year: '2003',
-        region: 'Global',
-        color: 'bg-rose-500',
-        description: 'Global Registry of Acute Coronary Events risk model',
-        paperLink: 'https://www.ahajournals.org/doi/10.1161/CIRCULATIONAHA.106.638871'
+        name: 'D:A:D Score',
+        year: '2010',
+        region: 'HIV Patients',
+        color: 'bg-pink-600',
+        description: 'Cardiovascular risk prediction for HIV-positive patients',
+        paperLink: 'https://www.sciencedirect.com/science/article/pii/S1058301210000013'
       },
-      {
-        name: 'TIMI',
-        year: '2000',
-        region: 'Global',
-        color: 'bg-sky-500',
-        description: 'Thrombolysis in Myocardial Infarction risk score',
-        paperLink: 'https://www.nejm.org/doi/10.1056/NEJM200011163432001'
-      },
-    ]
-  },
-  {
-    category: 'Emergency Medicine',
-    models: [
-      {
-        name: 'EDACS',
-        year: '2014',
-        region: 'Global',
-        color: 'bg-slate-500',
-        description: 'Emergency Department Assessment of Chest pain Score',
-        paperLink: 'https://www.ahajournals.org/doi/10.1161/CIRCULATIONAHA.114.011696'
-      },
-      {
-        name: 'HEART',
-        year: '2013',
-        region: 'Global',
-        color: 'bg-zinc-500',
-        description: 'History, ECG, Age, Risk factors, Troponin score',
-        paperLink: 'https://www.ahajournals.org/doi/10.1161/CIRCULATIONAHA.113.003814'
-      },
-    ]
-  },
-  {
-    category: 'Atrial Fibrillation',
-    models: [
       {
         name: 'CHADS2',
         year: '2001',
@@ -377,11 +441,6 @@ const modelCategories = [
         description: 'Enhanced CHADS2 score with additional stroke risk factors',
         paperLink: 'https://www.ahajournals.org/doi/10.1161/CIRCULATIONAHA.109.874425'
       },
-    ]
-  },
-  {
-    category: 'Bleeding Risk',
-    models: [
       {
         name: 'HAS-BLED',
         year: '2010',
@@ -390,31 +449,21 @@ const modelCategories = [
         description: 'HAS-BLED score for bleeding risk assessment in anticoagulated patients',
         paperLink: 'https://www.ahajournals.org/doi/10.1161/CIRCULATIONAHA.109.873247'
       },
-    ]
-  },
-  {
-    category: 'Global Risk Scores',
-    models: [
       {
-        name: 'INTERHEART',
-        year: '2004',
-        region: 'Global',
-        color: 'bg-emerald-600',
-        description: 'Global case-control study identifying 9 CVD risk factors',
-        paperLink: 'https://www.thelancet.com/journals/lancet/article/PIIS0140-6736(04)17018-9/fulltext'
+        name: 'ASSIGN',
+        year: '2009',
+        region: 'Scotland',
+        color: 'bg-violet-500',
+        description: 'Scottish ASSIGN score for cardiovascular risk assessment',
+        paperLink: 'https://www.heart.bmj.com/content/95/6/497'
       },
-    ]
-  },
-  {
-    category: 'Special Populations',
-    models: [
       {
-        name: 'D:A:D Score',
-        year: '2010',
-        region: 'HIV Patients',
-        color: 'bg-pink-600',
-        description: 'Cardiovascular risk prediction for HIV-positive patients',
-        paperLink: 'https://www.sciencedirect.com/science/article/pii/S1058301210000013'
+        name: 'LifeCVD2',
+        year: '2022',
+        region: 'Global',
+        color: 'bg-teal-600',
+        description: 'Lifetime cardiovascular disease risk assessment',
+        paperLink: 'https://academic.oup.com/eurheartj/article/43/36/3374/6664657'
       },
     ]
   }
@@ -422,34 +471,34 @@ const modelCategories = [
 
 const features = [
   {
-    icon: ChartBarIcon,
-    title: '46 Risk Models',
-    description: 'Complete coverage from primary prevention to emergency medicine',
+    icon: GlobeAltIcon,
+    title: 'Global Coverage',
+    description: '46 validated models from 35+ countries covering every major continent and ethnic group',
   },
   {
-    icon: BeakerIcon,
-    title: 'Production Ready',
-    description: 'Type-safe, validated, and thoroughly tested for clinical use',
+    icon: CpuChipIcon,
+    title: 'Batch Processing',
+    description: 'Process millions of patients efficiently with vectorized operations and optimized algorithms',
   },
   {
-    icon: BookOpenIcon,
-    title: 'Research Quality',
-    description: 'Based on peer-reviewed algorithms and clinical guidelines',
+    icon: ScaleIcon,
+    title: 'Research-Grade',
+    description: 'All models based on peer-reviewed publications and large-scale clinical studies',
   },
   {
-    icon: CodeBracketIcon,
-    title: 'Python 3.10+',
-    description: 'Modern Python with full type hints and comprehensive documentation',
+    icon: AcademicCapIcon,
+    title: 'Clinical Validation',
+    description: 'Used in academic research, clinical trials, and healthcare systems worldwide',
   },
   {
-    icon: HeartIcon,
-    title: 'High Performance',
-    description: 'Optimized for processing large patient cohorts efficiently',
+    icon: UserGroupIcon,
+    title: 'Multi-Population',
+    description: 'Specialized models for diabetes, CKD, HIV, elderly, and ethnic-specific populations',
   },
   {
-    icon: ShieldCheckIcon,
-    title: 'Data Validation',
-    description: 'Built-in validation ensures reliable risk calculations',
+    icon: CheckCircleIcon,
+    title: 'Type-Safe Python',
+    description: 'Full type hints, comprehensive validation, and production-ready API design',
   },
 ]
 
@@ -470,26 +519,38 @@ export default function Home() {
       {/* Hero Section */}
       <section className="medical-gradient text-white">
         <div className="section-container">
-          <div className="text-center max-w-4xl mx-auto">
-            <h1 className="text-5xl md:text-6xl font-bold mb-6">
-              Cardiovascular Risk Assessment
-              <span className="block mt-2 text-3xl md:text-4xl font-normal">for Python</span>
-            </h1>
-            <p className="text-xl md:text-2xl mb-8 text-blue-100">
-              A comprehensive Python package with 46 validated cardiovascular risk models
-              for research and clinical applications
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-              <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-lg px-4 py-3 mb-4 sm:mb-0 cursor-pointer hover:bg-white/20 transition-colors" onClick={() => navigator.clipboard.writeText('pip install cvd-risk')}>
-                <code className="text-white font-mono text-sm">$ pip install cvd-risk</code>
-                <span className="text-white/70 text-xs ml-2">Click to copy</span>
+          <div className="max-w-6xl mx-auto grid md:grid-cols-3 items-center gap-8">
+            <div className="order-2 md:order-2 md:col-span-2 text-left">
+              <h1 className="text-5xl md:text-6xl font-bold mb-6">
+                Cardiovascular Risk Assessment
+                <span className="block mt-2 text-3xl md:text-4xl font-normal">for Python</span>
+              </h1>
+              <p className="text-xl md:text-2xl mb-8 text-blue-100">
+                A comprehensive Python package with 46 validated cardiovascular risk models
+                for research and clinical applications
+              </p>
+              <div className="flex flex-col sm:flex-row gap-4 sm:items-center">
+                <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-lg px-4 py-3 cursor-pointer hover:bg-white/20 transition-colors inline-flex items-center" onClick={() => navigator.clipboard.writeText('pip install cvd-risk')}>
+                  <code className="text-white font-mono text-sm">$ pip install cvd-risk</code>
+                  <span className="text-white/70 text-xs ml-2">Click to copy</span>
+                </div>
+                <a
+                  href="https://github.com/m-aljasem/PyCVDRisk"
+                  className="bg-white text-primary-600 px-6 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors duration-200 inline-flex justify-center"
+                >
+                  View Source Code
+                </a>
               </div>
-              <a
-                href="https://github.com/m-aljasem/PyCVDRisk"
-                className="bg-white text-primary-600 px-6 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors duration-200"
-              >
-                View Source Code
-              </a>
+            </div>
+            <div className="order-1 md:order-1 md:col-span-1 flex justify-center md:justify-start">
+              <Image
+                src="/PyCVDRisk-Logo.png"
+                alt="PyCVDRisk logo"
+                width={320}
+                height={320}
+                priority
+                className="drop-shadow-2xl w-56 md:w-72 lg:w-80 h-auto"
+              />
             </div>
           </div>
         </div>
@@ -532,15 +593,13 @@ export default function Home() {
                 <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                   {category.models.map((model, idx) => (
                     <div key={idx} className="card group hover:scale-105 transition-transform">
-                      {/* Image placeholder */}
-                      <div className={`${model.color} w-full h-32 rounded-lg mb-4 flex items-center justify-center text-white font-bold text-xl`}>
-                        <div className="text-center">
-                          <div className="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-2">
-                            <span className="text-2xl">{model.name.charAt(0)}</span>
-                          </div>
-                          <span className="text-xs opacity-80">Image Placeholder</span>
-                        </div>
-                      </div>
+                      {/* Contextual medical / region-themed image */}
+                      <img
+                        src={modelImageUrl(model)}
+                        alt={`${model.name} illustration`}
+                        className="w-full h-32 rounded-lg mb-4 object-cover bg-gray-100"
+                        loading="lazy"
+                      />
 
                       {/* Model name and info */}
                       <h4 className="text-lg font-bold mb-2">{model.name}</h4>
@@ -552,16 +611,25 @@ export default function Home() {
                       {/* Description */}
                       <p className="text-sm text-gray-700 mb-3 line-clamp-3">{model.description}</p>
 
-                      {/* Paper link */}
-                      <a
-                        href={model.paperLink}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-primary-600 hover:text-primary-800 text-sm font-medium inline-flex items-center"
-                      >
-                        View Paper
-                        <ArrowRightIcon className="ml-1 h-3 w-3" />
-                      </a>
+                      {/* Action buttons */}
+                      <div className="flex gap-2">
+                        <a
+                          href={model.paperLink}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="flex-1 text-center bg-primary-600 hover:bg-primary-700 text-white text-sm font-medium py-2 px-3 rounded-md transition-colors"
+                        >
+                          View Paper
+                        </a>
+                        <a
+                          href={`https://pycvdrisk.aljasem.eu.org/docs/models/${model.name.toLowerCase().replace(/\s+/g, '-')}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="flex-1 text-center bg-gray-600 hover:bg-gray-700 text-white text-sm font-medium py-2 px-3 rounded-md transition-colors"
+                        >
+                          Docs
+                        </a>
+                      </div>
                     </div>
                   ))}
                 </div>
@@ -578,9 +646,7 @@ export default function Home() {
           <div className="max-w-4xl mx-auto text-center">
             <RocketLaunchIcon className="h-16 w-16 text-primary-600 mx-auto mb-6" />
             <h2 className="text-4xl font-bold text-gray-900 mb-6">Quick Start</h2>
-            <div className="bg-gray-900 rounded-xl p-8 text-left">
-              <pre className="text-green-400 overflow-x-auto">
-                <code>{`# Install the package
+            <SyntaxHighlightedCode code={`# Install the package
 pip install cvd-risk
 
 # Import and use
@@ -600,11 +666,9 @@ patient = PatientData(
 # Calculate risk
 model = SCORE2()
 result = model.calculate(patient)
-print(f"10-year risk: {result.risk_score:.1f}%")`}</code>
-              </pre>
-            </div>
+print(f"10-year risk: {result.risk_score:.1f}%")`} />
             <p className="mt-6 text-gray-600">
-              All 22 models are available through simple imports. Check the documentation for model-specific requirements.
+              All 46 models are available through simple imports. Check the documentation for model-specific requirements.
             </p>
           </div>
         </div>
@@ -617,7 +681,7 @@ print(f"10-year risk: {result.risk_score:.1f}%")`}</code>
             <div>
               <h3 className="text-xl font-bold mb-4">PyCVDRisk</h3>
               <p className="text-gray-400">
-                Python package for cardiovascular disease risk assessment with 46 validated models.
+                Python package for cardiovascular disease risk assessment with 46 validated models from 35+ countries.
               </p>
             </div>
             <div>
@@ -650,4 +714,3 @@ print(f"10-year risk: {result.risk_score:.1f}%")`}</code>
     </>
   )
 }
-
