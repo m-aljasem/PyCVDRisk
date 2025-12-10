@@ -2,5 +2,5 @@ streamlit>=1.38.0
 pandas>=2.1.0
 numpy>=1.24.0
 pydantic>=2.5.0
--e ..
+cvd-risk>=0.1.48
 

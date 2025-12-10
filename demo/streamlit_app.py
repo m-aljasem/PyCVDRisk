@@ -2,22 +2,14 @@
 
 from __future__ import annotations
 
-import sys
 from functools import lru_cache
-from pathlib import Path
 from typing import Any, Dict, Iterable, List, Optional, Union, get_args, get_origin
 
 import pandas as pd
 import streamlit as st
 
-# Ensure the local src directory is on sys.path when running from the repo
-ROOT_DIR = Path(__file__).resolve().parents[1]
-SRC_DIR = ROOT_DIR / "src"
-if SRC_DIR.exists() and str(SRC_DIR) not in sys.path:
-    sys.path.insert(0, str(SRC_DIR))
-
-from cvd_risk import models as cvd_models  # noqa: E402
-from cvd_risk.core.validation import PatientData  # noqa: E402
+from cvd_risk import models as cvd_models
+from cvd_risk.core.validation import PatientData
 
 MODEL_CLASSES: Dict[str, Any] = {name: getattr(cvd_models, name) for name in cvd_models.__all__}
 
