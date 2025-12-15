@@ -302,5 +302,12 @@ FORMS: dict[str, list[Variant]] = {
                 flag("st_depression", "ST-segment depression"), num("creatinine", "Creatinine", 1.0, "mg/dL", 0.1, 20.0, 0.1),
                 flag("elevated_enzymes", "Elevated cardiac enzymes"), flag("in_hospital_pci", "PCI in hospital")),
                 output="points"),
+        *(Variant(f"GRACE 2.0, {label}", cr.grace2, (AGE(65), num("heart_rate", "Heart rate", 80, "bpm", 20, 250), SBP,
+                  flag("cardiac_arrest", "Cardiac arrest at admission"), flag("st_deviation", "ST-segment deviation"),
+                  flag("elevated_enzymes", "Elevated cardiac enzymes"),
+                  num("creatinine", "Creatinine", 1.0, "mg/dL", 0.1, 20.0, 0.1),
+                  choice("killip", "Killip class", (1, 2, 3, 4))), fixed={"horizon": horizon, "outcome": outcome})
+          for label, horizon, outcome in (("1-year death", 1, "death"), ("1-year death or MI", 1, "death_mi"),
+                                          ("3-year death", 3, "death"), ("3-year death or MI", 3, "death_mi"))),
     ],
 }

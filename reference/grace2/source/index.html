@@ -1,0 +1,1190 @@
+﻿<!DOCTYPE html> 
+<html manifest="/offline.manifest">
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+
+    <title>GraceScore</title> 
+	
+    <link rel="stylesheet" href="styles/jquery.mobile-1.2.0.min.css" />
+    <link rel="stylesheet" href="styles/core.css" />
+    <link rel="stylesheet" href="styles/add2home.css" />
+    <link rel="stylesheet" href="styles/animations.css" />
+    <link rel="stylesheet" id="css" />
+	
+    <!-- Android 
+    <script type="text/javascript" src="scripts/cordova-2.0.0.js"></script>-->
+    <!-- iOS -->
+    <script type="text/javascript" src="cordova.js"></script>
+    <script type="text/javascript" src="scripts/jquery/jquery-1.8.1.min.js"></script>
+    <script type="text/javascript" src="scripts/jquery/jquery-ui.js"></script>
+    <script type="text/javascript" src="common/config.js"></script>
+    <script type="text/javascript" src="common/qunit/qunit.js"></script>
+    <script type="text/javascript" src="common/grace/grace.js"></script>
+    <script type="text/javascript" src="common/grace/ASK_qunit_extensions.js"></script>
+    <script type="text/javascript" src="common/grace/grace_lookups.js"></script>
+    
+    
+    <!-- Global Custom jQuery Changes -->
+    <script type="text/javascript">
+        $(document).bind('mobileinit', function (evt) {
+
+            $.mobile.buttonMarkup.hoverDelay = 0;
+            $.support.cors = true;
+            $.mobile.allowCrossDomainPages = true;
+            $.mobile.defaultPageTransition = 'none';
+            $.mobile.defaultDialogTransition = 'none';
+            $.mobile.loadingMessage = 'Please wait...';
+            $.event.special.tap.tapholdThreshold = 10;
+
+
+            /* Check if iOS */
+            if ((navigator.userAgent.match(/iPhone/i)) || (navigator.userAgent.match(/iPad/i))) {
+                $('#css').attr('href', 'styles/ios.css');
+            }
+
+            /* Check if Android */
+            else if (navigator.userAgent.toLowerCase().indexOf("android") > -1) {
+                $('#css').attr('href', 'styles/android.css');
+            }
+        });
+
+        $(document).ready(function () {
+            if ((navigator.userAgent.match(/iPhone/i)) || (navigator.userAgent.match(/iPad/i))) {
+                isSafariOrChrome = true;
+            }
+        });    
+    </script>
+
+    <script type="text/javascript" src="scripts/jquery/jquery.mobile-1.2.0.min.js"></script>  
+    <script type="text/javascript" src="scripts/add2home.js"></script>
+
+<!--[if lte IE 8]> 
+<style type="text/css"> 
+.pass-error {margin-top : 50px; }
+</style>
+<![endif]--> 
+
+</head>
+
+<body id="box">
+
+<!-- ***************************************************************** Content Starts Here ***************************************************************** -->
+
+<div class="img-preloads graph1y"></div>
+<div class="img-preloads graph1y-mi"></div>
+<div class="img-preloads graph3y"></div>
+
+
+
+<div id="back_row">
+	<div class="ui-content">
+		<div class="btn_touch_area">
+			<span id="back_btn">
+			    <span class="back-text">Back</span>
+			</span>
+		</div>
+	</div>
+</div>
+
+
+
+<!-- START: Wrapper -->
+    <div id="wrapper" class="no_overflow" data-role="page" data-iscroll="enable">
+
+    <!-- Error message when fields not filled out completely -->
+    <div id="error-msg" class="error-part">
+        <div class="relative">
+            <div id="form-test" class="test-error error-part">
+                <h3>Please fill in the following required information</h3>
+                <ul>
+                    <li id="e-age">Age</li>
+                    <li id="e-heart">Heart Rate</li>
+                    <li id="e-blood">Systolic Blood Pressure</li>
+                    <li id="e-chf">CHF</li>
+                    <li id="e-creat">Creatinine</li>
+                </ul>
+            </div>
+
+
+            <div id="ok_touch_area">
+                <span id="error-ok">OK</span>
+            </div>
+        </div>
+    </div>
+
+
+    <div id="disable"></div><!-- Invisible container that overlaps the page to avoid taps/clicks during page change when its class set to enable -->
+
+       
+        <!-- START: Main Header -->
+        <div class="header" data-role="header" data-position="fixed" data-tap-toggle="false" style="padding-top: constant(safe-area-inset-top); padding-top: env(safe-area-inset-top);">
+            <div class="header-wrap">
+                <h1><span id="logo"></span></h1>
+                <div class="clearfix"></div>
+            </div><!-- END: Header Wrap -->
+        </div>
+        <!-- END: Main Header -->
+
+        
+
+       <!-- <div id="reviewMode" style="display:none">
+            <p><h3 style="margin-left: 46px; width:90%; color: red;">Diagnostic Mode is on. This should not be on during normal use of the calculator. If you have come here in error please remove the '?reviewMode=rpg' part of the url in your address bar</h3></p>
+        </div>-->
+
+
+    <div id="full-disclaimer">
+        <div id="fd_popup_close"><span></span></div>
+        <div id="fd-content">
+            <div id="ajax-content">
+                <h1>GRACE 2.0 ACS Risk Calculator</h1>
+                <h2>Terms and Conditions of Use</h2>
+                <h3>(Mobile App and Website)</h3>
+
+
+                <p>By accessing, using or downloading the GRACE 2.0 ACS Risk Calculator app or accompanying website you agree to the following Terms and Conditions:</p>
+
+
+                <h4>INTRODUCTION</h4>
+                <ul>
+                    <li><span>1.1</span>The GRACE 2.0 ACS Risk Calculator app (the "App") and the accompanying 
+website (the "Site") are developed by the University Court of the University of Edinburgh, a
+                    charitable body registered in Scotland under registration number SC005336, 
+                    incorporated under the Universities (Scotland) Acts and having its registered 
+                    office at Old College, South Bridge, Edinburgh EH8 9YL, and the University of 
+                    Massachusetts, a public institution of higher education of the Commonwealth of 
+                    Massachusetts as represented by its Medical School (Worcester campus) ("We" or "Us" or "Our"). 
+                    The App is suitable for use on iOS and Android devices.</li>
+    
+                    <li><span>1.2</span>The Site and the App are for use only by qualified health care professionals ("HCPs"), 
+                    in conjunction with a comprehensive individual patient assessment, in patients with Acute 
+                    Coronary Syndromes ("ACS"). The Site and the App are intended as a risk assessment tool
+                    to provide HCPs with information about a patient’s potential for a future coronary event, 
+                    as one component of a comprehensive clinical patient assessment.</li>
+
+                    <li><span>1.3</span>Nothing contained in the Site or the App is intended to replace the physician–patient 
+                    relationship, or to be a substitute for medical advice. Any information provided should 
+                    be interpreted in the context of a comprehensive professional clinical assessment. You 
+                    hereby agree that any medical decision or treatment will be based on a complete clinical 
+                    assessment and not this risk score in isolation.</li>
+
+                    <li><span>1.4</span>By accessing any part of this Site and the App you shall be deemed to have accepted this 
+                    legal notice in full. We may revise this legal notice at any time by updating this posting. 
+                    You should check the Site from time to time to review the then current legal notice, because 
+                    it is binding on you. Certain provisions of this legal notice may be superseded by expressly 
+                    designated legal notices or terms located on particular pages at the Site.</li>
+
+                    <li><span>1.5</span>Neither We, nor AstraZeneca AB, the GRACE Committee nor AS&K Communications can assume 
+                    responsibility for how you use or interpret the GRACE 2.0 ACS Risk Calculator. The 
+                    information contained on this Site and the App are subject to change without notice.</li>
+                </ul>
+
+
+                <h4>CONDITIONS OF USE</h4>
+                <ul>
+                    <li><span>2.1</span>You are permitted to print and download extracts from the Site for your own use on 
+                    the following basis: (i) no documents or related graphics on the Site are modified in any 
+                    way; (ii) no graphics on the Site are used separately from the corresponding text; and 
+                    (iii) Our copyright and trademark notices and this permission notice appear in all copies.</li>
+
+                    <li><span>2.2</span>Any material you transmit or post to the Site shall be considered non-confidential 
+                    and non-proprietary. We shall have no obligations with respect to such material. We, 
+                    and Our designees, shall be free to copy, disclose, distribute, incorporate and otherwise 
+                    use such materials and all data, images, sounds, text and other things embodied therein 
+                    for any and all commercial or non-commercial purposes.</li>
+
+                    <li><span>2.3</span>You are prohibited from posting or transmitting to or from the Site any material:
+                        <ul>
+                            <li><span>a</span>that is threatening, defamatory, obscene, indecent, seditious, offensive, 
+                            pornographic, abusive, liable to incite racial hatred, discriminatory, menacing, 
+                            scandalous, inflammatory, blasphemous, in breach of confidence, in breach of 
+                            privacy or which may cause annoyance or inconvenience; or</li>
+
+                            <li><span>b</span>for which you have not obtained all necessary licences and/or approvals; or</li>
+
+                            <li><span>c</span>which constitutes or encourages conduct that would be considered a criminal 
+                            offence, give rise to civil liability, or otherwise be contrary to the law of 
+                            or infringe the rights of any third party, in any country in the world; or</li>
+
+                            <li><span>d</span>which is technically harmful (including, without limitation, computer 
+                            viruses, logic bombs, Trojan horses, worms, harmful components, corrupted 
+                            data or other malicious software or harmful data).</li>
+                        </ul>
+                    </li>
+
+                    <li><span>2.4</span>You may not misuse the Site (including, without limitation, by hacking).</li>
+
+                    <li><span>2.5</span>We shall fully co-operate with any law enforcement authorities or 
+                    court order requesting or directing us to disclose the identity or 
+                    locate anyone posting any material in breach of condition 2.3 and 2.4.</li>
+                </ul>
+
+
+                <h4>INTELLECTUAL PROPERTY</h4>
+                <ul>
+                    <li><span>3.1</span>Unless otherwise stated, the copyright and other intellectual property rights 
+                    in all material relating to the App and on the Site (including without limitation 
+                    photographs and graphical images) are owned or controlled by Us or Our licensors. 
+                    For the purposes of this legal notice, any use of extracts from the Site other than 
+                    in accordance with condition 2.1 for any purpose is prohibited. If you breach any 
+                    of the terms in this legal notice, your permission to the Site automatically 
+                    terminates and you must immediately destroy any downloaded or printed extracts 
+                    from the Site.</li>
+
+                    <li><span>3.2</span>Subject to condition 2.1, no part of the Site may be reproduced or stored in 
+                    any other website or included in any public or private electronic retrieval 
+                    system or service without Our prior written permission.</li>
+
+                    <li><span>3.3</span>Any rights not expressly granted in these terms are reserved.</li>
+                </ul>
+
+
+                <h4>ACCESS & AVAILABILITY</h4>
+                <ul>
+                    <li><span>4.1</span>While We endeavour to ensure that the Site is normally available 24 hours a 
+                    day, We shall not be liable if for any reason the Site is unavailable at any 
+                    time or for any period.</li>
+
+                    <li><span>4.2</span>Access to the Site may be suspended temporarily and without notice in 
+                    the case of system failure, maintenance or repair or for reasons beyond 
+                    Our control.</li>
+                </ul>
+
+
+                <h4>LINKS TO & FROM OTHER WEBSITES</h4>
+                <ul>
+                    <li><span>5.1</span>Links to third party websites on the Site are provided solely for 
+                    your convenience. If you use the links, you leave the Site. We have 
+                    not reviewed all of these third party websites and do not control and 
+                    are not responsible for these websites or their content or availability. 
+                    We therefore do not endorse or make any representations about them, 
+                    or material found there, or any results that may be obtained from using 
+                    them. If you decide to access any of the third party website linked 
+                    to the Site, you do so entirely at your own risk.</li>
+                </ul>
+
+
+                <h4>DISCLAIMER</h4>
+                <ul>
+                    <li><span>6.1</span>While We endeavour to ensure that the information on the Site and 
+                    the App is correct, We do not warrant the accuracy and completeness of 
+                    the material on the Site or the App. We may make changes to the material 
+                    on the Site and the App, at any time without notice. The material on the 
+                    Site and the App may be out of date, and We make no commitment to update 
+                    such material.</li>
+
+                    <li><span>6.2</span>You also understand and agree that all information, applications and
+                    other materials are provided “as is” and without representation or warranty 
+                    of any kind concerning the quality, safety, accuracy or suitability of the 
+                    App, either express or implied, including without limitation any implied 
+                    warranties of merchantability, fitness for a particular purpose and the 
+                    use of reasonable skill and care. You also acknowledge that your use of 
+                    this Site and App are at your own risk.</li>
+                </ul>
+
+
+                <h4>LIABILITY</h4>
+                <ul>
+                    <li><span>7.1</span>We, and any other party (whether or not involved in creating, producing, 
+                    maintaining or delivering the Site and the App), and the officers, directors, 
+                    employees, or agents of any of them, exclude all liability and responsibility 
+                    for any amount or kind of loss or damage that may result to you or a third 
+                    party (including, without limitation, any direct, indirect, punitive or 
+                    consequential loss or damages, arising from or connected in any way to business 
+                    interruption, and whether in delict (including without limitation negligence), 
+                    contract or otherwise, in connection with the Site or the App, in any way or 
+                    in connection with the use, inability to use or the results of use of the Site 
+                    or the App, any websites linked to the Site or the material on such websites, 
+                    including but not limited to loss or damage due to viruses that may infect 
+                    your computer equipment, software, data or other property on account of your 
+                    access to, use of, or browsing the Site or your downloading of any material 
+                    from Site or any websites, linked to the Site.</li>
+
+                    <li><span>7.2</span>Nothing in this legal notice shall exclude or limit Our liability for: 
+                    (a) death or personal injury caused by negligence; or (b) fraud; or (c) 
+                    misrepresentation as to a fundamental matter; or any liability which 
+                    cannot be excluded or limited under applicable law.</li>
+
+                    <li><span>7.3</span>If your use of material on the Site or the App results in the need 
+                    for servicing, repair or correction of equipment, software or data, you 
+                    assume all costs thereof.</li>
+                </ul>
+
+
+                <h4>GOVERNING LAW & JURISDICTION</h4>
+                <ul>
+                    <li><span>8.1</span>This legal notice shall be governed by and construed in accordance 
+                    with Scottish law. Disputes arising in connection with this legal notice 
+                    shall be subject to the exclusive jurisdiction of the Scottish courts.</li>
+                </ul>
+
+
+                <p>If the Terms and Conditions set forth above are not acceptable to you, do not use this Site or App.</p>
+            </div>
+        </div>
+    </div>
+
+    <div data-iscroll="scroller">
+     
+     <!-- START: Main Wrap for content -->
+     <div id="main" class="active">
+
+        <!-- START: Page Calculate -->
+        <div class="page main-pages page-calculate active is_open" id="page-calculate-id">
+
+            <!-- START: Content -->
+            <div data-role="content">
+
+                <ul data-role="listview" data-inset="true" id="the-list">
+
+                        <!-- START: Age List -->
+                        <li class="li-menu top-round li-required flag">
+                            <fieldset id="select1" data-role="controlgroup">
+                                <label for="age">Age</label>
+                                <select name="age" id="selectAge" data-icon="false" class="list">
+                                    <option value="not" disabled="disabled">years</option>
+                                    <option value="29">&lt;30</option>
+                                    <option value="34">30&ndash;39</option>
+                                    <option value="42">40&ndash;44</option>
+                                    <option value="47">45&ndash;49</option>
+                                    <option value="50">50</option>
+                                    <option value="51">51</option>
+                                    <option value="52">52</option>
+                                    <option value="53">53</option>
+                                    <option value="54">54</option>
+                                    <option value="55">55</option>
+                                    <option value="56">56</option>
+                                    <option value="57">57</option>
+                                    <option value="58">58</option>
+                                    <option value="59">59</option>
+                                    <option value="60">60</option>
+                                    <option value="61">61</option>
+                                    <option value="62">62</option>
+                                    <option value="63">63</option>
+                                    <option value="64">64</option>
+                                    <option value="65">65</option>
+                                    <option value="66">66</option>
+                                    <option value="67">67</option>
+                                    <option value="68">68</option>
+                                    <option value="69">69</option>
+                                    <option value="70">70</option>
+                                    <option value="71">71</option>
+                                    <option value="72">72</option>
+                                    <option value="73">73</option>
+                                    <option value="74">74</option>
+                                    <option value="75">75</option>
+                                    <option value="76">76</option>
+                                    <option value="77">77</option>
+                                    <option value="78">78</option>
+                                    <option value="79">79</option>
+                                    <option value="80">80</option>
+                                    <option value="81">81</option>
+                                    <option value="82">82</option>
+                                    <option value="83">83</option>
+                                    <option value="84">84</option>
+                                    <option value="85">85</option>
+                                    <option value="86">86</option>
+                                    <option value="87">87</option>
+                                    <option value="88">88</option>
+                                    <option value="89">89</option>
+                                    <option value="92">90-94</option>
+                                    <option value="95">95 or older</option>
+                                </select>
+                            </fieldset>
+                        </li>
+                        <!-- END: Age List -->
+
+                        <!-- START: Heart Rate List -->
+                        <li class="li-menu li-required flag">
+                            <fieldset data-role="controlgroup">
+                                <label for="heart-rate">Heart rate</label>
+                                <select name="heart-rate" id="selectHeart" data-icon="false" class="list">
+                                    <option value="not" disabled="disabled">bpm</option>
+                                    <option value="49">&lt;50</option>
+                                    <option value="59.5">50&ndash;69</option>
+                                    <option value="74.5">70&ndash;79</option>
+                                    <option value="84.5">80&ndash;89</option>
+                                    <option value="94.5">90&ndash;99</option>
+                                    <option value="104.5">100&ndash;109</option>
+                                    <option value="119.5">110&ndash;129</option>
+                                    <option value="139.5">130&ndash;149</option>
+                                    <option value="174.5">150&ndash;199</option>
+                                    <option value="200">200 or greater</option>
+                                </select>
+
+                            </fieldset>
+                        </li>
+                        <!-- END: Heart Rate List -->
+
+                        <!-- START: Systolic Blood Pressure List -->
+                        <li class="li-menu row-end li-required flag">
+                            <fieldset data-role="controlgroup">
+                                <label for="blood-pressure">Systolic blood pressure</label>
+                                <select name="blood-pressure" id="selectBlood" data-icon="false" class="list">
+                                    <option value="not" disabled="disabled">mmHg</option>
+                                    <option value="79">&lt;80</option>
+                                    <option value="89.5">80&ndash;99</option>
+                                    <option value="104.5">100&ndash;109</option>
+                                    <option value="114.5">110&ndash;119</option>
+                                    <option value="124.5">120&ndash;129</option>
+                                    <option value="134.5">130&ndash;139</option>
+                                    <option value="149.5">140&ndash;159</option>
+                                    <option value="169.5">160&ndash;179</option>
+                                    <option value="180">180 or greater</option>
+                                </select>
+                            </fieldset>
+                        </li>
+                        <!-- END: Systolic Blood Pressure List -->
+
+                        <!-- START: CHF List -->
+                        <li class="li-menu li-required flag">
+                            <fieldset data-role="controlgroup">
+                                <label for="chf">CHF</label>
+                                <select name="chf" id="selectCHF" data-icon="false" class="list">
+                                    <option value="not" disabled="disabled">Killip class</option>
+                                    <option value="na" id="chf-na">Not available</option>
+                                    <option value="1">I</option>
+                                    <option value="2">II</option>
+                                    <option value="3">III</option>
+                                    <option value="4">IV</option>
+                                </select>
+                            </fieldset>
+                        </li>
+                        <!-- END: CHF List -->
+
+                        <!-- START: Diuretic usage -->
+                        <li class="li-menu row-end li-disabled switch" id="diuretic_switch">
+                            <fieldset data-role="controlgroup">
+                                <label for="diuretic">Diuretic usage</label>
+                                <select name="diuretic" id="selectDiuretic" data-role="slider" disabled="disabled" class="slider">
+                                    <option value="no">No</option>
+                                    <option value="yes">Yes</option>
+                                </select>
+                            </fieldset>
+                        </li>
+                        <!-- END: Diuretic usage -->
+
+                        <!-- START: Creatinine List -->
+                        <li class="li-menu li-required flag">
+                            <fieldset data-role="controlgroup">
+                                <label for="creatinine">Creatinine</label>
+                                <select name="creatinine" id="selectCreatine" data-icon="false" class="list">
+                                    
+                                    <option value="na" id="creat-na">Not available</option>
+                                    <option value="0.195">0&ndash;0.39 / 0&ndash;35.3</option>
+                                    <option value="0.595">0.4&ndash;0.79 / 35.4&ndash;70</option>
+                                    <option value="0.995">0.8&ndash;1.19 / 71&ndash;105</option>
+                                    <option value="1.395">1.2&ndash;1.59 / 106&ndash;140</option>
+                                    <option value="1.795">1.6&ndash;1.99 / 141&ndash;176</option>
+                                    <option value="2.995">2.0&ndash;3.99 / 177&ndash;353</option>
+                                    <option value="4.0">4.0 or greater / 354 or greater</option>
+
+                                </select>
+                            </fieldset>
+                        </li>
+                        <!-- END: Creatinine List -->
+
+                        <!-- START: Renal failure -->
+                        <li class="li-menu row-end li-disabled switch" id="renal_switch">
+                            <fieldset data-role="controlgroup">
+                                <label for="renal">Renal failure</label>
+                                <select name="renal" id="selectRenal" data-role="slider" disabled="disabled" class="slider">
+                                    <option value="no">No</option>
+                                    <option value="yes">Yes</option>
+                                </select>
+                            </fieldset>
+                        </li>
+                        <!-- END: Renal failure -->
+
+
+                                                <!-- //////////////////// CODE IN INITIALISE.JS WAS COMMENTED OUT AS WELL //////////////////// -->
+
+                        <!-- START: ST-segment deviation -->
+                        <li class="li-menu switch">
+                            <fieldset data-role="controlgroup">
+                                <label for="st-segment">ST-segment deviation</label>
+                                <select name="st-segment" id="selectSegment" data-role="slider" class="slider" class="list">
+                                    <option value="no">No</option>
+                                    <option value="yes">Yes</option>
+                                </select>
+                            </fieldset>
+                        </li>
+                        
+                        <!-- END: ST-segment deviation -->
+
+                        <!-- START: Elevated troponin -->
+                        <li class="li-menu switch">
+                            <fieldset data-role="controlgroup">
+                                <label for="troponin">Elevated troponin*</label>
+                                <select name="troponin" data-role="slider" id="selectTroponin" class="slider" class="list">
+                                    <option value="no">No</option>
+                                    <option value="yes">Yes</option>
+                                </select>
+                            </fieldset>
+                        </li>
+                        <!-- END: Elevated troponin -->
+
+                        <!-- START: Cardiac arrest at admission -->
+                        <li class="li-menu switch">
+                            <fieldset data-role="controlgroup">
+                                <label for="cardiac">Cardiac arrest at admission</label>
+                                <select name="cardiac" id="selectCardiac" data-role="slider" class="slider" class="list">
+                                    <option value="no">No</option>
+                                    <option value="yes">Yes</option>
+                                </select>
+                            </fieldset>
+                        </li>
+                        <!-- END: Cardiac arrest at admission -->
+
+                        <li class="li-menu" id="note"><span>* Or other necrosis cardiac biomarkers</span></li>
+
+                        <!-- START: At Discharge Checkbox -->
+                        <!--
+                        <li class="li-menu">
+                            <fieldset data-role="controlgroup">
+                                <label for="discharge" data-iconpos="right">At discharge</label>
+                                <input type="checkbox" name="discharge" id="discharge" class="checkbox" />
+                            </fieldset>
+                        </li>
+                        -->
+                        <!-- END: At Discharge Checkbox -->
+
+                        <!-- START: In-hospital PCI -->
+                        <!--
+                        <li class="li-menu li-disabled switch">
+                            <fieldset data-role="controlgroup">
+                                <label for="pci">In-hospital PCI</label>
+                                <select name="pci" id="pci" data-role="slider" disabled="disabled" class="slider" class="list">
+                                    <option value="no">No</option>
+                                    <option value="yes">Yes</option>
+                                </select>
+                            </fieldset>
+                        </li>
+                        -->
+                        <!-- END: In-hospital PCI -->
+
+                        <!-- START: In-hospital CABG -->
+                        <!--
+                        <li class="li-menu li-disabled switch">
+                            <fieldset data-role="controlgroup">
+                                <label for="cabg">In-hospital CABG</label>
+                                <select name="cabg" id="cabg" data-role="slider" disabled="disabled" class="slider" class="list">
+                                    <option value="no">No</option>
+                                    <option value="yes">Yes</option>
+                                </select>
+                            </fieldset>
+                        </li>
+                        -->
+                        <!-- END: In-hospital CABG -->
+
+                        <!-- START: Past history of MI -->
+                        <!--
+                        <li class="li-menu bottom-round li-disabled switch">
+                            <fieldset data-role="controlgroup">
+                                <label for="history">Past history of MI</label>
+                                <select name="history" id="history" data-role="slider" disabled="disabled" class="slider" class="list">
+                                    <option value="no">No</option>
+                                    <option value="yes">Yes</option>
+                                </select>
+                            </fieldset>
+                        </li>
+                        -->
+                        <!-- END: Past history of MI -->
+
+                    </ul>
+
+                    <div class="calculator_btn">
+                        <a href="#" data-role="button" id="calculate" class="green-btn calculator-btn">Calculate</a>
+                        <a href="#" data-role="button" id="reset" class="red-btn calculator-btn">Reset</a>
+                    </div>
+
+                        
+
+
+                </div>
+                <!-- END: Content -->
+
+            <div id="error-bcg" class="error-part"></div>
+
+        </div>
+        <!-- END: Page Calculate -->
+
+
+
+        <!-- START: Page Result -->
+        <div class="page main-pages page-result" id="page-result-id">
+
+            <!-- START: Content -->
+            <div data-role="content">
+
+                    <div class="result-container">
+                        
+                        <div data-role="controlgroup" data-type="horizontal" class="death-switch">
+                            <a href="#" data-role="button" class="graph-death-btn left active">
+                                Death
+                                <span class="point-down active"></span>
+                            </a>
+                            <a href="#" data-role="button" class="graph-death-btn right">
+                                Death/MI
+                                <span class="point-down"></span>
+                            </a>
+                        </div>
+
+                        <!-- Start: Result Table 1 -->
+                        <div class="result-tables active" id="table1">
+                            <div class="table-title ui-grid-b" style="width: 100%;"> <!-- table-title class to cover few pixels lack of background on the right -->
+                                <div class="p2-title-btn ui-block-a">Time</div>
+                                <div class="p2-title-btn ui-block-b">% Risk (Score)</div>
+                                <div class="p2-title-btn ui-block-c" style="padding: 20px 0px;">Histograms</div>
+                            </div>
+
+                            <!-- table-result class to cover few pixels lack of background on the right -->
+                            <div class="table-result ui-grid-b"> 
+                                <div class="p2-title-btn ui-block-a grey-block">In hospital</div>
+                                <div class="p2-title-btn ui-block-b grey-block" id="inHospitalResult"></div>
+                                <div class="p2-title-btn ui-block-c grey-block"><a class="chart-ico graph1_btn disabled" href="#" data-role="button"><span></span></a></div>
+                            </div>
+
+                            <div class="table-result ui-grid-b">
+                                <div id="sixMonthTitle" class="p2-title-btn ui-block-a grey-block">To 6 months</div>
+                                <div class="p2-title-btn ui-block-b grey-block" id="sixMonthResult"></div>
+                                <div class="p2-title-btn ui-block-c grey-block"><a class="chart-ico graph2_btn disabled" id="graph2_btn" href="#" data-role="button"><span></span></a></div>
+                            </div>
+                            
+                            <div class="table-result table-row ui-grid-b">
+                                <div id="oneYearTitle" class="p2-title-btn ui-block-a grey-block">1 year</div>
+                                <div class="p2-title-btn ui-block-b grey-block" id="oneYearResult"></div>
+                                <div class="p2-title-btn ui-block-c grey-block"><a class="chart-ico graph3_btn" id="one-year-nomi" href="#" data-role="button"><span></span></a></div>
+                            </div>
+
+                            <div class="table-result table-row ui-grid-b bottom-round">
+                                <div class="p2-title-btn ui-block-a grey-block">3 years</div>
+                                <div class="p2-title-btn ui-block-b grey-block" id="threeYearResult"></div>
+                                <div class="p2-title-btn ui-block-c grey-block"><a class="chart-ico graph4_btn" id="graph4_btn" href="#" data-role="button"><span></span></a></div>
+                            </div>
+                        </div>
+                        <!-- End: Result Table 1 -->
+
+
+                        <!-- Start: Result Table 2 MI -->
+                        <div class="result-tables" id="table2">
+                            <div class="table-title ui-grid-b" style="width: 100%;"> <!-- table-title class to cover few pixels lack of background on the right -->
+                                <div class="p2-title-btn ui-block-a">Time</div>
+                                <div class="p2-title-btn ui-block-b">% Risk</div>
+                                <div class="p2-title-btn ui-block-c" style="padding: 20px 0px;">Histograms</div>
+                            </div>
+
+                            <div class="table-result table-row ui-grid-b" id="inHospitalMiContainer" style="display:none"> 
+                                <div class="p2-title-btn ui-block-a grey-block">In hospital</div>
+                                <div class="p2-title-btn ui-block-b grey-block" id="inHospitalResultMI"></div>
+                                <div class="p2-title-btn ui-block-c grey-block"><a class="chart-ico graph1MI_btn" id="graph1MI_btn" href="#" data-role="button"><span></span></a></div>
+                            </div>
+
+                            <div class="table-result table-row ui-grid-b" id="sixMonthMiContainer" style="display:none">
+                                <div class="p2-title-btn ui-block-a grey-block">To 6 months</div>
+                                <div class="p2-title-btn ui-block-b grey-block" id="sixMonthResultMI"></div>
+                                <div class="p2-title-btn ui-block-c grey-block"><a class="chart-ico graph2MI_btn" id="graph2MI_btn" href="#" data-role="button"><span></span></a></div>
+                            </div>
+
+                            <div class="table-result table-row ui-grid-b bottom-round">
+                                <div class="p2-title-btn ui-block-a grey-block">1 year</div>
+                                <div class="p2-title-btn ui-block-b grey-block" id="oneYearResultMI"></div>
+                                <div class="p2-title-btn ui-block-c grey-block"><a class="chart-ico graph3MI_btn" id="graph3MI_btn" href="#" data-role="button"><span></span></a></div>
+                            </div>
+
+                            <div class="table-result table-row ui-grid-b bottom-round" style="display: none">
+                                <div class="p2-title-btn ui-block-a grey-block">3 years</div>
+                                <div class="p2-title-btn ui-block-b grey-block" id="threeYearResultMI"></div>
+                                <div class="p2-title-btn ui-block-c grey-block"><a class="chart-ico graph4MI_btn" id="graph4MI_btn" href="#" data-role="button"><span></span></a></div>
+                            </div>
+                        </div>
+                        <!-- End: Result Table 2 -->
+
+                    </div>
+
+                    <div class="calculator_btn">
+                        <a href="#" data-role="button" id="edit-input" class="green-btn calculator-btn result_btn">Edit input</a>
+                        <a href="#" data-role="button" id="new-calculation" class="red-btn calculator-btn result_btn">New calculation</a>
+                    </div>
+
+            </div>
+            <!-- END: Content -->
+
+        </div>
+        <!-- END: Page Result -->
+
+        <div class="page main-pages graphs-container" id="page-graph-id">
+
+            <div data-role="content">
+            
+                <div class="result-container">
+
+                    <!-- Start: Graph Death: In Hospital -->
+                    <div class="graphs active" id="graph">
+
+                        <div class="graph-wrap top-round">
+                            <span id="graph-header"><!--Number of patients by risk group for 1-year mortality--></span>
+                        </div>
+
+                        <div id="graph-img">
+                            <div id="graph-content">
+                                <span id="curve"></span>
+                                <span id="bar"><span id="bar-result"></span></span>
+                            </div>
+                        </div>
+
+                        <div class="graph-wrap bottom-round">
+                    	    <span id="graph-footer"></span>
+                	    </div>
+                    
+                    </div>
+                    <!-- End: Graph Death -->
+
+
+                </div>
+        
+            </div>
+        </div>
+        
+        <!-- END: Graph - Death -->
+
+	<div class="clearfix"></div>
+
+    </div><!-- END: Main Wrap for content -->
+        
+
+<!-- ========== HELP & ABOUT PAGES GO BELOW ========== -->
+
+<div class="other_pages" id="page-help">
+
+
+        <!-- START: Help page -->
+        <div class="footer-page help-menu">
+            <div data-role="content">
+
+                <ul id="help-menu" class="info-ul">
+                    <li class="top-round">
+                        <a href="#" id="help3" class="help-btn info">What does this do?</a>
+                        <span class="icon-right"></span>
+                    </li>
+                    <li>
+                        <a href="#" id="help4" class="help-btn info">Why would I use it?</a>
+                        <span class="icon-right"></span>
+                    </li>
+                    <li>
+                        <a href="#" id="help5" class="help-btn info">What is different?</a>
+                        <span class="icon-right"></span>
+                    </li>
+                    <li>
+                        <a href="#" id="help6" class="help-btn info">How do I enter data?</a>
+                        <span class="icon-right"></span>
+                    </li>
+                    <li>
+                        <a href="#" id="help7" class="help-btn info">What is CHF/Killip?</a>
+                        <span class="icon-right"></span>
+                    </li>
+                    <li>
+                        <a href="#" id="help8" class="help-btn info">What are the creatinine<span class="addbr"></span> units?</a>
+                        <span class="icon-right"></span>
+                    </li>
+                    <li>
+                        <a href="#" id="help9" class="help-btn info">I don’t have creatinine/Killip<span class="addbr"></span> data</a>
+                        <span class="icon-right"></span>
+                    </li>
+                    <li>
+                        <a href="#" id="help10" class="help-btn info">What is troponin?</a>
+                        <span class="icon-right"></span>
+                    </li>
+                    <li>
+                        <a href="#" id="help11" class="help-btn info">What do the results mean?</a>
+                        <span class="icon-right"></span>
+                    </li>                                                          
+                    <li>
+                        <a href="#" id="help12" class="help-btn info">Why is a range quoted?</a>
+                        <span class="icon-right"></span>
+                    </li>
+                    <li>
+                        <a href="#" id="help13" class="help-btn info">Where is the GRACE<span class="addbr"></span> numerical score?</a>
+                        <span class="icon-right"></span>
+                    </li>
+                    <li>
+                        <a href="#" id="help14" class="help-btn info">What do the graphs show?</a>
+                        <span class="icon-right"></span>
+                    </li>
+                    <li>
+                        <a href="#" id="help15" class="help-btn info">What are its limitations?</a>
+                        <span class="icon-right"></span>
+                    </li>
+                    <li class="bottom-round">
+                        <a href="#" id="help16" class="help-btn info">Who made this?</a>
+                        <span class="icon-right"></span>
+                    </li>
+                </ul>
+            
+            </div>
+        </div>
+        <!-- end help page menu -->
+
+		<div class="footer-page text-page">
+			
+	        <!-- START: Help 3 -->
+	        <div class="help-pages" id="page-help3">      
+	            <div data-role="content">            
+	                <h2>What does this do?</h2>
+	                <p>The GRACE 2.0 ACS Risk Calculator is a tool to help clinicians assess the future risk of death or myocardial infarction (MI), as a guide to treatment options, in a patient with an acute coronary syndrome (ACS). It includes clinical findings at admission that have been shown to have predictive power for adverse events (see the <a onclick="openLink('http://www.outcomes-umassmed.org/GRACE/bibliography.aspx')" href="#"><span>GRACE bibliography</span></a> for supporting literature).</p>
+	                <p>These factors include age, pulse rate, systolic blood pressure, renal function, congestive heart failure, ST-segment deviation, cardiac arrest and elevated biomarkers, which together provide more than 90% of the accuracy of the complete multivariable prediction model.</p>
+	                <p>Outputs are given in terms of probability of dying (as a percentage) while in hospital, and at 6 months and 1 and 3 years after admission. The combined risk of death or MI at 1 year is also given. The GRACE score at 6 months is also provided as guidelines have categorized patients into low (&le;108 GRACE score), medium (109–140 GRACE score) and high risk (&gt;140 GRACE score) (<a onclick="openLink('http://dx.doi.org/10.1093/eurheartj/ehr236')" href="#">ESC Guideline on non-STE ACS 2011. <em style="font-weight: normal;">Eur Heart J</em> 2011;32:2999–3054</a>).</p>
+	            </div>
+	        </div>
+	        <!-- END: Help 3 -->
+	
+	
+	
+	        <!-- START: Help 4 -->
+	        <div class="help-pages" id="page-help4">
+	            <div data-role="content">            
+	                <h2>Why would I use it?</h2>
+	                <p>Risk calculators are designed to integrate important risk factors. The GRACE 2.0 ACS Risk Calculator can provide clinicians with a robust risk of death or death/MI for the patient presenting with ACS, to help guide the use of more intensive and invasive therapies. The GRACE Risk Score has been <a onclick="openLink('http://www.outcomes-umassmed.org/GRACE/')" href="#">extensively and independently validated</a>. The current updated version of the calculator provides more accurate non-linear computations and an updated interface for mobile devices. </p>
+	            </div>
+	        </div>
+	        <!-- END: Help 4 -->
+	
+	
+	
+	        <!-- START: Help 5 -->
+	        <div class="help-pages" id="page-help5">
+	            <div data-role="content">         
+	                <h2>What is different?</h2>
+	                <p>This version of the GRACE 2.0 ACS Risk Calculator takes account of the non-linear relationship of certain risk factors, and now includes 1-year and 3-year risk calculations. The 1- and 3-year calculations are particularly relevant for long-term clinical management, and they have been validated externally against the FAST-MI registry.</p>
+	                <p>Emphasis is given to the probability of an event occurring (shown as percent risk of death or death/MI in the period), but for reference to prior studies and guidelines the GRACE risk score is also provided where applicable.</p>
+	                <p>To help users understand the context of a result, the updated calculator also provides the population histograms from the GRACE registry, indicating where the individual patient’s result is positioned compared with the whole ACS population. This allows the clinician to determine at a glance whether an individual’s risk is low, medium or high.</p>
+	                <p>In addition, it is recognized that some evaluations may not be available (serum creatinine and Killip class) at the time a risk score is required. For the <a onclick="openLink('http://guidance.nice.org.uk/CG94')" href="#">NICE Guideline on non-ST elevation ACS</a> a “mini” version of the GRACE score was tested in a population of approximately 70,000 patients. It performed well compared with all published scores. This option is automatically implemented when creatinine or Killip is not available (see <a href="#" id="goHelp9">I don’t have creatinine/Killip data</a>).</p>
+	            </div>
+	        </div>
+	        <!-- END: Help 5 -->
+	
+	
+	        <!-- START: Help 6 -->
+	        <div class="help-pages" id="page-help6">
+	            <div data-role="content">      
+	                <h2>How do I enter data?</h2>
+	                <p>To calculate the GRACE risk for any patient with documented or suspected ACS, enter the patient data by selecting from the ranges given or by using the yes/no toggle switches. Press "Calculate" to obtain risk of event probabilities, or "Reset" to clear all entered data.</p>
+	                <p>On the results screen, use “Edit input” to change individual parameters for the same patient, or "New calculation" to reset the calculator and start over.</p>
+	            </div>
+	        </div>
+	        <!-- END: Help 6 -->
+			
+	
+	        <!-- START: Help 7 -->
+	        <div class="help-pages" id="page-help7">
+	            <div data-role="content">          
+	                <h2>What is CHF/Killip?</h2>
+	                <p>Killip is a classification of congestive heart failure (CHF) that independently predicts mortality in patients with MI. For the purposes of the calculator it includes <i>prior history or current CHF</i>.</p>
+	                <p>The Killip classification:</p>
+	                <ul style="list-style: none;">
+	                <li>I.	No clinical sign of CHF</li>
+	                <li>II.	Presence of rales (crackles) in the lungs, raised jugular venous pressure, or third heart sound (S3 gallop)</li>
+	                <li>III.	Acute pulmonary oedema</li>
+	                <li>IV.	Cardiogenic shock</li>
+	                </ul>
+	            </div>
+	        </div>
+	        <!-- END: Help 7 -->
+			
+	
+	        <!-- START: Help 8 -->
+	        <div class="help-pages" id="page-help8">
+	            <div data-role="content">
+	                <h2>What are the creatinine units?</h2>
+	                <p>Creatinine values are displayed in both US and SI units (mg dL<sup>-1</sup> and &micro;mol L<sup>-1</sup>, respectively) for your convenience.</p>
+	            </div>
+	        </div>
+	        <!-- END: Help 8 -->
+					
+	
+	        <!-- START: Help 9 -->
+	        <div class="help-pages" id="page-help9">
+	            <div data-role="content">            
+	                <h2>I don't have creatinine/Killip data</h2>
+	                <p>The most accurate result is obtained using actual Killip class and serum creatinine level values, but if you do not have these data then select "Not available". You will then be able to enter substitute values: either presence of renal failure in place of serum creatinine or use of diuretics (either current or historical) in place of Killip class.</p>
+	                <p>The calculator will automatically default to the "mini-GRACE" algorithm with results that are nearly as accurate as the full GRACE risk calculation. The "mini-GRACE" algorithm will be employed whenever either serum creatinine or Killip class is unavailable.</p>
+	            </div>
+	        </div>
+	        <!-- END: Help 9 -->
+	
+	
+	        <!-- START: Help 10 -->
+	        <div class="help-pages" id="page-help10">
+	            <div data-role="content">            
+	                <h2>What is troponin?</h2>
+	                <p>Troponin is a protein found in heart cells that is released into the bloodstream following cardiac damage. Elevated troponin in the bloodstream on admission is a strong predictor of mortality and infarct size.</p>
+	                <p>If troponin data are not available then cardiac biomarkers of myocardial necrosis (sometimes known as "cardiac enzymes", for example CK-MB or CK) may be substituted.</p>
+	            </div>
+	        </div>
+	        <!-- END: Help 10 -->		
+			
+	
+	        <!-- START: Help 11 -->
+	        <div class="help-pages" id="page-help11">
+	            <div data-role="content">            
+	                <h2>What do the results mean?</h2>
+	                <p>The results are given first as a probability (expressed as a percentage) of either death alone, or death/MI, occurring up to given time points after admission. The original GRACE score is also provided for 6-month results.</p>
+	            </div>
+	        </div>
+	        <!-- END: Help 11 -->
+			
+			
+	
+	        <!-- START: Help 12 -->
+	        <div class="help-pages" id="page-help12">
+	            <div data-role="content">            
+	                <h2>Why is a range quoted?</h2>
+	                <p>Because of differences in the way the 6-month and 1-year probabilities are calculated (see <a href="#" id="goHelp15">"What are its limitations?"</a>), and to reflect the differences in original risk populations, a range of probabilities may be quoted.</p>
+	            </div>
+	        </div>
+	        <!-- END: Help 12 -->
+			
+	
+	        <!-- START: Help 13 -->
+	        <div class="help-pages" id="page-help13">
+	            <div data-role="content">            
+	                <h2>Where is the GRACE numerical score?</h2>
+	                <p>Previous versions of the GRACE ACS Risk Score Calculator yielded numerical "scores", which then had to be converted to probabilities. In this version, risks are given directly as probabilities for ease of interpretation. While users already familiar with the calculator may be comfortable with the GRACE score, a probability is more intuitive and easier to understand in context. Additionally, the 1- and 3-year calculations yield a probability directly from linear and non-linear terms, resulting in greater predictive accuracy than can be obtained using a score.</p>
+	                <p>Because nomograms for in-hospital and 6-month death and death/MI are calculated from different patient datasets, with differing risk factor estimates (and because estimates determine the risk score), it is impossible to relate the scores at the different time points to each other in the same patient. However, the probability of an event will always increase over time, and so probability gives a more easily understandable insight into how the different clinical parameters might affect long-term risk. For the benefit of users familiar with the previous version of the calculator, we have retained the original GRACE score for 6-month results.</p>
+	            </div>
+	        </div>
+	        <!-- END: Help 13 -->
+			
+	
+	        <!-- START: Help 14 -->
+	        <div class="help-pages" id="page-help14">
+	            <div data-role="content">            
+	                <h2>What do the graphs show?</h2>
+	                <p>The graphs (currently only available for 1 and 3 years) are derived from the entire GRACE population of 102,341 patients, and show the distribution of risk for the entire ACS population.</p>
+	                <p>The vertical bar on the graph indicates the calculated probability of an event for the individual patient result, superimposed over the full range of the GRACE ACS population. The number on top gives the calculated probability, while the bar changes colour, from green to yellow to red, depending on the risk tertile for that particular patient. This allows the practitioner to determine at a glance whether their patient has a low, medium or high risk, and is intended as a guide to inform clinical management of patients.</p>
+	                <p>In the app, use the "Back" button to return to the tabulated output.</p>
+	            </div>
+	        </div>
+	        <!-- END: Help 14 -->
+			
+	
+	        <!-- START: Help 15 -->
+	        <div class="help-pages" id="page-help15">
+	            <div data-role="content">            
+	                <h2>What are its limitations?</h2>
+	                <p>The new 1-year and 3-year calculations are based on clinical observations across the entire GRACE ACS population. In addition, for greater accuracy, the updated score takes account of the non-linear relationship between some factors and risk. The in-hospital and 6-month calculations did not have access to the entire dataset, and so it is not possible to directly compare the shorter-term with the longer-term outputs for any given patient. For this reason, the 6-month results in this version of the calculator are adjusted to reflect overall death rates in the different populations. This explains why the 6-month results in this version are not identical to the probabilities given by the original calculator.</p>
+	                <p>Additionally, the 6-month calculation is based on a score-based model, which is converted to a probability. This is less accurate than calculating the probability directly. Together with the difference in original risk populations this may result in the 6-month probability being greater than at 1 year for some patients. When this occurs the risk is quoted as a range between the two extremes.</p>
+	                <p>However, as the calculator is designed to facilitate management of patients suffering an ACS, the small differences that these uncertainties introduce are, from a clinical point of view, largely irrelevant. To guide clinical therapeutic decision making, the most important factor to know is whether a given patient is in the lowest, middle or upper tertile of risk, as indicated by the graphs.</p>
+	                <p>This version includes death/MI calculations only at 1 year. It is considered that 1 year is the most clinically relevant time point, but further outputs will be enabled once the calculator has been fully validated against external databases.</p>
+	            </div>
+	        </div>
+	        <!-- END: Help 15 -->
+			
+			
+	
+	        <!-- START: Help 16 -->
+	        <div class="help-pages" id="page-help16">
+	            <div data-role="content">            
+	                <h2>Who made this?</h2>
+	                <p>The updated calculator is derived from the <a onclick="openLink('http://www.outcomes-umassmed.org/GRACE/')" href="#">original GRACE score</a>. The work on the updated calculator was supported by the British Heart Foundation, the Chief Scientist in Scotland and an educational grant from AstraZeneca to the University of Edinburgh (chair of the GRACE Advisory Committee, Professor Keith AA Fox at the University of Edinburgh). Professors Frederick A Anderson, Jr. and Gordon FitzGerald of the Center for Outcomes Research, University of Massachusetts Medical School, analysed the GRACE population risk factors and created the algorithms. The algorithms were implemented and the app and website created by AS&amp;K Communications.</p>
+                    <p>
+                        For further information and bibliography please visit the
+                        <a onclick="openLink('http://www.outcomes-umassmed.org/GRACE/')" href="#">GRACE homepage</a>. 
+                                           </p>
+	            </div>
+	        </div>
+	        <!-- END: Help 16 -->
+		
+
+		</div>
+		
+		<div class="clearfix"></div>
+</div> 
+<!-- end other pages -->
+
+
+
+<!-- end About Page -->
+<div class="other_pages" id="page-about">
+
+        <div class="footer-page about-menu">
+            <div data-role="content">
+
+                <ul id="about-menu" class="info-ul">
+                    <li class="top-round" >
+                        <a href="#" id="about1" class="about-btn info">About</a>
+                        <span class="icon-right"></span>
+                    </li>
+                    <li>
+                        <a href="#" id="about2" class="about-btn info">What's new</a>
+                        <span class="icon-right"></span>
+                    </li>
+                    <li>
+                        <a href="#" id="about3" class="about-btn info">Disclaimer</a>
+                        <span class="icon-right"></span>
+                    </li>
+                    <li class="bottom-round">
+                        <a href="#" id="about4" class="about-btn info">Contact us</a>
+                        <span class="icon-right"></span>
+                    </li>
+
+                </ul>
+
+            </div>
+        </div>
+        <!-- end about page menu -->
+
+		<div class="footer-page text-page">
+			
+	        <!-- START: About 1 -->
+	        <div class="about-pages" id="page-about1">
+	            <div data-role="content">            
+	                <h2>About</h2>
+	                <p>The GRACE 2.0 ACS Risk Calculator implements the revised GRACE algorithms for predicting death or death/myocardial infarction following 
+                    presentation with an acute coronary syndrome (ACS).</p>
+	
+                    <p>
+                        GRACE (the <a onclick="openLink('http://www.outcomes-umassmed.org/GRACE/default.aspx')" href="#">Global Registry of Acute Coronary Events</a>) 
+                        is an international observational programme of outcomes for patients who were hospitalized with an ACS in the 10 
+                        years from 1999. GRACE includes nearly 250 hospitals in 30 countries, and enrolled a total of 102,341 patients. 
+                        Participating physicians receive confidential quarterly reports showing their outcomes side by side with the
+                        aggregate outcomes of all participating hospitals. The GRACE Risk Score has been extensively validated 
+                        prospectively and externally.
+                    </p>
+
+                    <p>
+                        For more information and bibliography please visit the 
+                        <a onclick="openLink('http://www.outcomes-umassmed.org/GRACE/')" href="#">GRACE homepage</a>. 
+                                           </p>
+
+                    <p>
+                        The work on the updated GRACE calculator was supported by the British Heart Foundation and the Chief Scientist 
+                        in Scotland, and the development of the app and website was supported by an educational grant from AstraZeneca 
+                        to the University of Edinburgh.
+                    </p>
+	            </div>
+	        </div>
+	        <!-- END: About 1 -->
+	
+	
+	        <!-- START: About 2 -->
+	        <div class="about-pages" id="page-about2">
+	            <div data-role="content">
+	                <h2>What’s new in this version?</h2>
+	
+	                <ul>
+	                    <li>"Mini-GRACE" algorithm (for use when serum creatinine and Killip class may not be available)</li>
+	                    <li>New 1- and 3-year calculations</li> 
+	                    <li>New calculations provide probabilities directly, bypassing scores</li>
+	                    <li>Population histograms with high-, medium- and low-risk markers</li>
+                        <li>CE marking</li>
+	                </ul>
+	            </div>
+	        </div>
+	        <!-- END: About 2 -->
+	
+	
+	        <!-- START: About 3 -->
+	        <div class="about-pages" id="page-about3">
+	            <div data-role="content">
+	                <h2>Disclaimer</h2>
+	                <p>
+                        By accessing, using or downloading the GRACE 2.0 ACS Risk Calculator app or accompanying 
+                        website you agree to the following Terms and Conditions:
+                    </p>
+
+                    <p>
+                        The GRACE 2.0 ACS Risk Calculator app (the "App") and the accompanying website (the "Site") are developed by the University Court of the 
+                        University of Edinburgh, a charitable body registered in Scotland under registration 
+                        number SC005336, incorporated under the Universities (Scotland) Acts and having its 
+                        main administrative offices at Old College, South Bridge, Edinburgh EH8 9YL, and the 
+                        University of Massachusetts, a public institution of higher education of the 
+                        Commonwealth of Massachusetts as represented by its Medical School (Worcester campus) 
+                        ("We"). The Site and App are for use only by qualified health care professionals 
+                        ("HCPs"), in conjunction with a comprehensive individual patient assessment, in 
+                        patients with Acute Coronary Syndromes ("ACS"). The Site and the App are intended 
+                        as a risk assessment tool to provide HCPs with information about a patient’s 
+                        potential for a future coronary event, as one component of a comprehensive clinical 
+                        patient assessment.
+                    </p>
+
+                    <p>
+                        Nothing contained in the Site or the App is intended to replace the physician–patient 
+                        relationship, or to be a substitute for medical advice. Any information provided should 
+                        be interpreted in the context of a comprehensive professional clinical assessment. 
+                    </p>
+
+                    <p>
+                        You hereby agree that any medical decision or treatment will be based on a complete 
+                        clinical assessment and not this risk score in isolation. You also acknowledge that 
+                        your use of this Site and the App are at your own risk.
+                    </p>
+
+                    <p>
+                        Please see <span class="view-full-disclaimer hide-elements">full Terms and Conditions</span>.
+                    </p>
+
+                    <p>
+                        If the Terms and Conditions set forth above are not acceptable to you, do not use 
+                        this Site or App.
+                    </p>
+	            </div>
+	        </div>
+	        <!-- END: About 3 -->
+	
+	
+	        <!-- START: About 4 -->
+	        <div class="about-pages" id="page-about4">
+	            <div data-role="content">
+	                <h2>Contact us</h2>
+	                <p>For help with the calculator, FAQs and further information please visit <a href="#" onclick="openLink('http://www.outcomes-umassmed.org/GRACE/')">GRACE homepage</a>.</p>
+	            </div>
+	        </div>
+	        <!-- END: About 4 -->
+	
+		</div>
+		
+		<div class="clearfix"></div>
+</div> 
+<!-- end other pages -->
+
+
+</div>
+<!-- end scroller -->
+
+
+
+    <!-- START: Main Footer -->
+    <div data-role="footer" class="ui-bar footer" data-position="fixed" data-tap-toggle="false" style="margin-bottom: constant(safe-area-inset-bottom);margin-bottom: env(safe-area-inset-bottom);">
+        <div id="footer-disabled"></div>
+        <div class="ui-grid-b">
+            <div class="ui-block-a active foot-btn" id="foot-btn1">
+                <a href="#" id="go1">Calculator</a>
+            </div>
+            <div class="ui-block-b foot-btn" id="foot-btn2">
+                <a href="#" id="go2">Help</a>
+            </div>
+            <div class="ui-block-c foot-btn" id="foot-btn3">
+                <a href="#" id="go3">About</a>
+            </div>
+        </div>
+        
+    </div>
+    <!-- END: Main Footer -->
+</div>
+<!-- END: Wrapper -->
+
+
+<script type="text/javascript" src="common/tests.js"></script>
+<script type="text/javascript" src="scripts/jquery.class.js"></script>
+<script type="text/javascript" src="scripts/functions.js"></script> <!-- Helper functions -->
+<script type="text/javascript" src="common/commonFunctions.js"></script> <!-- Calculate functions -->
+<script type="text/javascript" src="scripts/initialise.js"></script> <!-- On page load events -->
+
+
+</body>
+</html>

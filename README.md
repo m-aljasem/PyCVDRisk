@@ -41,6 +41,7 @@ score2(age=[50, 62], sex=["male", "female"], smoker=[1, 0], sbp=[140, 130],
 | TIMI UA/NSTEMI (0-7) | implemented from the paper (11/11 rules), verified vs R `RiskScorescvd` (5,000 patients identical) |
 | EDACS (chest pain) | implemented from the paper (29/29 rules), verified vs R `RiskScorescvd` (5,000 patients identical) |
 | GRACE in-hospital (Granger 2003) and 6-month post-discharge (Eagle 2004) | implemented from the published nomograms, 78/78 bands checked at both ends against the PDFs; Granger's worked examples disagree with its own table (documented; the authors confirmed the table); the 6-month score also matches the developers' archived GRACE calculator on all 87,808 band combinations |
+| GRACE 2.0 (Fox 2014; 1- and 3-year death, and death or MI, after ACS admission; with substitutions for creatinine and Killip class) | spline coefficients from the developers' calculator code; verified vs that code run unmodified (24,572/24,572 displayed values) and Fox 2014 Table 2 (24/24 hazard ratios) |
 
 ### One call for any country
 
