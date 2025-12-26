@@ -37,10 +37,11 @@ from cvd_risk.score2 import (
 )
 from cvd_risk.smart2 import smart2
 from cvd_risk.smart_reach import smart_reach
+from cvd_risk.suita import suita, suita_risk
 from cvd_risk.timi import timi
 from cvd_risk.uniscore import guideline_score, uniscore
 from cvd_risk.who2019 import who2019
 from cvd_risk.who_ish import who_ish
 
-__all__ = ["adrs", "assign", "cha2ds2_vasc", "chads2", "dial2", "edacs", "finrisk", "framingham", "globorisk", "grace2", "grace_6month", "grace_hospital", "guideline_score", "has_bled", "heart", "life_cvd2", "pce", "predict_bleed", "predict_cvd", "predict_cvd_bmi", "predict_cvd_policy", "predict_post_acs", "predict_post_cvd", "predict_t2d", "prevent", "procam", "procam_stroke", "qrisk2", "qrisk3", "regicor", "reynolds", "score", "score2", "score2_asia_pacific", "score2_ckd", "score2_diabetes", "score2_op", "smart2", "smart_reach", "timi", "uniscore", "who2019", "who_ish"]
+__all__ = ["adrs", "assign", "cha2ds2_vasc", "chads2", "dial2", "edacs", "finrisk", "framingham", "globorisk", "grace2", "grace_6month", "grace_hospital", "guideline_score", "has_bled", "heart", "life_cvd2", "pce", "predict_bleed", "predict_cvd", "predict_cvd_bmi", "predict_cvd_policy", "predict_post_acs", "predict_post_cvd", "predict_t2d", "prevent", "procam", "procam_stroke", "qrisk2", "qrisk3", "regicor", "reynolds", "score", "score2", "score2_asia_pacific", "score2_ckd", "score2_diabetes", "score2_op", "smart2", "smart_reach", "suita", "suita_risk", "timi", "uniscore", "who2019", "who_ish"]
 __version__ = "2.0.0.dev0"

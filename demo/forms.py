@@ -26,6 +26,7 @@ from cvd_risk.score.coefficients import REGIONS as SCORE_REGIONS
 from cvd_risk.score2 import REGIONS as ESC_REGIONS
 from cvd_risk.score2.coefficients import DIPSTICK
 from cvd_risk.smart_reach import REGION_NAMES as SMART_REGIONS
+from cvd_risk.suita import suita_risk
 from cvd_risk.who2019.coefficients import REGIONS as WHO_REGIONS
 
 # shortcut: country lists come from the packages' private data loaders (no public list yet);
@@ -208,6 +209,11 @@ FORMS: dict[str, list[Variant]] = {
     "regicor": [Variant(label, cr.regicor, (AGE(55, 35, 74), SEX, TC, HDL, SBP, DBP, DIABETES, SMOKER),
                         fixed={"calibration": cal})
                 for label, cal in (("REGICOR (Girona)", "gerona"), ("Original Framingham", "framingham"))],
+    "suita": [Variant(f"{label} sheet", cr.suita, (AGE(55, lo, 79), SEX, SMOKER, DIABETES, SBP, DBP,
+                      num("hdl", "HDL cholesterol", 50, "mg/dL", 10, 150), EGFR,
+                      num(sheet, f"{label} cholesterol", default, "mg/dL", 50, 500)),
+                      output="points", points_to_risk=lambda p, a, sheet=sheet: f"{r}%" if (r := suita_risk(p, sheet)) else None)
+              for label, sheet, default, lo in (("Total", "tc", 200, 36), ("LDL", "ldl", 120, 35))],
     "predict": [
         Variant("Primary prevention", cr.predict_cvd, (AGE(55, 30, 79), SEX, ETH_NZ, NZDEP, SMOKING_NZ, DIABETES,
                 flag("af", "Atrial fibrillation"), flag("family_history", "Family history of premature CVD"),
