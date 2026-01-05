@@ -209,6 +209,10 @@ FORMS: dict[str, list[Variant]] = {
     "regicor": [Variant(label, cr.regicor, (AGE(55, 35, 74), SEX, TC, HDL, SBP, DBP, DIABETES, SMOKER),
                         fixed={"calibration": cal})
                 for label, cal in (("REGICOR (Girona)", "gerona"), ("Original Framingham", "framingham"))],
+    "cuore": [Variant("CUORE", cr.cuore, (AGE(55, 35, 69), SEX, SBP,
+                      num("tc", "Total cholesterol", 220, "mg/dL", 130, 320),
+                      num("hdl", "HDL cholesterol", 50, "mg/dL", 20, 100), SMOKER, DIABETES,
+                      flag("bp_treatment", "On blood-pressure treatment")))],
     "suita": [Variant(f"{label} sheet", cr.suita, (AGE(55, lo, 79), SEX, SMOKER, DIABETES, SBP, DBP,
                       num("hdl", "HDL cholesterol", 50, "mg/dL", 10, 150), EGFR,
                       num(sheet, f"{label} cholesterol", default, "mg/dL", 50, 500)),

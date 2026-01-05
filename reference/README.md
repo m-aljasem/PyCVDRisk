@@ -30,7 +30,8 @@ then `Rscript reference/qrisk3/run_reference_cran.R`), `python reference/<family
 | PREDICT (NZ): 2018 primary prevention, BMI, VARIANZ policy, T2D, bleeding, post-CVD, post-ACS | verified; coefficients identical to the authors' R source (7/7 models); authors' R code run unmodified: 21,000 patients, max diff 5e-13; 49/49 paper rows; 2/2 worked examples | PredictRiskScores 0.9 (VIEW team); Pylypchuk 2018; Selak 2019 | A + C | `predict/REPORT.md` |
 | ASSIGN 1.0 and 2.0 | verified; v2.0 **official calculator: 200/200 displayed scores reproduced**, its 32 constants equal ours; v1.0 constants vs the 2007 appendix; printed 0.2286 is a typo (calculator uses 0.22286) | Woodward 2007; Welsh 2025; rightdecisions.scot.nhs.uk | A (v2), C (v1) | `assign/REPORT.md` |
 | PROCAM 2007 (coronary Weibull score, men and women; stroke score) | verified; 50/50 Table 2 bands, 95/95 rows of Tables 3-4, 39/39 Table 7 values vs PDF; 1 printed overlap (Table 4, women 46) and the "<" boundaries documented; replaces PROCAM 2002 | Assmann 2007 (Tables 2-7) | C | `procam/REPORT.md` |
-| REGICOR (Wilson 1998 + Girona calibration, Rev Esp Cardiol 2003) | **official charts reproduced for men** (198/200, misses within 0.01 points); women within 1 point in every cell (their 65-74 panel repeats 55-64); Wilson Table 6 verbatim; Rev Esp Table 1 18/19 rows (men's optimal-BP sign differs, Wilson followed); 40/40 bands; Wilson and Rev Esp worked examples | Wilson 1998 (Table 6, Appendix); Marrugat, Rev Esp Cardiol 2003 (Table 1, Appendix); official charts (regicor.cat) |
+| REGICOR (Wilson 1998 + Girona calibration, Rev Esp Cardiol 2003) | **official charts reproduced for men** (198/200, misses within 0.01 points); women within 1 point in every cell (their 65-74 panel repeats 55-64); Wilson Table 6 verbatim; Rev Esp Table 1 18/19 rows (men's optimal-BP sign differs, Wilson followed); 40/40 bands; Wilson and Rev Esp worked examples | Wilson 1998 (Table 6, Appendix); Marrugat, Rev Esp Cardiol 2003 (Table 1, Appendix); official charts (regicor.cat) | A + C | `regicor/REPORT.md` |
+| CUORE Project individual score (Italy 2007) | verified; **official ISS calculator: 300/300 displayed values reproduced** with Table 2's printed coefficients; it rounds the mean of its two SBP readings half to even; 13/14 Table 2 hazard ratios (the men's HDL HR 1.60/0.60 is misprinted; beta -0.013 gives 1.20/0.83) | Giampaoli 2007 (Ital J Public Health; Tables 1-2); ISS online calculator (progettocuore.medisoft.it) | A + C | `cuore/REPORT.md` |
 | Suita score 2014 (TC and LDL sheets, with CKD) | verified; LDL sheet = 10 x beta for every entry; TC sheet 3 entries differ from 10 x beta (HDL >= 60, CKD 4-5, first age band; documented); one baseline survival fits every row of both probability tables | Nishimura 2014 (J Atheroscler Thromb; Tables 3-5) | C | `suita/REPORT.md` |
 | WHO/ISH charts 2007 (14 subregions, with/without cholesterol) | verified; 3 whoishRisk transcription errors corrected | guideline's 2 printed charts (768 cells); whoishRisk 1.0 table (10,752 cells) and its R lookup logic (transliterated, not run) | A (2 subregions) + B | `who_ish/REPORT.md` |
 | HEART | verified; 18/18 published rules | Melki & Jernberg 2013 (Table 1, Methods); RiskScorescvd 0.3.1 | C + B | `heart/REPORT.md` |
@@ -39,6 +40,7 @@ then `Rscript reference/qrisk3/run_reference_cran.R`), `python reference/<family
 | EDACS | verified; 29/29 published rules | Than 2014 (Box 3); RiskScorescvd 0.3.1 | C + B | `edacs/REPORT.md` |
 | GRACE in-hospital, 6-month | verified; 78/78 bands vs the printed nomograms; worked-example discrepancy confirmed by the authors (table correct); 6-month score equals the developers' GRACE tool (2004/2013 builds, archived) on all 87,808 band combinations; the tool's in-hospital score is a different, later nomogram | Granger 2003 (Fig 4); Eagle 2004 (Fig 2); developers' ACS Risk Model tool | 6-month A + C; in-hospital C | `grace/REPORT.md` |
 | GRACE 2.0 (1- and 3-year death, death or MI; full and substituted) | verified; developers' calculator code (acs_risk2, archived) run unmodified: 24,572/24,572 displayed values (6,143 dropdown combinations x 4 outcomes), its 836 lookup values reproduced, its grace.js to 1e-15 and its 4 worked examples; 24/24 hazard ratios of Fox 2014 Table 2 | developers' GRACE 2.0 calculator; Fox 2014 (Table 2) | A + C | `grace2/REPORT.md` |
+| Aus CVD Risk Calculator (AUS-PREDICT 2023; general and diabetes equations) | implemented, **not exported** (licence, owner action 20); developers' calculator code run unmodified: 6,000/6,000 displayed values (max rel diff 1.6e-7, its e = 2.718282); 16/16 Box 5 recalibration factors, centring values = Box 1/6 means | Heart Foundation calculator (cvdcheck.org.au, bundle archived); Paige 2025 (Med J Aust; Boxes 1, 5, 6) | A + C | `auscvd/REPORT.md` |
 
 ## Owner actions needed
 
@@ -113,6 +115,11 @@ then `Rscript reference/qrisk3/run_reference_cran.R`), `python reference/<family
     supplement's equation prints (-0.4616, age x -0.0075); at age >= 70 and eGFR >= 90 it gives up to 28.9
     points less. Which is intended? The package follows the paper. Also: patient A's base 1.96% (the calculator
     itself shows 2.5%). The dipstick add-on is not in the calculator, so it stays at C + B.
+20. **Aus CVD (AUS-PREDICT): licence.** The paper withholds the coefficients (licensed by the Heart Foundation on
+    request); the package reads them from the public calculator code. Ask the Heart Foundation before `auscvd` is
+    exported, listed in the README and website, and added to the manuscript.
+21. **CUORE: calculator fixture missing.** `cuore/fixtures/calculator_reference.csv` is not on disk, so
+    `tests/cuore/test_matches_official_calculator` fails; re-run `cuore/query_calculator.py` (or restore the file).
 
 ## Evidence ceiling per score
 
