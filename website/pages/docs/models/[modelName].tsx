@@ -4,7 +4,7 @@ import Seo from '@/components/Seo'
 import Footer from '@/components/Footer'
 import { REPO, SITE_URL } from '@/lib/site'
 import { SyntaxHighlightedCode } from '@/components/Code'
-import { models, groups, photoFor, evidenceLabel, type Model } from '@/lib/models'
+import { models, groups, photoFor, evidenceLabel, referenceVerified, type Model } from '@/lib/models'
 import {
   ArrowLeftIcon,
   ArrowTopRightOnSquareIcon,
@@ -90,7 +90,7 @@ export default function ModelDocumentation({ model }: { model: Model }) {
 
               <div className="bg-white rounded-xl shadow-lg p-8">
                 <h2 className="text-2xl font-bold text-gray-900 mb-4 flex items-center">
-                  <CheckBadgeIcon className={`h-7 w-7 mr-2 ${model.evidence === 'A' ? 'text-emerald-500' : 'text-amber-500'}`} />
+                  <CheckBadgeIcon className={`h-7 w-7 mr-2 ${referenceVerified(model.evidence) ? 'text-emerald-500' : 'text-amber-500'}`} />
                   Verification
                 </h2>
                 <p className="text-sm font-semibold text-gray-500 mb-2">{evidenceLabel(model.evidence)}</p>

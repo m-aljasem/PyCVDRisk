@@ -2,10 +2,10 @@ import Link from 'next/link'
 import Navigation from '@/components/Navigation'
 import Seo from '@/components/Seo'
 import Footer from '@/components/Footer'
-import { models } from '@/lib/models'
+import { models, referenceVerified } from '@/lib/models'
 import { REPO, REPO_FILE, CONTACT, SITE_URL, AUTHOR } from '@/lib/site'
 
-const verified = models.filter(m => m.evidence === 'A').length
+const verified = models.filter(m => referenceVerified(m.evidence)).length
 
 const contributions = [
   ['Report a discrepancy', 'If an output differs from a paper, a calculator or another implementation, open an issue with the inputs, both results and the source. Discrepancies are the most valuable contribution: each one either exposes an error or is documented in the verification report.'],

@@ -3,12 +3,12 @@ import Link from 'next/link'
 import Navigation from '@/components/Navigation'
 import Seo from '@/components/Seo'
 import { SyntaxHighlightedCode } from '@/components/Code'
-import { models, groups, photoFor, evidenceLabel, packageVersion } from '@/lib/models'
+import { models, groups, photoFor, evidenceLabel, referenceVerified, packageVersion } from '@/lib/models'
 import Footer from '@/components/Footer'
 import InstallButton from '@/components/InstallButton'
 import { PAPER_URL, INSTALL, REPO, SITE_URL, SITE_NAME, AUTHOR } from '@/lib/site'
 
-const verified = models.filter(m => m.evidence === 'A').length
+const verified = models.filter(m => referenceVerified(m.evidence)).length
 const years = models.flatMap(m => m.year.match(/\d{4}/g)!.map(Number))
 
 const stats = [
@@ -194,10 +194,10 @@ export default function Home() {
                             <span
                               title={evidenceLabel(m.evidence)}
                               className={`absolute top-2 right-2 text-xs font-semibold px-2 py-0.5 rounded-full ${
-                                m.evidence === 'A' ? 'bg-emerald-500 text-white' : 'bg-amber-400 text-gray-900'
+                                referenceVerified(m.evidence) ? 'bg-emerald-500 text-white' : 'bg-amber-400 text-gray-900'
                               }`}
                             >
-                              {m.evidence === 'A' ? 'Reference-verified' : 'Paper-checked'}
+                              {referenceVerified(m.evidence) ? 'Reference-verified' : 'Paper-checked'}
                             </span>
                           </div>
                           <div className="p-5 flex-1 flex flex-col">
