@@ -534,6 +534,22 @@
    "result": "0.08358"
   },
   {
+   "slug": "china-par",
+   "report": "https://github.com/m-aljasem/PyCVDRisk/blob/HEAD/reference/china_par/REPORT.md",
+   "name": "China-PAR",
+   "fullName": "Prediction for ASCVD Risk in China",
+   "year": "2016",
+   "region": "China",
+   "photo": "asia_pacific",
+   "group": "primary",
+   "outcome": "10-year first ASCVD event (MI, CHD death, stroke) with waist, region and urbanisation",
+   "paperUrl": "https://doi.org/10.1161/CIRCULATIONAHA.116.022367",
+   "verification": "Official calculator (cvdrisk.com.cn): 550/550 displayed values with coefficients recovered within 0.005 of the paper's; the printed 2-decimal coefficients alone miss it by up to 12.7 points.",
+   "evidence": "A, C",
+   "example": "from cvd_risk import china_par\n\nchina_par(age=60, sex=\"male\", sbp=130, bp_treated=0, total_chol=5.4, hdl_chol=1.4,\n          waist=80, smoker=0, diabetes=1, north=1, urban=1, family_history=0)",
+   "result": "0.109"
+  },
+  {
    "slug": "who-ish",
    "report": "https://github.com/m-aljasem/PyCVDRisk/blob/HEAD/reference/who_ish/REPORT.md",
    "name": "WHO/ISH",

@@ -32,6 +32,7 @@ then `Rscript reference/qrisk3/run_reference_cran.R`), `python reference/<family
 | PROCAM 2007 (coronary Weibull score, men and women; stroke score) | verified; 50/50 Table 2 bands, 95/95 rows of Tables 3-4, 39/39 Table 7 values vs PDF; 1 printed overlap (Table 4, women 46) and the "<" boundaries documented; replaces PROCAM 2002 | Assmann 2007 (Tables 2-7) | C | `procam/REPORT.md` |
 | REGICOR (Wilson 1998 + Girona calibration, Rev Esp Cardiol 2003) | **official charts reproduced for men** (198/200, misses within 0.01 points); women within 1 point in every cell (their 65-74 panel repeats 55-64); Wilson Table 6 verbatim; Rev Esp Table 1 18/19 rows (men's optimal-BP sign differs, Wilson followed); 40/40 bands; Wilson and Rev Esp worked examples | Wilson 1998 (Table 6, Appendix); Marrugat, Rev Esp Cardiol 2003 (Table 1, Appendix); official charts (regicor.cat) | A + C | `regicor/REPORT.md` |
 | CUORE Project individual score (Italy 2007) | verified; **official ISS calculator: 300/300 displayed values reproduced** with Table 2's printed coefficients; it rounds the mean of its two SBP readings half to even; 13/14 Table 2 hazard ratios (the men's HDL HR 1.60/0.60 is misprinted; beta -0.013 gives 1.20/0.83) | Giampaoli 2007 (Ital J Public Health; Tables 1-2); ISS online calculator (progettocuore.medisoft.it) | A + C | `cuore/REPORT.md` |
+| China-PAR (2016) | verified; **official calculator: 550/550 displayed values reproduced**; coefficients recovered within 0.005 of the printed ones (a seed-0 set matched 144/150 held-out patients, 6 off by 0.1 at a rounding edge); printed 2-decimal coefficients miss it by up to 12.7 points; Table 2 differs from the calculator in 5/8 values | Yang 2016 (Circulation; Suppl Tables 1-2, Table 2); cvdrisk.com.cn (National Center for Cardiovascular Diseases) | A + C | `china_par/REPORT.md` |
 | Suita score 2014 (TC and LDL sheets, with CKD) | verified; LDL sheet = 10 x beta for every entry; TC sheet 3 entries differ from 10 x beta (HDL >= 60, CKD 4-5, first age band; documented); one baseline survival fits every row of both probability tables | Nishimura 2014 (J Atheroscler Thromb; Tables 3-5) | C | `suita/REPORT.md` |
 | WHO/ISH charts 2007 (14 subregions, with/without cholesterol) | verified; 3 whoishRisk transcription errors corrected | guideline's 2 printed charts (768 cells); whoishRisk 1.0 table (10,752 cells) and its R lookup logic (transliterated, not run) | A (2 subregions) + B | `who_ish/REPORT.md` |
 | HEART | verified; 18/18 published rules | Melki & Jernberg 2013 (Table 1, Methods); RiskScorescvd 0.3.1 | C + B | `heart/REPORT.md` |
@@ -118,8 +119,11 @@ then `Rscript reference/qrisk3/run_reference_cran.R`), `python reference/<family
 20. **Aus CVD (AUS-PREDICT): licence.** The paper withholds the coefficients (licensed by the Heart Foundation on
     request); the package reads them from the public calculator code. Ask the Heart Foundation before `auscvd` is
     exported, listed in the README and website, and added to the manuscript.
-21. **CUORE: calculator fixture missing.** `cuore/fixtures/calculator_reference.csv` is not on disk, so
-    `tests/cuore/test_matches_official_calculator` fails; re-run `cuore/query_calculator.py` (or restore the file).
+21. **China-PAR: question for the authors (D. Gu, Fuwai Hospital).** Ask for the full-precision coefficients, S10
+    and means behind the online calculator (the package's set is recovered from it, see `china_par/REPORT.md`), and
+    for the lifetime model the calculator shows below age 60. Optional: Table 2 differs from the calculator in 5/8
+    values, and the women's worked example enters diabetes = 0. `uniscore` still routes China to SCORE2
+    Asia-Pacific (`routing.csv`); switching it to China-PAR is your call (Chinese guidelines recommend China-PAR).
 
 ## Evidence ceiling per score
 
