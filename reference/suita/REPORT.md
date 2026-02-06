@@ -45,3 +45,13 @@ score sheets can, and they are what the package implements.
    (stage 3 = 30-59), which the paper cites.
 5. **Upper age.** The sheets' top age bands are open-ended; the cohort was aged 30-79, so the package gives NaN
    from 80.
+
+## 5. Web calculators (JAS 2017 adaptation)
+
+Two independent web calculators, calculator.jp/health/suita and dataclock.jp/calculation-of-suita-score (`fixtures/jas2017_web_calculators.json`), implement the Japan Atherosclerosis Society 2017 guideline's
+version of the LDL sheet: diabetes (6) becomes glucose intolerance (5), CKD is dropped, and family history of
+premature CHD (+5) is added. On every item they share with Table 5b (age 5 bands, sex, smoking, blood pressure
+5 categories, HDL 3, LDL 5) and on the 9 probability rows their values equal the package's
+(`tests/suita/test_suita.py`). They are third-party implementations of a different variant, so this is a partial
+level-B check of the LDL sheet, not of its diabetes or CKD rows. The JAS 2017 variant itself is not implemented: its
+primary source (Kinoshita M et al. J Atheroscler Thromb 2018;25:846-984) is not in `source/`.

@@ -550,6 +550,22 @@
    "result": "0.109"
   },
   {
+   "slug": "suita",
+   "report": "https://github.com/m-aljasem/PyCVDRisk/blob/HEAD/reference/suita/REPORT.md",
+   "name": "Suita",
+   "fullName": "Suita score (2014)",
+   "year": "2014",
+   "region": "Japan",
+   "photo": "asia_pacific",
+   "group": "primary",
+   "outcome": "10-year CHD points with CKD, total- or LDL-cholesterol sheet",
+   "paperUrl": "https://pubmed.ncbi.nlm.nih.gov/?term=Nishimura+Suita+J+Atheroscler+Thromb+2014",
+   "verification": "Point sheets checked against the paper's Cox coefficients; one baseline survival fits both probability tables; two web calculators of the JAS 2017 adaptation agree on every shared item.",
+   "evidence": "C (+ partial B)",
+   "example": "from cvd_risk import suita\n\nsuita(age=55, sex=\"male\", smoker=1, diabetes=0, sbp=140, dbp=85, hdl=50, egfr=70, tc=220)",
+   "result": "42"
+  },
+  {
    "slug": "who-ish",
    "report": "https://github.com/m-aljasem/PyCVDRisk/blob/HEAD/reference/who_ish/REPORT.md",
    "name": "WHO/ISH",

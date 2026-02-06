@@ -77,3 +77,20 @@ def test_ages_outside_sheets_and_arguments():
     with pytest.raises(ValueError):
         suita(50, "male", 0, 0, 125, 75, 55, 90, tc=200, ldl=120)
     assert suita_risk(np.nan, "ldl") == ""
+
+
+def test_jas2017_web_calculators_share_the_ldl_sheet():
+    """calculator.jp and dataclock.jp (JAS 2017 adaptation of the LDL sheet): every item it shares with Table 5b, and
+    the probability rows, equal ours; diabetes 6 -> glucose intolerance 5, CKD dropped, family history +5 added."""
+    import json
+    from pathlib import Path
+    web = json.loads((Path(__file__).parents[2] / "reference" / "suita" / "fixtures" / "jas2017_web_calculators.json")
+                     .read_text(encoding="utf-8"))
+    p, s = web["points"], mod.SHEETS["ldl"]
+    assert p["age (35-44, 45-54, 55-64, 65-69, >=70)"] == list(s["age"][1][1:6])
+    assert (p["female"], p["smoker"]) == (s["female"], s["smoker"])
+    assert p["bp (optimal, normal, high normal, stage 1, stage 2)"] == list(s["bp"])
+    assert p["hdl (<40, 40-59, >=60)"] == list(s["hdl"][1])
+    assert p["ldl (<100, 100-139, 140-159, 160-179, >=180)"] == list(s["chol"][1])
+    assert [lab for _, lab in web["risk_by_total (dataclock)"]] == [lab for _, lab in mod.RISK["ldl"]]
+    assert [hi for hi, _ in web["risk_by_total (dataclock)"][:-1]] == [hi for hi, _ in mod.RISK["ldl"][:-1]]
