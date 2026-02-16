@@ -1,0 +1,24 @@
+Package: Jcvrisk
+Type: Package
+Title: Risk Calculator for Cardiovascular Disease in Japan
+Version: 0.1.3
+Authors@R: 
+    c(
+      person(given = "Hiroshi",
+             family = "Okumiyama",
+             role = c("aut", "cre"),
+             email = "xzxz2019@iCloud.com"),
+      person(given = "Ryosuke",
+             family = "Fujii",
+             role = "aut")
+    )
+Description: A calculation tool to obtain the 5-year or 10-year risk of cardiovascular disease from various risk models.
+License: MIT + file LICENSE
+Encoding: UTF-8
+NeedsCompilation: no
+Packaged: 2025-10-29 13:14:23 UTC; student
+Author: Hiroshi Okumiyama [aut, cre],
+  Ryosuke Fujii [aut]
+Maintainer: Hiroshi Okumiyama <xzxz2019@iCloud.com>
+Repository: CRAN
+Date/Publication: 2025-10-29 13:30:02 UTC

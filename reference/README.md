@@ -4,6 +4,8 @@ Each score lives in `src/cvd_risk/<family>/`; its evidence lives here.
 Regenerate any family: `python reference/<family>/make_patients.py`,
 `Rscript reference/<family>/run_reference.R` (QRISK3: `python reference/qrisk3/run_reference.py`
 then `Rscript reference/qrisk3/run_reference_cran.R`), `python reference/<family>/report.py`.
+Japanese scores vs the R package Jcvrisk: `python reference/jcvrisk/make_patients.py`,
+`Rscript reference/jcvrisk/run_jcvrisk.R` (`jcvrisk/REPORT.md`).
 
 | Score | Status | Reference | Evidence | Report |
 |---|---|---|---|---|
