@@ -566,6 +566,22 @@
    "result": "42"
   },
   {
+   "slug": "suita-cvd",
+   "report": "https://github.com/m-aljasem/PyCVDRisk/blob/HEAD/reference/suita_cvd/REPORT.md",
+   "name": "Suita CVD",
+   "fullName": "Suita CVD risk model (2020)",
+   "year": "2020",
+   "region": "Japan",
+   "photo": "asia_pacific",
+   "group": "primary",
+   "outcome": "10-year stroke or CHD points, with and without ECG",
+   "paperUrl": "https://doi.org/10.5551/jat.48843",
+   "verification": "Every point equals 10 x the paper's coefficient (40/40); Table 4's probability bands as printed; R Jcvrisk gives the same band except at its SBP 139 / DBP 89 cut-point gap.",
+   "evidence": "C (+ partial B)",
+   "example": "from cvd_risk import suita_cvd\n\nsuita_cvd(age=55, sex=\"male\", sbp=135, dbp=85, bp_treated=0, hdl=45, smoker=1,\n          diabetes=0, proteinuria=0, ldl=150)",
+   "result": "22"
+  },
+  {
    "slug": "who-ish",
    "report": "https://github.com/m-aljasem/PyCVDRisk/blob/HEAD/reference/who_ish/REPORT.md",
    "name": "WHO/ISH",

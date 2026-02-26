@@ -161,12 +161,16 @@ M = [
      "10-year CHD points with CKD, total- or LDL-cholesterol sheet", PM + "Nishimura+Suita+J+Atheroscler+Thromb+2014",
      "Point sheets checked against the paper's Cox coefficients; one baseline survival fits both probability tables; two web calculators of the JAS 2017 adaptation agree on every shared item.", "C (+ partial B)",
      'suita(age=55, sex="male", smoker=1, diabetes=0, sbp=140, dbp=85, hdl=50, egfr=70, tc=220)'),
+    ("suita-cvd", "Suita CVD", "Suita CVD risk model (2020)", "2020", "Japan", "asia_pacific", "primary",
+     "10-year stroke or CHD points, with and without ECG", DOI + "10.5551/jat.48843",
+     "Every point equals 10 x the paper's coefficient (40/40); Table 4's probability bands as printed; R Jcvrisk gives the same band except at its SBP 139 / DBP 89 cut-point gap.", "C (+ partial B)",
+     'suita_cvd(age=55, sex="male", sbp=135, dbp=85, bp_treated=0, hdl=45, smoker=1,\n          diabetes=0, proteinuria=0, ldl=150)'),
     ("who-ish", "WHO/ISH", "WHO/ISH risk charts (2007)", "2007", "Global, 14 WHO subregions", "who_flag", "primary",
      "10-year fatal and non-fatal CVD risk band, with and without cholesterol", PM + "Mendis+WHO+ISH+risk+prediction+charts+2007",
      "Every cell of the guideline's two printed charts (768/768) and R whoishRisk (3 transcription errors in it corrected).", "A, B",
      'who_ish(age=60, sex="male", smoker=1, sbp=150, diabetes=0, region="eur_a", total_chol=6.0)'),
 ]
-REPORT = {"score2-op": "score2", "score2-diabetes": "score2", "score2-asia-pacific": "score2", "cha2ds2-vasc": "af",
+REPORT = {"suita-cvd": "suita_cvd", "score2-op": "score2", "score2-diabetes": "score2", "score2-asia-pacific": "score2", "cha2ds2-vasc": "af",
           "chads2": "af", "has-bled": "af", "uniscore": None}
 GITHUB = "https://github.com/m-aljasem/PyCVDRisk/blob/HEAD/"
 GROUPS = {"primary": "Primary prevention", "conditions": "Diabetes, kidney disease, established CVD and atrial fibrillation",
