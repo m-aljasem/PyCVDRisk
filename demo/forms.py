@@ -226,6 +226,11 @@ FORMS: dict[str, list[Variant]] = {
                           points_to_risk=lambda p, a: f"{cr.suita_cvd_risk(p, 'af' in a).item()}%")
                   for label, ecg in (("Without ECG", ()), ("With ECG", (flag("af", "Atrial fibrillation (ECG)"),
                                                                        flag("lvh", "Left ventricular hypertrophy (ECG)"))))],
+    "hisayama": [Variant(f"{label} model", cr.hisayama, (AGE(60, 40, 84), SEX, SBP, DIABETES,
+                         num("hdl", "HDL cholesterol", 50, "mg/dL", 10, 150), flag("proteinuria", "Urinary protein 1+ or more"),
+                         SMOKER, flag("exercise", "Regular exercise (sports 3+ times a week)"),
+                         num(arg, f"{label} cholesterol", default, "mg/dL", 30, 500)))
+                 for label, arg, default in (("LDL", "ldl", 130), ("Non-HDL", "non_hdl", 150))],
     "suita": [Variant(f"{label} sheet", cr.suita, (AGE(55, lo, 79), SEX, SMOKER, DIABETES, SBP, DBP,
                       num("hdl", "HDL cholesterol", 50, "mg/dL", 10, 150), EGFR,
                       num(sheet, f"{label} cholesterol", default, "mg/dL", 50, 500)),

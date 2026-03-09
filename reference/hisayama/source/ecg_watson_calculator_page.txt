@@ -1,0 +1,28 @@
+<<page 1>>
+ASCVD Risk Calculator for Japanese
+patients (Hisayama score)
+Age Range (40–79):
+40–49
+Gender:
+Female Male
+Systolic Blood Pressure (mmHg):
+<120
+Impaired Glucose Tolerance (IGT):
+No Yes
+LDL Cholesterol (mg/dL):
+<120
+HDL Cholesterol (mg/dL):
+>60
+Smoking Status:
+No Yes
+Calculate Risk
+Risk Score: 0
+Estimated 10-Year Risk: 0%
+📋  Copy
+🖨  Print
+🏠  Home
+⚠  Disclaimer: This calculator is based on Japanese cohort data (Hisayama Study) and may
+not generalize to other populations. It is intended for use in primary prevention and
+educational purposes only.
+11/23/26, 5:35 PM Global ASCVD Risk Calculator (Japanese Model)
+https://ecg.watson.jp/medical/ASCVD/ 1/1

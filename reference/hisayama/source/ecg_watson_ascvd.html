@@ -1,0 +1,235 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="keywords" content="ASCVD, cardiovascular risk, stroke, MI, prevention, global, primary prevention">
+  <meta name="description" content="Global ASCVD 10-Year Risk Calculator for primary prevention. This tool is based on Japanese cohort data and is intended for educational purposes only.">
+  <title>Global ASCVD Risk Calculator (Japanese Model)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      margin: 0;
+      background: linear-gradient(to right, #0f2027, #203a43, #2c5364);
+      color: #f4f4f4;
+      padding: 20px;
+    }
+    .container {
+      max-width: 640px;
+      background: #1e2a38;
+      padding: 30px;
+      margin: auto;
+      border-radius: 16px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+    }
+    h1 {
+      text-align: center;
+      color: #00e0ff;
+    }
+    .form-group {
+      margin: 20px 0;
+    }
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 600;
+    }
+    select, button {
+      width: 100%;
+      padding: 14px;
+      border-radius: 8px;
+      border: none;
+      font-size: 16px;
+      margin-top: 8px;
+    }
+    button {
+      background: #00e0ff;
+      color: #000;
+      font-weight: bold;
+      margin-top: 20px;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #00b8cc;
+    }
+    .options-container {
+      display: flex;
+      gap: 10px;
+      margin-top: 8px;
+    }
+    .option {
+      flex: 1;
+      background: #2a3d4d;
+      padding: 10px;
+      text-align: center;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    .option.selected {
+      background: #00e0ff;
+      color: #000;
+      font-weight: bold;
+    }
+    #results {
+      margin-top: 30px;
+      background: #2a3d4d;
+      padding: 20px;
+      border-radius: 12px;
+      text-align: center;
+    }
+    #results span {
+      color: #00e0ff;
+      font-size: 24px;
+      font-weight: bold;
+    }
+    .disclaimer {
+      margin-top: 30px;
+      font-size: 0.9em;
+      color: #ccc;
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <h1>ASCVD Risk Calculator for Japanese patients (Hisayama score)</h1>
+  <form id="ascvdForm">
+    <div class="form-group">
+      <label for="ageRange">Age Range (40–79):</label>
+      <select id="ageRange">
+        <option value="0">40–49</option>
+        <option value="1">50–59</option>
+        <option value="2">60–69</option>
+        <option value="3">70–79</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>Gender:</label>
+      <div class="options-container" id="genderOptions">
+        <div class="option" data-value="0">Female</div>
+        <div class="option" data-value="7">Male</div>
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Systolic Blood Pressure (mmHg):</label>
+      <select id="bloodPressure">
+        <option value="0">&lt;120</option>
+        <option value="1">120–129</option>
+        <option value="2">130–139</option>
+        <option value="3">140–159</option>
+        <option value="4">&gt;160</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>Impaired Glucose Tolerance (IGT):</label>
+      <div class="options-container" id="metabolismOptions">
+        <div class="option" data-value="0">No</div>
+        <div class="option" data-value="1">Yes</div>
+      </div>
+    </div>
+    <div class="form-group">
+      <label>LDL Cholesterol (mg/dL):</label>
+      <select id="ldl">
+        <option value="0">&lt;120</option>
+        <option value="1">120–139</option>
+        <option value="2">140–159</option>
+        <option value="3">&gt;160</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>HDL Cholesterol (mg/dL):</label>
+      <select id="hdl">
+        <option value="0">&gt;60</option>
+        <option value="1">40–59</option>
+        <option value="2">&lt;40</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>Smoking Status:</label>
+      <div class="options-container" id="smokingOptions">
+        <div class="option" data-value="0">No</div>
+        <div class="option" data-value="1">Yes</div>
+      </div>
+    </div>
+    <button type="button" onclick="calculateRisk()">Calculate Risk</button>
+  </form>
+  <div id="results">
+    <p>Risk Score: <span id="riskScore">0</span></p>
+    <p>Estimated 10-Year Risk: <span id="tenYearRisk">0%</span></p>
+  </div>
+  <div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-top: 20px;">
+    <button onclick="copyResult()">📋 Copy</button>
+    <button onclick="window.print()">🖨️ Print</button>
+    <button onclick="window.location.href='https://ecg.watson.jp/'">🏠 Home</button>
+  </div>
+  <div class="disclaimer">
+    ⚠️ Disclaimer: This calculator is based on Japanese cohort data (Hisayama Study) and may not generalize to other populations. It is intended for use in primary prevention and educational purposes only.
+  </div>
+</div>
+<script>
+  document.querySelectorAll('.option').forEach(option => {
+    option.addEventListener('click', function () {
+      const siblings = this.parentNode.querySelectorAll('.option');
+      siblings.forEach(sib => sib.classList.remove('selected'));
+      this.classList.add('selected');
+    });
+  });
+
+  function calculateRisk() {
+    const gender = parseInt(document.querySelector('#genderOptions .selected')?.getAttribute('data-value') || 0);
+    const bp = parseInt(document.getElementById('bloodPressure').value);
+    const igt = parseInt(document.querySelector('#metabolismOptions .selected')?.getAttribute('data-value') || 0);
+    const ldl = parseInt(document.getElementById('ldl').value);
+    const hdl = parseInt(document.getElementById('hdl').value);
+    const smoking = parseInt(document.querySelector('#smokingOptions .selected')?.getAttribute('data-value') || 0);
+    const age = parseInt(document.getElementById('ageRange').value);
+
+    const riskScoreTo10YRisk = [
+      [1, 1, 1.7, 3.4], [1, 1, 1.9, 3.9], [1, 1, 2.2, 4.5], [1, 1.1, 2.6, 5.2],
+      [1, 1.3, 3, 6], [1, 1.4, 3.4, 6.9], [1, 1.7, 3.9, 7.9], [1, 1.9, 4.5, 9.1],
+      [1.1, 2.2, 5.2, 10.4], [1.3, 2.6, 6, 11.9], [1.4, 3, 6.9, 13.6], [1.7, 3.4, 7.9, 15.5],
+      [1.9, 3.9, 9.1, 17.7], [2.2, 4.5, 10.4, 20.2], [2.6, 5.2, 11.9, 22.9], [3, 6, 13.6, 25.9],
+      [3.4, 6.9, 15.5, 29.3], [3.9, 7.9, 17.7, 33], [4.5, 9.1, 20.2, 37], [5.2, 10.4, 22.9, 41.1]
+    ];
+
+    let score = gender + bp + igt + ldl + hdl + (smoking * 2);
+    score = Math.min(score, riskScoreTo10YRisk.length - 1);
+    const validAge = Math.min(age, 3);
+    const tenYearRisk = riskScoreTo10YRisk[score][validAge];
+
+    document.getElementById('riskScore').innerText = score;
+    document.getElementById('tenYearRisk').innerText = tenYearRisk.toFixed(1) + '%';
+  }
+
+  function copyResult() {
+    const ageText = document.getElementById('ageRange').selectedOptions[0].text;
+    const genderText = document.querySelector('#genderOptions .selected')?.innerText || '';
+    const bpText = document.getElementById('bloodPressure').selectedOptions[0].text;
+    const igtText = document.querySelector('#metabolismOptions .selected')?.innerText || '';
+    const ldlText = document.getElementById('ldl').selectedOptions[0].text;
+    const hdlText = document.getElementById('hdl').selectedOptions[0].text;
+    const smokingText = document.querySelector('#smokingOptions .selected')?.innerText || '';
+    const score = document.getElementById('riskScore').innerText;
+    const risk = document.getElementById('tenYearRisk').innerText;
+
+    const text = `🧾 ASCVD Risk Calculation Summary:
+- Age: ${ageText}
+- Gender: ${genderText}
+- Systolic BP: ${bpText}
+- Impaired Glucose Tolerance: ${igtText}
+- LDL Cholesterol: ${ldlText}
+- HDL Cholesterol: ${hdlText}
+- Smoking: ${smokingText}
+→ Risk Score: ${score}
+→ Estimated 10-Year Risk: ${risk}`;
+
+    navigator.clipboard.writeText(text).then(() => {
+      alert("Copied to clipboard!");
+    });
+  }
+</script>
+</body>
+</html>

@@ -582,6 +582,22 @@
    "result": "22"
   },
   {
+   "slug": "hisayama",
+   "report": "https://github.com/m-aljasem/PyCVDRisk/blob/HEAD/reference/hisayama/REPORT.md",
+   "name": "Hisayama",
+   "fullName": "Hisayama ASCVD risk model (2022)",
+   "year": "2022",
+   "region": "Japan",
+   "photo": "asia_pacific",
+   "group": "primary",
+   "outcome": "10-year first ASCVD event (CHD or atherothrombotic infarction), ages 40-84; equation and point score",
+   "paperUrl": "https://doi.org/10.5551/jat.61960",
+   "verification": "Points equal weight / 0.144 (18/18) and the constants check; point score equal to R Jcvrisk (2,702/2,702) and to a web calculator of the JAS 2022 chart (79/80 cells).",
+   "evidence": "C, B",
+   "example": "from cvd_risk import hisayama\n\nhisayama(age=60, sex=\"male\", sbp=140, diabetes=0, hdl=50, proteinuria=0, smoker=1,\n         exercise=0, ldl=130)",
+   "result": "0.07546"
+  },
+  {
    "slug": "who-ish",
    "report": "https://github.com/m-aljasem/PyCVDRisk/blob/HEAD/reference/who_ish/REPORT.md",
    "name": "WHO/ISH",
