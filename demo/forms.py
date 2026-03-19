@@ -231,6 +231,10 @@ FORMS: dict[str, list[Variant]] = {
                          SMOKER, flag("exercise", "Regular exercise (sports 3+ times a week)"),
                          num(arg, f"{label} cholesterol", default, "mg/dL", 30, 500)))
                  for label, arg, default in (("LDL", "ldl", 130), ("Non-HDL", "non_hdl", 150))],
+    "epoch-japan": [Variant(label, cr.epoch_japan, (AGE(60, 40, 79), SEX, SBP, SMOKER, DIABETES,
+                            flag("proteinuria", "Urinary protein 1+ or more")) + extra, fixed={"outcome": outcome})
+                    for label, outcome, extra in (("CHD death", "chd", (TC, HDL)), ("Stroke death", "stroke", ()),
+                                                  ("CVD death", "cvd", ()))],
     "suita": [Variant(f"{label} sheet", cr.suita, (AGE(55, lo, 79), SEX, SMOKER, DIABETES, SBP, DBP,
                       num("hdl", "HDL cholesterol", 50, "mg/dL", 10, 150), EGFR,
                       num(sheet, f"{label} cholesterol", default, "mg/dL", 50, 500)),
