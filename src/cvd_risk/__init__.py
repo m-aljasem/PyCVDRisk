@@ -14,6 +14,7 @@ from cvd_risk.globorisk import globorisk
 from cvd_risk.grace import grace2, grace_6month, grace_hospital
 from cvd_risk.heart import heart
 from cvd_risk.hisayama import hisayama, hisayama_points, hisayama_points_risk
+from cvd_risk.jals import jals, jals_risk
 from cvd_risk.life_cvd2 import life_cvd2
 from cvd_risk.pce import pce
 from cvd_risk.predict import (
@@ -47,5 +48,5 @@ from cvd_risk.uniscore import guideline_score, uniscore
 from cvd_risk.who2019 import who2019
 from cvd_risk.who_ish import who_ish
 
-__all__ = ["adrs", "assign", "cha2ds2_vasc", "chads2", "china_par", "cuore", "dial2", "edacs", "epoch_japan", "finrisk", "framingham", "globorisk", "grace2", "grace_6month", "grace_hospital", "guideline_score", "has_bled", "heart", "hisayama", "hisayama_points", "hisayama_points_risk", "life_cvd2", "pce", "predict_bleed", "predict_cvd", "predict_cvd_bmi", "predict_cvd_policy", "predict_post_acs", "predict_post_cvd", "predict_t2d", "prevent", "procam", "procam_stroke", "qrisk2", "qrisk3", "regicor", "reynolds", "score", "score2", "score2_asia_pacific", "score2_ckd", "score2_diabetes", "score2_op", "smart2", "smart_reach", "suita", "suita_cvd", "suita_cvd_risk", "suita_risk", "timi", "uniscore", "who2019", "who_ish"]
+__all__ = ["adrs", "assign", "cha2ds2_vasc", "chads2", "china_par", "cuore", "dial2", "edacs", "epoch_japan", "finrisk", "framingham", "globorisk", "grace2", "grace_6month", "grace_hospital", "guideline_score", "has_bled", "heart", "hisayama", "hisayama_points", "hisayama_points_risk", "jals", "jals_risk", "life_cvd2", "pce", "predict_bleed", "predict_cvd", "predict_cvd_bmi", "predict_cvd_policy", "predict_post_acs", "predict_post_cvd", "predict_t2d", "prevent", "procam", "procam_stroke", "qrisk2", "qrisk3", "regicor", "reynolds", "score", "score2", "score2_asia_pacific", "score2_ckd", "score2_diabetes", "score2_op", "smart2", "smart_reach", "suita", "suita_cvd", "suita_cvd_risk", "suita_risk", "timi", "uniscore", "who2019", "who_ish"]
 __version__ = "2.0.0.dev0"

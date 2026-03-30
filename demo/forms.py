@@ -235,6 +235,17 @@ FORMS: dict[str, list[Variant]] = {
                             flag("proteinuria", "Urinary protein 1+ or more")) + extra, fixed={"outcome": outcome})
                     for label, outcome, extra in (("CHD death", "chd", (TC, HDL)), ("Stroke death", "stroke", ()),
                                                   ("CVD death", "cvd", ()))],
+    "jals": [Variant(label, cr.jals, (AGE(65, 40, 89), SEX, SBP, DBP, BP_TREATED, SMOKER, DIABETES,
+                     flag("af", "Atrial fibrillation")) + extra, output="points", fixed={"outcome": outcome},
+                     points_to_risk=lambda p, a, o=outcome: (f"{100 * float(cr.jals_risk(p, a['age'], o, 10)):.2f}% "
+                                                             f"(5-year {100 * float(cr.jals_risk(p, a['age'], o)):.2f}%)"))
+             for label, outcome, extra in (
+                 ("Stroke", "stroke", ()),
+                 ("Acute MI", "ami", (num("hdl", "HDL cholesterol", 50, "mg/dL", 10, 150),
+                                      num("non_hdl", "Non-HDL cholesterol", 150, "mg/dL", 30, 500))),
+                 ("Stroke or MI", "composite", (num("hdl", "HDL cholesterol", 50, "mg/dL", 10, 150),)),
+                 ("CVD death", "cvd_death", (num("hdl", "HDL cholesterol", 50, "mg/dL", 10, 150),
+                                             num("bmi", "Body-mass index", 23.0, "kg/m²", 12.0, 70.0, 0.1), EGFR)))],
     "suita": [Variant(f"{label} sheet", cr.suita, (AGE(55, lo, 79), SEX, SMOKER, DIABETES, SBP, DBP,
                       num("hdl", "HDL cholesterol", 50, "mg/dL", 10, 150), EGFR,
                       num(sheet, f"{label} cholesterol", default, "mg/dL", 50, 500)),

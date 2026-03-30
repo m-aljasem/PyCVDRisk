@@ -614,6 +614,22 @@
    "result": "0.009731"
   },
   {
+   "slug": "jals",
+   "report": "https://github.com/m-aljasem/PyCVDRisk/blob/HEAD/reference/jals/REPORT.md",
+   "name": "JALS",
+   "fullName": "Japan Arteriosclerosis Longitudinal Study score (2019)",
+   "year": "2019",
+   "region": "Japan",
+   "photo": "asia_pacific",
+   "group": "primary",
+   "outcome": "5- and 10-year stroke, AMI, stroke + AMI and CVD death, with and without AF; points (risk via jals_risk)",
+   "paperUrl": "https://doi.org/10.1038/s41440-019-0220-z",
+   "verification": "Points equal 10 x log2 of the printed rate ratios (174/176, 2 at a rounding edge); risk table recovered from Table 6 (257/260 five-year values, the rest within 0.01).",
+   "evidence": "C",
+   "example": "from cvd_risk import jals\n\njals(age=75, sex=\"male\", sbp=165, dbp=85, bp_treated=0, smoker=0, diabetes=0,\n     outcome=\"stroke\", af=0)",
+   "result": "25"
+  },
+  {
    "slug": "who-ish",
    "report": "https://github.com/m-aljasem/PyCVDRisk/blob/HEAD/reference/who_ish/REPORT.md",
    "name": "WHO/ISH",

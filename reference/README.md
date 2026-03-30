@@ -39,6 +39,7 @@ Japanese scores vs the R package Jcvrisk: `python reference/jcvrisk/make_patient
 | Suita CVD risk model 2020 (stroke or CHD; with/without ECG) | verified; points = 10 x beta 40/40; Table 4 bands as printed (not reproducible from S10 alone, documented); Jcvrisk same band for 2,409/2,416 and 2,411/2,416 (its SBP 139 / DBP 89 gap) | Nakai 2020 (J Atheroscler Thromb; Tables 3-4); Jcvrisk 0.1.3 (R) | C (+ partial B) | `suita_cvd/REPORT.md` |
 | Hisayama 2022 (ASCVD; equation, non-HDL variant, point score) | verified; points = weight / 0.144 18/18; point constant and both equation constants checked; Jcvrisk 2,702/2,702 (1e-12); ecg.watson.jp (JAS 2022 chart) 79/80 cells; Fig. 1 risk table departs from the stated formula (documented) | Honda 2022 (J Atheroscler Thromb; Table 2, Fig. 1, Suppl Tables 1-4); Jcvrisk 0.1.3; ecg.watson.jp | C + B | `hisayama/REPORT.md` |
 | EPOCH-JAPAN 2021 (CHD, stroke, CVD death) | verified; worked examples 2/2 (sums and risks); Jcvrisk stroke and CVD 2,416/2,416 (1e-12); Jcvrisk CHD uses ln TC for ln TC/HDL (documented) | Li 2021 (J Atheroscler Thromb; Table 2, Suppl Table 2); Jcvrisk 0.1.3 | C + B | `epoch_japan/REPORT.md` |
+| JALS score 2019 (stroke, AMI, composite, CVD death; with/without AF) | verified; points = 10 x log2 IRR 174/176 (2 at a rounding edge); Table 6 constants recovered: 257/260 five-year, 235/260 ten-year values, rest within 0.01; worked example; no risk table for the models without AF; Jcvrisk departs from the paper (documented) | Harada 2019 (Hypertens Res; Tables 2-6) | C | `jals/REPORT.md` |
 | WHO/ISH charts 2007 (14 subregions, with/without cholesterol) | verified; 3 whoishRisk transcription errors corrected | guideline's 2 printed charts (768 cells); whoishRisk 1.0 table (10,752 cells) and its R lookup logic (transliterated, not run) | A (2 subregions) + B | `who_ish/REPORT.md` |
 | HEART | verified; 18/18 published rules | Melki & Jernberg 2013 (Table 1, Methods); RiskScorescvd 0.3.1 | C + B | `heart/REPORT.md` |
 | CHADS2, CHA2DS2-VASc, HAS-BLED | verified; 32/32 published rules, definitions quoted from the PDFs | Gage 2001; Lip 2010; Pisters 2010 | C | `af/REPORT.md` |
@@ -129,6 +130,12 @@ Japanese scores vs the R package Jcvrisk: `python reference/jcvrisk/make_patient
     for the lifetime model the calculator shows below age 60. Optional: Table 2 differs from the calculator in 5/8
     values, and the women's worked example enters diabetes = 0. `uniscore` still routes China to SCORE2
     Asia-Pacific (`routing.csv`); switching it to China-PAR is your call (Chinese guidelines recommend China-PAR).
+22. **Japan: sources still needed** (add to `Formulas/` or Zotero). (a) JAS Guidelines 2017 (Kinoshita M et al.
+    J Atheroscler Thromb 2018;25:846-984), the primary source of the Suita adaptation two web calculators implement;
+    (b) the JAS 2022 guideline, for its Hisayama chart (glucose intolerance, no proteinuria or exercise items; one
+    web calculator implements it); (c) optionally the earlier Hisayama models (Arima, Hypertens Res 2009; Honda,
+    Atherosclerosis 2018), NIPPON DATA80 (Circ J 2006) and the JALS online supplement (Harada 2019; risk tables for
+    the models without AF are not in the article). Hisayama 2022, EPOCH-JAPAN and JALS are now implemented.
 
 ## Evidence ceiling per score
 
@@ -139,6 +146,6 @@ Why the scores below A stay where they are:
 | Reynolds | C | The official site (reynoldsriskscore.org) is now a parked domain; the papers' examples are the only official outputs. |
 | PROCAM 2007 (points) | C | The full Weibull function is in an unpublished annex; the Assmann-Stiftung online test returns its continuous risk, which cannot check the point score cell by cell. Owner action 18. |
 | ADRS | C (weak) | No calculator or charts found; owner action 15. |
-| Suita 2014 | C | No calculator for the 2014 sheets; the Japan Atherosclerosis Society's tools implement the 2017 adaptation and the 2022 (Hisayama) score. S(t) and the cohort means are unpublished, so the Cox models cannot be run. |
+| Suita 2014, Suita CVD 2020, JALS 2019 | C (+ partial B) | No calculator for the 2014 sheets; the Japan Atherosclerosis Society's tools implement the 2017 adaptation and the 2022 (Hisayama) score. S(t) and the cohort means are unpublished, so the Cox models cannot be run. Suita CVD 2020: no calculator found; Jcvrisk is a partial B. JALS: no calculator found; Jcvrisk departs from the paper. |
 | GRACE in-hospital (Granger 2003) | C | The developers' archived calculator (2004-2013) uses a later in-hospital nomogram, not Figure 4; today's online GRACE is GRACE 2.0, a different model (implemented, at A). The 6-month score (Eagle 2004) is at A. |
 | HEART, TIMI, EDACS, CHADS2, CHA2DS2-VASc, HAS-BLED | C (+ B) | Point scores: the published rules are the definition, so C is the ceiling. |
