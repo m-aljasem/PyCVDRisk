@@ -34,8 +34,26 @@ def load():
     return p, ours, ref
 
 
+RATES = {0: "< 4.7%", 1: "4.7%", 2: "8.3%", 3: "13.2%", 4: "19.9%", 5: "26.2%", 6: "40.9%", 7: "40.9%"}  # Fig. 1
+
+
+def calculator(name="calculator_reference_run2.csv"):
+    """Rows of a fixtures/calculator_reference*.csv (the TIMI app) with our score for the same 7 yes/no inputs."""
+    rows = list(csv.DictReader((FX / name).open()))
+    b = {k: np.array([int(r[k]) for r in rows]) for k in ("age65", "cadrisk", "knowncad", "asa", "angina",
+                                                         "stchange", "cardiac")}
+    ours = timi(np.where(b["age65"], 65, 64), 3 * b["cadrisk"], b["knowncad"], b["stchange"], 2 * b["angina"],
+                b["asa"], b["cardiac"])
+    want = [f"{int(o)} Point{'' if o == 1 else 's'} - {RATES[int(o)]} risk" for o in ours]
+    return rows, ours, want
+
+
 def main():
     p, ours, ref = load()
+    crow, _, cwant = calculator()
+    csame = sum(r["displayed"] == w for r, w in zip(crow, cwant))
+    row1, _, want1 = calculator("calculator_reference.csv")
+    miss1 = [(r, w) for r, w in zip(row1, want1) if r["displayed"] != w]
     same = int((ours == ref).sum())
     rules = [(n, float(timi(**{**BASE, **kw})), w) for n, kw, w in RULES]
     rules_ok = sum(g == w for _, g, w in rules)
@@ -49,15 +67,45 @@ def main():
          "| Rule | Score | Expected |", "|---|---:|---:|"]
     L += [f"| {n} | {g:g} | {w} |" for n, g, w in rules]
     L += ["", f"{rules_ok}/{len(rules)} rules give the published points.", "",
-          "## 2. RiskScorescvd (evidence level B)", "",
+          "## 2. TIMI Study Group calculator (evidence level A)", "",
+          "The TIMI Study Group's calculator page (https://timi.org/timi-calculators/) links to its Shiny app",
+          "https://timibiostat.shinyapps.io/calculators/ (G. Melloni and A. Bellavia, curated by TIMI investigators),",
+          "tab \"TIMI Risk Score for UA/NSTEMI\". It takes 7 yes/no inputs (age >=65 / <65, >=3 CAD risk factors,",
+          "known CAD with stenosis >=50%, aspirin in the past 7 days, >=2 anginal episodes in 24 h, ST changes >=0.5 mm,",
+          "elevated troponin or CK-MB) and shows \"<points> Point(s) - <14-day event rate> risk\".", "",
+          "`query_calculator.mjs` set every one of the 2^7 = 128 input combinations in headless Chrome (one session,",
+          "sequential, >= 1 s each) and stored the displayed text and the input values the Shiny client held when it",
+          "read the output. The package's score for the same inputs, written in the app's format with the event rates",
+          "of the paper's Figure 1, was compared as text. Two passes:", "",
+          f"- **Pass 2** (`fixtures/calculator_reference_run2.csv`, output read once unchanged for 3 s): "
+          f"**{csame}/{len(crow)} displayed results equal** (points and event rate).",
+          f"- Pass 1 (`fixtures/calculator_reference.csv`, unchanged for 1 s): {len(row1) - len(miss1)}/{len(row1)}. "
+          + "; ".join(f"Combination {r['combo']} ({r['server_inputs']}, 4 points) showed \"{r['displayed']}\"" for r, _ in miss1)
+          + (" although the inputs were already set; pass 2 shows 4 points for it. A stale read of an output that"
+             " had not yet refreshed (an earlier, unsaved pass missed two other rows the same way), not a rule"
+             " difference." if miss1 else ""), "",
+          "The app's own server code is not published. Its authors also publish the R package TIMIcalculators 0.1.0,",
+          "described as the app's companion with the same functions (github.com/gmelloni/TIMIcalculators, commit",
+          "ae85afb, 2025-04-14; GPL-3; archived in `source/TIMIcalculators/`). Its `computeUANSTEMI()`",
+          "(R/timi_scores.R) gives 1 point per \"Yes\" or \">=65\" and returns the same 8 strings the app displays.",
+          "`run_timicalculators.R` cuts that one function out and runs the 128 combinations; it was not run here",
+          "(the session's permission policy blocked executing downloaded code), so the package check is by reading.", "",
+          "Event rates: the paper gives 4.7% for scores 0/1 together and 40.9% for 6/7 together; the app shows",
+          "\"< 4.7%\" for a score of 0 (a display choice, not a number in the paper). `cvd_risk.timi` returns points only.", "",
+          "Archived: `source/TIMIcalculators/` (DESCRIPTION, NAMESPACE, README.md, R/aaa_imports.R,",
+          "R/timi_scores.R sha256 c370f439532c8407dceee3fb9b04babd2531d6231346cf658b9a33bde08ca3b8, R/timi_examples.R, data/timi_examples.rda, man/computeUANSTEMI.Rd;",
+          "raw.githubusercontent.com/gmelloni/TIMIcalculators/ae85afb91679d1b39f548178c5543742e1c79330/<path>),",
+          "`source/timi_app_uanstemi_rendered.html` (the app's DOM with the UA/NSTEMI tab open) and",
+          "`source/timi_app_uanstemi.png` (screenshot).", "",
+          "## 3. RiskScorescvd (evidence level B)", "",
           *[f"- {v}" for v in (FX / "VERSION").read_text().splitlines()], "",
           "RiskScorescvd stands in previous PCI or CABG for known coronary stenosis, and hs-troponin I",
           "above fixed sex-specific limits (34 and 16 ng/L) for elevated markers. `make_patients.py` draws both",
           "forms consistently, with 30% of ages and troponins on or next to a cut point.", "",
           f"{len(p)} random patients (seed 2000): {same}/{len(p)} identical scores."]
     (HERE / "REPORT.md").write_text("\n".join(L) + "\n")
-    print(f"rules {rules_ok}/{len(rules)}; RiskScorescvd {same}/{len(p)}")
-    assert rules_ok == len(rules) and same == len(p)
+    print(f"rules {rules_ok}/{len(rules)}; calculator {csame}/{len(crow)}; RiskScorescvd {same}/{len(p)}")
+    assert rules_ok == len(rules) and same == len(p) and csame == len(crow) == 128 and len(miss1) <= 1
 
 
 if __name__ == "__main__":

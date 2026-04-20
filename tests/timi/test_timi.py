@@ -24,3 +24,13 @@ def test_cut_points():
 
 def test_invalid_rows_are_nan():
     assert np.isnan(timi([-1, 50, 50, 50], [0, 1.5, 0, 0], [0, 0, 2, 0], 0, [0, 0, 0, -1], 0, 0)).all()
+
+
+def test_matches_timi_study_group_calculator():
+    """All 128 yes/no combinations as displayed by the TIMI Study Group's app (reference/timi/REPORT.md section 2)."""
+    import importlib.util
+    spec = importlib.util.spec_from_file_location("timi_report", FX.parent / "report.py")
+    rep = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(rep)
+    rows, _, want = rep.calculator()
+    assert len(rows) == 128 and [r["displayed"] for r in rows] == want
