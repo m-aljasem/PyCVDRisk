@@ -10,6 +10,8 @@ percent, NaN for a row with a missing or invalid input, an unrecognised sex, or 
 Women's family-history beta is 0.49159 in version 1 (2007 appendix) and 0.492 in version 2 (2025 supplement and the
 official calculator). The 2025 centring lines print men's cholesterol beta as 0.2286; the official calculator uses
 0.22286, as here (reference/assign/REPORT.md).
+ASSIGN 1.5 (developers' 2013 update, run by the offline calculator 1.5.1) keeps the version-1 algorithm and scores
+rheumatoid arthritis as 10 extra cigarettes per day: pass cigarettes_per_day + 10 for such patients with version=1.
 """
 
 from __future__ import annotations

@@ -98,3 +98,34 @@ def test_official_calculator_run():
     ours = assign(*(np.array([r[k] for r in rows], dtype=object if k == "sex" else float) for k in keys))
     bad = [(r["id"], r["shown"], o) for r, o in zip(rows, ours) if _shown(o) != r["shown"]]
     assert bad == []
+
+
+OFFLINE = SRC / "wayback" / "offline_1_5_1" / "includes" / "js"
+
+
+def test_offline_v151_constants():
+    # developers' offline calculator 1.5.1 (2014): betas.js holds the version-1 betas and centring means
+    js = (OFFLINE / "betas.js").read_text()
+    order = ("age", "tc", "hdl", "sbp", "diabetes", "chd", "cpd", "simd")
+    blocks = dict(zip(("beta", "mean"), js.split("var beta_coefficients")))
+    for kind, table in (("beta", BETA[1]), ("mean", MEAN[1])):
+        for sex, vals in table.items():
+            block = re.search(r'"%s"\s*:\s*\{(.*?)\}' % sex, blocks[kind], re.S).group(1)
+            d = {k: float(v) for k, v in re.findall(r'"(\w+)":\s*(-?[\d.]+)', block)}
+            assert tuple(d[k] for k in order) == vals, (kind, sex)
+    src = (OFFLINE / "assign-offline.js").read_text()
+    assert '{ "male" : 0.8831, "female" : 0.9365 }' in src and "cpd = parseInt(cpd, 10) + 10" in src
+
+
+def test_offline_v151_run():
+    # 1,000 seeded patients through the cut-out calculate() (reference/assign/run_offline_v151.js);
+    # rheumatoid arthritis is entered in the calculator as 10 extra cigarettes a day
+    fx = Path(__file__).parents[2] / "reference" / "assign" / "fixtures" / "offline_v151_reference.jsonl"
+    rows = [json.loads(ln) for ln in fx.read_text().splitlines()]
+    assert len(rows) == 1000 and sum(r["rheumatoid_arthritis"] for r in rows) == 200
+    col = {k: np.array([r[k] for r in rows], dtype=object if k == "sex" else float) for k in rows[0]}
+    cpd = col["cigarettes_per_day"] + 10 * col["rheumatoid_arthritis"]
+    ours = assign(col["age"], col["sex"], col["total_chol"], col["hdl_chol"], col["sbp"], col["diabetes"],
+                  col["family_history"], cpd, col["simd_score"], version=1)
+    np.testing.assert_allclose(ours, col["raw"], rtol=0, atol=1e-12)
+    assert (np.floor(ours + 0.5) == col["shown"]).all()

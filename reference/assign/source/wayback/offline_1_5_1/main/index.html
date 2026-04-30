@@ -1,0 +1,252 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+	<head>
+		<title>Estimate the risk - ASSIGN Score &ndash; prioritising prevention of cardiovascular disease</title>
+
+		<meta name="keywords" content="" />
+		<meta name="description" content="" />
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<meta http-equiv="imagetoolbar" content="no" />
+		<meta name="MSSmartTagsPreventParsing" content="true" />
+		<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7" >
+		<meta name="viewport" content="width=990" />
+
+		<link href="../includes/style/layout.css" rel="stylesheet" type="text/css" media="screen" />
+		<link href="../includes/style/content/estimate-the-risk.css" rel="stylesheet" type="text/css" media="screen" />
+		<link href="../includes/style/alt-media-print.css" rel="stylesheet" type="text/css" media="print" />
+
+
+		<script type="text/javascript" src="../includes/js/lib/jquery-1.3.2.min.js"></script>
+
+		<script type="text/javascript" src="../includes/js/betas.js"></script>
+		<script type="text/javascript" src="../includes/js/ranges.js"></script>
+		<script type="text/javascript" src="../includes/js/usual-ranges.js"></script>
+		<script type="text/javascript" src="../includes/js/means.js"></script>
+
+		<script type="text/javascript" src="../includes/js/assign-offline.js"></script>
+
+
+		<!--[if IE 6]>
+			<link rel="stylesheet" type="text/css" href="../includes/style/ie.css" />
+		<![endif]-->
+	</head>
+	<body>
+		<ul id="access">
+			<li><a href="#primary_navigation" accesskey="c">Skip to navigation</a></li>
+			<li><a href="#primary_content" accesskey="s">Skip to main content</a></li>
+		</ul>
+
+		<p id="identity"><a href="">ASSIGN Score &ndash; <span>prioritising prevention of cardiovascular disease</span></a></p><div id="banner"></div>
+
+		<div id="content" class="gateway">
+			<div id="primary_content">
+				<div class="rounded">
+					<h1 id="heart_score" >ASSIGN Cardiovascular Risk Score Version 1.5</h1>
+					<h2>Estimate the Risk: NHS Scotland clinical use</h2>
+
+					<p class="initial">Enter details in the fields to the right, then click Calculate.</p>
+
+					<span class="tr"></span>
+					<span class="tl"></span>
+				</div>
+				<div class="info">
+					<h2>DISCLAIMER:</h2>
+					<p style="color:#FF0000;">You must make yourself familiar with the online version at assign-score.com before using this offline version. Read the notes, ASSIGN for beginners, advanced information, full disclaimer and be prepared to go back to the online version if you have any questions about this offline version.</p>
+					<p>ASSIGN Score Offline Version 1.5.1 March 2014<br/>
+					Check <a href="http://www.assign-score.com/">assign-score.com</a> for newer versions</p>
+				</div>
+			</div>
+
+			<div id="secondary_content">
+				<div class="rounded">
+					<form action="error.php" onsubmit="return false;" method="post" id="calculator">
+						<fieldset>
+							<input type="hidden" name="algorithm"  id="algorithm" value="assign" />
+
+							<div class="question_block first-child" id="name">
+								<div class="question">
+									<label id="name-label" for="name">Name/ Patient ID</label>
+									<input type="text" name="name" />
+									<p class="toggle_notes"><a href="">notes</a></p>
+								</div>
+
+								<div class="expand">
+									<p class="error"></p>
+									<p class="notes" id="expand_name">Subject's name.</p>
+								</div>
+							</div>
+
+							<div class="question_block first-child" id="age">
+
+								<div class="question">
+									<label for="age">Current age</label>
+									<input type="text" name="age" class="numeric"/>
+									<p class="toggle_notes"><a href="">notes</a></p>
+								 </div>
+
+								<div class="expand">
+									<p class="error"></p>
+									<p class="notes" id="expand_age">Age at last birthday.</p>
+								</div>
+
+							</div>
+
+							<div class="question_block" id="sex">
+								<div class="question">
+									<p class="label">Sex</p>
+									<input checked="checked" type="radio" name="sex" value="male" class="radio" id="sex_m" /><label class="radio_label" for="sex_m">M</label>
+									<input  type="radio" name="sex" value="female" class="radio" id="sex_f" /><label class="radio_label" for="sex_f">F</label>
+									<p class="toggle_notes"><a href="">notes</a></p>
+								</div>
+
+								<div class="expand">
+									<p class="error"></p>
+									<p class="notes" id="expand_sex">Please select a sex. </p>
+								</div>
+							</div>
+
+							<div class="question_block" id="postcode">
+								<div class="question">
+									<label for="postcode">Scottish Postcode</label>
+									<input id="postcode-trigger" type="text" name="postcode" value="" />
+									<p class="toggle_notes"><a href="">notes</a></p>
+								</div>
+
+								<div class="expand">
+									<p class="error"></p>
+									<p class="notes" id="expand_postcode">Links to Scottish Index of Multiple Deprivation 2012 (SIMD) for Scottish postcodes only. Missing or unrecognised postcode will result in default SIMD of 20.0. Please check the postcode entered was accurate, including any space in the middle.</p>
+								</div>
+							</div>
+
+							<div class="question_block" id="chd">
+								<div class="question">
+									<p class="label">Family history of CHD/Stroke</p>
+									<input checked="checked" type="radio" name="chd" value="0" class="radio" id="chd_n" /><label class="radio_label" for="chd_n">N</label>
+									<input  type="radio" name="chd" value="1" class="radio" id="chd_y" /><label class="radio_label" for="chd_y">Y</label>
+									<p class="toggle_notes"><a href="">notes</a></p>
+								 </div>
+
+								<div class="expand">
+									<p class="error"></p>
+									<p class="notes" id="expand_chd">Has a close relative developed coronary heart disease or had a stroke before the age of 60?</p>
+								</div>
+							</div>
+
+							<div class="question_block" id="diabetes">
+								<div class="question">
+									<label>Is the subject diabetic?</label>
+									<input checked="checked" type="radio" name="diabetes" value="0" class="radio" id="diabetes_n" /><label class="radio_label" for="diabetes_n">N</label>
+									<input  type="radio" name="diabetes" value="1" class="radio" id="diabetes_y" /><label class="radio_label" for="diabetes_y">Y</label>
+									<p class="toggle_notes"><a href="">notes</a></p>
+								 </div>
+								<div class="expand">
+									<p class="error"></p>
+									<p class="notes" id="expand_diabetes">Has the subject been clinically diagnosed as diabetic? </p>
+								</div>
+							</div>
+
+							<div class="question_block" id="arthritis">
+								<div class="question">
+									<label>Rheumatoid arthritis?</label>
+									<input checked="checked" type="radio" name="arthritis" value="0" class="radio" id="arthritis_n" /><label class="radio_label" for="arthritis_n">N</label>
+									<input  type="radio" name="arthritis" value="1" class="radio" id="arthritis_y" /><label class="radio_label" for="arthritis_y">Y</label>
+									<p class="toggle_notes"><a href="">notes</a></p>
+								 </div>
+								<div class="expand">
+									<p class="error"></p>
+									<p class="notes" id="expand_arthritis">Has the subject been clinically diagnosed with rheumatoid arthritis (not other forms of arthritis)? </p>
+								</div>
+							</div>
+
+							<div class="question_block" id="cpd">
+								<div class="question">
+									<label for="cpd">Cigarettes smoked daily or equivalent</label>
+									<input type="text" name="cpd" value="" class="numeric hasMean"/>
+									<p class="mean"><a href="#" onmousedown="useMean('cpd'); return false;">use mean</a></p>
+									<p class="toggle_notes"><a href="">notes</a></p>
+								</div>
+
+								<div class="expand">
+									<p class="error"></p>
+									<p class="notes" id="expand_cpd">Average number of cigarettes smoked per day or equivalent. </p>
+								</div>
+							</div>
+
+							<div class="question_block" id="sbp">
+								<div class="question">
+									<label for="sbp">Systolic Blood Pressure</label>
+
+									<input type="text" name="sbp" value="" class="numeric hasMean"/>
+									<p class="mean"><a href="#" onmousedown="useMean('sbp'); return false;">use mean</a></p>
+									<p class="toggle_notes"><a href="">notes</a></p>
+								</div>
+
+								<div class="expand">
+									<p class="error"></p>
+									<p class="notes" id="expand_sbp">Systolic blood pressure in millimetres of mercury (mmHg). In order to return a score the value entered should be between 80 and 250. </p>
+								</div>
+							</div>
+
+							<div class="question_block" id="tc">
+								<div class="question">
+									<label for="tc">Total cholesterol</label>
+									<input type="text" name="tc" value="" class="numeric hasMean"/>
+									<p class="mean"><a href="#" onmousedown="useMean('tc'); return false;">use mean</a></p>
+									<p class="toggle_notes"><a href="">notes</a></p>
+								</div>
+
+								<div class="expand">
+									<p class="error"></p>
+									<p class="notes" id="expand_tc">Total cholesterol in millimoles per litre (mmol/l). In order to return a score the value entered should be between 2 and 12.5. </p>
+								</div>
+							</div>
+
+							<div class="question_block" id="hdl">
+								<div class="question">
+									<label for="hdl">HDL Cholesterol</label>
+									<input type="text" name="hdl" value="" class="numeric hasMean"/>
+									<p class="mean"><a href="#" onmousedown="useMean('hdl'); return false;">use mean</a></p>
+									<p class="toggle_notes"><a href="">notes</a></p>
+								</div>
+
+								<div class="expand">
+									<p class="error"></p>
+									<p class="notes" id="expand_hdl">High density lipoprotein cholesterol in millimoles per litre (mmol/l). In order to return a score the value entered should be between 0.3 and 3.5. </p>
+								</div>
+
+							</div>
+
+							<div id="results">
+								<div id="results-data"></div>
+								<input id="calc_submit" type="submit" value="Calculate" name="subcalc" class="submit" />
+								<div class='print-btn'><a href='#' onclick="window.print();return false;">Print</a></div>
+								<div class='print-btn new-patient'><a href='../assign-score.html'>New patient</a></div>
+							</div>
+						</fieldset>
+					</form>
+
+					<span class="tr"></span><span class="tl"></span>
+				</div>
+			</div>
+		</div>
+
+		<h2 class="accessibility">Site Information</h2>
+
+		<div id="network">
+			<ul id="associates">
+				<li class="sign"><a title="External link" href="http://www.sign.ac.uk/">SIGN</a></li>
+				<li class="healthier_scotland"><a title="External link" href="http://www.infoscotland.com/infoscotland/43.1.2.html">Healthier Scotland</a></li>
+				<li class="dundee_university"><a title="External link" href="http://www.dundee.ac.uk/">University of Dundee</a></li>
+				<li class="nhs_scotland"><a title="External link" href="http://www.show.scot.nhs.uk/">NHS Scotland</a></li>
+			</ul>
+		</div>
+
+		<div id="site_footer">
+			<ul>
+				<li>Do not 'RECALCULATE' more than six times, click on 'NEW PATIENT' to enter any further changes.<br /></li>
+				<li>&copy; Copyright ASSIGN Score 2008.  Version 1.5.1 March 2014 incorporates SIMD 2012, rheumatoid arthritis and updated population means, algorithm unchanged.</li>
+				<li class="top"><a href="#">Back to top<span></span></a></li>
+			</ul>
+		</div>
+	</body>
+</html>
