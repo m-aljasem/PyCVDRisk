@@ -1,7 +1,10 @@
 # Hisayama ASCVD risk model (2022): verification report
 
-Evidence level C + B: the paper's equation, point derivation and constants; the point score also matches the R
-package Jcvrisk on every patient, and a web calculator of the JAS 2022 chart on 79/80 cells.
+Evidence level A + B + C. A: the Japan Atherosclerosis Society's official 2022 app (browser JS, run unmodified) gives
+the same shown risk, risk category and reference risk as the package on 3,920/3,920 patients; it uses the Fig. 1 points
+for age, sex, SBP, HDL-C, LDL-C and smoking and the paper's points-to-risk formula, so those are level A. The diabetes,
+proteinuria and exercise points, the full equation and the non-HDL-C model are not in the app and stay at C (+ B:
+Jcvrisk on every patient; ecg.watson.jp on 79/80 chart cells).
 
 ## Sources
 
@@ -16,6 +19,16 @@ package Jcvrisk on every patient, and a web calculator of the JAS 2022 chart on 
 - **Web calculator**: ecg.watson.jp/medical/ASCVD ("ASCVD Risk Calculator for Japanese patients (Hisayama score)"; `source/ecg_watson_ascvd.html`, sha256 d4246e41...; printed copy `source/ecg_watson_calculator_page.pdf`).
   It implements the JAS 2022 guideline chart: no proteinuria or exercise items, impaired glucose tolerance 1 point
   in place of diabetes 3, ages 40-79.
+
+- **JAS official app (level A)**: "動脈硬化性疾患発症予測・脂質管理目標設定アプリ（医師・医療従事者向け）", the web
+  version of the JAS 2022 risk / lipid-target app (App Store id1229590106, Google Play baraabaru.qzlab.com.kandomyakuapp2),
+  linked from https://www.j-athero.org/jp/general/ge_tool2/ and served from
+  https://www.j-athero.org/general/gl2022app/workers/ (Copyright JAS 2022). It computes in the browser:
+  `mainQuestions.js` (`calsSuitaScore2`, `createResult2`; sha256 93d8c048...0419) sums the points and looks the total
+  up in a 30-row table of 10-year risk and category; `result.js` shows the risk text, category, LDL-C / non-HDL-C
+  targets and the ratio to the lowest-risk person of the same age and sex. All 15 HTML/JS files are in
+  `source/jas2022_app/` (sha256 in `sha256sum source/jas2022_app/*`). The older public tool
+  j-athero.org/general/ge_app/general2/ is still live and still says it follows the 2017 guideline (Suita-based).
 
 ## Model
 
@@ -33,12 +46,32 @@ Fig. 1 points (0-27 without age) and p = 1 - 0.9696^exp((score + age points) x 0
 - ecg.watson.jp: its 20 x 4 table equals the formula at score + 2 (the page has no exercise item, so every patient
   carries the 2 points for no regular exercise), shown to 1 decimal with a floor of 1.0, in 79/80 cells.
 
+- **JAS official app** (`run_jas2022_app.js` -> `fixtures/jas2022_app_reference.json`; test
+  `test_jas2022_official_app`): every point cell (4 age decades x 2 sexes x 3 HDL x 4 LDL x 5 SBP x 2 glucose x 2
+  smoking = 1,920, at band-boundary values 119/120, 129/130, 139/140, 159/160, 39/40, 59/60) plus 2,000 seeded
+  patients with raw values (1,000 entering TC + TG, the app's Friedewald route, parseInt truncation). The app shows
+  points nowhere; it shows the 10-year risk to 1 decimal, the category (low < 2%, intermediate 2-< 10%, high >= 10%)
+  and the ratio to the same-age, same-sex reference risk. Package: Fig. 1 points + 1 for impaired glucose tolerance,
+  put through `hisayama_points_risk(score + 2, age)`, shown to 1 decimal ("1.0% or less" at total <= 7). Shown risk
+  3,920/3,920, category 3,920/3,920 (1,082 low, 1,931 intermediate, 907 high), reference risk 3,920/3,920, LDL-C
+  used 3,920/3,920; all 29 reachable table rows hit (totals 0-35). The app's table equals the formula at total + 2,
+  rounded to 1 decimal, in 30/30 rows (row 7 is "1.0% or less", formula 0.94%).
+
 ## Findings
 
 1. **Fig. 1's risk table does not follow the paper's own formula.** Its values form one sequence in score + age
    points, as the formula implies, but they rise faster (on the log(-log) scale about 0.155 per point, not 0.144):
    15.7% against 11.9% at score 27, ages 40-49; 49.7% against 37.0% at score 16, ages 80-84. The package follows
    the stated formula, as do Jcvrisk and the JAS 2022 chart (via the web calculator); Fig. 1's table is not used.
-2. **Web calculator, one cell**: score 19, ages 70-79 shows 41.1%; the formula gives 41.4%.
-3. **The JAS 2022 chart is a different score.** It drops proteinuria and exercise and scores glucose intolerance;
-   its primary source (the JAS 2022 guideline) is not in hand, so it is not implemented.
+2. **Web calculator, one cell**: score 19, ages 70-79 shows 41.1%; the formula and the JAS official app give 41.4%
+   (third-party transcription error).
+3. **The JAS 2022 chart is a different score** (confirmed by the JAS app's code): no proteinuria or exercise item,
+   impaired glucose tolerance (fasting glucose 110-125 mg/dL or OGTT 2-h 140-199) 1 point; diabetes, CKD and PAD
+   route to the high-risk category before the score; prior CHD or atherothrombotic stroke route to secondary
+   prevention; ages 40-79. Its risk table is the paper's formula with the 2 no-exercise points always added
+   (classification: guideline adaptation, not an error). Not implemented as a separate function; the test shows it
+   is `hisayama_points(..., diabetes=0, proteinuria=0, exercise=1) + igt` through `hisayama_points_risk`.
+4. **JAS app, unreachable rows**: the table has rows for totals 36 (46.1%) and >= 37 ("50% or more"), but the
+   maximum total is 35 (16 + 7 + 2 + 3 + 4 + 1 + 2). Harmless.
+5. **JAS app, input handling**: with TC entered the form clears LDL-C and uses Friedewald LDL-C = TC - HDL-C - TG/5
+   (truncated), whatever the TG level; the non-HDL-C it computes is passed on but not scored.

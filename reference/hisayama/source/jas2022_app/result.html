@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="user-scalable=no">
+<title>動脈硬化性疾患発症予測・脂質管理目標設定アプリ（医師・医療従事者向け）</title>
+<link rel="stylesheet" type="text/css" href="common.css">
+<style type="text/css">@media print{ body{ background-color:white; background-image: none !important; } .forprint{ width:100% !important;} .noprint { display:none; } .print100 { overflow: visible !important; margin:0; padding:0;width:90%; height:100%; min-width:500px; min-height:900px;} }</style>
+<script type="text/javascript" src="../lib/jquery/jquery-3.1.1.min.js"></script>
+<script type="text/javascript" src="common.js"></script>
+<script type="text/javascript" src="result.js"></script>
+</head>
+<body>
+	<div class="headerRoot">
+		<div class="main">
+			<div class="left">動脈硬化性疾患発症予測・脂質管理目標設定アプリ<br />（医師・医療従事者向け）</div>
+			<div class="right">
+				<button onClick="javascript:history.back(); return false;" class="noprint">
+					<img src="appbar.arrow.left.png" class="backBtnImg">
+				</button>
+			</div>
+		</div>
+	</div>
+	<div class="contentsRoot">
+		<br />
+		<div class="subTitle">
+			<div class="left">予測される10年間の動脈硬化性疾患発症リスク</div>
+		</div>
+		<div class="main center">
+			<p class="riskRateText bold">
+				<span id="rateText"></span>
+			</p>
+			<div class="main" id="highRiskMsg">
+				<p class="resultText">同年齢、同性で最もリスクが低い人と比べて <span class="riskRateText"><span id="rateDiv"></span>倍</span> 発症確率が高くなっています。</p>
+			</div>
+			<div class="main" id="lowRiskMsg">
+				<p class="resultText">同年齢、同性で最もリスクが低い人と比べて <span class="riskRateText">同程度</span> の発症確率です。</p>
+			</div>
+		</div>
+		<div class="subTitle">
+			<div class="left">リスク分類</div>
+		</div>
+		<div class="main center">
+			<p class="riskRateText bold"><span id="riskText"></span>です</p>
+		</div>
+		<div class="subTitle">
+			<div class="left">管理目標値</div>
+		</div>
+		<div class="main2">
+			<br />
+			<table class="targetValuesText">
+				<tr>
+					<td>LDL-C</td><td class="unitTd">＜</td><td class="valueTd"><span id="targetLDLCText"></span></td><td>mg/dL</td>
+				</tr>
+				<tr>
+					<td>Non-HDL-C</td><td class="unitTd">＜</td><td class="valueTd"><span id="targetNonLDLCText"></span></td><td>mg/dL</td>
+				</tr>
+				<tr>
+					<td>TG</td><td class="unitTd">＜</td><td class="valueTd">150</td><td>mg/dL(空腹時)</td>
+				</tr>
+				<tr>
+					<td></td><td class="unitTd">＜</td><td class="valueTd">175</td><td>mg/dL(随時)</td>
+				</tr>
+				<tr>
+					<td>HDL-C</td><td class="unitTd">≧</td><td class="valueTd">40</td><td>mg/dL</td>
+				</tr>
+			</table>
+			<p class="questionText">
+ 				<small>10時間以上の絶食を「空腹時」、それ以外の条件を「随時」とする。</small>
+			</p>
+		</div>
+		<div class="main">
+			<p class="resultText">LDL-Cが180mg/dL以上が持続する場合は、家族性高コレステロール血症の可能性も念頭に置いてください。</p>
+			<p class="resultText" id="lowRiskOnlyMsg">これらの目標値は到達努力目標であり、低下率20-30％も目標値としてなり得ます。<br />まずLDL-Cの管理目標値を達成し、その後non-HDL-Cの達成を目指してください。</p>
+		</div>
+		<div class="main">
+			<table class="resulttable">
+				<tr>
+					<th class="td2w">年齢</th>
+					<th class="td2w">性別</th>
+				</tr>
+				<tr>
+					<td  class="td2w">
+						<span id="old"></span>
+					</td>
+					<td  class="td2w">
+						<span id="sex"></span>
+					</td>
+				</tr>
+			</table>
+
+			<br />
+
+			<table class="resulttable">
+				<tr>
+					<th class="td3w">LDLコレステロール値</th>
+					<th class="td3w">HDLコレステロール値</th>
+				</tr>
+				<tr>
+					<td class="td2w">
+						<span id="ldl"></span> mg/dL
+					</td>
+					<td class="td2w">
+						<span id="hdl"></span> mg/dL
+					</td>
+				</tr>
+			</table>
+
+			<br />
+
+			<table class="resulttable">
+				<tr>
+					<th class="td3w">収縮期血圧</th>
+					<th class="td3w">糖代謝異常</th>
+					<th class="td3w">喫煙の習慣</th>
+				</tr>
+				<tr>
+					<td class="td3w">
+						 <span id="systolicBloodPressure"></span> mmHg<br />
+					</td>
+					<td class="td3w">
+						<span id="diabeteMellitus"></span>
+					</td>
+					<td  class="td3w">
+						<span id="smoking"></span>
+					</td>
+				</tr>
+			</table>
+
+		</div>
+
+		<div class="main center">
+			<p>
+				<button id="editBtn" class="noprint">前画面に戻る</button>&nbsp;&nbsp;&nbsp;
+				<button id="backBtn" class="noprint default">初めに戻る</button>
+			</p>
+		</div>
+	</div>
+	<div class="footerRoot">
+		<div class="main">
+			<div>Copyright©一般社団法人日本動脈硬化学会2022</div>
+		</div>
+	</div>
+</body>
+</html>

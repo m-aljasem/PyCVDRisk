@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="user-scalable=no">
+<title>動脈硬化性疾患発症予測・脂質管理目標設定アプリ（医師・医療従事者向け）</title>
+<link rel="stylesheet" type="text/css" href="common.css">
+<script type="text/javascript" src="../lib/jquery/jquery-3.1.1.min.js"></script>
+<script type="text/javascript" src="common.js"></script>
+<script type="text/javascript" src="highRisk.js"></script>
+</head>
+<body>
+	<div class="headerRoot">
+		<div class="main">
+			<div class="left">動脈硬化性疾患発症予測・脂質管理目標設定アプリ<br />（医師・医療従事者向け）</div>
+			<div class="right">
+				<button onClick="javascript:history.back(); return false;">
+					<img src="appbar.arrow.left.png" class="backBtnImg">
+				</button>
+			</div>
+		</div>
+	</div>
+	<div class="contentsRoot">
+		<br />
+		<div class="subTitle">
+			<div class="left">一次予防　高リスク</div>
+		</div>
+		<div class="main">
+			<p class="questionText">まず生活習慣の改善を行った後、薬物療法の適用を考慮する	</p>
+		</div>
+		<div class="subTitle">
+			<div class="left">管理目標値</div>
+		</div>
+		<div class="main2">
+			<br />
+			<table class="targetValuesText">
+				<tr>
+					<td>LDL-C</td><td class="unitTd">＜</td><td class="valueTd">120</td><td>mg/dL</td>
+				</tr>
+				<tr>
+					<td>Non-HDL-C</td><td class="unitTd">＜</td><td class="valueTd">150</td><td>mg/dL</td>
+				</tr>
+				<tr>
+					<td>TG</td><td class="unitTd">＜</td><td class="valueTd">150</td><td>mg/dL(空腹時)</td>
+				</tr>
+				<tr>
+					<td></td><td class="unitTd">＜</td><td class="valueTd">175</td><td>mg/dL(随時)</td>
+				</tr>
+				<tr>
+					<td>HDL-C</td><td class="unitTd">≧</td><td class="valueTd">40</td><td>mg/dL</td>
+				</tr>
+			</table>
+			<p class="questionText">
+ 				<small>10時間以上の絶食を「空腹時」、それ以外の条件を「随時」とする。</small>
+			</p>
+		</div>
+		<div class="main">
+			<p class="questionText">
+LDL-Cが180mg/dL以上が持続する場合は、家族性高コレステロール血症の可能性も念頭に置いてください。<br />
+糖尿病患者において、下記のいずれかを合併する場合はより厳格な脂質管理を考慮してください。
+			</p>
+			<ul class="questionText">
+				<li>PAD</li>
+				<li>細小血管症（網膜症、腎症、神経障害）</li>
+				<li>喫煙あり</li>
+			</ul>
+		</div>
+		<div class="main2">
+			<table class="targetValuesText">
+				<tr>
+					<td>LDL-C</td><td class="unitTd">＜</td><td class="valueTd">100</td><td>mg/dL</td>
+				</tr>
+				<tr>
+					<td>Non-HDL-C</td><td class="unitTd">＜</td><td class="valueTd">130</td><td>mg/dL</td>
+				</tr>
+			</table>
+		</div>
+		<br />
+		<div class="main center">
+			<p>
+				<button id="backBtn" class="default">初めに戻る</button>
+			</p>
+		</div>
+	</div>
+	<div class="footerRoot">
+		<div class="main">
+			<div>Copyright©一般社団法人日本動脈硬化学会2022</div>
+		</div>
+	</div>
+</body>
+</html>

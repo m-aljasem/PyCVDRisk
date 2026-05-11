@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="user-scalable=no">
+<title>動脈硬化性疾患発症予測・脂質管理目標設定アプリ（医師・医療従事者向け）</title>
+<link rel="stylesheet" type="text/css" href="common.css">
+<script type="text/javascript" src="../lib/jquery/jquery-3.1.1.min.js"></script>
+<script type="text/javascript" src="common.js"></script>
+<script type="text/javascript" src="saihatsuBoshi.js"></script>
+</head>
+<body>
+	<div class="headerRoot">
+		<div class="main">
+			<div class="left">動脈硬化性疾患発症予測・脂質管理目標設定アプリ<br />（医師・医療従事者向け）</div>
+			<div class="right">
+				<button onClick="javascript:history.back(); return false;">
+					<img src="appbar.arrow.left.png" class="backBtnImg">
+				</button>
+			</div>
+		</div>
+	</div>
+	<div class="contentsRoot">
+		<br />
+		<div class="subTitle">
+			<div class="left">二次予防</div>
+		</div>
+		<div class="main">
+			<p class="questionText">生活習慣の是正とともに薬物治療を考慮する</p>
+		</div>
+		<div class="subTitle">
+			<div class="left">管理目標値</div>
+		</div>
+		<div class="main2">
+			<br />
+			<table class="targetValuesText">
+				<tr>
+					<td>LDL-C</td><td class="unitTd">＜</td><td class="valueTd">100</td><td>mg/dL</td>
+				</tr>
+				<tr>
+					<td>Non-HDL-C</td><td class="unitTd">＜</td><td class="valueTd">130</td><td>mg/dL</td>
+				</tr>
+				<tr>
+					<td>TG</td><td class="unitTd">＜</td><td class="valueTd">150</td><td>mg/dL(空腹時)</td>
+				</tr>
+				<tr>
+					<td></td><td class="unitTd">＜</td><td class="valueTd">175</td><td>mg/dL(随時)</td>
+				<tr>
+				</tr>
+				<tr>
+					<td>HDL-C</td><td class="unitTd">≧</td><td class="valueTd">40</td><td>mg/dL</td>
+				</tr>
+			</table>
+			<p class="questionText">
+ 				<small>10時間以上の絶食を「空腹時」、それ以外の条件を「随時」とする。</small>
+			</p>
+		</div>
+		<div class="main">
+			<p class="questionText">
+下記4病態のいずれかを合併する場合はより厳格な脂質管理を考慮してください。
+			</p>
+			<ul class="questionText">
+				<li>急性冠症候群</li>
+				<li>家族性高コレステロール血症</li>
+				<li>糖尿病</li>
+				<li>冠動脈疾患とアテローム血栓性脳梗塞（明らかなアテローム*を伴うその他の脳梗塞を含む）の合併</li>
+			</ul>
+		</div>
+		<div class="main2">
+			<p class="questionText">
+				<small>*頭蓋内外動脈に50％以上の狭窄、または弓部大動脈粥腫（最大肥厚４mm以上）</small>
+			</p>
+		</div>
+		<div class="main2">
+			<table class="targetValuesText">
+				<tr>
+					<td>LDL-C</td><td class="unitTd">＜</td><td class="valueTd">70</td><td>mg/dL</td>
+				</tr>
+				<tr>
+					<td>Non-HDL-C</td><td class="unitTd">＜</td><td class="valueTd">100</td><td>mg/dL</td>
+				</tr>
+			</table>
+		</div>
+		<br />
+		<div class="main center">
+			<p>
+				<button id="backBtn" class="default">初めに戻る</button>
+			</p>
+		</div>
+	</div>
+	<div class="footerRoot">
+		<div class="main">
+			<div>Copyright©一般社団法人日本動脈硬化学会2022</div>
+		</div>
+	</div>
+</body>
+</html>

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="user-scalable=no">
+<title>動脈硬化性疾患発症予測・脂質管理目標設定アプリ（医師・医療従事者向け）</title>
+<link rel="stylesheet" type="text/css" href="common.css">
+<script type="text/javascript" src="../lib/jquery/jquery-3.1.1.min.js"></script>
+<script type="text/javascript" src="common.js"></script>
+<script type="text/javascript" src="secondQuestion.js"></script>
+</head>
+<body>
+	<div class="headerRoot">
+		<div class="main">
+			<div class="left">動脈硬化性疾患発症予測・脂質管理目標設定アプリ<br />（医師・医療従事者向け）</div>
+			<div class="right">
+				<button onClick="javascript:history.back(); return false;">
+					<img src="appbar.arrow.left.png" class="backBtnImg">
+				</button>
+			</div>
+		</div>
+	</div>
+	<div class="contentsRoot">
+		<div class="main">
+			<p class="questionText bold">下記のいずれかがあるか？</p>
+			<ul class="questionText bold">
+				<li>糖尿病（耐糖能異常は含まない）</li>
+				<li>慢性腎臓病（CKD)</li>
+				<li>末梢動脈疾患（PAD）</li>
+			</ul>
+		</div>
+		<br />
+		<div class="main center">
+			<p>
+				<button id="noBtn" class="default">なし</button>
+			</p>
+			<p>
+				<button id="yesBtn">あり</button>
+			</p>
+		</div>
+	</div>
+	<div class="footerRoot">
+		<div class="main">
+			<div>Copyright©一般社団法人日本動脈硬化学会2022</div>
+		</div>
+	</div>
+</body>
+</html>

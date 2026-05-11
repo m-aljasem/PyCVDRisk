@@ -89,3 +89,25 @@ def test_equation_and_ranges():
         hisayama(60, "male", 140, 0, 50, 0, 1, 0)
     with pytest.raises(ValueError):
         hisayama_points("male", 140, 0, 50, 0, 1, 0, ldl=130, non_hdl=160)
+
+
+def test_jas2022_official_app():
+    """JAS's official 2022 app (j-athero.org gl2022app, browser JS run unmodified in Node by
+    reference/hisayama/run_jas2022_app.js) on 3,920 patients: shown 10-year risk (1 decimal, '1.0% or less' at total
+    <= 7), risk category (<2, 2-<10, >=10%) and the ratio's reference risk all equal Fig. 1
+    points (age, sex, SBP, HDL-C, LDL-C, smoking) + 1 for impaired glucose tolerance, put through the paper's formula
+    at score + 2 (the no-exercise points; the chart has no exercise or proteinuria item)."""
+    d = pd.DataFrame(json.loads((REF / "hisayama/fixtures/jas2022_app_reference.json").read_text())["rows"])
+    assert len(d) == 3920 and "error" not in d
+    age = d.old.to_numpy()
+    sex = np.where(d.sex == 7, "male", "female")
+    ldl = d.ldl.fillna(np.trunc(d.tc - d.hdl - d.tg / 5)).to_numpy()  # app's Friedewald, parseInt truncation
+    assert (ldl == d.ldl_used).all()
+    score = hisayama_points(sex, d.systolicBloodPressure, 0, d.hdl, 0, d.smoking == 2, 1, ldl=ldl) + d.diabeteMellitus
+    total = score + np.select([age >= 70, age >= 60, age >= 50], [16, 11, 5], 0)
+    risk = 100 * hisayama_points_risk(score + 2, age)
+    shown = np.where(total <= 7, 1.0, np.where(total >= 37, 50.0, np.round(risk, 1)))
+    assert (shown == d.rate).all()
+    assert (np.digitize(risk, [2, 10]) == d.risk).all()
+    assert (np.maximum(np.round(100 * hisayama_points_risk(np.where(d.sex == 7, 9, 2), age), 1), 1.0) == d.rateMin).all()
+    assert set(d.risk) == {0, 1, 2} and total.min() == 0 and total.max() == 35  # 36 and ">= 37" rows unreachable
