@@ -1,0 +1,17 @@
+Package: cliot
+Type: Package
+Title: Clinical Indices and Outcomes Tools
+Version: 1.0.0
+Authors@R: person(given = "Neel",
+                    family = "Agarwal",
+                    role = c("aut", "cre"),
+                    email = "neel.agarwal.216@gmail.com")
+Maintainer: Neel Agarwal <neel.agarwal.216@gmail.com>
+Description: Collection of indices and tools relating to clinical research that aid epidemiological cohort or retrospective chart review with big data. All indices and tools take commonly used lab values, patient demographics, and clinical measurements to compute various risk and predictive values for survival or further classification/stratification. References to original literature and validation contained in each function documentation. Includes all commonly available calculators available online. 
+License: GPL-3
+Encoding: UTF-8
+NeedsCompilation: no
+Packaged: 2025-11-30 22:13:04 UTC; neel
+Author: Neel Agarwal [aut, cre]
+Repository: CRAN
+Date/Publication: 2025-11-30 22:30:09 UTC

@@ -1,0 +1,148 @@
+
+      
+function hideAndPrint()
+{
+  printButton.style.display ='none';
+  document.all("pageBack").style.display='none';
+  document.all("alternateBack").style.display='block';
+  document.all("leftNavDiv").style.display='none';
+  document.all("formLayer").style.left = '15px';
+ 
+  window.print();
+  if (alert("Click ok after you print this page"))   
+  {
+    
+    for (var i = 1; i <= 49999; i++) 
+    { 
+      if (i >= 49999) 
+      {
+        printButton.style.display ='block';
+        document.all("pageBack").style.display='block';
+        document.all("alternateBack").style.display='none';
+        document.all("leftNavDiv").style.display='block';
+        document.all("formLayer").style.left = '215px';
+  
+      }
+    }
+  }
+  else
+  {
+    printButton.style.display ='block';
+    document.all("pageBack").style.display='block';
+    document.all("alternateBack").style.display='none';
+    document.all("leftNavDiv").style.display='block';
+    document.all("formLayer").style.left = '215px';    
+  }
+         
+}
+      
+function displayRisk()
+{
+  var scoreBar;  
+  var backColor;  
+  
+  // displaying the user scoreBar
+  var lResultRisk = 0;
+  lResultRisk = document.all("resultRisk").value;
+  
+  if (lResultRisk > 0)
+  {
+
+    scoreBar = "";    
+    scoreBar = scoreBar + "<table style='border:solid 1px' border=0 width=100% cellpadding=4 cellspacing=0>";
+    scoreBar = scoreBar + "<tr class=scoreRow><td width=15%>Your 10-year risk (age " + document.all("newAge").value + ")</td><td width=70%>" ;
+    
+    for (i = 1; i <= lResultRisk; i++)
+    {
+      scoreBar =  scoreBar +  "<img src=images/redbar.gif border=0>";
+    } 
+    document.all("atAgeDiv").innerHTML = "Age " + document.all("newAge").value + "";
+    scoreBar =  scoreBar + "</td><td width=15% align=right><strong>" + lResultRisk + "%</strong></td></tr>" ;     
+  }
+  
+  // ****************************************************************************************
+  scoreBar =  scoreBar + "<tr class=scoreRow><td valign=bottom nowrap colspan=3><strong>Your 10-year risk (age " + document.all("newAge").value + ") if, </strong></td></tr>" ;     
+  // ****************************************************************************************        
+  // style='padding-bottom:0px;border-bottom:solid 1px'
+  // displaying the optimal risk scoreBar  for Non Smoker
+  var lNonSmokerRisk = 0;
+  lNonSmokerRisk = document.all("resultNonSmoker").value;
+  if (lNonSmokerRisk > 0)
+  {   
+    scoreBar = scoreBar + "<tr class=scoreRow><td width=15% nowrap><li><u>you didn't smoke </u></li></td><td>";
+    for (i = 1; i <= lNonSmokerRisk; i++)
+    {
+      scoreBar =  scoreBar +  "<img src=images/orangebar.gif border=0>";
+    }  
+    scoreBar =  scoreBar + "</td><td align=right><strong>" + lNonSmokerRisk + "%</strong></td></tr>";
+  }
+  // ****************************************************************************************        
+  // displaying the optimal risk scoreBar  for optimal SBP
+  var lSBPRisk = 0;
+  lSBPRisk = document.all("resultSBP").value;
+  if (lSBPRisk > 0)
+  {   
+    scoreBar = scoreBar + "<tr class=scoreRow><td width=15% onmouseover=document.all('opSBPDiv').style.display='block'; onmouseout=document.all('opSBPDiv').style.display='none'; nowrap><li><A>your blood pressure were optimal </A></li></td><td>";
+    for (i = 1; i <= lSBPRisk; i++)
+    {
+      scoreBar =  scoreBar +  "<img src=images/orangebar.gif border=0>";
+    }  
+    scoreBar =  scoreBar + "</td><td align=right><strong>" + lSBPRisk + "%</strong></td></tr>";
+  }
+  // ****************************************************************************************        
+  // displaying the optimal risk scoreBar  for optimal Cholesterol
+  var lCholesterolRisk = 0;
+  lCholesterolRisk = document.all("resultTC").value;
+  if (lCholesterolRisk > 0)
+  {   
+    scoreBar = scoreBar + "<tr class=scoreRow><td width=15% onmouseover=document.all('opColDiv').style.display='block'; onmouseout=document.all('opColDiv').style.display='none'; nowrap><li><A>your cholesterol were optimal</A> </li></td><td>";
+    for (i = 1; i <= lCholesterolRisk; i++)
+    {
+      scoreBar =  scoreBar +  "<img src=images/orangebar.gif border=0>";
+    }  
+    scoreBar =  scoreBar + "</td><td align=right><strong>" + lCholesterolRisk + "%</strong></td></tr>";
+  }
+  // ****************************************************************************************        
+  // displaying the optimal risk scoreBar  for optimal hsCRP
+  var lHSCRPRisk = 0;
+  lHSCRPRisk = document.all("resultHSCRP").value;
+  if (lHSCRPRisk > 0)
+  {   
+    scoreBar = scoreBar + "<tr class=scoreRow><td width=15% onmouseover=document.all('opCRPDiv').style.display='block'; onmouseout=document.all('opCRPDiv').style.display='none'; nowrap><li><a>your hsCRP were optimal</a></li></td><td>";
+    for (i = 1; i <= lHSCRPRisk; i++)
+    {
+      scoreBar =  scoreBar +  "<img src=images/orangebar.gif border=0>";
+    }  
+    scoreBar =  scoreBar + "</td><td align=right><strong>" + lHSCRPRisk + "%</strong></td></tr>";
+  }
+  // ****************************************************************************************
+          
+  // displaying the optimal risk scoreBar
+  var loptimalRisk = 0;
+  loptimalRisk = document.all("resultOptimal").value;
+  if (loptimalRisk > 0)
+  {   
+    scoreBar = scoreBar + "<tr class=scoreRow><td width=15% onmouseover=document.all('opAllDiv').style.display='block'; onmouseout=document.all('opAllDiv').style.display='none'; nowrap><li><a>all the above were optimal</a></li></td><td>";
+    for (i = 1; i <= loptimalRisk; i++)
+    {
+      scoreBar =  scoreBar +  "<img src=images/greenbar.gif border=0>";
+    }  
+    scoreBar =  scoreBar + "</td><td align=right><strong>" + loptimalRisk + "%</strong></td></tr>";
+  }
+  scoreBar = scoreBar + "<tr><td colspan=3 class=formRow>";
+  scoreBar = scoreBar + "<div id=opSBPDiv class=infoDiv style=display:none>Optimal blood pressure is < 120 mm/Hg</div>";
+  scoreBar = scoreBar + "<div id=opColDiv class=infoDiv style=display:none>Optimal Total Cholesterol < 160 mg/DL and optimal HDL (good) Cholesterol > 60 mg/DL </div>";
+  scoreBar = scoreBar + "<div id=opCRPDiv class=infoDiv style=display:none>Optimal hsCRP is < 0.5 mg/L</div>";
+  scoreBar = scoreBar + "<div id=opAllDiv class=infoDiv style=display:none>Non-smoker with Optimal blood pressure  < 120 mm/Hg and Optimal Total Cholesterol < 160 mg/DL and optimal HDL (good) Cholesterol > 60 mg/DL and Optimal hsCRP is < 0.5 mg/L.</div>";        
+  scoreBar = scoreBar + "<strong>The graph above also compares your risk to that of a woman of age " + document.all("newAge").value + " who has optimal levels for all modifiable risk factors, and shows what your risk would be if you improved your individual risk factors. For young women, risk may appear to be low over the next 10-years, yet can be very high over a lifetime. Thus, to see what your risk would be as you get older if your risk factors remain the same, click on the buttons above.<strong></td></tr>";
+  scoreBar = scoreBar + "</table><br><br>";
+  
+  if ((document.all("resultRisk").value > 0) && (document.all("resultOptimal").value > 0))
+  { 
+    if (document.all("resultFrame"))
+    {
+      document.all("optimalScore").innerHTML = scoreBar;
+    }
+  }          
+  // ****************************************************************************************
+}

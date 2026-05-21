@@ -1,0 +1,5 @@
+exportPattern("^[[:alpha:]]+")
+importFrom("stats", "approx")
+importFrom("utils", "as.roman", "tail")
+importFrom("stats", "na.omit")
+importFrom("stats", "coef", "lm")

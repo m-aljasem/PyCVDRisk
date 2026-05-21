@@ -1,0 +1,52 @@
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+  <HEAD>
+    <title>Reynolds Risk Score</title><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><link href="styles.css" rel="stylesheet" type="text/css">
+  </HEAD>
+  <body>
+    <div id="contentLayer" class="content">
+      <p class="title"><STRONG><U>General prevention guidelines for women are provided 
+            below</U></STRONG></p>
+      <p><strong>Smoking: </strong>Cigarette smoking is the single most important 
+        preventable cause of death in women. Women who smoke have a risk of heart 
+        attack and stroke two to four times higher than that of non-smokers. The good 
+        news is that if you quit, risk comes down dramatically. If you don't smoke, 
+        don't start. Secondhand smoke in your home or at work also increases your risk 
+        as well as the risk for your children.
+      </p>
+      <p><strong>High Blood Presure: </strong>High blood pressure puts a strain on your 
+        heart that over time can weaken its function. High blood pressure causes heart 
+        disease, stroke, and can also lead to kidney failure. If you have high blood 
+        pressure, your physician will recommend diet, exercise, and where needed, 
+        blood pressure lowering medication. You should have your blood pressure checked 
+        every two years.</p>
+      <P><STRONG>High Cholesterol:</STRONG> Women with high levels of total cholesterol 
+        are at increased risk for heart disease, as are women with low levels of HDL or 
+        "good" cholesterol. If you have high cholesterol levels, your physician will 
+        recommend diet, exercise, and where needed, cholesterol lowering medication. 
+        You should have your cholesterol checked every 2 to 3 years.
+      </P>
+      <p>
+        <STRONG>High hsCRP: </STRONG>Women with increased levels of high-sensitivity 
+        C-reactive protein (hsCRP) can have increased risk of heart attack, stroke, and 
+        cardiovascular death, even if cholesterol levels are in the normal range. 
+        Increased levels of hsCRP also increse your risk of developing high blood 
+        pressure and diabetes. If you have increased levels of hsCRP, diet, exercise, 
+        and smoking cessation are the most important interventions to consider.</p>
+      <p><strong>Why are exercise and diet so important? </strong>Regular physical 
+        activity and maintatining proper weight are essential to reducing your risk of 
+        heart disease and improving your quality of life. Studies have repeatedly shown 
+        that exercise improves heart-health, both by lowering "bad" cholesterol, hsCRP, 
+        and blood pressure, as well as increasing "good" cholesterol. Both regular 
+        exercise and weight reduction also lower your risk of developing diabetes. 
+        Exercise also fights the aging process and helps to reduce injuries. If you are 
+        currently inactive, talk with your physician about starting an exercise 
+        program.</p>
+      <P><a href="default.aspx">Back to Calculator</a></P>
+      <p>&nbsp;</p>
+    </div>
+    <img src="images/bg.gif" width="981" height="602" border="0" usemap="#topNav"> 
+    <map name="topNav" id="topNav">	<area shape="rect" coords="213,56,318,80" href="home.aspx" />	<area shape="rect" coords="322,56,425,80" href="default.aspx" />	<area shape="rect" coords="430,56,535,80" href="faq.aspx" /></map>
+  </body>
+</HTML>

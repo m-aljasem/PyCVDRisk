@@ -8,9 +8,9 @@ Model B, "the Reynolds Risk Score": women from Ridker et al., JAMA 2007 (reprint
 corrections; Box), men from Ridker et al., Circulation 2008 (Appendix C). Both PDFs are in
 `source/`. Each coefficient is quoted as a term of the printed formula: 19/19 found in the PDF text.
 
-No independent implementation was available: the official calculator (reynoldsriskscore.org)
-is gone, and no R or Python package implements these papers. Evidence is level C: the papers'
-worked examples.
+Evidence: level A for men (the developers' SAS code, section 3, agrees exactly); level A with one
+documented discrepancy for women (the SAS code's baseline survival differs from the paper's;
+the paper's own Table 6 supports the printed value); plus level C, the papers' worked examples.
 
 ## 2. Worked examples
 
@@ -42,3 +42,60 @@ parental history), model B. Printed risks have one decimal.
 the formula gives when every printed number (coefficients, S0 and mean) moves by up to half
 its last printed digit. The papers computed with unrounded coefficients, so differences of
 one in the last printed decimal are expected.
+
+## 3. Developers' code: Nancy Cook's SAS program
+
+`source/cook_sas/risk_score_code.sas` ("SAS code for computing AHA/ACC, ATP III, and Reynolds risk
+scores", Nancy Cook, BWH, 25 Aug 2014; Cook is the statistician and senior author of both papers),
+linked from https://ncook.bwh.harvard.edu/sas-macros.html ("provided as is"). sha256 bc0673afc94017adb41e4eea22319103c049bb79771956e9a16f48740cd69bf4. `run_cook_sas.py` cuts the two
+Reynolds blocks out of the file and evaluates their statements unchanged (arithmetic only; no SAS needed)
+on the 17 worked examples and 2,000 seeded patients (seed 2007; age 45-80, SBP 90-190, TC 120-320,
+HDL 25-100 mg/dL, hsCRP 0.1-20 mg/L log-uniform, 15% of women diabetic with HbA1c 5.5-10%).
+
+**Men.** The SAS block has the printed coefficients, S0 and mean. 1022/1022 seeded men agree
+(max difference 1.9e-13 percentage points); the Clinical Example gives 20.4896% in both. Level A.
+
+**Women.** The SAS block has unrounded coefficients (0.07988 age, 3.13693 ln SBP, 0.17989 ln hsCRP,
+1.38163 ln TC, -1.17186 ln HDL, 0.13360 HbA1c if diabetic, 0.81795 smoking, 0.43770 parental history;
+mean 22.324591018), each of which rounds to the printed value, but a baseline survival of
+**0.989057** where the paper prints **0.98634**. With the file as published, risks are
+1.0-25.6% lower than this package (max 8.42 points;
+13/978 equal to one decimal) and 0/16 Table 6 values are reproduced.
+With S0 replaced by the printed 0.98634, the SAS statements reproduce 16/16 Table 6 values exactly
+(this package, with the printed rounded coefficients: 14/16), and the seeded women agree with
+this package within 0.66% relative (max 0.259 points; 625/978 equal to one
+decimal): the residual is the rounding of the printed coefficients.
+
+Classification: the S0 of 0.989057 in the SAS file disagrees with the paper's printed S0 and with the
+paper's own Table 6, which needs S0 between 0.98625 and 0.98640 with these coefficients; the paper is
+self-consistent, so this package keeps 0.98634. The file's value may belong to another model or
+time point (unknown). The women's block also names smoking and parental
+history `currsmk` and `famhxmi`, while the header documents `currsmoke` and `parhxmi` (would give
+missing risks in SAS unless the data set uses those names); not a numeric issue.
+
+## 4. The official calculator (reynoldsriskscore.org)
+
+Wayback CDX for reynoldsriskscore.org (2007-2026) lists default.aspx, home.aspx, Details.aspx, faq.aspx,
+commonScripts.js, styles.css and images; from 2024 the domain is parked. Captures saved in
+`source/wayback/` (file name = page_capture date). The calculator was an ASP.NET form that posted to
+the server: the risk came back in hidden fields (`resultRisk`, `resultOptimal`, ...), and
+`commonScripts.js` only draws the bars and converts mmol/L to mg/dL (x 39 for both total and HDL
+cholesterol). No result page, client-side formula, spreadsheet or handheld version was captured, so
+the site cannot be compared. Input rules shown on the form: age at most 80, hsCRP accepted up to
+50 mg/L, diabetes excluded (FAQ: people with diabetes should not use the score), parental history =
+heart attack or stroke before 60. This package enforces none of these (documented in its docstring).
+
+## 5. Third-party implementations
+
+- **cliot 1.0.0** (CRAN, N. Agarwal, 2025; `source/third_party/cliot_1.0.0.tar.gz`, sha256
+  83794e0c8a3f15434a61678558bcc19e30bc42139122f797183727ac019aa1bd): `reynolds_risk_score_women()` only.
+  It uses **3.193** for ln(SBP) where the paper prints 3.137, and its help page suggests entering
+  HbA1c 5.0 for non-diabetic women, whereas the paper enters HbA1c only if diabetic. `run_cliot.R`
+  (function cut out and run unchanged): with HbA1c 0 for non-diabetics, 5/978 seeded women equal this
+  package at its one-decimal output, cliot higher by 0.4-54.6%, and Table 6 is not reproduced (e.g.
+  hsCRP 1, no parental history: 8.6 vs printed 7.4). With 3.193 replaced by 3.137, 978/978 equal
+  (max 0.05 points, its rounding). Classification: cliot's error (coefficient typo; HbA1c advice).
+- **CVrisk 1.2.1** (CRAN): no Reynolds function in the source (`source/third_party/CVrisk_1.2.1.tar.gz`,
+  sha256 cddba08b5978a281db07939c8bc9dbad2b51162e98c855e8fed6e13b3571e630).
+- **MDCalc** (calc 3932, women only): the page prints the paper's formula (3.137, S0 0.98634, mean
+  22.325); its computation code is not in the page, so it was not run.

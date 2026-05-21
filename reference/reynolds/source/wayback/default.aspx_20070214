@@ -1,0 +1,195 @@
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+  <HEAD>
+    <title>Reynolds Risk Score</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+    <LINK href="styles.css" type="text/css" rel="stylesheet">
+      <script language="javascript" src="commonScripts.js">
+      
+      </script>
+  </HEAD>
+  <body onload="javaScript:displayRisk();">
+    <form name="Form1" method="post" action="default.aspx" id="Form1">
+<input type="hidden" name="__VIEWSTATE" id="__VIEWSTATE" value="/wEPDwUKLTU0ODI0NTk4NWRkI3hB2g448lR19Neb7XXTDQY5toU=" />
+
+      <div class="content" id="formLayer">
+        <p><span class="textRow">If you are a healthy woman without diabetes, the Reynolds Risk Score is 
+          designed to predict your risk of having a future heart attack, stroke, or other 
+          major heart disease in the next 10 years. </span><br>
+          <Br>
+          In addition to your age, blood pressure, cholesterol levels and whether you 
+          currently smoke, the Reynolds Risk Score uses information from two other risk 
+          factors, a blood test called hsCRP (a measure of inflammation) and whether or 
+          not either of your parents had a heart attack before they reached age 60 (a 
+          measure of genetic risk). To calculate your risk, fill in the information below 
+          with your most recent values. <A href="faq.aspx?#helpFaq"><strong>Click here</strong></A>
+          for help filling the information.</p>
+        <!--TABLE id="Table4" cellSpacing="0" cellPadding="0" width="100%" border="0">
+          <tr>
+            <td class="formRow" id="collapseRow" style="display:block" align="left" colSpan="2"><A class="handCursor" onclick="document.all('calculatorTable').style.display='none';document.all('collapseRow').style.display='none';document.all('expandRow').style.display='block';"><IMG id="minusSrc" src="images/minus.gif" border="0">
+                Close Calculator</A>
+            </td>
+          </tr>
+          <tr>
+            <td class="formRow" id="expandRow" style="display:none" align="left" colSpan="2"><A class="handCursor" onclick="document.all('calculatorTable').style.display='block';document.all('expandRow').style.display='none';document.all('collapseRow').style.display='block';"><IMG id="plusSrc" src="images/plus.gif" border="0">
+                Open Calculator</A>
+            </td>
+          </tr>
+        </TABLE-->
+        <TABLE id="calculatorTable" style="DISPLAY: block" cellSpacing="1" cellPadding="0" width="100%"
+          border="0">
+          <TR>
+            <td class="alternateRow" width="50%"><STRONG>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Age</STRONG></td>
+            <TD class="alternateRow" noWrap width="50%"><input name="Age" type="text" maxlength="3" id="Age" />&nbsp;<STRONG>Years</STRONG></TD>
+          </TR>
+          <TR>
+            <td class="formRow"><STRONG><a class="divCursor" onmouseover="document.all('help1').style.display='block';" onmouseout="document.all('help1').style.display='none';"><IMG src="images/info.jpg" border="0"></a>Do 
+                you currently smoke?</STRONG></td>
+            <TD class="formRow" noWrap><span id="Smoker" class="formRow"><input id="Smoker_0" type="radio" name="Smoker" value="1" /><label for="Smoker_0">
+                  <strong>Yes</strong></label><input id="Smoker_1" type="radio" name="Smoker" value="0" /><label for="Smoker_1">
+                  <strong>No</strong></label></span></TD>
+          </TR>
+          <TR>
+            <td class="alternateRow"><STRONG><a class="divCursor" onmouseover="document.all('help2').style.display='block';" onmouseout="document.all('help2').style.display='none';"><IMG src="images/info1.jpg" border="0"></a>
+                Systolic Blood Pressure (SBP)</STRONG></td>
+            <TD class="alternateRow" noWrap><input name="SBP" type="text" maxlength="3" id="SBP" />&nbsp;<STRONG>mm/Hg</STRONG></TD>
+          </TR>
+          <TR>
+            <td class="formRow"><STRONG><a class="divCursor" onmouseover="document.all('help3').style.display='block';" onmouseout="document.all('help3').style.display='none';"><IMG src="images/info.jpg" border="0"></a>Total 
+                Cholesterol</STRONG></td>
+            <TD class="formRow" noWrap><input name="TotalCol" type="text" maxlength="3" id="TotalCol" />&nbsp;<STRONG>
+                mg/DL&nbsp;</STRONG></TD>
+          </TR>
+          <TR>
+            <td class="alternateRow"><STRONG><a class="divCursor" onmouseover="document.all('help4').style.display='block';" onmouseout="document.all('help4').style.display='none';"><IMG src="images/info1.jpg" border="0"></a>HDL 
+                or "Good" Cholesterol</STRONG></td>
+            <TD class="alternateRow" noWrap><input name="HDLCol" type="text" maxlength="3" id="HDLCol" />&nbsp;<STRONG>
+                mg/DL&nbsp;</STRONG></TD>
+          </TR>
+          <TR>
+            <td class="formRow"><STRONG><a class="divCursor" onmouseover="document.all('help5').style.display='block';" onmouseout="document.all('help5').style.display='none';"><IMG src="images/info.jpg" border="0"></a>High 
+                Sensitivity C-Reactive Protein (hsCRP)</STRONG></td>
+            <TD class="formRow" noWrap><input name="hsCRP" type="text" maxlength="3" id="hsCRP" />&nbsp;<STRONG>
+                mg/L&nbsp;</STRONG></TD>
+          </TR>
+          <TR>
+            <td class="alternateRow"><STRONG><a class="divCursor" onmouseout="document.all('help6').style.display='none';" onmouseover="document.all('help6').style.display='block';"><img src="images/info1.jpg" border="0"></a>Did 
+                your Mother or Father have a heart attack before age 60 ?</STRONG></td>
+            <TD class="alternateRow" noWrap><span id="history" class="alternateRow"><input id="history_0" type="radio" name="history" value="1" /><label for="history_0">
+                  <strong>Yes</strong></label><input id="history_1" type="radio" name="history" value="0" /><label for="history_1">
+                  <strong>No</strong></label></span></TD>
+          </TR>
+          <TR>
+            <TD class="formRow">
+              <input name="resultRisk" type="hidden" id="resultRisk" /> <input name="resultOptimal" type="hidden" id="resultOptimal" />
+              <input name="resultNonSmoker" type="hidden" id="resultNonSmoker" /> <input name="resultSBP" type="hidden" id="resultSBP" />
+              <input name="resultTC" type="hidden" id="resultTC" /> <input name="resultHSCRP" type="hidden" id="resultHSCRP" />
+              
+              <input name="newAge" type="hidden" id="newAge" />
+            </TD>
+            <TD class="formRow" noWrap>
+              <input type="submit" name="submitButton" value="Calculate 10 year risk" id="submitButton" /></TD>
+          </TR>
+        </TABLE>
+        
+        <div id="optimalScore">
+        </div>
+      </div>
+      <div class="popup" id="help1" style="DISPLAY: none"><STRONG>How to enter smoking 
+    status:
+    <BR>
+  </STRONG>The Reynolds Risk Score considers a woman who has smoked any 
+  cigarettes in the last month as a "current smoker".&nbsp;&nbsp;&nbsp;&nbsp; 
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+  <br>
+  <br>
+  <br>
+  <br>
+</div>
+<div class="popup" id="help2" style="DISPLAY: none"><STRONG>How to enter systolic 
+    blood pressure:
+    <BR>
+  </STRONG>The systolic blood pressure value to be used in the Reynolds Risk 
+  Score is the upper number from your most recent blood pressure evaluation, 
+  regardless of whether you are on blood pressure medications. For example, if 
+  your blood pressure is 120/80, then your systolic blood pressure to be used in 
+  the Reynolds Risk Score is 120. Systolic blood pressure should be reported in 
+  mm/Hg. The typical range for women is between 90 to 190 mm/Hg. For most women, 
+  an optimal systolic blood pressure is less than 120 mm/Hg.<br>
+</div>
+<div class="popup" id="help3" style="DISPLAY: none"><STRONG>How to enter total 
+    cholesterol:
+    <BR>
+  </STRONG>The American Heart Association recommends that total cholesterol 
+  values should be the average of at least two measurements obtained from a 
+  standard blood test. Total cholesterol, HDL cholesterol and hsCRP can be 
+  measured on the same blood sample. Total cholesterol should be reported to you 
+  in mg/dL. The typical range for women is between 100 and 400 mg/dL, with higher 
+  levels associated with higher risk. For most women, an optimal level of total 
+  cholesterol is less than 160 mg/dL.<br>
+  <br>
+</div>
+<div class="popup" id="help4" style="DISPLAY: none"><STRONG>How to enter HDL or 
+    "good"&nbsp;cholesterol:
+    <BR>
+  </STRONG>The American Heart Association recommends that HDL or "good" 
+  cholesterol values should be the average of at least two measurements obtained 
+  from a standard blood test. Total cholesterol, HDL cholesterol and hsCRP can be 
+  measured on the same blood sample. HDL cholesterol should be reported to you in 
+  mg/dL. The typical range for women is between 10 and 100 mg/dL, with higher 
+  levels associated with lower risk. For most women, an optimal level of HDL 
+  cholesterol is greater than 60 mg/dL.
+  <br>
+</div>
+<div class="popup" id="help5" style="DISPLAY: none"><STRONG>How to enter hsCRP:
+    <BR>
+  </STRONG>The American Heart Association recommends that high sensitivity 
+  C-reactive protein (hsCRP) values should be the lower of at least two values 
+  obtained from a standard blood test. This is particularly important if the 
+  initial hsCRP value is &gt; 5 mg/L. Total cholesterol, HDL cholesterol and 
+  hsCRP can be measured on the same blood sample. The typical range for hsCRP is 
+  between 0.01 and 10 mg/L, with higher levels associated with higher risk. Some 
+  women will have very high hsCRP levels on a chronic basis, even after repeat 
+  testing. These women represent a high risk group so the Reynolds Risk Score 
+  will accept hsCRP values up to 50 mg/L. For most women, an optimal level of 
+  hsCRP is less than 0.5 mg/L.<br>
+  <br>
+</div>
+<div id="help6" style="DISPLAY:none" class="popup"><STRONG>How to enter parental 
+    history of heart disease before age 60:
+    <BR>
+  </STRONG>If either your mother or father suffered from a heart attack or stroke 
+  before age 60 years, the Reynolds Risk Score considers parental history to be 
+  positive.<br>
+  <br>
+</div>
+<div class="quickDiv" id="leftNavDiv" style="DISPLAY: block">
+  <STRONG>How Do I Improve My Risk Factors?</STRONG>
+  <BR>
+  There are many excellent websites that provide information on risk reduction 
+  including sites sponsored by the <a href="http://www.americanheart.org" target="_blank">
+    American Heart Association</a> and the <a href="http://www.acc.org" target="_blank">
+    American College of Cardiology</a> . Excellent sites with information 
+  specific to women include <a href="http://www.GoRedForWomen.com" target="_blank">www.GoRedForWomen.com</a>,
+  <a href="http://www.ChooseToMove.com" target="_blank">www.ChooseToMove.com</a>, <a href="http://www.womenshealth.gov/hearttruth/" target="_blank">
+    www.womenshealth.gov</a>. For specific information on C-reactive protein, 
+  patient-friendly information can be obtained at <a href="http://www.crphealth.com" target="_blank">
+    crphealth.com</a>.
+  <br>
+  <br>
+  <p>
+    <strong><a class="content" href="Details.aspx">Advice for Prevention in Women</a></strong>
+  </p>
+</div>
+
+      <IMG id="pageBack" style="DISPLAY:block" height="602" src="images/bg.gif" width="981"
+        useMap="#topNav" border="0"> <IMG id="alternateBack" style="DISPLAY:none" height="602" src="images/printbg.gif" width="981"
+        border="0"> 
+      <map name="topNav" id="topNav">	<area shape="rect" coords="213,56,318,80" href="home.aspx" />	<area shape="rect" coords="322,56,425,80" href="default.aspx" />	<area shape="rect" coords="430,56,535,80" href="faq.aspx" /></map>
+<input type="hidden" name="__EVENTVALIDATION" id="__EVENTVALIDATION" value="/wEWFAKqht7PBgLwgq+qBgL46IHKCwLn6IHKCwL3h6ukBwLnupbGCwLDg4+PBQLhpIPgBALp/fvzDwLmpo/rCAL5po/rCALpyaWFBAL/4+aXDAKBpY7yAwKWivnjCQKB+9DPCALd6+8cArfBttkPAsiz6LUIApK64NQLkbwQo+NxH8mhygw/Nv4JT9Ln/9s=" /></form>
+  </body>
+</HTML>
