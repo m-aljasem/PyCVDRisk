@@ -29,3 +29,16 @@ def test_invalid_rows_are_nan():
 
 def test_broadcast_2d():
     assert chads2(np.array([[60], [80]]), [0, 1], 1, 0, 0).shape == (2, 2)
+
+
+def test_every_combination_matches_paper_tables():
+    # independent of af.py: Gage, Lip Table 2 and Pisters Table 2 point tables, at every age cut point
+    import itertools
+    for age in [64.9, 65, 65.1, 74.9, 75]:
+        for f in itertools.product((0, 1), repeat=4):
+            assert chads2(age, *f) == f[0] + f[1] + f[2] + 2 * f[3] + (age >= 75)
+        for f in itertools.product((0, 1), repeat=6):
+            want = f[0] + f[1] + f[2] + 2 * f[3] + f[4] + f[5] + (2 if age >= 75 else age >= 65)
+            assert cha2ds2_vasc(age, "female" if f[5] else "male", *f[:5]) == want
+        for f in itertools.product((0, 1), repeat=8):
+            assert has_bled(age, *f) == sum(f) + (age > 65)
