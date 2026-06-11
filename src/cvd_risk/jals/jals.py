@@ -13,6 +13,11 @@ risk of the next age group). Table 6 prints the AF models only, to 2 decimals; C
 (reference/jals/fit_table6.py: 257/260 printed 5-year and 235/260 10-year values, the rest within 0.01 point).
 The paper gives no risk table for the models without AF.
 
+variant="acc_aha": the online supplement's Supplementary Tables 1-5, the same models refitted with the ACC/AHA 2017
+blood-pressure categories (optimal < 120 and < 80, elevated 120-129 and < 80, 130-139 / 80-89, 140-159 / 90-99,
+160-179 / 100-109, >= 180 / >= 110; the higher of the SBP and DBP category). Its points, and its risk table
+(constants recovered from Supplementary Table 5: 260/260 printed 5-year values), differ from the main text's.
+
 Ages outside 40-89 give NaN.
 """
 
@@ -45,12 +50,34 @@ POINTS = {
                       age=((0, 6, 16, 35, 56), (0, 6, 16, 35, 55)), egfr=((11, 2, 0, 1), (11, 2, 0, 2)),
                       diabetes=(4, 4), men=(7, 6), smoker=(9, 9)),
 }
+# Supplementary Tables 1-4 (ACC/AHA variant), same layout; None: not in that model
+POINTS_ACC_AHA = {
+    "stroke": dict(af=(None, 21), bp=((0, 8, 7, 14, 21, 27),) * 2, bp_treated=((12, 13, 14, 18, 19, 19),) * 2,
+                   diabetes=(6, 6), men=(5, 4), smoker=(7, 7)),
+    "ami": dict(af=(None, 12), hdl=((11, 7, 0),) * 2, bp=((0, 4, 4, 7, 9, 17),) * 2,
+                bp_treated=((2, 15, 16, 11, 6, 9),) * 2, non_hdl=((0, 10, 13, 17),) * 2, egfr=(None, (3, 3, 0, 0)),
+                diabetes=(9, 9), men=(17, 17), smoker=(10, 11)),
+    "composite": dict(af=(None, 20), hdl=((4, 2, 0),) * 2, bp=((0, 7, 7, 13, 19, 26), (0, 7, 7, 14, 19, 26)),
+                      bp_treated=((11, 14, 14, 17, 17, 18), (10, 13, 14, 17, 18, 18)), diabetes=(6, 6), men=(6, 5),
+                      smoker=(7, 8)),
+    "cvd_death": dict(af=(None, 18), bmi=((6, 0, -1), (7, 0, -2)), hdl=((3, -1, 0),) * 2,
+                      bp=((0, 0, 3, 4, 10, 13), (0, 0, 3, 4, 11, 13)),
+                      bp_treated=((7, 7, 5, 6, 8, 5), (6, 7, 5, 6, 9, 5)), egfr=((11, 2, 0, 1),) * 2,
+                      diabetes=(4, 4), men=(6, 6), smoker=(9, 9)),
+}
+BP_CUTS_ACC_AHA = ((120, 130, 140, 160, 180), (80, 80, 90, 100, 110))  # DBP 80-89 enters the 130-139 row
 CUTS = dict(hdl=(40, 60), non_hdl=(130, 150, 170), bmi=(18.5, 25), egfr=(45, 60, 90))
 # Table 6 (AF models): c = 5-year cumulative hazard at score 0, per age group (reference/jals/fixtures)
 C = dict(stroke=(0.00112124, 0.00147186, 0.00269892, 0.0055283, 0.00933885),
          ami=(6.69028e-05, 0.000146371, 0.000168871, 0.00028776, 0.000466331),
          composite=(0.00117965, 0.00171427, 0.00291729, 0.00575496, 0.0094721),
          cvd_death=(0.000672136, 0.00101138, 0.00202594, 0.00738996, 0.0310137))
+# Supplementary Table 5 (ACC/AHA variant, AF models)
+C_ACC_AHA = dict(stroke=(0.00112014, 0.00147066, 0.00269706, 0.00552224, 0.00932759),
+                 ami=(6.51305e-05, 0.000141415, 0.000162078, 0.000273053, 0.000433829),
+                 composite=(0.00117766, 0.00171261, 0.00291729, 0.00575496, 0.00947583),
+                 cvd_death=(0.00066539, 0.00100548, 0.00202019, 0.00739456, 0.0310228))
+VARIANTS = ("jsh2014", "acc_aha")
 
 
 def _age_group(age):
@@ -64,40 +91,44 @@ def _pts(x, cuts, pts):
 
 
 def jals(age, sex, sbp, dbp, bp_treated, smoker, diabetes, *, outcome, af=None, hdl=None, non_hdl=None, bmi=None,
-         egfr=None) -> np.ndarray:
+         egfr=None, variant="jsh2014") -> np.ndarray:
     """Table 6 score (total points minus the age points) for outcome = "stroke", "ami", "composite" or "cvd_death".
     af given: the model with AF. Also needed: hdl (mg/dL) for ami, composite and cvd_death; non_hdl (mg/dL) for ami;
-    bmi (kg/m2) and egfr (mL/min/1.73 m2, J-CKDI equation) for cvd_death. Flags 0/1; smoker = current smoker."""
-    if outcome not in OUTCOMES:
-        raise ValueError(f"outcome must be one of {OUTCOMES}")
-    p = POINTS[outcome]
+    bmi (kg/m2) and egfr (mL/min/1.73 m2, J-CKDI equation) for cvd_death (variant="acc_aha": also for ami with af).
+    Flags 0/1; smoker = current smoker. variant = "jsh2014" (main text) or "acc_aha" (online supplement)."""
+    if outcome not in OUTCOMES or variant not in VARIANTS:
+        raise ValueError(f"outcome must be one of {OUTCOMES}; variant one of {VARIANTS}")
+    acc = variant == "acc_aha"
+    p = (POINTS_ACC_AHA if acc else POINTS)[outcome]
+    m = int(af is not None)
     given = dict(hdl=hdl, non_hdl=non_hdl, bmi=bmi, egfr=egfr)
-    missing = [k for k in CUTS if k in p and given[k] is None]
+    items = [k for k in CUTS if k in p and p[k][m] is not None]
+    missing = [k for k in items if given[k] is None]
     if missing:
         raise ValueError(f'outcome="{outcome}" needs ' + ", ".join(f"{k}=" for k in missing))
-    m = int(af is not None)
     s, d = as_float(sbp), as_float(dbp)
-    cat = np.maximum(np.digitize(np.nan_to_num(s), BP_CUTS[0]), np.digitize(np.nan_to_num(d), BP_CUTS[1]))
+    cuts = BP_CUTS_ACC_AHA if acc else BP_CUTS
+    cat = np.maximum(np.digitize(np.nan_to_num(s), cuts[0]), np.digitize(np.nan_to_num(d), cuts[1]))
     t = as_bool(bp_treated)
     bp = np.where(t == 1, np.asarray(p["bp_treated"][m], float)[cat], np.asarray(p["bp"][m], float)[cat])
     bp = np.where(np.isnan(s) | np.isnan(d) | np.isnan(t), np.nan, bp)
     sx = as_sex(sex)
     score = (bp + np.where(sx == 1, p["men"][m], np.where(sx == 0, 0.0, np.nan)) + p["smoker"][m] * as_bool(smoker)
              + p["diabetes"][m] * as_bool(diabetes) + np.where(_age_group(age) < 0, np.nan, 0.0))
-    for k in CUTS:
-        if k in p:
-            score = score + _pts(given[k], CUTS[k], p[k][m])
+    for k in items:
+        score = score + _pts(given[k], CUTS[k], p[k][m])
     if m:
         score = score + p["af"][1] * as_bool(af)
     return score
 
 
-def jals_risk(score, age, outcome, years=5) -> np.ndarray:
-    """Table 6 absolute risk (fraction) over 5 or 10 years for a jals score (model with AF) at a given age."""
-    if outcome not in OUTCOMES or years not in (5, 10):
-        raise ValueError(f"outcome must be one of {OUTCOMES}; years 5 or 10")
+def jals_risk(score, age, outcome, years=5, variant="jsh2014") -> np.ndarray:
+    """Table 6 absolute risk (fraction) over 5 or 10 years for a jals score (model with AF) at a given age;
+    variant="acc_aha": Supplementary Table 5."""
+    if outcome not in OUTCOMES or years not in (5, 10) or variant not in VARIANTS:
+        raise ValueError(f"outcome must be one of {OUTCOMES}; years 5 or 10; variant one of {VARIANTS}")
     g = _age_group(age)
-    c = np.asarray(C[outcome] + (np.nan,))
+    c = np.asarray((C_ACC_AHA if variant == "acc_aha" else C)[outcome] + (np.nan,))
     sc = 2 ** (as_float(score) / 10)
     first = 1 - np.exp(-c[g] * sc)
     if years == 5:

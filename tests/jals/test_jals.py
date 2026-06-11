@@ -1,4 +1,7 @@
+import contextlib
 import csv
+import importlib.util
+import io
 import math
 from pathlib import Path
 
@@ -100,3 +103,44 @@ def test_inputs():
         jals(60, "male", 130, 80, 0, 0, 0, outcome="ami", hdl=50)
     with pytest.raises(ValueError):
         jals_risk(10, 60, "stroke", years=7)
+
+
+def test_supplement_table5():
+    """Online supplement (ACC/AHA blood-pressure variant), Supplementary Table 5: 260/260 printed 5-year and 242/260
+    10-year values, the rest within 0.01; its worked example (stroke score 25 at 75: 3.08%, 10-year 8.06%)."""
+    rows = list(csv.DictReader(open(REF / "jals/fixtures/supp_table5.csv")))
+    name = dict(stroke="stroke", ami="ami", composite="composite", cvd="cvd_death")
+    age = {"40-49": 45, "50-59": 55, "60-69": 65, "70-79": 75, "80-89": 85}
+    hits = {5: 0, 10: 0}
+    for r in rows:
+        for y in (5, 10):
+            ours = round(100 * float(jals_risk(int(r["score"]), age[r["age"]], name[r["outcome"]], y, "acc_aha")), 2)
+            assert abs(ours - float(r[f"risk{y}"])) < 0.0101
+            hits[y] += ours == float(r[f"risk{y}"])
+    assert hits == {5: 260, 10: 242}
+    s = jals(75, "male", 165, 85, 0, 0, 0, outcome="stroke", af=0, variant="acc_aha")
+    assert s == 25
+    assert [round(100 * float(jals_risk(s, 75, "stroke", y, "acc_aha")), 2) for y in (5, 10)] == [3.08, 8.06]
+
+
+def test_supplement_blood_pressure_rows():
+    f = lambda sbp, dbp: float(jals(50, "female", sbp, dbp, 0, 0, 0, outcome="stroke", af=0, variant="acc_aha"))  # noqa: E731
+    assert [f(119, 79), f(125, 79), f(119, 80), f(125, 85), f(135, 70), f(150, 85), f(119, 110)] == \
+        [0, 8, 7, 7, 7, 14, 27]
+
+
+def test_jcvrisk_equals_supplement(monkeypatch):
+    """Jcvrisk 0.1.3 (3,000 seeded patients, reference/jcvrisk) implements the supplement's variant: every score of
+    the 8 functions equals ours once its blood-pressure row (the first matching row, not the higher) is used."""
+    spec = importlib.util.spec_from_file_location("cmp", REF / "jals/compare_jcvrisk.py")
+    cmp = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(cmp)
+    buf = io.StringIO()
+    monkeypatch.chdir(REF.parent)
+    with contextlib.redirect_stdout(buf):
+        cmp.main()
+    lines = buf.getvalue().splitlines()
+    assert lines[0].endswith("the higher category for 2107")
+    for line in lines[1:]:
+        assert "(same BP row 2107/2107), with Jcvrisk's BP row 3000/3000" in line, line
+        assert ("noaf" in line) != ("5-year risk from its score" in line and line.endswith("(max diff 0.01)"))

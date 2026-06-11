@@ -3,7 +3,8 @@
 Methods: 5-year risk = 1 - exp(-(5 x 1-year rate at total score 0) x 1.0718^score), 1.0718 = 2^0.1. Table 6 prints
 it to 2 decimals for scores 0, 5, ..., 60 by age group (AF models). Each column fits one constant c (risk =
 1 - exp(-c 2^(score/10))); c is the middle of the range that matches most of the column's 13 printed values. Writes
-fixtures/table6_constants.json and prints how many printed 5- and 10-year values the constants give back.
+fixtures/table6_constants.json and prints how many printed 5- and 10-year values the constants give back. The same
+for the online supplement's Table 5 (the ACC/AHA blood-pressure variant): fixtures/supp_table5_constants.json.
 """
 
 import csv
@@ -26,7 +27,13 @@ def risk10(c, c_next, score):
 
 
 def main():
-    rows = list(csv.DictReader(open(HERE / "fixtures/table6.csv")))
+    for name in ("table6", "supp_table5"):
+        print(name)
+        fit(name)
+
+
+def fit(name):
+    rows = list(csv.DictReader(open(HERE / f"fixtures/{name}.csv")))
     const = {}
     for o in OUTCOMES:
         const[o] = []
@@ -40,7 +47,7 @@ def main():
             hits = np.array([(np.abs(np.round(100 * risk5(c, s), 2) - v) < 1e-9).sum() for c in grid])
             best = np.flatnonzero(hits == hits.max())
             const[o].append(float("%.6g" % grid[best[len(best) // 2]]))  # middle of the best-matching range
-    json.dump(const, open(HERE / "fixtures/table6_constants.json", "w"), indent=1)
+    json.dump(const, open(HERE / f"fixtures/{name}_constants.json", "w"), indent=1)
     for o in OUTCOMES:
         n5 = n10 = 0
         m5 = m10 = 0.0
