@@ -1,0 +1,175 @@
+<!doctype html>
+
+<html lang="en-US">
+<head>
+	<meta charset="UTF-8" />
+	<title>HEART Score</title>
+	<link rel="stylesheet" media="screen" href="/resources/interface/screen.css" />
+</head>
+
+<body>
+
+	<div id="container">		
+		<div id="header">	
+			<ul>
+				<li><a href="/">Home</a></li>
+				<li class="active"><a href="/score/">Score</a></li>
+				<li><a href="/literature/">Literature</a></li>
+				<li><a href="/contact/">Contact</a></li>
+			</ul>
+		
+			<a href="/"><img src="/resources/interface/images/heartLogo.png" id="logo" /></a>	
+		</div>
+		
+		<div id="content">
+			<div style="width: 48%; float: right;">
+			
+				<img src="/resources/interface/images/predictionChart.png" style="width: 100%; margin-bottom: 1em;" />
+			
+				<p>The above graph shows that the HEART score is a perfect predictor of MACE within six weeks after presentation. The X axis represents the HEART score a patient scores, while the Y axis indicates the increase in risk of a cardiac event. The S shaped curve represents a discrimination between low and high risk patients. Low HEART scores accompany a low likelihood of an ACS; high HEART scores predict high numbers of MACE.</p>
+		
+					
+				<table class="policyTable">
+				
+					<tr class="header">
+						<td>HEART Score</td>
+						<td>Risk of MACE</td>
+						<td>Proposed Policy</td>
+					</tr>
+				
+					<tr class="green">
+						<td>0 - 3</td>
+						<td>0,9%</td>
+						<td>Discharge</td>
+					</tr>
+				
+					<tr class="orange">
+						<td>4 - 6</td>
+						<td>12%</td>
+						<td>X-ECG</td>
+					</tr>
+				
+					<tr class="red">
+						<td>7 - 10</td>
+						<td>65%</td>
+						<td>CAG</td>
+					</tr>
+				
+				</table>
+		
+				<p>Patients can be divided into three distinct groups. A score of 0-3 points carries a risk of 0.9% for reaching a MACE, and therefore supports a policy of early discharge. With this very low risk percentage in mind it is doubtful whether additional diagnostic procedures at the outpatient clinic are useful.</p
+				<p>In case of a HEART score of 4-6 points immediate discharge is not an option, as this figure indicates a risk of 12.0% for a MACE within six weeks. Such patients should be admitted for clinical observation, treated as an ACS awaiting final diagnosis, and subjected to non-invasive investigations such as repeated Troponin, exercise testing and possibly advanced ischemia detection. A HEART score &#8805; 7 points, with a risk of 65% for a MACE, calls for early aggressive treatments possibly including invasive strategies without preceding non-invasive testing.</p>
+				
+			</div>
+				
+			<div style="width: 48%;">
+			
+				<h2>HEART Score Criteria</h2>
+			
+				<p>By assigning zero, one, or two points — towards an atypical patient history, ECG anomalies, the patient's age, any risk factors present, and elevated Troponine — patients score on a scale of 0‒10.</p>
+				
+				<p class="downloadButton"><img src="/resources/interface/images/downloadIcon.png" /><a href="/resources/table.pdf">Download this chart as PDF.</a></p>
+				
+				<table class="scoreCriteria">
+				
+					<tr>
+						<td rowspan="3" class="factor"><strong>H</strong>istory</td>
+						<td>Highly suspicious</td>
+						<td>2</td>
+					</tr>
+					<tr>
+						<td>Moderately suspicious</td>
+						<td>1</td>
+					</tr>
+					<tr>
+						<td>Slightly suspicious</td>
+						<td>0</td>
+					</tr>
+
+					<tr><td>&nbsp;</td></tr>
+
+					<tr>
+						<td rowspan="3" class="factor"><strong>E</strong>CG</td>
+						<td>Significant ST-depression</td>
+						<td>2</td>
+					</tr>
+					<tr>
+						<td>Non specific repolarisation disturbance</td>
+						<td>1</td>
+					</tr>
+					<tr>
+						<td>Normal</td>
+						<td>0</td>
+					</tr>
+					
+					<tr><td>&nbsp;</td></tr>
+					
+					<tr>
+						<td rowspan="3" class="factor"><strong>A</strong>ge</td>
+						<td>&#8805; 65 years</td>
+						<td>2</td>
+					</tr>
+					<tr>
+						<td>45 &#8211; 65 years</td>
+						<td>1</td>
+					</tr>
+					<tr>
+						<td>&#8804; 45 years</td>
+						<td>0</td>
+					</tr>
+					
+					<tr><td>&nbsp;</td></tr>
+					
+					<tr>
+						<td rowspan="3" class="factor"><strong>R</strong>isk Factors</td>
+						<td>&#8805; 3 risk factors <em>or</em> history of atherosclerotic disease</td>
+						<td>2</td>
+					</tr>
+					<tr>
+						<td>1 or 2 risk factors</td>
+						<td>1</td>
+					</tr>
+					<tr>
+						<td>No risk factors known</td>
+						<td>0</td>
+					</tr>
+					
+					<tr><td>&nbsp;</td></tr>
+					
+					<tr>
+						<td rowspan="3" class="factor"><strong>T</strong>roponin</td>
+						<td>&#8805; 3x normal limit</td>
+						<td>2</td>
+					</tr>
+					<tr>
+						<td>1 &#8211; 3x normal limit</td>
+						<td>1</td>
+					</tr>
+					<tr>
+						<td>&#8804; normal limit</td>
+						<td>0</td>
+					</tr>
+				
+				</table>
+			
+			</div>
+			
+			<div class="invisible">&nbsp;</div>
+			
+			<p class="sosumi">Copyright &copy; 2010, HEART Study.</p>				
+		</div>
+	</div>
+
+</body>
+</html>
+
+<script type="text/javascript">
+	var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+	document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+	try {
+		var pageTracker = _gat._getTracker("UA-12648805-1");
+		pageTracker._trackPageview();
+	} catch(err) {}
+</script>

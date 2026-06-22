@@ -33,3 +33,11 @@ def test_invalid_rows_are_nan():
 
 def test_broadcast_2d():
     assert heart(np.array([[0], [2]]), [0, 1], 50, 1, 0, 2).shape == (2, 2)
+
+
+def test_developers_score_card_all_combinations():
+    # heartscore.nl card: three rows per item, 0/1/2 points; every one of the 3^5 combinations sums.
+    g = np.array(np.meshgrid(*[range(3)] * 5, indexing="ij")).reshape(5, -1)
+    pick = lambda i, v: np.array(v)[g[i]]
+    got = heart(g[0], g[1], pick(2, [30, 55, 80]), pick(3, [0, 2, 4]), 0, pick(4, [0.5, 2, 6]))
+    np.testing.assert_array_equal(got, g.sum(axis=0))
