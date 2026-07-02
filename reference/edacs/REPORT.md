@@ -41,6 +41,13 @@ both ends; other items are checked on a woman aged 30 (2 points).
 
 29/29 rules give the published points.
 
+### Exhaustive grid
+
+Box 3 read as a lookup table (`box3()` in `report.py`), against the package, over every integer
+input combination: ages 18-110 x sex x known CAD x 0-5 risk factors x the four symptoms.
+
+35712/35712 identical scores (max difference 0).
+
 ## 2. RiskScorescvd (evidence level B)
 
 - reference: RiskScorescvd (CRAN), EDACS() - vendored source, see reference/vendor/RiskScorescvd/DESCRIPTION
@@ -54,7 +61,34 @@ therefore set known CAD to 0; the CAD rule is covered in section 1. 40% of ages 
 
 5000 random patients aged 18-99 (seed 2014): 5000/5000 identical scores.
 
-## 3. Differences by design
+## 3. Third-party calculators (evidence level B, rules only)
+
+No developer calculator exists: edacs.org and www.edacs.org redirect, live and in
+every Wayback capture (2014-10-05, 2015-08-02), to Sussex Community NHS's unrelated Eating and Drinking
+Ability Classification System; the paper gives no URL; no EDACS app from the developers was found.
+MDCalc (calc 1858) names Than and Flaws as creators, but its scoring code is server side and was not
+queried. Its form (`source/mdcalc_1858_schema.json`):
+
+- 6/6 items carry Box 3's points; age bands in its table equal Box 3; the CAD / risk-factor
+  item is shown only when `age<=50`.
+- Wording differs: MDCalc's radiation item reads "arm, shoulder, neck, or jaw"; Box 3 and Table 2 say
+  "arm or shoulder" (throat radiation was tested and dropped, Table 1). Ambiguity on MDCalc's side;
+  the package follows the paper.
+- cliot 1.0.0 (CRAN), `edacs_chest_pain_score()` (cut out unmodified to `source/cliot_edacs.R`), read
+  but not run: same bands and points, but its +4 for known CAD or >= 3 risk factors applies at every
+  age, not only 18-50 (cliot's error against Box 3 c). `run_cliot.R` runs it over the grid.
+
+Downloaded (sha256):
+
+- `source/mdcalc_1858_schema.json`: extracted from the `__NEXT_DATA__` of
+  https://www.mdcalc.com/calc/1858/emergency-department-assessment-chest-pain-score-edacs
+  (31fc857fc1e131087f469c07e6a1ed7a4f91fd3f9f240bb3b26a3e667307ad57)
+- `source/cliot_edacs.R`: lines 14605-14699 of R/neelpackage.R in
+  https://cran.r-project.org/src/contrib/cliot_1.0.0.tar.gz (tarball
+  83794e0c8a3f15434a61678558bcc19e30bc42139122f797183727ac019aa1bd; excerpt
+  cf737149578f17395f3dd6b2b82b6d18cae0348bdeec46534847585d9f4ae021)
+
+## 4. Differences by design
 
 - Ages are taken in completed years (50.5 counts as 50); RiskScorescvd mixes `Age < 51` and `Age <= 50`.
 - Ages under 18 give NaN (the score is for adults); RiskScorescvd gives 0 age points.

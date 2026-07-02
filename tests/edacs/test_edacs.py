@@ -25,3 +25,12 @@ def test_age_bands_and_young_rule():
 
 def test_invalid_rows_are_nan():
     assert np.isnan(edacs([17, 40, 40], ["m", "x", "m"], [0, 0, 2], 0, 0, 0, 0, 0)).all()
+
+
+def test_exhaustive_grid_matches_box3():
+    import importlib.util
+    spec = importlib.util.spec_from_file_location("edacs_report", FX.parent / "report.py")
+    rep = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(rep)
+    n, same, _ = rep.grid()
+    assert same == n == 35712

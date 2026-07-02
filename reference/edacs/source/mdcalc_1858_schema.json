@@ -1,0 +1,170 @@
+{
+ "full_title_en": "Emergency Department Assessment of Chest Pain Score (EDACS)",
+ "launch_date": "2018-04-06T21:17:57.000Z",
+ "publishedAt": "2022-04-21T20:29:03.250Z",
+ "versionNumber": 1,
+ "md5": "f7c1f1bcce7d3d6a059c7ef57584ee95",
+ "equation_logic": "74a1975658b892ab68400bfed3c594e6",
+ "logic_language": "javascript",
+ "input_schema": [
+  {
+   "inct": null,
+   "option_fhir_rules": null,
+   "subheading": "<p>This score only applies to patients: (1) &ge;18 years old with normal vital signs; (2) Chest pain consistent with ACS; (3) No ongoing chest pain or crescendo angina</p>",
+   "subheading_instructions": "",
+   "type": "subheading"
+  },
+  {
+   "conditionality": "",
+   "default": null,
+   "fhir_rules": null,
+   "inct": null,
+   "label_en": "<p>Age</p>",
+   "name": "age",
+   "optional": false,
+   "tips_en": "",
+   "type": "textbox",
+   "unit": "age"
+  },
+  {
+   "conditionality": "",
+   "default": null,
+   "label_en": "<p>Sex</p>",
+   "md_calc_info_concept": null,
+   "name": "sex",
+   "option_fhir_rules": null,
+   "optional": false,
+   "options": [
+    {
+     "label": "Female",
+     "value": 0
+    },
+    {
+     "label": "Male",
+     "value": 6
+    }
+   ],
+   "show_points": true,
+   "tips_en": "",
+   "type": "toggle"
+  },
+  {
+   "conditionality": "age<=50",
+   "default": null,
+   "label_en": "<p>Known coronary artery disease or &ge;3 risk factors</p>",
+   "md_calc_info_concept": null,
+   "name": "artery_disease_risk_factors",
+   "option_fhir_rules": null,
+   "optional": false,
+   "options": [
+    {
+     "label": "No",
+     "value": 0
+    },
+    {
+     "label": "Yes",
+     "value": 4
+    }
+   ],
+   "show_points": true,
+   "tips_en": "<ul><li><a href = \"http://www.ncbi.nlm.nih.gov/pubmed/24428678\">Than et al</a> define coronary artery disease (CAD) as \u201cprevious acute myocardial infarction, coronary artery bypass graft, or percutaneous intervention\u201d</li><li>Risk factors: dislipidaemia, diabetes, hypertension, current smoker, family history of premature CAD</li><li>The risk factors only apply to patients 18-50</li></ul>",
+   "type": "toggle"
+  },
+  {
+   "inct": null,
+   "option_fhir_rules": null,
+   "subheading": "<p>Symptoms and signs&nbsp;</p>",
+   "subheading_instructions": "",
+   "type": "subheading"
+  },
+  {
+   "conditionality": "",
+   "default": null,
+   "label_en": "<p>Diaphoresis</p>",
+   "md_calc_info_concept": null,
+   "name": "diaphoresis",
+   "option_fhir_rules": null,
+   "optional": false,
+   "options": [
+    {
+     "label": "No",
+     "value": 0
+    },
+    {
+     "label": "Yes",
+     "value": 3
+    }
+   ],
+   "show_points": true,
+   "tips_en": "",
+   "type": "toggle"
+  },
+  {
+   "conditionality": "",
+   "default": null,
+   "label_en": "<p>Pain radiates to arm, shoulder, neck, or jaw</p>",
+   "md_calc_info_concept": null,
+   "name": "radiates",
+   "option_fhir_rules": null,
+   "optional": false,
+   "options": [
+    {
+     "label": "No",
+     "value": 0
+    },
+    {
+     "label": "Yes",
+     "value": 5
+    }
+   ],
+   "show_points": true,
+   "tips_en": "",
+   "type": "toggle"
+  },
+  {
+   "conditionality": "",
+   "default": null,
+   "label_en": "<p>Pain occurred or worsened with inspiration</p>",
+   "md_calc_info_concept": null,
+   "name": "pain_inspiration",
+   "option_fhir_rules": null,
+   "optional": false,
+   "options": [
+    {
+     "label": "No",
+     "value": 0
+    },
+    {
+     "label": "Yes",
+     "value": -4
+    }
+   ],
+   "show_points": true,
+   "tips_en": "",
+   "type": "toggle"
+  },
+  {
+   "conditionality": "",
+   "default": null,
+   "label_en": "<p>Pain is reproduced by palpation</p>",
+   "md_calc_info_concept": null,
+   "name": "pain_palpation",
+   "option_fhir_rules": null,
+   "optional": false,
+   "options": [
+    {
+     "label": "No",
+     "value": 0
+    },
+    {
+     "label": "Yes",
+     "value": -6
+    }
+   ],
+   "show_points": true,
+   "tips_en": "",
+   "type": "toggle"
+  }
+ ],
+ "formula_en": "<p>Addition of the selected points; points assigned below. If score is &lt;16, patient can be evaluated in the &ldquo;low risk&rdquo; group with non-ischemic ECG and negative 0-hr and 2-hr troponins. These patients with these two additional features are low-risk for major adverse cardiac event.</p>\n<p>If score is &ge;16 or ECG shows new ischemia or 0-hr troponin is negative, then the patient is not low-risk and not appropriate for early discharge (obviously if the first troponin is negative and the patient is in the low-risk group, but the second troponin is positive, this patient no longer qualifies as low-risk).</p>\n<p>A negative ECG is defined as the absence of new or concerning signs of ischemia, including ST-segment elevation or depression, T-wave inversion, or other pathologic changes suggestive of ischemia or myocardial injury.</p>\n<div dir=\"ltr\">\n<table><colgroup><col width=\"415\"><col width=\"156\"><col width=\"52\"></colgroup>\n<tbody>\n<tr>\n<td colspan=\"2\">\n<p dir=\"ltr\"><strong>Variable</strong></p>\n</td>\n<td>\n<p dir=\"ltr\"><strong>Points</strong></p>\n</td>\n</tr>\n<tr>\n<td rowspan=\"10\">\n<p dir=\"ltr\">Age</p>\n</td>\n<td>\n<p dir=\"ltr\">18-45</p>\n</td>\n<td>\n<p dir=\"ltr\">2</p>\n</td>\n</tr>\n<tr>\n<td>\n<p dir=\"ltr\">46-50</p>\n</td>\n<td>\n<p dir=\"ltr\">4</p>\n</td>\n</tr>\n<tr>\n<td>\n<p dir=\"ltr\">51-55</p>\n</td>\n<td>\n<p dir=\"ltr\">6</p>\n</td>\n</tr>\n<tr>\n<td>\n<p dir=\"ltr\">56-60</p>\n</td>\n<td>\n<p dir=\"ltr\">8</p>\n</td>\n</tr>\n<tr>\n<td>\n<p dir=\"ltr\">61-65</p>\n</td>\n<td>\n<p dir=\"ltr\">10</p>\n</td>\n</tr>\n<tr>\n<td>\n<p dir=\"ltr\">66-70</p>\n</td>\n<td>\n<p dir=\"ltr\">12</p>\n</td>\n</tr>\n<tr>\n<td>\n<p dir=\"ltr\">71-75</p>\n</td>\n<td>\n<p dir=\"ltr\">14</p>\n</td>\n</tr>\n<tr>\n<td>\n<p dir=\"ltr\">76-80</p>\n</td>\n<td>\n<p dir=\"ltr\">16</p>\n</td>\n</tr>\n<tr>\n<td>\n<p dir=\"ltr\">81-85</p>\n</td>\n<td>\n<p dir=\"ltr\">18</p>\n</td>\n</tr>\n<tr>\n<td>\n<p dir=\"ltr\">&ge;86</p>\n</td>\n<td>\n<p dir=\"ltr\">20</p>\n</td>\n</tr>\n<tr>\n<td rowspan=\"2\">\n<p dir=\"ltr\">Sex</p>\n</td>\n<td>\n<p dir=\"ltr\">Female</p>\n</td>\n<td>\n<p dir=\"ltr\">0</p>\n</td>\n</tr>\n<tr>\n<td>\n<p dir=\"ltr\">Male</p>\n</td>\n<td>\n<p dir=\"ltr\">6</p>\n</td>\n</tr>\n<tr>\n<td rowspan=\"2\">\n<p dir=\"ltr\">Known coronary artery disease or &ge;3 risk factors*</p>\n</td>\n<td>\n<p dir=\"ltr\">No</p>\n</td>\n<td>\n<p dir=\"ltr\">0</p>\n</td>\n</tr>\n<tr>\n<td>\n<p dir=\"ltr\">Yes</p>\n</td>\n<td>\n<p dir=\"ltr\">4</p>\n</td>\n</tr>\n<tr>\n<td colspan=\"3\">\n<p dir=\"ltr\"><strong>Symptoms and signs</strong></p>\n</td>\n</tr>\n<tr>\n<td rowspan=\"2\">\n<p dir=\"ltr\">Diaphoresis</p>\n</td>\n<td>\n<p dir=\"ltr\">No</p>\n</td>\n<td>\n<p dir=\"ltr\">0</p>\n</td>\n</tr>\n<tr>\n<td>\n<p dir=\"ltr\">Yes</p>\n</td>\n<td>\n<p dir=\"ltr\">3</p>\n</td>\n</tr>\n<tr>\n<td rowspan=\"2\">\n<p dir=\"ltr\">Pain radiates to arm, shoulder, neck, or jaw</p>\n</td>\n<td>\n<p dir=\"ltr\">No</p>\n</td>\n<td>\n<p dir=\"ltr\">0</p>\n</td>\n</tr>\n<tr>\n<td>\n<p dir=\"ltr\">Yes</p>\n</td>\n<td>\n<p dir=\"ltr\">5</p>\n</td>\n</tr>\n<tr>\n<td rowspan=\"2\">\n<p dir=\"ltr\">Pain occurred or worsened with inspiration</p>\n</td>\n<td>\n<p dir=\"ltr\">No</p>\n</td>\n<td>\n<p dir=\"ltr\">0</p>\n</td>\n</tr>\n<tr>\n<td>\n<p dir=\"ltr\">Yes</p>\n</td>\n<td>\n<p dir=\"ltr\">-4</p>\n</td>\n</tr>\n<tr>\n<td rowspan=\"2\">\n<p dir=\"ltr\">Pain is reproduced by palpation</p>\n</td>\n<td>\n<p dir=\"ltr\">No</p>\n</td>\n<td>\n<p dir=\"ltr\">0</p>\n</td>\n</tr>\n<tr>\n<td>\n<p dir=\"ltr\">Yes</p>\n</td>\n<td>\n<p dir=\"ltr\">-6</p>\n</td>\n</tr>\n</tbody>\n</table>\n</div>\n<p>*<a href=\"https://www.ncbi.nlm.nih.gov/pubmed/24428678\" target=\"_blank\" rel=\"noopener\">Than et al.</a> define coronary artery disease (CAD) as &ldquo;previous acute myocardial infarction, coronary artery bypass graft, or percutaneous intervention.&rdquo; Risk factors include dislipidaemia, diabetes, hypertension, current smoker, and family history of premature CAD. The risk factors only apply to patients 18-50.</p>\n<p></p>"
+}
