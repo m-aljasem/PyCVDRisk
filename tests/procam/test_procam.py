@@ -64,3 +64,11 @@ def test_invalid():
     assert np.isnan(procam_stroke([34, 66], "m", 0, 0, 120)).all()
     with pytest.raises(ValueError):
         procam(50, "m", 3, 1.2, 1.5, 120, 0, 0, 0, output="risk")
+
+
+def test_assmann_foundation_online_tests():
+    # coronary: Tables 3-4 category = the tool's Weibull risk category 167/193 with inputs in closed bands, none 2 apart;
+    # stroke: the tool departs from Tables 6-7 (male sex 4 points, higher table). Asserted inside tool_section().
+    pytest.importorskip("pypdf")
+    lines = _report().tool_section()
+    assert any("| no input in an open-ended band | 193 | 167 | 14 | 12 | 0 |" in ln for ln in lines)

@@ -8,8 +8,8 @@ score for men and women aged 20-75 and the cerebral ischaemic event score (35-65
 
 Evidence level C: the paper's printed tables (`source/assmann2007.pdf`). The paper refers the full Weibull
 function to an annex that is not part of the article, so the published point score is implemented. The
-Assmann-Stiftung online test (assmann-stiftung.de) returns a continuous risk, presumably from the full
-function; it cannot check the point score cell by cell.
+Assmann Foundation's own online tests (section 5) run the full Weibull function for the coronary score, so
+they check the point score's categories only, and a stroke score that departs from Tables 6-7.
 
 ## 1. Table 2: coronary points
 
@@ -111,4 +111,72 @@ With one point per year of age (β 0.109), the other points should be about β/0
 
 Smoking and diabetes get more points than their coefficients imply; the paper does not say how the
 points were derived. Reported, not used as a check.
+
+## 5. The Assmann Foundation's online tests
+
+Source: www.assmann-stiftung.de/procam-tests/ embeds `/PROCAM21/index_neu.html` (saved in `source/procam21/`; sha256 in the table below). The page computes nothing in the browser: each slider sends a
+GET to `/PROCAM/api/healthcheck.php` (PROCAM-Gesundheitstest, men and women 20-75, myocardial infarction in
+10 years) or `/PROCAM/api/strokecheck.php` (Schlaganfalltest, 35-65), and shows the JSON `risk` (coronary 2
+decimals, stroke 1 decimal, capped at ">= 11.5%"). A third tab (Schnelltest: BMI instead of lipids) is not
+a published PROCAM 2007 score and was not used. The linked services.herzalter-bestimmen.de "Herzalter-Test"
+cites the 2007 paper and posts the same inputs to an API that stores each record ("Datenspende"), so it was
+not queried. The 2006 Wayback captures (`/assmann-stiftung/3_herz/tests/frameset-herz-t2.html`, `-t3.html`)
+hold only the framesets; their content frames (`praev1test2.html`, `praev1test3.html`) were never archived
+(404), so the 2002-era test code cannot be recovered.
+
+`query_calculator.py` sent 500 seeded coronary and 400 seeded stroke patients (seeds 2007,
+2008; integer inputs over the page's slider ranges), one GET per patient 1 s apart. `fixtures/calculator_probes.csv`
+varies one input at a time from a base patient.
+
+| File | sha256 |
+|---|---|
+| `source/procam21/gaugeHtml5.js` | `1b9a3b9a1bce850c93e2fecaf48ab66698fb6b0691ecc982b56ce71097fba59d` |
+| `source/procam21/index_neu.html` | `38fda1c7513e7610646b08609d70bb2f8362348dd4180dab7d1e7c69c03e5c73` |
+| `source/procam21/initGaugesHtml5.js` | `e8eaab4ef0f78002ea455b70315ea34665070b494c444e2b69e496a515612bb8` |
+| `source/procam21/procam-tests.html` | `157292fe189e38f35a09c9553b0541ab6d35af96f2ad8f1e405cec6eb5fe021e` |
+| `fixtures/calculator_coronary.csv` | `3b0d49ab00e2b2d03f5d573f2ab0ef1d3369d901e5b7bb246c07408b866882a4` |
+| `fixtures/calculator_probes.csv` | `0053143e38eb8f2525f69e9afd7941429e50d3ee08a350afafbeb876b69e1d51` |
+| `fixtures/calculator_stroke.csv` | `9b75cb062a23cabf4151282f798e5062392d436fb91cd6dae00b71c5273a621b` |
+
+### 5a. Coronary: the tool runs the continuous Weibull function
+
+The tool's risk moves within every Table 2 band and beyond its open ends (probes, LDL: 75 -> 2.47%, 100 -> 3.45%, 101 -> 3.49%, 105 -> 3.68%, 106 -> 3.73%, 150 -> 6.66%, 196 -> 12.03%, 250 -> 23.34%), so it is the full Weibull function, not the
+point score. It is the 2007 model (men and women, 20-75; the herzalter page cites Eur J Clin Invest
+2007;37:925). It cannot check the points value by value; it can check that Tables 3-4 place each person in
+the category the function gives (the tool's % binned at 5, 10, 20, 30):
+
+| Patients | n | Same category | Package lower | Package higher | 2+ categories apart |
+|---|---:|---:|---:|---:|---:|
+| all | 500 | 391 | 90 | 19 | 6 |
+| no input in an open-ended band | 193 | 167 | 14 | 12 | 0 |
+| LDL > 196, HDL < 35 or SBP > 180 | 307 | 224 | 76 | 7 | 6 |
+
+With every input inside a closed band the point score and the function agree on 167/193 categories; each
+disagreement is one category, in both directions, with the tool's risk within 29% (relative) of
+a category boundary: what rounding inputs to bands and points to categories does. With LDL > 196, HDL < 35 or
+SBP > 180 the point score saturates and gives the lower category far more often (all 2-apart cases are here).
+Classified as a property of the published point score, not an error of either. Not identity evidence: the
+level stays C for the point score.
+
+### 5b. Stroke: the tool departs from Tables 6-7
+
+SBP probes: 100 -> 1.4, 120 -> 1.4, 139 -> 1.4, 140 -> 1.6, 144 -> 1.6, 145 -> 1.8, 179 -> 3.6, 180 -> 4.1, 200 -> 4.1, 225 -> 4.1. The tool is flat below 140 and steps at
+Table 6's 5-mmHg cut-points, so it is a point score, not the Table 5 Cox model. But:
+
+- Package = tool for 26/400 patients. Grouped by the Table 6 total, 32 totals
+  have two tool values: women get the value men get 2 points higher. Adding 2 points to women makes the tool
+  a function of the total alone (56/56 totals single-valued), i.e. the tool's male-sex weight is 4
+  points where Table 6 prints 6 (Table 5's β 0.626 / 0.109 per year = 5.7).
+- Its points-to-risk table (indexed with women +2) is within 0.1 of Table 7 up to 54 points (42: 0.1 vs 0.2),
+  then above it by a growing margin:
+
+| Points | 55 | 60 | 65 | 70 | 75 | 77 | 78 | 80 |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|
+| Tool, % | 0.7 | 1.2 | 2.3 | 4.1 | 7.2 | 9 | 11.5 | 11.5 |
+| Table 7, % | 0.6 | 1.1 | 1.9 | 3.4 | 5.8 | 7.3 | 8.1 | 10 |
+
+  The tool shows ">= 11.5%" from 78 points; Table 7 prints values up to 80 and "> 10.0" above.
+
+Classified as the tool departing from the paper (perhaps a later recalibration; nothing on the page says so).
+The package keeps the paper.
 

@@ -1,0 +1,1046 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <title>PROCAM-Tests</title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link href="css/all.min.css" rel="stylesheet"> <!--load all styles -->
+    <link rel="stylesheet" type="text/css" href="css/styles.css">
+</head>
+  <body>
+
+    <div class="container p-1">
+        <div class="row">
+            <div class="col-lg-12">
+                <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <a class="nav-link active" id="pills-home-tab" data-toggle="pill" href="#pills-HC" role="tab" aria-controls="pills-HC" aria-selected="true">PROCAM-Gesundheitstest</a>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <a class="nav-link" id="pills-profile-tab" data-toggle="pill" href="#pills-QC" role="tab" aria-controls="pills-QC" aria-selected="false">PROCAM-Schnelltest</a>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <a class="nav-link" id="pills-contact-tab" data-toggle="pill" href="#pills-SC" role="tab" aria-controls="pills-SC" aria-selected="false">PROCAM-Schlaganfalltest</a>
+                    </li>
+                </ul>
+                <div class="tab-content" id="pills-tabContent">
+                    <div class="tab-pane fade show active" id="pills-HC" role="tabpanel" aria-labelledby="pills-HC-tab">
+                        <div class="row">
+                            <div class="col-lg-7 p-3">
+                                <div class="card bg-light text-left">
+                                    <div class="card-body">
+                                    <h5 class="card-title">Der PROCAM-Gesundheitstest</h5>
+                                    <p class="card-text">Der PROCAM-Gesundheitstest basiert auf der <a href="https://www.assmann-stiftung.de/procam-studie/" target="_blank">PROCAM-Studie</a> und gilt für Frauen und Männer im Alter von 20 bis 75 Jahren zur Ermittlung des Risikos für einen Herzinfarkt innerhalb der nächsten 10 Jahre.
+                                    <p><strong>Bei einem Ergebnis im gelben oder roten Bereich (Herzinfarktrisiko über 10% in 10 Jahren) sollten Sie Ihren Arzt oder Apotheker konsultieren.</strong></p>
+                                    </div>
+                                </div>
+                                <div class="card bg-light text-left mt-3 p-3">
+                                    <div class="card-body">
+                                        <form>
+                                             <div class="form-group row">
+                                                <label for="unit" class="col-sm-5 col-form-label col-form-label-sm">Einheit:</label>
+                                                <div class="col-sm-7">
+                                                    <select class="form-control" name="select-units" id="select-units">
+                                                        <option>mg/dL</option>
+                                                        <option>mmol/l</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label for="age" class="col-sm-5 col-form-label col-form-label-sm">Alter:</label>
+                                                <div class="col-sm-7">
+                                                    <div class="d-flex">
+                                                        <div class="w-75">
+                                                            <input type="range" class="custom-range range-age-hc" min="20" max="75">
+                                                        </div>
+                                                        <small class="ml-2 val-age-hc"></small>
+                                                        <small>&nbsp;Jahre</small>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label for="gender" class="col-sm-5 col-form-label col-form-label-sm">Geschlecht:<br>&nbsp;</label>
+                                                <div class="col-sm-7">
+                                                    <div class="btn-group btn-group-toggle btn-group-sm" data-toggle="buttons">
+                                                        <label class="btn btn-secondary active">
+                                                            <input type="radio" name="options" id="gender_female" autocomplete="off" checked> Weiblich
+                                                        </label>
+                                                        <label class="btn btn-secondary">
+                                                            <input type="radio" name="options" id="gender_male" autocomplete="off"> Männlich
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label for="diabetes" class="col-sm-5 col-form-label col-form-label-sm">Diabetes mellitus oder BZ >= 120 mg/dL:</label>
+                                                <div class="col-sm-7">
+                                                    <div class="btn-group btn-group-toggle btn-group-sm" data-toggle="buttons">
+                                                        <label class="btn btn-secondary active">
+                                                            <input type="radio" name="options" id="diabetes_no" autocomplete="off" checked> Nein
+                                                        </label>
+                                                        <label class="btn btn-secondary">
+                                                            <input type="radio" name="options" id="diabetes_yes" autocomplete="off"> Ja
+                                                        </label>
+                                                    </div>
+                                                    <i class="fas fa-question-circle ml-4 info pull-right" aria-hidden="true" data-toggle="popover" title="Hinweis" data-content="Bitte beachten Sie, dass sich dieser Grenzwert auf einen Nüchternblutzucker im Serum bezieht. Auswertungen im Rahmen der Studie haben gezeigt, dass dies einem Grenzwert von 125 mg/dl im Plasma bzw. von 110 mg/dl im Kapillarblut entspricht. (von Eckardstein A, Schulte H, Assmann G. Risk for diabetes mellitus in middle-aged Caucasian male participants of the PROCAM study: implications for the definition of impaired fasting glucose by the American Diabetes Association. J Clin Endocrinol Metab. 2000;85:3101.8.)"></i>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label for="smoking" class="col-sm-5 col-form-label col-form-label-sm">Zigarettenrauchen <br>(zur Zeit):</label>
+                                                <div class="col-sm-7">
+                                                    <div class="btn-group btn-group-toggle btn-group-sm" data-toggle="buttons">
+                                                        <label class="btn btn-secondary active">
+                                                            <input type="radio" name="options" id="smoking_no" autocomplete="off" checked> Nein
+                                                            </label>
+                                                            <label class="btn btn-secondary">
+                                                            <input type="radio" name="options" id="smoking_yes" autocomplete="off"> Ja
+                                                            </label>
+                                                    </div>
+                                                    <i class="fas fa-question-circle ml-4 info" aria-hidden="true" data-toggle="popover" title="Hinweis" data-content="Wer lebenslang raucht, verkürzt seine Lebenserwartung um ca. 10 Jahre. Aufhören lohnt sich allerdings in jedem Alter. Wer zwischen dem 25. und 34. Lebensjahr mit dem Rauchen aufhört, hat eine Lebenserwartung wie ein lebenslanger Nichtraucher. Wer erst zwischen dem 55. und 64. Lebensjahr mit dem Rauchen aufhört, gewinnt immerhin 4 Jahre an Lebenserwartung."></i>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label for="anamnesis" class="col-sm-5 col-form-label col-form-label-sm">Positive Familienanamnese:</label>
+                                                <div class="col-sm-7">
+                                                    <div class="btn-group btn-group-toggle btn-group-sm" data-toggle="buttons">
+                                                        <label class="btn btn-secondary active">
+                                                            <input type="radio" name="options" id="anamnesis_no" autocomplete="off" checked> Nein
+                                                            </label>
+                                                            <label class="btn btn-secondary">
+                                                            <input type="radio" name="options" id="anamnesis_yes" autocomplete="off"> Ja
+                                                            </label>
+                                                    </div>
+                                                    <i class="fas fa-question-circle ml-4 info" aria-hidden="true" data-toggle="popover" title="Hinweis" data-content="Positive Familienanamnese: Myokardinfarkt bei Eltern, Großeltern oder Geschwistern vor dem 60. Lebensjahr"></i>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label for="systolic" class="col-sm-5 col-form-label col-form-label-sm">Systolischer Blutdruck:</label>
+                                                <div class="col-sm-7">
+                                                    <div class="d-flex">
+                                                        <div class="w-75">
+                                                            <input type="range" class="custom-range range-systolic-hc" min="100" max="225">
+                                                        </div>
+                                                        <small class="ml-2 val-systolic-hc"></small>
+                                                        <small>&nbsp;mmHg</small>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label for="ldl" class="col-sm-5 col-form-label col-form-label-sm">LDL-Cholesterin:</label>
+                                                <div class="col-sm-7">
+                                                    <div class="d-flex">
+                                                        <div class="w-75">
+                                                            <input type="range" class="custom-range range-ldl" min="75" max="250">
+                                                        </div>
+                                                        <small class="ml-2 val-ldl"></small>
+                                                        <small class="val-unit">&nbsp;mg/dL</small>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label for="hdl" class="col-sm-5 col-form-label col-form-label-sm">HDL-Cholesterin:</label>
+                                                <div class="col-sm-7">
+                                                    <div class="d-flex">
+                                                        <div class="w-75">
+                                                            <input type="range" class="custom-range range-hdl" min="25" max="75">
+                                                        </div>
+                                                        <small class="ml-2 val-hdl"></small>
+                                                        <small class="val-unit">&nbsp;mg/dL</small>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label for="triglyceride" class="col-sm-5 col-form-label col-form-label-sm">Triglyzeride:                                                </label>
+                                                <div class="col-sm-7">
+                                                    <div class="d-flex">
+                                                        <div class="w-75">
+                                                            <input type="range" class="custom-range range-triglyceride" min="50" max="400">
+                                                        </div>
+                                                        <small class="ml-2 val-triglyceride"></small>
+                                                        <small class="val-unit">&nbsp;mg/dL</small>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-5 p-3 text-center">
+                                <h5 id="titleResultHC">Ihr Herzinfarktrisiko (in 10 Jahren)</h5>
+                                <canvas id="gauge_health" width="200" height="200" class="control" ></canvas>
+                                <p><small  id="htmlResultHC">&nbsp;</small></p>
+                                <div class="card fade" id="cardDbdhHC">
+                                    <div class="p-3"><h4>Kennen Sie schon Ihr Herzalter?</h4></div>
+                                    <div class="card-header p-0">
+                                        <a href='https://www.herzalter-bestimmen.de' target="_blank" class="p-0"><img class="card-img-top"  src="./img/DBDH_keyvisual.png"/></a>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="m-3 fade show" id="divSaveResultHC">
+                                            <!--<p class="small m-3">Sie interessieren sich für Ihre Herzgesundheit? Dann bestimmen Sie jetzt Ihr Herzalter anonym und kostenlos im Rahmen unserer gemeinnützigen Initiative "Deutschland bestimmt das Herzalter!".
+                                            </p>-->
+                                            <a href='#lblHeartAgeHC' class='btn btn-primary' id="btnSaveResultHC">Jetzt Herzalter bestimmen</a>
+                                        </div>
+                                        <div class="m-3 d-none" id="divSuccessHC">
+                                            <h4>Ihr Herzalter beträgt:</h4>
+                                            <div id="lblHeartAgeHC"></div>
+                                            <p class="small m-3"><strong>Was ist das Herzalter?</strong> Das Herzalter und das tatsächliche Alter können stark voneinander abweichen. Das Alter Ihres Herzens wird neben der erblichen Veranlagung und Umweltfaktoren in erheblichem Maße vom Lebensstil beeinflusst. Ist das Herzalter deutlich höher als das tatsächliche Alter, ist dies nicht selten mit einem hohen Herzinfarkt-Risiko verbunden. Auf Basis der Daten der PROCAM-Studie können Sie das Herzalter mit einem einfachen Test anonym berechnen lassen. Das Herzalter kann für Frauen und Männer im Alter von 20 bis 75 berechnet werden.</p>
+                                            <b>Möchten Sie die Arbeit der Assmann-Stiftung für Prävention unterstützen?</b><br>
+                                            <a title="Jetzt spenden für „Deutschland bestimmt das Herzalter“ auf betterplace.org!" target="_blank" href="https://www.betterplace.org/de/donate/platform/projects/75560-deutschland-bestimmt-das-herzalter?utm_campaign=donate_btn&amp;utm_content=project%2375560&amp;utm_medium=external_banner&amp;utm_source=projects"><img style="border:0px" alt="Jetzt Spenden! Das Spendenformular wird von betterplace.org bereit gestellt." width="160" height="100" src="https://betterplace-assets.betterplace.org/static-images/projects/donation-button-de.png" /></a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="pills-QC" role="tabpanel" aria-labelledby="pills-QC-tab">
+                        <div class="row">
+                            <div class="col-lg-7 p-3">
+                                <div class="card bg-light text-left">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Der PROCAM-Schnelltest</h5>
+                                        <p class="card-text">Der PROCAM-Schnelltest basiert auf der <a href="https://www.assmann-stiftung.de/procam-studie/" target="_blank">PROCAM-Studie</a> und gilt für Frauen und Männer im Alter von 20 bis 75 Jahren zur Ermittlung des Risikos für einen Herzinfarkt innerhalb der nächsten 10 Jahre.</p>
+                                        <p><strong>Grundsätzlich empfehlen wir, die Lipide (HDL-Cholesterin, LDL-Cholesterin und Triglyzeride) im Blut bestimmen zu lassen (fragen Sie Ihren Hausarzt) und dann den aussagekräftigeren PROCAM-Gesundheitstest durchzuführen.</strong></p>
+                                        <p><strong>Bei einem Ergebnis im gelben oder roten Bereich (Herzinfarktrisiko über 10% in 10 Jahren) sollten Sie Ihren Arzt oder Apotheker konsultieren.</strong></p>
+                                    </div>
+                                </div>
+                                <div class="card bg-light text-left mt-3 p-3">
+                                    <div class="card-body">
+                                        <form>
+                                            <div class="form-group row">
+                                                <label for="age" class="col-sm-5 col-form-label col-form-label-sm">Alter:</label>
+                                                <div class="col-sm-7">
+                                                    <div class="d-flex">
+                                                        <div class="w-75">
+                                                            <input type="range" class="custom-range range-age-qc" min="20" max="75">
+                                                        </div>
+                                                        <small class="ml-2 val-age-qc"></small>
+                                                        <small>&nbsp;Jahre</small>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label for="gender" class="col-sm-5 col-form-label col-form-label-sm">Geschlecht:<br>&nbsp;</label>
+                                                <div class="col-sm-7">
+                                                    <div class="btn-group btn-group-toggle btn-group-sm" data-toggle="buttons">
+                                                        <label class="btn btn-secondary active">
+                                                            <input type="radio" name="options" id="gender_female" autocomplete="off" checked> Weiblich
+                                                        </label>
+                                                        <label class="btn btn-secondary">
+                                                            <input type="radio" name="options" id="gender_male" autocomplete="off"> Männlich
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label for="diabetes" class="col-sm-5 col-form-label col-form-label-sm">Diabetes mellitus oder BZ >= 120 mg/dL:</label>
+                                                <div class="col-sm-7">
+                                                    <div class="btn-group btn-group-toggle btn-group-sm" data-toggle="buttons">
+                                                        <label class="btn btn-secondary active">
+                                                            <input type="radio" name="options" id="diabetes_no" autocomplete="off" checked> Nein
+                                                        </label>
+                                                        <label class="btn btn-secondary">
+                                                            <input type="radio" name="options" id="diabetes_yes" autocomplete="off"> Ja
+                                                        </label>
+                                                    </div>
+                                                    <i class="fas fa-question-circle ml-4 info pull-right" aria-hidden="true" data-toggle="popover" title="Hinweis" data-content="Bitte beachten Sie, dass sich dieser Grenzwert auf einen Nüchternblutzucker im Serum bezieht. Auswertungen im Rahmen der Studie haben gezeigt, dass dies einem Grenzwert von 125 mg/dl im Plasma bzw. von 110 mg/dl im Kapillarblut entspricht. (von Eckardstein A, Schulte H, Assmann G. Risk for diabetes mellitus in middle-aged Caucasian male participants of the PROCAM study: implications for the definition of impaired fasting glucose by the American Diabetes Association. J Clin Endocrinol Metab. 2000;85:3101.8.)"></i>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label for="smoking" class="col-sm-5 col-form-label col-form-label-sm">Zigarettenrauchen <br>(zur Zeit):</label>
+                                                <div class="col-sm-7">
+                                                    <div class="btn-group btn-group-toggle btn-group-sm" data-toggle="buttons">
+                                                        <label class="btn btn-secondary active">
+                                                            <input type="radio" name="options" id="smoking_no" autocomplete="off" checked> Nein
+                                                            </label>
+                                                            <label class="btn btn-secondary">
+                                                            <input type="radio" name="options" id="smoking_yes" autocomplete="off"> Ja
+                                                            </label>
+                                                    </div>
+                                                    <i class="fas fa-question-circle ml-4 info" aria-hidden="true" data-toggle="popover" title="Hinweis" data-content="Wer lebenslang raucht, verkürzt seine Lebenserwartung um ca. 10 Jahre. Aufhören lohnt sich allerdings in jedem Alter. Wer zwischen dem 25. und 34. Lebensjahr mit dem Rauchen aufhört, hat eine Lebenserwartung wie ein lebenslanger Nichtraucher. Wer erst zwischen dem 55. und 64. Lebensjahr mit dem Rauchen aufhört, gewinnt immerhin 4 Jahre an Lebenserwartung."></i>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label for="anamnesis" class="col-sm-5 col-form-label col-form-label-sm">Positive Familienanamnese:</label>
+                                                <div class="col-sm-7">
+                                                    <div class="btn-group btn-group-toggle btn-group-sm" data-toggle="buttons">
+                                                        <label class="btn btn-secondary active">
+                                                            <input type="radio" name="options" id="anamnesis_no" autocomplete="off" checked> Nein
+                                                            </label>
+                                                            <label class="btn btn-secondary">
+                                                            <input type="radio" name="options" id="anamnesis_yes" autocomplete="off"> Ja
+                                                            </label>
+                                                    </div>
+                                                    <i class="fas fa-question-circle ml-4 info" aria-hidden="true" data-toggle="popover" title="Hinweis" data-content="Positive Familienanamnese: Myokardinfarkt bei Eltern, Großeltern oder Geschwistern vor dem 60. Lebensjahr"></i>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label for="systolic" class="col-sm-5 col-form-label col-form-label-sm">Systolischer Blutdruck:</label>
+                                                <div class="col-sm-7">
+                                                    <div class="d-flex">
+                                                        <div class="w-75">
+                                                            <input type="range" class="custom-range range-systolic-qc" min="100" max="225">
+                                                        </div>
+                                                        <small class="ml-2 val-systolic-qc"></small>
+                                                        <small>&nbsp;mmHg</small>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label for="weight" class="col-sm-5 col-form-label col-form-label-sm">Gewicht:</label>
+                                                <div class="col-sm-7">
+                                                    <div class="d-flex">
+                                                        <div class="w-75">
+                                                            <input type="range" class="custom-range range-weight-qc" min="40" max="120">
+                                                        </div>
+                                                        <small class="ml-2 val-weight-qc"></small>
+                                                        <small>&nbsp;kg</small>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label for="height" class="col-sm-5 col-form-label col-form-label-sm">Größe:</label>
+                                                <div class="col-sm-7">
+                                                    <div class="d-flex">
+                                                        <div class="w-75">
+                                                            <input type="range" class="custom-range range-height-qc" min="140" max="210">
+                                                        </div>
+                                                        <small class="ml-2 val-height-qc"></small>
+                                                        <small>&nbsp;cm</small>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label for="therapy" class="col-sm-5 col-form-label col-form-label-sm">Einnahme blutdrucksenkender Medikamente:</label>
+                                                <div class="col-sm-7">
+                                                    <div class="btn-group btn-group-toggle btn-group-sm" data-toggle="buttons">
+                                                        <label class="btn btn-secondary active">
+                                                            <input type="radio" name="options" id="therapy_no" autocomplete="off" checked> Nein
+                                                            </label>
+                                                            <label class="btn btn-secondary">
+                                                            <input type="radio" name="options" id="therapy_yes" autocomplete="off"> Ja
+                                                            </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-5 p-3 text-center">
+                                <h5 id="titleResultQC">Ihr Herzinfarktrisiko (in 10 Jahren)</h5>
+                                <canvas id="gauge_quick" width="200" height="200" class="control" ></canvas>
+                                <p><small  id="htmlResultQC">&nbsp;</small></p>
+                                <div class="mt-4">
+                                    <div class="card fade" id="cardDbdhQC">
+                                        <div class="p-3"><h4>Kennen Sie schon Ihr Herzalter?</h4></div>
+                                        <div class="card-header p-0">
+                                            <a href='https://www.herzalter-bestimmen.de' target="_blank" class="p-0"><img class="card-img-top"  src="./img/DBDH_keyvisual.png"/></a>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="m-3 fade show" id="divSaveResultQC">
+                                                <!--<p class="small m-3">Sie interessieren sich für Ihre Herzgesundheit? Dann bestimmen Sie jetzt Ihr Herzalter anonym und kostenlos im Rahmen unserer gemeinnützigen Initiative "Deutschland bestimmt das Herzalter!".
+                                                </p>-->
+                                                <a href='#lblHeartAgeQC' class='btn btn-primary' id="btnSaveResultQC">Jetzt Herzalter bestimmen</a>
+                                            </div>
+                                            <div class="m-3 d-none" id="divSuccessQC">
+                                                <h4>Ihr Herzalter beträgt:</h4>
+                                                <div id="lblHeartAgeQC"></div>
+                                                <p class="small m-3"><strong>Was ist das Herzalter?</strong> Das Herzalter und das tatsächliche Alter können stark voneinander abweichen. Das Alter Ihres Herzens wird neben der erblichen Veranlagung und Umweltfaktoren in erheblichem Maße vom Lebensstil beeinflusst. Ist das Herzalter deutlich höher als das tatsächliche Alter, ist dies nicht selten mit einem hohen Herzinfarkt-Risiko verbunden. Auf Basis der Daten der PROCAM-Studie können Sie das Herzalter mit einem einfachen Test anonym berechnen lassen. Das Herzalter kann für Frauen und Männer im Alter von 20 bis 75 berechnet werden.</p>
+                                                <b>Möchten Sie die Arbeit der Assmann-Stiftung für Prävention unterstützen?</b><br>
+                                                <a title="Jetzt spenden für „Deutschland bestimmt das Herzalter“ auf betterplace.org!" target="_blank" href="https://www.betterplace.org/de/donate/platform/projects/75560-deutschland-bestimmt-das-herzalter?utm_campaign=donate_btn&amp;utm_content=project%2375560&amp;utm_medium=external_banner&amp;utm_source=projects"><img style="border:0px" alt="Jetzt Spenden! Das Spendenformular wird von betterplace.org bereit gestellt." width="160" height="100" src="https://betterplace-assets.betterplace.org/static-images/projects/donation-button-de.png" /></a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>    
+                    </div>
+                    <div class="tab-pane fade" id="pills-SC" role="tabpanel" aria-labelledby="pills-SC-tab">
+                        <div class="row">
+                            <div class="col-lg-7 p-3">
+                                <div class="card bg-light text-left">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Der PROCAM-Schlaganfalltest</h5>
+                                        <p class="card-text">Der PROCAM-Schlaganfalltest basiert auf der <a href="https://www.assmann-stiftung.de/procam-studie/" target="_blank">PROCAM-Studie</a> und gilt für Frauen und Männer im Alter von 35 bis 65 Jahren zur Ermittlung des Risikos für einen Schlaganfall innerhalb der nächsten 10 Jahre.</p>
+                                        <p><strong>Bei einem Ergebnis im roten Bereich sollten Sie Ihren Arzt oder Apotheker konsultieren.</strong></p>
+                                    </div>
+                                </div>
+                                <div class="card bg-light text-left mt-3 p-3">
+                                    <div class="card-body">
+                                        <form>
+                                            <div class="form-group row">
+                                                <label for="age" class="col-sm-5 col-form-label col-form-label-sm">Alter:</label>
+                                                <div class="col-sm-7">
+                                                    <div class="d-flex">
+                                                        <div class="w-75">
+                                                            <input type="range" class="custom-range range-age-sc" min="35" max="65">
+                                                        </div>
+                                                        <small class="ml-2 val-age-sc"></small>
+                                                        <small>&nbsp;Jahre</small>
+                                                    </div>
+                                                </div>
+                                                    
+                                            </div>
+                                            <div class="form-group row">
+                                                <label for="gender" class="col-sm-5 col-form-label col-form-label-sm">Geschlecht:<br>&nbsp;</label>
+                                                <div class="col-sm-7">
+                                                    <div class="btn-group btn-group-toggle btn-group-sm" data-toggle="buttons">
+                                                        <label class="btn btn-secondary active">
+                                                            <input type="radio" name="options" id="gender_female" autocomplete="off" checked> Weiblich
+                                                        </label>
+                                                        <label class="btn btn-secondary">
+                                                            <input type="radio" name="options" id="gender_male" autocomplete="off"> Männlich
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label for="diabetes" class="col-sm-5 col-form-label col-form-label-sm">Diabetes mellitus oder BZ >= 120 mg/dL:</label>
+                                                <div class="col-sm-7">
+                                                    <div class="btn-group btn-group-toggle btn-group-sm" data-toggle="buttons">
+                                                        <label class="btn btn-secondary active">
+                                                            <input type="radio" name="options" id="diabetes_no" autocomplete="off" checked> Nein
+                                                        </label>
+                                                        <label class="btn btn-secondary">
+                                                            <input type="radio" name="options" id="diabetes_yes" autocomplete="off"> Ja
+                                                        </label>
+                                                    </div>
+                                                    <i class="fas fa-question-circle ml-4 info pull-right" aria-hidden="true" data-toggle="popover" title="Hinweis" data-content="Bitte beachten Sie, dass sich dieser Grenzwert auf einen Nüchternblutzucker im Serum bezieht. Auswertungen im Rahmen der Studie haben gezeigt, dass dies einem Grenzwert von 125 mg/dl im Plasma bzw. von 110 mg/dl im Kapillarblut entspricht. (von Eckardstein A, Schulte H, Assmann G. Risk for diabetes mellitus in middle-aged Caucasian male participants of the PROCAM study: implications for the definition of impaired fasting glucose by the American Diabetes Association. J Clin Endocrinol Metab. 2000;85:3101.8.)"></i>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label for="smoking" class="col-sm-5 col-form-label col-form-label-sm">Zigarettenrauchen <br>(zur Zeit):</label>
+                                                <div class="col-sm-7">
+                                                    <div class="btn-group btn-group-toggle btn-group-sm" data-toggle="buttons">
+                                                        <label class="btn btn-secondary active">
+                                                            <input type="radio" name="options" id="smoking_no" autocomplete="off" checked> Nein
+                                                            </label>
+                                                            <label class="btn btn-secondary">
+                                                            <input type="radio" name="options" id="smoking_yes" autocomplete="off"> Ja
+                                                            </label>
+                                                    </div>
+                                                    <i class="fas fa-question-circle ml-4 info" aria-hidden="true" data-toggle="popover" title="Hinweis" data-content="Wer lebenslang raucht, verkürzt seine Lebenserwartung um ca. 10 Jahre. Aufhören lohnt sich allerdings in jedem Alter. Wer zwischen dem 25. und 34. Lebensjahr mit dem Rauchen aufhört, hat eine Lebenserwartung wie ein lebenslanger Nichtraucher. Wer erst zwischen dem 55. und 64. Lebensjahr mit dem Rauchen aufhört, gewinnt immerhin 4 Jahre an Lebenserwartung."></i>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label for="systolic" class="col-sm-5 col-form-label col-form-label-sm">Systolischer Blutdruck:</label>
+                                                <div class="col-sm-7">
+                                                    <div class="d-flex">
+                                                        <div class="w-75">
+                                                            <input type="range" class="custom-range range-systolic-sc" min="100" max="225">
+                                                        </div>
+                                                        <small class="ml-2 val-systolic-sc"></small>
+                                                        <small>&nbsp;mmHg</small>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-5 p-3 text-center">
+                                <h5 id="titleResultSC">Ihr Schlaganfallrisiko</h5>
+                                <canvas id="gauge_stroke" width="200" height="200" class="control" ></canvas>
+                                <p><small  id="htmlResultSC">&nbsp;</small></p>
+                                <div class="card">
+                                    <div class="card-header p-0">
+                                        <a href='https://www.herzalter-bestimmen.de' target="_blank" class="p-0"><img class="card-img-top"  src="./img/DBDH_keyvisual.png"/></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>           
+                </div>
+            <div class="small text-left p-3"><strong>Hinweis:</strong> Die Werte für Blutzucker sind in der Regel nach einer Mahlzeit höher als im Nüchternblut. Ggf. wird eine Wiederholungsuntersuchung nüchtern empfohlen. Wenn Sie nicht nüchtern Blut abnehmen, können die Risiken dadurch falsch hoch berechnet werden.</div>
+            <div class="small text-left p-3">© Assmann-Stiftung für Prävention</div>
+        </div>
+    </div>
+    <div id="disclaimer-modal" class="modal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Nutzungsbedingungen</h5>
+                </div>
+                <div class="modal-body small" style="height:400px;overflow:scroll">
+                    <p>Die PROCAM-Tests gelten nur für Personen im Alter zwischen 20 und 75 Jahren. Die wissenschaftliche Basis der PROCAM-Tests ist die PROCAM-Studie [G. Assmann et al.: Assessing risk of myocardial infarction and stroke: new data from the Prospective Cardiovascular Münster (PROCAM) Study, European Journal of Clinical Investigation, 2007, 37, 925-932].  Die Tests sind nicht für Personen vorgesehen, die bereits in der Vergangenheit einen Herzinfarkt erlitten haben oder wissen, dass sie gefäßkrank sind. Solche Personen haben in der Regel ohnehin ein hohes Herzinfarktrisiko [International Task Force for Prevention of Coronary Heart Disease und International Atherosclerosis Society (2009): Handbuch Prävention der koronaren Herzkrankheit. Thomson Reuters. ISBN: 978-84-8124-260-7]. Grundsätzlich sind die Tests nicht zur Diagnose, Therapie oder Überwachung von Krankheiten vorgesehen. Die Tests dienen im Rahmen der Bildungsprojekte der Assmann-Stiftung für Prävention der gesundheitlichen Aufklärung der Bevölkerung und ersetzen keinesfalls eine individuelle ärztliche Beratung und/oder Untersuchung. Insofern ist mit deren Anwendung nicht beabsichtigt, medizinische Diagnosen und/oder Behandlungen zu ersetzen. Sie sollten nicht als Grundlage für medizinische Diagnosen und/oder Behandlungen herangezogen werden. Prinzipiell dürfen die bereitgestellten Informationen nicht als Ersatz für ärztlichen Rat oder ärztliche Therapie interpretiert oder genutzt werden. Bei Verdacht auf gesundheitliche Beschwerden oder bei bereits bekannten Erkrankungen ist immer ein Arzt aufzusuchen. Auch ein niedrig geschätztes Risiko sollte nicht als Garantie dafür aufgefasst werden, dass die betreffende Person geschützt ist, einen Herzinfarkt zu erleiden. Die Anwendungen sind ihrer Zweckbestimmung nach kein Medizinprodukt. Der Anbieter übernimmt keine Haftung für direkte und indirekte Folgen, die sich daraus ergeben können, dass Nutzer die hier bereitgestellten Daten und Informationen verwenden. Eine Behandlung bestehender Risikofaktoren sollte grundsätzlich unter ärztlicher Beratung erfolgen. Die Nutzung der hier verfügbaren PROCAM-Tests durch Dritte (z.B. Apotheken, Dienstleister, Krankenkassen, Unternehmen) sind ausschließlich im Rahmen spezieller Partner-Programme möglich.</p>
+                    <p>Bitte beachten Sie auch unsere <a href='https://www.assmann-stiftung.de/datenschutzerklaerung/' target='_blank'>Datenschutzerklärung</a> und unseren <a href='https://www.assmann-stiftung.de/haftungsausschluss/' target='_blank'>Haftungsausschluss.</a></p>
+                    <p>Sofern Sie zusätzlich ihr Herzalter bestimmen möchten, werden Ihre Daten durch die Assmann-Stiftung für Prävention als „Datenspende“ anonym und für Dritte nicht zugänglich in einer Datenbank gespeichert, analysiert und im Rahmen der „Deutschland bestimmt das Herzalter“ Initiative in Form von anonymen Gesamtreportings zur gesundheitlichen Aufklärung am Weltherztag veröffentlicht.</p>
+                    <h4>Haftung für Inhalte</h4>
+                    <p>Als Dienstanbieter ist die Assmann-Stiftung für Prävention gemäß § 7 Abs.1 TMG für eigene Inhalte nach den allgemeinen Gesetzen verantwortlich. Nach §§ 8 bis 10 TMG ist die Assmann-Stiftung für Prävention als Dienstanbieter jedoch nicht verpflichtet, übermittelte oder gespeicherte fremde Informationen zu überwachen. Verpflichtungen zur Entfernung oder Sperrung der Nutzung von Informationen nach den allgemeinen Gesetzen bleiben hiervon unberührt.</p>
+                    <h4>Urheberrecht</h4>
+                    <p>Die durch die Assmann-Stiftung für Prävention bereitgestellten Inhalte und Werke unterliegen dem deutschen Urheberrecht. Die Vervielfältigung, Bearbeitung, Verbreitung und jede Art der Verwertung außerhalb der Grenzen des Urheberrechtes bedürfen der schriftlichen Zustimmung des jeweiligen Autors bzw. Erstellers. Downloads und Kopien sind nur für den privaten, nicht kommerziellen Gebrauch gestattet. Soweit die Inhalte nicht von der Assmann-Stiftung für Prävention erstellt wurden, müssen die Urheberrechte Dritter beachtet werden. Insbesondere werden Inhalte Dritter als solche gekennzeichnet. Sollten Sie trotzdem auf eine Urheberrechtsverletzung aufmerksam werden, bitten wir um einen entsprechenden Hinweis. Bei Bekanntwerden von Rechtsverletzungen werden wir derartige Inhalte umgehend entfernen.</p>
+                </div>
+                <p class="p-3 small"><b>Ich bin mit den Nutzungsvereinbarungen einverstanden und akzeptiere die Haftungsausschlüsse.</b></p> 
+                <div class="modal-footer bg-light">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">Ich akzeptiere</button>
+                </div>
+            </div>
+        </div>
+    </div>
+      
+    
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+    <script src="js/gaugeHtml5.js" type="text/javascript"></script>
+    <script src="js/initGaugesHtml5.js" type="text/javascript"></script>
+
+    <script>
+            $(document).ready(function() {
+
+                //show disclaimer
+                $('#disclaimer-modal').modal();
+
+                //init popovers
+                $(function () {
+                    $('[data-toggle="popover"]').popover()
+                });
+
+                //quickcheck
+
+                //register events..
+                $('#pills-QC label').on('click', () => {
+                    $().ready(function(){
+                        calculateRiskQC();
+                    });
+                });
+
+                //DBDH save Results events ..
+                $('#btnSaveResultHC').click(function(){
+                    saveDbdhResultHC(function(data){
+                            if(data){
+                                $('#divSaveResultHC').addClass('d-none');
+                                $('#divSuccessHC').removeClass('d-none');
+                                //show heartage
+                                console.log(data);
+                                $('#lblHeartAgeHC').html(data.heartAge + "<small style='font-size:20px!important'> Jahre</small>");
+                            }
+                            else console.log("no data");
+                    });
+                })
+                
+                $('#btnSaveResultQC').click(function(){
+                        saveDbdhResultQC(function(data){
+                            if(data){
+                                $('#divSaveResultQC').addClass('d-none');
+                                $('#divSuccessQC').removeClass('d-none');
+                                //show heartage
+                                console.log(data);
+                                $('#lblHeartAgeQC').html(data.heartAge + "<small style='font-size:20px!important'> Jahre</small>");
+                            }
+                            else console.log("no data");
+                        });
+                    })
+
+                //age
+                const $valueSpanAgeQC = $('.val-age-qc');
+                const $valueAgeQC = $('.range-age-qc');
+                
+                $valueSpanAgeQC.html($valueAgeQC.val());
+                
+                $valueAgeQC.on('input change', () => {
+                    $valueSpanAgeQC.each(function(){
+                        $(this).html($valueAgeQC.val());
+                    });
+                    calculateRiskQC();
+                });
+
+                //systolic
+                const $valueSpanSystolicQC = $('.val-systolic-qc');
+                const $valueSystolicQC = $('.range-systolic-qc');
+                
+                $valueSpanSystolicQC.html($valueSystolicQC.val());
+                
+                $valueSystolicQC.on('input change', () => {
+                    $valueSpanSystolicQC.each(function(){
+                        $(this).html($valueSystolicQC.val());
+                    });
+                    calculateRiskQC();
+                });
+
+                //height
+                const $valueSpanHeightQC = $('.val-height-qc');
+                const $valueHeightQC = $('.range-height-qc');
+                
+                $valueSpanHeightQC.html($valueHeightQC.val());
+                
+                $valueHeightQC.on('input change', () => {
+                    $valueSpanHeightQC.each(function(){
+                        $(this).html($valueHeightQC.val());
+                    });
+                    calculateRiskQC();
+                });
+
+                //weight
+                const $valueSpanWeightQC = $('.val-weight-qc');
+                const $valueWeightQC = $('.range-weight-qc');
+                
+                $valueSpanWeightQC.html($valueWeightQC.val());
+                
+                $valueWeightQC.on('input change', () => {
+                    $valueSpanWeightQC.each(function(){
+                        $(this).html($valueWeightQC.val());
+                    });
+                    calculateRiskQC();
+                });
+
+                //healthcheck ---------------------------------------------
+
+                //register events..
+                $('#pills-HC label').on('click', () => {
+                    $().ready(function(){
+                        calculateRiskHC();
+                    });
+                });
+                 
+                //age
+                const $valueSpanAgeHC = $('.val-age-hc');
+                const $valueAgeHC = $('.range-age-hc');
+                
+                $valueSpanAgeHC.html($valueAgeHC.val());
+                
+                $valueAgeHC.on('input change', () => {
+                    $valueSpanAgeHC.each(function(){
+                        $(this).html($valueAgeHC.val());
+                    });
+                    calculateRiskHC();
+                });
+
+                //systolic
+                const $valueSpanSystolicHC = $('.val-systolic-hc');
+                const $valueSystolicHC = $('.range-systolic-hc');
+                
+                $valueSpanSystolicHC.html($valueSystolicHC.val());
+                
+                $valueSystolicHC.on('input change', () => {
+                    $valueSpanSystolicHC.each(function(){
+                        $(this).html($valueSystolicHC.val());
+                    });
+                    calculateRiskHC();
+                });
+
+
+                //ldl
+                const $valueSpanLdl = $('.val-ldl');
+                const $valueLdl = $('.range-ldl');
+                
+                $valueSpanLdl.html($valueLdl.val());
+                
+                $valueLdl.on('input change', () => {
+                    $valueSpanLdl.each(function(){
+                        $(this).html($valueLdl.val());
+                    });
+                    calculateRiskHC();
+                });
+
+                //hdl
+                const $valueSpanHdl = $('.val-hdl');
+                const $valueHdl = $('.range-hdl');
+                
+                $valueSpanHdl.html($valueHdl.val());
+                
+                $valueHdl.on('input change', () => {
+                    $valueSpanHdl.each(function(){
+                        $(this).html($valueHdl.val());
+                    });
+                    calculateRiskHC();
+                });
+
+
+                //triglyceride
+                const $valueSpanTriglyceride = $('.val-triglyceride');
+                const $valueTriglyceride = $('.range-triglyceride');
+                
+                $valueSpanTriglyceride.html($valueTriglyceride.val());
+                
+                $valueTriglyceride.on('input change', () => {
+                    $valueSpanTriglyceride.each(function(){
+                        $(this).html($valueTriglyceride.val());
+                    });
+                    calculateRiskHC();
+                });
+
+                //unit
+                $('#select-units').on('change', () => {
+                    //set cholesterol values...
+                    let unit  = $('#select-units option:selected').text(); 
+                    //console.log(unit);   
+
+                    let newLdlVal, newHdlVal, newTriglycerideVal;
+
+                    //if mg/l
+                    if(unit == 'mg/dL'){
+                        //new value mmol/l *  18 = mg/dL
+                        newLdlVal = ($valueLdl.val() / 0.02586).toFixed(0);
+                        newHdlVal = ($valueHdl.val() / 0.02586).toFixed(0);
+                        newTriglycerideVal = ($valueTriglyceride.val() / 0.0114).toFixed(0);
+                    
+                        //change slider values & labels
+                        $valueHdl.attr('min',25);
+                        $valueHdl.attr('max',75);
+                        $valueHdl.attr('step',1);
+
+                        $valueLdl.attr('min',75);
+                        $valueLdl.attr('max',250);
+                        $valueLdl.attr('step',1);
+
+                        $valueTriglyceride.attr('min',50);
+                        $valueTriglyceride.attr('max',400);
+                        $valueTriglyceride.attr('step',1);
+
+                        $('.val-unit').html('&nbsp;mg/dL');
+                        
+                    }
+                     //else if mmol/l
+                    else if(unit == 'mmol/l'){
+                        //change slider values & labels
+                        //new value mg/dL / 18 = mmol/l
+                        newLdlVal = ($valueLdl.val() * 0.02586).toFixed(1);
+                        newLdlVal = newLdlVal < 1.9? 1.9 : newLdlVal > 6.5? 6.5 : newLdlVal;
+                        
+                        newHdlVal = ($valueHdl.val() * 0.02586).toFixed(1);
+                        newHdlVal = newHdlVal < 0.6? 0.6 : newHdlVal > 6.5? 6.5 : newHdlVal;
+
+                        newTriglycerideVal = ($valueTriglyceride.val() * 0.0114).toFixed(1);
+                        newTriglycerideVal = newTriglycerideVal < 0.6? 0.6 : newTriglycerideVal > 4.6? 4.6 : newTriglycerideVal;
+
+                        $valueHdl.attr('min',0.6);
+                        $valueHdl.attr('max',1.9);
+                        $valueHdl.attr('step',0.1);
+
+                        $valueLdl.attr('min',1.9);
+                        $valueLdl.attr('max',6.5);
+                        $valueLdl.attr('step',0.1);
+
+                        $valueTriglyceride.attr('min',0.6);
+                        $valueTriglyceride.attr('max',4.6);
+                        $valueTriglyceride.attr('step',0.1);
+
+                        $('.val-unit').html('&nbsp;mmol/l');
+                    }
+
+                    //set new values 
+
+                    $valueLdl.attr('value',newLdlVal);
+                    $valueHdl.attr('value',newHdlVal);
+                    $valueTriglyceride.attr('value',newTriglycerideVal);
+
+                    $valueSpanLdl.html(newLdlVal);
+                    $valueSpanHdl.html(newHdlVal);
+                    $valueSpanTriglyceride.html(newTriglycerideVal);
+                })
+
+
+                //strokecheck  ----------------------------------------------
+
+                //register events..
+                $('#pills-SC label').on('click', () => {
+                    $().ready(function(){
+                        calculateRiskSC();
+                    });
+                });
+
+                //age
+                const $valueSpanAgeSC = $('.val-age-sc');
+                const $valueAgeSC = $('.range-age-sc');
+                
+                $valueSpanAgeSC.html($valueAgeSC.val());
+                
+                $valueAgeSC.on('input change', () => {
+                    $valueSpanAgeSC.each(function(){
+                        $(this).html($valueAgeSC.val());
+                    });
+                    calculateRiskSC();
+                });
+
+                //systolic
+                const $valueSpanSystolicSC = $('.val-systolic-sc');
+                const $valueSystolicSC = $('.range-systolic-sc');
+                
+                $valueSpanSystolicSC.html($valueSystolicSC.val());
+                
+                $valueSystolicSC.on('input change', () => {
+                    $valueSpanSystolicSC.each(function(){
+                        $(this).html($valueSystolicSC.val());
+                    });
+                    calculateRiskSC();
+                });
+
+            });
+
+
+            function calculateRiskQC() {
+                let age = $('.range-age-qc').val();
+                let gender = $('#pills-QC #gender_female').parent().hasClass('active') ?  2 : 1;
+                let diabetes = $('#pills-QC #diabetes_no').parent().hasClass('active') ?  0 : 1;
+                let smoking = $('#pills-QC #smoking_no').parent().hasClass('active') ?  0 : 1;
+                let anamnesis = $('#pills-QC #anamnesis_no').parent().hasClass('active') ?  0 : 1;
+                let systolic = $('.range-systolic-qc').val();
+                let height = $('.range-height-qc').val();
+                let weight = $('.range-weight-qc').val();
+                let therapy = $('#pills-QC #therapy_no').parent().hasClass('active') ?  0 : 1;
+                
+                jQuery.get('/PROCAM/api/quickcheck.php', { 'age':age, 'gender':gender, 'diabetes':diabetes, 'smoking':smoking, 'anamnesis':anamnesis, 'systrr':systolic, 'height':height, 'weight':weight, 'antihyp_b':therapy, 'language':'de-de'}, function (data) {
+                    var data = $.parseJSON(data);
+                    //console.log(data);
+                    var risk = parseFloat(data.risk, 10);
+                    if (risk <= 20)
+                    _gaugeQuick.setValue(risk * 3.3, risk);
+                    else if (risk > 20)
+                    _gaugeQuick.setValue((risk - 20) * 0.425 + 66, risk);
+
+                    //set info text
+                    var relativeRisk = parseFloat(data.relativeRisk, 10);
+                    var adjusted = parseFloat(data.adjusted, 10);
+                    let titleResult = "";
+                    let htmlText = "";
+
+                    if (risk >= 2 && relativeRisk > 1) {
+                        titleResult = "Ihr Herzinfarktrisiko: " + risk.toString() + "% (in 10 Jahren, " + relativeRisk + "-fach erhöht**)";
+                        htmlText = "<span style='font-size:9px'>** Im Vergleich zum Risiko eines gleichaltrigen Durchschnittsbürgers (" + adjusted + "% in 10 Jahren).</span>";
+                    }
+                    else if (risk >= 2 && relativeRisk == 1) {
+                        titleResult = "Ihr Herzinfarktrisiko: " + risk.toString() + "%** (in 10 Jahren)";
+                        htmlText = "<span style='font-size:9px'>** Das Herzinfarktrisiko entspricht dem eines gleichaltrigen Durchschnittsbürgers.</span>";
+                    }
+                    else if (risk >= 2 && relativeRisk < 1) {
+                        titleResult = "Ihr Herzinfarktrisiko: " + risk.toString() + "%** (in 10 Jahren)";
+                        htmlText = "<span style='font-size:9px'>** Das Herzinfarktrisiko ist niedriger als das Risiko eines gleichaltrigen Durchschnittsbürgers (" + adjusted + "% in 10 Jahren).</span>";
+                    }
+                    else if (risk < 2) {
+                        titleResult = "Ihr Herzinfarktrisiko: " + risk.toString() + "% (in 10 Jahren)";
+                        htmlText = "";
+                    } 
+
+                    //set titleResult
+                    $('#titleResultQC').text(titleResult);
+                    //set htmlText
+                    $('#htmlResultQC').html(htmlText);
+
+                    //show dbdh
+                    $('#cardDbdhQC').addClass('show');
+                      
+                });
+            }
+
+
+            function calculateRiskHC() {
+                let age = $('.range-age-hc').val();
+                let gender = $('#pills-HC #gender_female').parent().hasClass('active') ?  2 : 1;
+                let diabetes = $('#pills-HC #diabetes_no').parent().hasClass('active') ?  0 : 1;
+                let smoking = $('#pills-HC #smoking_no').parent().hasClass('active') ?  0 : 1;
+                let anamnesis = $('#pills-HC #anamnesis_no').parent().hasClass('active') ?  0 : 1;
+                let systolic = $('.range-systolic-hc').val();
+
+                //check units .. 
+                let units  = $('#select-units option:selected').text(); 
+          
+                let ldl = $('.range-ldl').val();
+                let hdl = $('.range-hdl').val();
+                let triglyceride = $('.range-triglyceride').val();
+                
+                $.get('/PROCAM/api/healthcheck.php', { 'age':age, 'gender':gender, 'diabetes':diabetes, 'smoking':smoking, 'anamnesis':anamnesis, 'systrr':systolic, 'ldl':ldl, 'hdl':hdl, 'triglyceride':triglyceride, 'units':units, 'language':'en-us'}, function (data) {
+                    var data = $.parseJSON(data);
+                    var risk = parseFloat(data.risk, 10);
+                    if (risk <= 20)
+                        _gaugeHealth.setValue(risk * 3.3, risk);
+                    else if (risk > 20)
+                        _gaugeHealth.setValue((risk - 20) * 0.425 + 66, risk);
+
+                    //set info text
+                    var relativeRisk = parseFloat(data.relativeRisk, 10);
+                    var adjusted = parseFloat(data.adjusted, 10);
+                    let titleResult = "";
+                    let htmlText = "";
+
+                    if (risk >= 2 && relativeRisk > 1) {
+                        titleResult =  "Ihr Herzinfarktrisiko: " + risk.toString() + "% (in 10 Jahren, " + relativeRisk + "-fach erhöht**)";
+                        htmlText = "<span style='font-size:9px'>** Im Vergleich zum Risiko eines gleichaltrigen Durchschnittsbürgers (" + adjusted + "% in 10 Jahren).</span>";
+                    }
+                    else if (risk >= 2 && relativeRisk == 1) {
+                        titleResult = "Ihr Herzinfarktrisiko: " + risk.toString() + "%** (in 10 Jahren)";
+                        htmlText = "<span style='font-size:9px'>** Das Herzinfarktrisiko entspricht dem eines gleichaltrigen Durchschnittsbürgers.</span>";
+                    }
+                    else if (risk >= 2 && relativeRisk < 1) {
+                        titleResult = "Ihr Herzinfarktrisiko: " + risk.toString() + "%** (in 10 Jahren)";
+                        htmlText = "<span style='font-size:9px'>** Das Herzinfarktrisiko ist niedriger als das Risiko eines gleichaltrigen Durchschnittsbürgers (" + adjusted + "% in 10 Jahren).</span>";
+                    }
+                    else if (risk < 2) {
+                        titleResult = "Ihr Herzinfarktrisiko: " + risk.toString() + "% (in 10 Jahren)";
+                        htmlText = "";
+                    }
+
+                    //set titleResult
+                    $('#titleResultHC').text(titleResult);
+                    //set htmlText
+                    $('#htmlResultHC').html(htmlText);
+
+                    //show dbdh
+                    $('#cardDbdhHC').addClass('show');
+                
+                });
+            }
+
+
+
+            function calculateRiskSC() {
+              
+                let age = $('.range-age-sc').val();
+                let gender = $('#pills-SC #gender_female').parent().hasClass('active') ?  2 : 1;
+                let diabetes = $('#pills-SC #diabetes_no').parent().hasClass('active') ?  0 : 1;
+                let smoking = $('#pills-SC #smoking_no').parent().hasClass('active') ?  0 : 1;
+                let systolic = $('.range-systolic-sc').val();
+
+                $.get('/PROCAM/api/strokecheck.php', { 'age':age, 'gender':gender, 'diabetes':diabetes, 'smoking':smoking, 'systrr':systolic, 'language':'de-de'}, function (data) {
+                    var data = $.parseJSON(data);
+                    var risk = parseFloat(data.risk, 10);
+
+                    if (risk<=5){
+                        _gaugeStroke.setValue(risk * 10, risk);
+                    }
+                    else if (risk>5){
+                        _gaugeStroke.setValue(((risk-5) * 7.7 + 50), risk);
+                    }
+
+                    //set info text
+                    var relativeRisk = parseFloat(data.relativeRisk, 10);
+                    var adjusted = parseFloat(data.adjusted, 10);
+                    let titleResult = "";
+                    let htmlText = "";
+
+                    if (risk >= 1 && relativeRisk > 1){
+                        titleResult = "Ihr Schlaganfallrisiko: " + risk.toString() + "% (in 10 Jahren, " +relativeRisk + "-fach erhöht**)";
+                        htmlText = "<span style='font-size:9px'>** Im Vergleich zum Risiko eines gleichaltrigen Durchschnittsbürgers ("+ adjusted +"% in 10 Jahren).</span>";
+                        if(risk == 11.5){
+                            titleResult = "Ihr Schlaganfallrisiko: >= 11.5% (in 10 Jahren, >=" +relativeRisk + "-fach erhöht**)";
+                        }
+                    }
+                    else if (risk >= 1 && relativeRisk == 1){
+                        titleResult = "Ihr Schlaganfallrisiko: " + risk.toString() + "%** (in 10 Jahren)";
+                        htmlText = "<span style='font-size:9px'>** Das Schlaganfallrisiko entspricht dem eines gleichaltrigen Durchschnittsbürgers.</span>";
+                    }
+                    else if (risk >= 1 && relativeRisk < 1){
+                        titleResult = "Ihr Schlaganfallrisiko: " + risk.toString() + "%** (in 10 Jahren)";
+                        htmlText= "<span style='font-size:9px'>** Das Schlaganfallrisiko ist niedriger als das Risiko eines gleichaltrigen Durchschnittsbürgers ("+ adjusted +"% in 10 Jahren).</span>";
+                    }
+                    else if (risk < 1){
+                        titleResult = "Ihr Schlaganfallrisiko: " + risk.toString() + "% (in 10 Jahren)";
+                        htmlText = "";
+                    }
+
+                    //set titleResult
+                    $('#titleResultSC').text(titleResult);
+                    //set htmlText
+                    $('#htmlResultSC').html(htmlText);
+
+                });
+            }
+
+            function saveDbdhResultQC(next){
+                //set tenant and dbdhid
+                let tenantId = "ASP";
+                let dbdhId = generateUUID();
+
+                let age = $('.range-age-qc').val();
+                let gender = $('#pills-QC #gender_female').parent().hasClass('active') ?  2 : 1;
+                let diabetes = $('#pills-QC #diabetes_no').parent().hasClass('active') ?  0 : 1;
+                let smoking = $('#pills-QC #smoking_no').parent().hasClass('active') ?  0 : 1;
+                let anamnesis = $('#pills-QC #anamnesis_no').parent().hasClass('active') ?  0 : 1;
+                let systolic = $('.range-systolic-qc').val();
+                let height = $('.range-height-qc').val();
+                let weight = $('.range-weight-qc').val();
+                let therapy = $('#pills-QC #therapy_no').parent().hasClass('active') ?  0 : 1;
+                
+                $.get('https://services.herzalter-bestimmen.de/api/calculate', {dbdhId:dbdhId, tenantId:tenantId, age:age, gender:gender, diabetes:diabetes, systrr: systolic, smoking:smoking, anamnesis:anamnesis, testType:"QC", ldl:"", hdl:"", triglyceride: "", height:height, weight:weight, antihyp_b:therapy, zipCode:""}, function(data){
+                    if(data.result){
+                        console.log(data);
+                        let result = data.result;
+                        next(result);
+                    }else{
+                        next(null);
+                    }
+                 });
+            }
+
+            function saveDbdhResultHC(next){
+                //set tenant and dbdhid
+                let tenantId = "ASP";
+                let dbdhId = generateUUID();
+
+                let age = $('.range-age-hc').val();
+                let gender = $('#pills-HC #gender_female').parent().hasClass('active') ?  2 : 1;
+                let diabetes = $('#pills-HC #diabetes_no').parent().hasClass('active') ?  0 : 1;
+                let smoking = $('#pills-HC #smoking_no').parent().hasClass('active') ?  0 : 1;
+                let anamnesis = $('#pills-HC #anamnesis_no').parent().hasClass('active') ?  0 : 1;
+                let systolic = $('.range-systolic-hc').val();
+
+                //check units ...
+                let newLdlVal, newHdlVal, newTriglycerideVal;
+
+                let ldl = $('.range-ldl').val();
+                let hdl = $('.range-hdl').val();
+                let triglyceride = $('.range-triglyceride').val();
+
+                let ldlInput, hdlInput, triglycerideInput;
+
+                //check units .. 
+                let unit  = $('#select-units option:selected').text(); 
+                if(unit == 'mmol/l'){
+                    console.log("mmol! needs to be converted to mg/dl");
+                    //change slider values & label
+
+                    newLdlVal = (ldl / 0.02586).toFixed(0);
+                    newHdlVal = (hdl / 0.02586).toFixed(0);
+                    newTriglycerideVal = (triglyceride / 0.0114).toFixed(0);
+                    
+                    ldlInput = newLdlVal;
+                    hdlInput = newHdlVal;
+                    triglycerideInput = newTriglycerideVal;
+
+                }else{
+                    ldlInput = ldl;
+                    hdlInput = hdl;
+                    triglycerideInput = triglyceride;
+                }
+                
+                console.log(ldlInput);
+                console.log(hdlInput);
+                console.log(triglycerideInput);
+                $.get('https://services.herzalter-bestimmen.de/api/calculate', {dbdhId:dbdhId, tenantId:tenantId, age:age, gender:gender, diabetes:diabetes, systrr: systolic, smoking:smoking, anamnesis:anamnesis, testType:"HC", ldl:ldlInput, hdl:hdlInput, triglyceride: triglycerideInput, height:"", weight:"", antihyp_b:"", zipCode:""}, function(data){
+                    if(data.result){
+                        let result = data.result;
+                        next(result);
+                    }else{
+                        next(null);
+                    }
+                 });
+            }
+
+            
+            function generateUUID() { // Public Domain/MIT
+                var d = new Date().getTime();//Timestamp
+                var d2 = (performance && performance.now && (performance.now() * 1000)) || 0;//Time in microseconds since page-load or 0 if unsupported
+                return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+                    var r = Math.random() * 16;//random number between 0 and 16
+                    if (d > 0) {//Use timestamp until depleted
+                        r = (d + r) % 16 | 0;
+                        d = Math.floor(d / 16);
+                    } else {//Use microseconds since page-load if supported
+                        r = (d2 + r) % 16 | 0;
+                        d2 = Math.floor(d2 / 16);
+                    }
+                    return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16);
+                });
+            }
+
+    </script>
+  </body>
+</html>
