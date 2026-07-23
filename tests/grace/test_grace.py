@@ -81,3 +81,27 @@ def test_finding_developers_calculator_uses_a_revised_in_hospital_nomogram():
     assert [cb[b][v][0] for b, v in (("cardiac_cb", "arrestPoint1"), ("stsegment_cb", "STPoint1"),
                                      ("enzymes_cb", "enzymesPoint1"))] == [43, 30, 15]  # Granger 39, 28, 14
     assert grace_hospital(2, 90, 80, 45, 1.0, 1, 1, 1) == 20 + 53 + 9 + 25 + 7 + 39 + 28 + 14
+
+
+def test_hospital_bands_are_the_developers_score_at_band_midpoints():
+    # The developers' 2010 methods document gives Figure 4 as continuous SAS code (fixtures/umass_methods_2010.json);
+    # each printed band is that score at the band's midpoint, rounded down (reference/grace/REPORT.md section 4).
+    import json
+    import math
+    from pathlib import Path
+
+    nomo = json.loads((Path(__file__).parents[2] / "reference" / "grace" / "fixtures" / "umass_methods_2010.json")
+                      .read_text())["granger_section2_nomogram"]
+    base = dict(killip=1, sbp=250, heart_rate=40, age=20, creatinine=0.2, cardiac_arrest=0, st_deviation=0,
+                elevated_enzymes=0)
+    edges = {"sbp": [80, 100, 120, 140, 160, 200], "heart_rate": [50, 70, 90, 110, 150, 200],
+             "age": [30, 40, 50, 60, 70, 80, 90], "creatinine": [0, 0.4, 0.8, 1.2, 1.6, 2.0, 4.0]}
+    for k, e in edges.items():
+        xs, ys = zip(*nomo[k])
+        pts = ([e[0] - 10] if k != "creatinine" else []) + [(a + b) / 2 for a, b in zip(e, e[1:])] + [e[-1] + 10]
+        for x in pts:
+            item = float(grace_hospital(**{**base, k: x})) - float(grace_hospital(**base)) + (k == "creatinine")
+            assert item == math.floor(np.interp(x, xs, ys) + 1e-9), (k, x)
+    assert [float(grace_hospital(k, 250, 40, 20, 0.2, 0, 0, 0)) - 1 for k in (1, 2, 3, 4)] == nomo["killip"]
+    assert float(grace_hospital(1, 250, 40, 20, 0.2, 1, 1, 1)) - 1 == \
+        nomo["cardiac_arrest"] + nomo["st_deviation"] + nomo["elevated_enzymes"]

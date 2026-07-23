@@ -1,0 +1,19 @@
+{
+  "source": "https://web.archive.org/web/20190924222907id_/https://www.outcomes-umassmed.org/GRACE/publicfiles/GRACE_RiskModel_Coefficients.pdf",
+  "document": "Methods and formulas used to calculate the GRACE Risk Scores, Center for Outcomes Research, UMass Medical School, updated April 21, 2010 (source/GRACE_RiskModel_Coefficients.pdf)",
+  "granger_section2_nomogram": {
+    "note": "SAS code 'for obtaining risk score as in article' (Granger 2003 p. 2351): piecewise linear between these (input, points) knots, constant beyond the ends",
+    "sbp": [[80, 58], [100, 48], [110, 43], [120, 39], [130, 34], [140, 29], [150, 24], [160, 19], [180, 10], [200, 0]],
+    "heart_rate": [[50, 0], [60, 3], [70, 6], [80, 9], [90, 12], [100, 15], [110, 18], [150, 30], [200, 46]],
+    "age": [[30, 0], [40, 17], [50, 33], [60, 50], [70, 67], [80, 83], [90, 100]],
+    "creatinine": [[0, 0], [0.2, 1], [0.4, 3], [0.6, 4], [0.8, 6], [1.0, 7], [1.2, 8], [1.4, 10], [1.6, 11], [1.8, 13], [2.0, 14], [3.0, 21], [4.0, 28]],
+    "killip": [0, 20, 39, 59],
+    "st_deviation": 28, "elevated_enzymes": 14, "cardiac_arrest": 39
+  },
+  "granger_section1_logistic": {
+    "intercept": -7.7035, "age": 0.0531, "heart_rate": 0.0087, "sbp": -0.0168, "creatinine": 0.1823,
+    "killip": 0.6931, "cardiac_arrest": 1.4586, "elevated_enzymes": 0.4700, "st_deviation": 0.8755,
+    "example": {"age": 57, "heart_rate": 70, "sbp": 110, "creatinine": 1.2, "killip": 3, "cardiac_arrest": 1,
+                "elevated_enzymes": 0, "st_deviation": 1, "xb": -1.28364, "p": 0.21693}
+  }
+}
