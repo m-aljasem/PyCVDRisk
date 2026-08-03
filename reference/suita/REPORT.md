@@ -10,7 +10,15 @@ Functions: `cvd_risk.suita.suita` (points), `suita_risk` (the sheet's printed 10
   study. J Atheroscler Thromb 2014;21(8):784-798 (open access, J-STAGE; `source/nishimura2014.pdf`). Table 3
   (TC model) and Table 4 (LDL model) give the Cox coefficients, with and without CKD; Table 5 gives the prediction
   score sheets (TC and LDL, both with CKD) and their probability tables.
-- **No developers' calculator for the 2014 sheets was found.** The Japan Atherosclerosis Society's web tool
+- **Developers' chart (evidence A, LDL sheet only).** NCVC press release "冠動脈疾患を予測する新しいリスクスコアの開発"
+  (Development of a new risk score predicting coronary heart disease; 2014-05-07, updated 2014-05-09), Table 1
+  "吹田スコア": the LDL sheet with CKD and its probability table, issued by the developers' institution (Nishimura's
+  division). Page http://www.ncvc.go.jp/pr/release/006484.html (Wayback 20140525195300); image
+  http://www.ncvc.go.jp/20140507_press_h1.jpg (Wayback 20140526013703), `source/ncvc_20140507_press_h1.jpg`, sha256
+  1f12d261caa6c90debc5492b98b8f7d21989f59e82e3cee423fe74a4d281ef7e; transcribed in
+  `fixtures/ncvc_2014_press_sheet.json`. The release has no TC sheet. (Section 6.)
+- **No developers' calculator for the 2014 sheets was found** (re-searched: NCVC site and press
+  releases via Wayback, Japanese and English web search). The Japan Atherosclerosis Society's web tool
   ("これりすくん", archived at j-athero.org/general/ge_app/general2) implements the 2017 guideline's adaptation
   (ages 35-74, glucose intolerance and family history, CKD moved to the high-risk conditions), a different score;
   the current tool follows the 2022 guideline (Hisayama-based).
@@ -55,3 +63,23 @@ premature CHD (+5) is added. On every item they share with Table 5b (age 5 bands
 (`tests/suita/test_suita.py`). They are third-party implementations of a different variant, so this is a partial
 level-B check of the LDL sheet, not of its diabetes or CKD rows. The JAS 2017 variant itself is not implemented: its
 primary source (Kinoshita M et al. J Atheroscler Thromb 2018;25:846-984) is not in `source/`.
+
+## 6. Developers' chart (NCVC press release, May 2014)
+
+The NCVC sheet (`fixtures/ncvc_2014_press_sheet.json`) equals the package's LDL sheet on all 28 point entries
+(age 5, sex, smoking, diabetes, blood pressure 4 rows, LDL 5, HDL 3, CKD 3) and all 9 probability rows
+(`test_ncvc_2014_press_release_sheet_equals_the_ldl_sheet`). Two label differences, no value differences:
+
+- Blood pressure has four rows; "正常血圧" (normal, 0) stands for the paper's "normal and high normal" (0).
+- CKD stage 3 is labelled "eGFR 30-59" and stage 4-5 "eGFR < 30", which settles finding 4's stage-3 band for the
+  LDL sheet in favour of the K/DOQI cut-points the package uses (eGFR 60 is no CKD).
+
+This is a reprint of Table 5b by the developers, not a calculator: it confirms the published sheet is the one the
+developers intended and fixes the eGFR band, but it adds no computation beyond the sheet. The TC sheet stays at
+evidence C, and its three departures from Table 3a (findings 1-3) are unresolved.
+
+## 7. Author request
+
+`make_author_test_patients.py` writes `fixtures/author_test_patients.csv` (20 patients, inputs only; S01-S06 target
+the TC-sheet entries in question, S07-S20 seeded 2014) and `fixtures/author_test_expected.csv` (our points and
+printed probabilities on both sheets, kept back).

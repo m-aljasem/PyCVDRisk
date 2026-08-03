@@ -94,3 +94,21 @@ def test_jas2017_web_calculators_share_the_ldl_sheet():
     assert p["ldl (<100, 100-139, 140-159, 160-179, >=180)"] == list(s["chol"][1])
     assert [lab for _, lab in web["risk_by_total (dataclock)"]] == [lab for _, lab in mod.RISK["ldl"]]
     assert [hi for hi, _ in web["risk_by_total (dataclock)"][:-1]] == [hi for hi, _ in mod.RISK["ldl"][:-1]]
+
+
+def test_ncvc_2014_press_release_sheet_equals_the_ldl_sheet():
+    """The developers' own sheet (NCVC press release, May 2014): every point and probability row equals ours; its BP
+    row 'normal' (0) carries the paper's 'normal and high normal', and it labels CKD stage 3 as eGFR 30-59."""
+    import json
+    from pathlib import Path
+    web = json.loads((Path(__file__).parents[2] / "reference" / "suita" / "fixtures" / "ncvc_2014_press_sheet.json")
+                     .read_text(encoding="utf-8"))
+    p, s = list(web["points"].values()), mod.SHEETS["ldl"]
+    assert p[0] == list(s["age"][1][1:6])
+    assert p[1:4] == [s["female"], s["smoker"], s["diabetes"]]
+    assert p[4] == [s["bp"][0], s["bp"][1], s["bp"][3], s["bp"][4]] and s["bp"][1] == s["bp"][2]
+    assert p[5] == list(s["chol"][1]) and p[6] == list(s["hdl"][1]) and p[7] == list(s["ckd"])[::-1]
+    assert [lab for _, lab in web["risk_by_total"]] == [lab for _, lab in mod.RISK["ldl"]]
+    assert [hi for hi, _ in web["risk_by_total"][:-1]] == [hi for hi, _ in mod.RISK["ldl"][:-1]]
+    ckd = suita(50, "female", 0, 0, 125, 75, 55, [29.9, 30, 59.9, 60], ldl=120)
+    np.testing.assert_array_equal(ckd - ckd[-1], [14, 3, 3, 0])  # eGFR 30-59 is stage 3, as the sheet labels it

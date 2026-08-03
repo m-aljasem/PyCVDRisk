@@ -1,0 +1,14 @@
+{
+ "note": "Table 1 (吹田スコア) of the NCVC press release 'Development of a new risk score predicting coronary heart disease' (冠動脈疾患を予測する新しいリスクスコアの開発, 2014-05-07, last updated 2014-05-09), the developers' own LDL score sheet. Transcribed by hand from the image. Page: http://www.ncvc.go.jp/pr/release/006484.html (Wayback 20140525195300); image: http://www.ncvc.go.jp/20140507_press_h1.jpg (Wayback 20140526013703, source/ncvc_20140507_press_h1.jpg, sha256 1f12d261caa6c90debc5492b98b8f7d21989f59e82e3cee423fe74a4d281ef7e). The release has no TC sheet.",
+ "points": {
+  "age (35-44, 45-54, 55-64, 65-69, >=70)": [30, 38, 45, 51, 53],
+  "female": -7,
+  "smoker": 5,
+  "diabetes": 6,
+  "bp (至適血圧 optimal, 正常血圧 normal, Stage 1, Stage 2 or above)": [-7, 0, 4, 6],
+  "ldl (<100, 100-139, 140-159, 160-179, >=180)": [0, 5, 7, 10, 11],
+  "hdl (<40, 40-59, >=60)": [0, -5, -6],
+  "ckd (Stage 1 or 2 eGFR>60, Stage 3 eGFR 30-59, Stage 4 or 5 eGFR<30)": [0, 3, 14]
+ },
+ "risk_by_total": [[35, "<1"], [40, "1"], [45, "2"], [50, "3"], [55, "5"], [60, "9"], [65, "14"], [70, "22"], [null, ">28"]]
+}
