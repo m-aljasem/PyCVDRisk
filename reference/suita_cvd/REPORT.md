@@ -10,6 +10,9 @@ of a cardiovascular disease risk prediction model using the Suita study, a popul
 in Japan. J Atheroscler Thromb 2020;27(11):1160-75. doi:10.5551/jat.48843 (`source/nakai2020.pdf`, J-STAGE advance
 publication, CC BY-NC-SA; sha256 0ef10402...7361). Table 3: Cox coefficients and points, with and without ECG;
 Table 4: 10-year CVD probability by score band and the 10-year baseline survival (0.99411 / 0.99389).
+Erratum: J Atheroscler Thromb 2021;28:304, doi:10.5551/jat.ER48843 (`source/nakai2020_erratum.pdf`, from
+https://www.jstage.jst.go.jp/article/jat/28/3/28_ER48843/_pdf; sha256
+17f5f152be6472162859cd037a1a1dce5cad5cf1cd88b3ab15f01e88291430b8).
 
 ## Model
 
@@ -29,6 +32,22 @@ applies. Table 4 maps the total to a printed probability. `cvd_risk.suita_cvd`, 
   (`sbp < 139`, `dbp < 89`) leave those values in the lowest category. Partial B: it computes non-HDL-C as TC - HDL-C
   and only warns outside ages 30-79.
 
+## Developer tool search
+
+No calculator, app or spreadsheet from the NCVC / Suita Study group was found for this model: web searches in
+English and Japanese (NCVC press releases, MHLW grant reports, J-STAGE), and a Wayback CDX listing of ncvc.go.jp
+URLs containing risk, score, calc or suita (the only tool there is the 2017 AF risk score sheet,
+`pr/release/files/af_riskscore_sheet_1707.xlsx`, a different model). The group's later work (Kashima 2023, Environ
+Health Prev Med) builds new scores from health check-up items rather than a tool for this one. Level A is not
+reachable without the authors.
+
+## Author test set
+
+`make_author_test_patients.py` writes `fixtures/author_test_patients.csv` (20 patients: 8 on category boundaries,
+including SBP 139 and DBP 89, discordant SBP/DBP and LDL-C/non-HDL-C, treated BP, HDL-C 39/40/60, LDL-C 140,
+non-HDL-C 170, age-band edges, AF and LVH; then 12 seeded, seed 2020) and keeps our Table 3 points and Table 4
+bands, both models, in `fixtures/author_test_expected.csv`.
+
 ## Findings
 
 1. **Table 4 is not a function of S10 alone.** The paper computes each band's probability as the average predicted
@@ -37,3 +56,6 @@ applies. Table 4 maps the total to a printed probability. `cvd_risk.suita_cvd`, 
 2. **Supplemental Table 3** (derivation subsample, n = 4,585) prints different coefficients and points (e.g. atrial
    fibrillation 1.12, 11 points, against 0.83, 8); the package uses Table 3 (full cohort), which the paper presents as the model.
 3. **Model without CKD.** Unlike the 2014 Suita (CHD) score, this model has no CKD item (the paper explains why).
+4. **Erratum (2021): non-HDL-C = TC - HDL-C.** The original Methods (p. 1162) read "subtracting HDL-C from TG";
+   the erratum corrects it to TC. The package takes non-HDL-C as an input; the Jcvrisk check and the author test
+   set use TC - HDL-C, as corrected. Paper's error, corrected by the authors.
