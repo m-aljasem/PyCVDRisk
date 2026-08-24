@@ -34,3 +34,18 @@ The mean term follows Supplementary Table 2: ln 57.0, ln 131.1, ln 4.1 and propo
 2. Table 1 gives 47.9% men; Supplementary Table 2 uses 0.480 in the mean term. The package follows Supplementary
    Table 2, which reproduces the examples.
 3. The mean term uses ln(mean), not mean(ln), and 0.267 x ln 57 for the interaction, as the examples do.
+
+## Search for a developer tool
+
+No level-A source found. Searched (English and Japanese) for an EPOCH-JAPAN web calculator, app, risk chart or
+spreadsheet from the group, JAS, JCS or NCVC: none exists. The paper (Discussion) only proposes the models for
+"education and risk communication tools"; its supplement holds no spreadsheet; the JAS 2022 guideline uses the
+Hisayama model, not EPOCH-JAPAN. The MHLW grant reports of the group (mhlw-grants.niph.go.jp, 201909001A0005,
+201909001A0006, 201909001B0005) describe validation and recalibration of the death models, with no tool or
+risk table. Jcvrisk remains the only implementation.
+
+## Author test set
+
+`make_author_test_patients.py` writes `fixtures/author_test_patients.csv` (20 patients: the two Supplementary
+Table 2 examples, then 18 seeded with seed 2021, ages 40-79, mg/dL) and `fixtures/author_test_expected.csv` (our
+CHD, stroke and CVD 10-year risks in %, held back).
