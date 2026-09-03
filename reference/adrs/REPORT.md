@@ -70,8 +70,44 @@ term that Table 2 lists. The mean score subtracted, 6.37, should equal the score
 A smaller slip: the ASCVD block stores exp(score) in `ASCVD_SUMRF_` but raises 0.994 to `ASCVD_SUMRF` (no
 trailing underscore); the intent, 1 - S0 ** exp(score), is clear and is what the package computes.
 
-## 4. Owner action
+## 5. Search for a developer tool
 
-Ask the authors to confirm the cohort GFR mean (111.4?), the stroke formula, and to provide a few calculated
-risks; with those the evidence would rise above weak C.
+No ADRS calculator, app or code was found: web search (ADRS, Abu Dhabi Risk Score, the authors), GitHub and OSF
+search, the JAHA article (the PCEs, not the ADRS, are implemented in the Abu Dhabi ambulatory services) and Europe
+PMC for later papers by the authors. medRxiv (preprint 10.1101/2024.03.19.24304561) refused automated access.
+The one later paper is the authors' own preprint, AlKetbi LB, Nagelkerke N. Recalibration of four cardiovascular
+risk prediction scores in two Abu Dhabi cohorts. Research Square 2026, doi:10.21203/rs.3.rs-11668877/v1
+(`source/rs-11668877_v1_recalibration_preprint.pdf`, downloaded from assets-eu.researchsquare.com,
+sha256 2e9c6da32a772fe60cbc859c2e8ca330a7917237a880151f983ff0b384e6f4f2). It has no worked example or individual predictions, but it states three things:
+
+- **Baseline survival**: 0.994 was 'used in the original scoring'; the unrounded value is 0.993639 (risks about
+  6% higher). The package keeps 0.994, the published value.
+- **Full precision**: 'For clinical implementation of ADRS, the unrounded baseline survival (0.993639) and
+  full-precision coefficients should be used.' The full-precision coefficients are not published. The rounding
+  matters most for age squared: -0.001 stands for anything in [-0.0015, -0.0005), and at age 79 half a unit in
+  the last place moves the linear predictor by 0.0005 x (79^2 - 1749.5) = 2.2. On the 20 test patients below,
+  the two ends of that interval give 0.28 to 3.5 times the ASCVD risk of the printed equation. The published
+  ASCVD equation is therefore well defined but only loosely determines the authors' fitted model (paper's
+  precision, not our error).
+- **GFR mean**: in the preprint eGFR is 'expressed as its deviation from the eligible C1 mean (113.12, n = 7,434)'
+  for the incremental-value test; whether the ADRS itself was centred there or at the 111.4 implied by the JAHA
+  Table 1 (n = 8,699) is not said. On the test patients 113.12 changes ASCVD risk by up to 5% and CAD by up to 7%
+  (women; in men the deviation and its sex interaction nearly cancel). The package keeps 111.4.
+
+### Author test set
+
+`make_author_test_patients.py` (seed 2024) writes `fixtures/author_test_patients.csv`: 20 patients, 10 women and
+10 men aged 18-79, four in each blood-pressure stage of the CAD model, vitamin D 10-56 ng/mL, eGFR 60-138, TC/HDL
+2.7-7.1. `fixtures/author_test_expected.csv` holds our 10-year risks (%), plus the alternatives the answer would
+decide between: ASCVD and CAD with GFR mean 113.12 (`_gfr113`) and stroke as in the second Data S1 assignment
+(`_noint`: 7 of 20 patients change, by up to 91%). `tests/adrs` checks that the expected file matches the package.
+
+## 6. Owner action
+
+Send `fixtures/author_test_patients.csv` to the authors (inputs only; keep `author_test_expected.csv`
+back). When the three risks come back, compare them with `author_test_expected.csv`: agreement with the main
+columns to the 2 decimals of a percentage verifies the implementation against the developers' own syntax
+(evidence A for the published equations); agreement with a `_gfr113` or `_noint` column instead identifies
+which GFR mean or stroke formula they use (to be adopted only with their confirmation). Full-precision
+coefficients, if sent, would allow a full-precision option and a measure of the rounding error of section 5.
 

@@ -39,3 +39,16 @@ def test_invalid_and_outcome():
     assert np.isfinite(r[0]) and np.isnan(r[1:]).all()
     with pytest.raises(ValueError):
         adrs(**P, outcome="death")
+
+
+def test_author_test_set_matches_package():
+    # reference/adrs/fixtures: what we send the authors and what we expect back must stay in step with the package
+    import pandas as pd
+    from pathlib import Path
+    fix = Path(__file__).parents[2] / "reference" / "adrs" / "fixtures"
+    p, e = pd.read_csv(fix / "author_test_patients.csv"), pd.read_csv(fix / "author_test_expected.csv")
+    assert len(p) == 20 and (p.id == e.id).all()
+    args = [p[c] for c in ("age", "sex", "smoker", "sbp", "dbp", "tc_hdl", "diabetes", "hypertension", "bp_treated",
+                           "vitamin_d", "egfr")]
+    for o in ("ascvd", "cad", "stroke"):
+        np.testing.assert_allclose(100 * adrs(*args, outcome=o), e[f"{o}_10y_pct"], atol=1e-4)
