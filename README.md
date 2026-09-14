@@ -52,6 +52,8 @@ score2(age=[50, 62], sex=["male", "female"], smoker=[1, 0], sbp=[140, 130],
 
 Evidence: **A** the developers' own code, calculator or charts; **B** an independent package; **C** the paper's worked examples and tables. Details per score: `reference/README.md`.
 
+Of the 40 scores, 26 are verified at level A, 5 more at level B (with C), and 9 rest on level C alone.
+
 ### One call for any country
 
 `uniscore` gives each person the score their country's guideline body recommends:

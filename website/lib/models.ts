@@ -11,6 +11,7 @@ export const photoFor = (key: string): Photo => (photos as Record<string, Photo>
 export const photoCredits = photos as Record<string, Photo>
 
 // Evidence levels (manuscript): A developers' code/calculator/charts, B independent package, C the paper's own examples and tables
-export const referenceVerified = (e: string) => /[AB]/.test(e)
+// a partial package check (Suita) does not make a score reference-verified
+export const referenceVerified = (e: string) => /[AB]/.test(e.replace(/partial B/g, ''))
 export const evidenceLabel = (e: string) =>
   `${referenceVerified(e) ? 'Verified against a reference implementation' : 'Checked against the published paper'} (evidence ${e})`
