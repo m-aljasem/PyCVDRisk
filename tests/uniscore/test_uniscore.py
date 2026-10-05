@@ -12,6 +12,11 @@ from cvd_risk import (guideline_score, prevent, qrisk3, score2, score2_asia_paci
 ROOT = Path(__file__).parents[2]
 P = dict(sex="female", sbp=135, total_chol=5.8, hdl_chol=1.4, smoker=0, diabetes=0, bp_treated=1,
          statin=0, egfr=85, bmi=29, ethnicity="indian", smoking="ex", sbp_sd=6)
+def same(a, b):
+    # array vs scalar calls can differ in the last bit where NumPy uses SIMD exp/log (GitHub runners)
+    np.testing.assert_allclose(a, b, rtol=1e-13, atol=0)
+
+
 S2 = dict(sex="female", smoker=0, sbp=135, total_chol=5.8, hdl_chol=1.4, diabetes=0)
 
 
@@ -36,11 +41,11 @@ def test_routing_table_is_current():
                             recalibration="country")),
 ])
 def test_each_route_equals_the_direct_call(country, expected):
-    assert uniscore(country, age=60, **P) == expected()
+    same(uniscore(country, age=60, **P), expected())
 
 
 def test_score2_op_from_age_70():
-    assert uniscore("DEU", age=75, **P) == score2_op(75, **S2, region="moderate")
+    same(uniscore("DEU", age=75, **P), score2_op(75, **S2, region="moderate"))
 
 
 def test_vectorised_mixed_countries():
@@ -54,7 +59,7 @@ def test_vectorised_mixed_countries():
 
 def test_qrisk3_diabetes_type_bridge():
     a = uniscore("GBR", age=60, **{**P, "diabetes": 1}, diabetes_type="type2")
-    assert a == qrisk3(60, "female", "indian", "ex", 29, 5.8 / 1.4, 135, 6, bp_treated=1, diabetes="type2")
+    same(a, qrisk3(60, "female", "indian", "ex", 29, 5.8 / 1.4, 135, 6, bp_treated=1, diabetes="type2"))
     with pytest.raises(ValueError, match="diabetes_type"):
         uniscore("GBR", age=60, **{**P, "diabetes": 1})
 
