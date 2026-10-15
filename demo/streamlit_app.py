@@ -8,8 +8,10 @@ The inputs for every model live in forms.py; the model descriptions are the webs
 from __future__ import annotations
 
 import base64
+import html
 import json
 import math
+import re
 from pathlib import Path
 
 import numpy as np
@@ -159,6 +161,10 @@ def result_html() -> str:
         return f'<div class="result na"><p class="kicker">Not applicable</p><p class="why">{why}</p></div>'
     if variant.output == "risk":
         big, unit, caption, frac = f"{value * 100:.1f}", "%", model["outcome"], value
+    elif variant.output == "percent":
+        big, unit, caption, frac = f"{value:.1f}", "%", model["outcome"], value / 100
+    elif variant.output == "band":
+        big, unit, caption, frac = html.escape(variant.labels[int(value)]), "", model["outcome"], None
     elif variant.output == "age":
         big, unit, caption, frac = f"{value:.1f}", "yrs", "Median age reached free of CVD", None
     else:
@@ -183,8 +189,10 @@ with result_col:
     st.markdown('<p class="section">The same call in Python</p>', unsafe_allow_html=True)
     st.code(python_call(), language="python", wrap_lines=True)
 
-    evidence = ("Verified against a reference implementation" if model["evidence"] == "A"
-                else "Checked against the published paper")
+    # same rule as website/lib/models.ts: any A or B, but a partial package check (Suita) does not count
+    verified = re.search("[AB]", model["evidence"].replace("partial B", ""))
+    evidence = ("Verified against a reference implementation" if verified else "Checked against the published paper")
+    evidence += f" (evidence {model['evidence']})"
     st.markdown(f"""
 <div class="about">
   <p class="kicker">About this model</p>

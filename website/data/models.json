@@ -192,8 +192,8 @@
    "group": "primary",
    "outcome": "10-year CVD risk with hsCRP and parental history",
    "paperUrl": "https://doi.org/10.1001/jama.297.6.611",
-   "verification": "Implemented from the printed formulas (19/19 terms), checked against the papers' 17 worked examples.",
-   "evidence": "C",
+   "verification": "Nancy Cook's own SAS code (senior author) run on 2,000 patients: exact for men; for women its baseline survival differs from the paper's (documented). 19/19 printed terms; 17/17 worked examples.",
+   "evidence": "A (men), C",
    "example": "from cvd_risk import reynolds\n\nreynolds(age=60, sex=\"female\", sbp=135, total_chol=5.7, hdl_chol=1.3, hscrp=3.0,\n         smoker=0, parental_history=1)",
    "result": "0.05208"
   },
@@ -368,8 +368,8 @@
    "group": "conditions",
    "outcome": "Stroke risk points in atrial fibrillation (0-9)",
    "paperUrl": "https://doi.org/10.1378/chest.09-1584",
-   "verification": "Implemented from the paper's point table; published rules checked.",
-   "evidence": "C",
+   "verification": "Every input combination at every age cut point (640/640) against the paper's point table; R cliot and MedCalc-Bench (640/640 each).",
+   "evidence": "C, B",
    "example": "from cvd_risk import cha2ds2_vasc\n\ncha2ds2_vasc(age=72, sex=\"female\", heart_failure=0, hypertension=1, diabetes=0,\n             stroke_tia_te=0, vascular_disease=0)",
    "result": "3"
   },
@@ -384,8 +384,8 @@
    "group": "conditions",
    "outcome": "Stroke risk points in atrial fibrillation (0-6)",
    "paperUrl": "https://doi.org/10.1001/jama.285.22.2864",
-   "verification": "Implemented from the paper's point table; Gage's worked example reproduced.",
-   "evidence": "C",
+   "verification": "Every input combination at every age cut point (160/160) against the paper's point table; R cliot (160/160).",
+   "evidence": "C, B",
    "example": "from cvd_risk import chads2\n\nchads2(age=76, heart_failure=1, hypertension=1, diabetes=0, stroke_tia=0)",
    "result": "3"
   },
@@ -400,8 +400,8 @@
    "group": "conditions",
    "outcome": "Major bleeding risk points on anticoagulation (0-9)",
    "paperUrl": "https://doi.org/10.1378/chest.10-0134",
-   "verification": "Implemented from the paper's point table; published rules checked.",
-   "evidence": "C",
+   "verification": "Every input combination at every age cut point (2,560/2,560) against the paper's point table; R cliot and MedCalc-Bench (2,560/2,560 each).",
+   "evidence": "C, B",
    "example": "from cvd_risk import has_bled\n\nhas_bled(age=70, hypertension=1, abnormal_renal=0, abnormal_liver=0, stroke=0,\n         bleeding=0, labile_inr=1, drugs=1, alcohol=0)",
    "result": "4"
   },
@@ -432,8 +432,8 @@
    "group": "acute",
    "outcome": "14-day adverse events in UA/NSTEMI (0-7)",
    "paperUrl": "https://doi.org/10.1001/jama.284.7.835",
-   "verification": "Published point rules (11/11); R RiskScorescvd (5,000 patients identical).",
-   "evidence": "C, B",
+   "verification": "The TIMI Study Group's own calculator app (128/128 input combinations); published point rules (11/11); R RiskScorescvd (5,000 patients identical).",
+   "evidence": "A, C, B",
    "example": "from cvd_risk import timi\n\ntimi(age=68, risk_factors=3, coronary_stenosis=1, st_deviation=1, anginal_events_24h=2,\n     aspirin_7d=1, elevated_markers=0)",
    "result": "6"
   },
@@ -592,8 +592,8 @@
    "group": "primary",
    "outcome": "10-year first ASCVD event (CHD or atherothrombotic infarction), ages 40-84; equation and point score",
    "paperUrl": "https://doi.org/10.5551/jat.61960",
-   "verification": "Points equal weight / 0.144 (18/18) and the constants check; point score equal to R Jcvrisk (2,702/2,702) and to a web calculator of the JAS 2022 chart (79/80 cells).",
-   "evidence": "C, B",
+   "verification": "The Japan Atherosclerosis Society's official 2022 app, run unmodified (3,920/3,920 patients; point score); points equal weight / 0.144 (18/18); R Jcvrisk (2,702/2,702); a web calculator of the JAS 2022 chart (79/80 cells).",
+   "evidence": "A (point score), B, C",
    "example": "from cvd_risk import hisayama\n\nhisayama(age=60, sex=\"male\", sbp=140, diabetes=0, hdl=50, proteinuria=0, smoker=1,\n         exercise=0, ldl=130)",
    "result": "0.07546"
   },
@@ -624,8 +624,8 @@
    "group": "primary",
    "outcome": "5- and 10-year stroke, AMI, stroke + AMI and CVD death, with and without AF; points (risk via jals_risk)",
    "paperUrl": "https://doi.org/10.1038/s41440-019-0220-z",
-   "verification": "Points equal 10 x log2 of the printed rate ratios (174/176, 2 at a rounding edge); risk table recovered from Table 6 (257/260 five-year values, the rest within 0.01).",
-   "evidence": "C",
+   "verification": "Points equal 10 x log2 of the printed rate ratios (174/176, 2 at a rounding edge); risk table recovered from Table 6 (257/260 five-year values, the rest within 0.01); R Jcvrisk equals the supplement's ACC/AHA variant on 3,000 patients.",
+   "evidence": "C, B",
    "example": "from cvd_risk import jals\n\njals(age=75, sex=\"male\", sbp=165, dbp=85, bp_treated=0, smoker=0, diabetes=0,\n     outcome=\"stroke\", af=0)",
    "result": "25"
   },
@@ -646,5 +646,5 @@
    "result": "1"
   }
  ],
- "version": "2.0.0.dev0"
+ "version": "2.0.1"
 }

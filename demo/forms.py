@@ -25,9 +25,11 @@ from cvd_risk.qrisk3 import DIABETES as Q_DIABETES, ETHNICITY as Q_ETHNICITY, SM
 from cvd_risk.score.coefficients import REGIONS as SCORE_REGIONS
 from cvd_risk.score2 import REGIONS as ESC_REGIONS
 from cvd_risk.score2.coefficients import DIPSTICK
+from cvd_risk.smart2.smart2 import REGION_NAMES as SMART2_REGIONS
 from cvd_risk.smart_reach import REGION_NAMES as SMART_REGIONS
 from cvd_risk.suita import suita_risk
 from cvd_risk.who2019.coefficients import REGIONS as WHO_REGIONS
+from cvd_risk.who_ish.who_ish import BANDS as WHO_ISH_BANDS, REGIONS as WHO_ISH_REGIONS
 
 # shortcut: country lists come from the packages' private data loaders (no public list yet);
 # switch to a public constant if the library adds one.
@@ -57,7 +59,8 @@ class Variant:
     label: str
     fn: Callable
     fields: tuple[Field, ...]
-    output: str = "risk"  # "risk" (fraction), "points" or "age" (CVD-free life expectancy)
+    output: str = "risk"  # "risk" (fraction), "percent", "band" (index into labels), "points" or "age" (CVD-free life expectancy)
+    labels: tuple = ()  # band names, for output="band"
     max_points: int | None = None
     fixed: dict = field(default_factory=dict)  # arguments passed without showing an input
     points_to_risk: Callable[[float, dict], str | None] | None = None  # (points, inputs) -> risk text
@@ -345,12 +348,31 @@ FORMS: dict[str, list[Variant]] = {
                 flag("st_depression", "ST-segment depression"), num("creatinine", "Creatinine", 1.0, "mg/dL", 0.1, 20.0, 0.1),
                 flag("elevated_enzymes", "Elevated cardiac enzymes"), flag("in_hospital_pci", "PCI in hospital")),
                 output="points"),
-        *(Variant(f"GRACE 2.0, {label}", cr.grace2, (AGE(65), num("heart_rate", "Heart rate", 80, "bpm", 20, 250), SBP,
+    ],
+    "grace2": [*(Variant(f"GRACE 2.0, {label}", cr.grace2, (AGE(65), num("heart_rate", "Heart rate", 80, "bpm", 20, 250), SBP,
                   flag("cardiac_arrest", "Cardiac arrest at admission"), flag("st_deviation", "ST-segment deviation"),
                   flag("elevated_enzymes", "Elevated cardiac enzymes"),
                   num("creatinine", "Creatinine", 1.0, "mg/dL", 0.1, 20.0, 0.1),
                   choice("killip", "Killip class", (1, 2, 3, 4))), fixed={"horizon": horizon, "outcome": outcome})
           for label, horizon, outcome in (("1-year death", 1, "death"), ("1-year death or MI", 1, "death_mi"),
-                                          ("3-year death", 3, "death"), ("3-year death or MI", 3, "death_mi"))),
-    ],
+                                          ("3-year death", 3, "death"), ("3-year death or MI", 3, "death_mi")))],
+    "smart2": [Variant("SMART2", cr.smart2, (AGE(65, 40, 80), SEX, SMOKER, DIABETES, SBP,
+                       num("non_hdl_chol", "Non-HDL cholesterol", 3.5, "mmol/L", 0.5, 15.0, 0.1), EGFR,
+                       num("hscrp", "hsCRP", 2.0, "mg/L", 0.1, 100.0, 0.1),
+                       num("years_since_diagnosis", "Years since first CVD diagnosis", 5, "years", 0, 60),
+                       flag("cad", "Coronary artery disease", True), flag("cerebrovascular", "Cerebrovascular disease"),
+                       flag("pad", "Peripheral artery disease"), flag("aaa", "Abdominal aortic aneurysm"),
+                       flag("antithrombotic", "Antithrombotic treatment"),
+                       choice("region", "Region", SMART2_REGIONS, "europe_moderate")))],
+    "assign": [Variant(label, cr.assign, (AGE(55, 30, 74), SEX, TC, HDL, SBP, DIABETES,
+                       flag("family_history", "Family history of premature CVD"),
+                       num("cigarettes_per_day", "Cigarettes per day", 0, "", 0, 100),
+                       num("simd_score", "SIMD score", 20, "0-100", 0, 100, 0.1,
+                           help="Scottish Index of Multiple Deprivation score (higher = more deprived)")),
+                       output="percent", fixed={"version": version})
+               for label, version in (("ASSIGN 2.0", 2), ("ASSIGN 1.0", 1))],
+    "who-ish": [Variant(label, cr.who_ish, (AGE(55, 40, 79), SEX, SMOKER, SBP, DIABETES,
+                        choice("region", "WHO subregion", WHO_ISH_REGIONS, "eur_a")) + extra,
+                        output="band", labels=WHO_ISH_BANDS)
+                for label, extra in (("With cholesterol", (TC,)), ("Without cholesterol", ()))],
 }
