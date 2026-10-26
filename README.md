@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="docs/pycvdrisk-github-header-banner.png" alt="PyCVDRisk" width="100%">
+  <img src="https://raw.githubusercontent.com/m-aljasem/PyCVDRisk/v2/docs/pycvdrisk-github-header-banner.png" alt="PyCVDRisk" width="100%">
 
 ### Cardiovascular risk scores from across the world, verified, in Python
 
@@ -81,7 +81,7 @@ array, and risks are returned as fractions in [0, 1].
 `uniscore` gives each person the score their country's guideline body recommends: PREVENT (USA), QRISK3 (UK),
 SCORE2/SCORE2-OP (the 55 ESC countries of SCORE2 Fig 5), SCORE2 Asia-Pacific (48 countries) and WHO 2019
 everywhere else. The routing table, with a source for every country, is
-[`src/cvd_risk/uniscore/routing.csv`](src/cvd_risk/uniscore/routing.csv).
+[`src/cvd_risk/uniscore/routing.csv`](https://github.com/m-aljasem/PyCVDRisk/blob/v2/src/cvd_risk/uniscore/routing.csv).
 
 ```python
 from cvd_risk import uniscore, guideline_score
@@ -110,62 +110,62 @@ example, and each report records exactly what was compared.
 
 | Score | Region | Year | Function | Evidence |
 |---|---|---|---|---|
-| **SCORE2** | Europe | 2021 | `score2` | ✅ A + B + C ([report](reference/score2/REPORT.md)) |
-| **SCORE2-OP** | Europe | 2021 | `score2_op` | ✅ A + B ([report](reference/score2/REPORT.md)) |
-| **SCORE2 Asia-Pacific** | Asia-Pacific | 2024 | `score2_asia_pacific` | ✅ A + B ([report](reference/score2/REPORT.md)) |
-| **SCORE** | Europe | 2003 | `score` | ✅ A ([report](reference/score/REPORT.md)) |
-| **LIFE-CVD2** | Europe | 2024 | `life_cvd2` | ✅ A ([report](reference/life_cvd2/REPORT.md)) |
-| **PREVENT** | United States | 2024 | `prevent` | ✅ A + C + B ([report](reference/prevent/REPORT.md)) |
-| **Pooled Cohort Equations** | United States | 2013 | `pce` | ✅ A + C + B ([report](reference/pce/REPORT.md)) |
-| **Framingham** | Framingham, Massachusetts | 2008 | `framingham` | ✅ A + C + B ([report](reference/framingham/REPORT.md)) |
-| **Reynolds** | United States (Boston) | 2007-2008 | `reynolds` | ✅ A (men) + C ([report](reference/reynolds/REPORT.md)) |
-| **QRISK3** | United Kingdom | 2017 | `qrisk3` | ✅ A + B ([report](reference/qrisk3/REPORT.md)) |
-| **QRISK2** | United Kingdom | 2014 | `qrisk2` | ✅ A ([report](reference/qrisk2/REPORT.md)) |
-| **ASSIGN** 1.0 and 2.0 | Scotland | 2007-2025 | `assign` | ✅ A + C ([report](reference/assign/REPORT.md)) |
-| **FINRISKI 2.0** | Finland | 2020 | `finrisk` | ✅ A + C ([report](reference/finrisk/REPORT.md)) |
-| **REGICOR** | Spain | 2003 | `regicor` | ✅ A + C ([report](reference/regicor/REPORT.md)) |
-| **CUORE** | Italy | 2007 | `cuore` | ✅ A + C ([report](reference/cuore/REPORT.md)) |
-| **PROCAM** | Germany | 2007 | `procam`, `procam_stroke` | 📄 C ([report](reference/procam/REPORT.md)) |
-| **ADRS** | United Arab Emirates | 2024 | `adrs` | 📄 C ([report](reference/adrs/REPORT.md)) |
-| **China-PAR** | China | 2016 | `china_par` | ✅ A + C ([report](reference/china_par/REPORT.md)) |
-| **Hisayama** | Japan | 2022 | `hisayama`, `hisayama_points`, `hisayama_points_risk` | ✅ A (point score) + B + C ([report](reference/hisayama/REPORT.md)) |
-| **EPOCH-JAPAN** | Japan | 2021 | `epoch_japan` | 🔁 C + B ([report](reference/epoch_japan/REPORT.md)) |
-| **JALS** | Japan | 2019 | `jals`, `jals_risk` | 🔁 C + B ([report](reference/jals/REPORT.md)) |
-| **Suita** | Japan | 2014 | `suita`, `suita_risk` | 📄 C (+ partial B) ([report](reference/suita/REPORT.md)) |
-| **Suita CVD** | Japan | 2020 | `suita_cvd`, `suita_cvd_risk` | 📄 C (+ partial B) ([report](reference/suita_cvd/REPORT.md)) |
-| **PREDICT** (7 equations) | New Zealand | 2018-2022 | `predict_cvd`, `predict_cvd_bmi`, `predict_cvd_policy` | ✅ A + C ([report](reference/predict/REPORT.md)) |
-| **Globorisk** | Global, 182 countries | 2015-2017 | `globorisk` | ✅ A ([report](reference/globorisk/REPORT.md)) |
-| **WHO 2019** | Global, 21 regions / 190 countries | 2019 | `who2019` | ✅ A + B ([report](reference/who2019/REPORT.md)) |
-| **WHO/ISH** | Global, 14 WHO subregions | 2007 | `who_ish` | ✅ A + B ([report](reference/who_ish/REPORT.md)) |
+| **SCORE2** | Europe | 2021 | `score2` | ✅ A + B + C ([report](https://github.com/m-aljasem/PyCVDRisk/blob/v2/reference/score2/REPORT.md)) |
+| **SCORE2-OP** | Europe | 2021 | `score2_op` | ✅ A + B ([report](https://github.com/m-aljasem/PyCVDRisk/blob/v2/reference/score2/REPORT.md)) |
+| **SCORE2 Asia-Pacific** | Asia-Pacific | 2024 | `score2_asia_pacific` | ✅ A + B ([report](https://github.com/m-aljasem/PyCVDRisk/blob/v2/reference/score2/REPORT.md)) |
+| **SCORE** | Europe | 2003 | `score` | ✅ A ([report](https://github.com/m-aljasem/PyCVDRisk/blob/v2/reference/score/REPORT.md)) |
+| **LIFE-CVD2** | Europe | 2024 | `life_cvd2` | ✅ A ([report](https://github.com/m-aljasem/PyCVDRisk/blob/v2/reference/life_cvd2/REPORT.md)) |
+| **PREVENT** | United States | 2024 | `prevent` | ✅ A + C + B ([report](https://github.com/m-aljasem/PyCVDRisk/blob/v2/reference/prevent/REPORT.md)) |
+| **Pooled Cohort Equations** | United States | 2013 | `pce` | ✅ A + C + B ([report](https://github.com/m-aljasem/PyCVDRisk/blob/v2/reference/pce/REPORT.md)) |
+| **Framingham** | Framingham, Massachusetts | 2008 | `framingham` | ✅ A + C + B ([report](https://github.com/m-aljasem/PyCVDRisk/blob/v2/reference/framingham/REPORT.md)) |
+| **Reynolds** | United States (Boston) | 2007-2008 | `reynolds` | ✅ A (men) + C ([report](https://github.com/m-aljasem/PyCVDRisk/blob/v2/reference/reynolds/REPORT.md)) |
+| **QRISK3** | United Kingdom | 2017 | `qrisk3` | ✅ A + B ([report](https://github.com/m-aljasem/PyCVDRisk/blob/v2/reference/qrisk3/REPORT.md)) |
+| **QRISK2** | United Kingdom | 2014 | `qrisk2` | ✅ A ([report](https://github.com/m-aljasem/PyCVDRisk/blob/v2/reference/qrisk2/REPORT.md)) |
+| **ASSIGN** 1.0 and 2.0 | Scotland | 2007-2025 | `assign` | ✅ A + C ([report](https://github.com/m-aljasem/PyCVDRisk/blob/v2/reference/assign/REPORT.md)) |
+| **FINRISKI 2.0** | Finland | 2020 | `finrisk` | ✅ A + C ([report](https://github.com/m-aljasem/PyCVDRisk/blob/v2/reference/finrisk/REPORT.md)) |
+| **REGICOR** | Spain | 2003 | `regicor` | ✅ A + C ([report](https://github.com/m-aljasem/PyCVDRisk/blob/v2/reference/regicor/REPORT.md)) |
+| **CUORE** | Italy | 2007 | `cuore` | ✅ A + C ([report](https://github.com/m-aljasem/PyCVDRisk/blob/v2/reference/cuore/REPORT.md)) |
+| **PROCAM** | Germany | 2007 | `procam`, `procam_stroke` | 📄 C ([report](https://github.com/m-aljasem/PyCVDRisk/blob/v2/reference/procam/REPORT.md)) |
+| **ADRS** | United Arab Emirates | 2024 | `adrs` | 📄 C ([report](https://github.com/m-aljasem/PyCVDRisk/blob/v2/reference/adrs/REPORT.md)) |
+| **China-PAR** | China | 2016 | `china_par` | ✅ A + C ([report](https://github.com/m-aljasem/PyCVDRisk/blob/v2/reference/china_par/REPORT.md)) |
+| **Hisayama** | Japan | 2022 | `hisayama`, `hisayama_points`, `hisayama_points_risk` | ✅ A (point score) + B + C ([report](https://github.com/m-aljasem/PyCVDRisk/blob/v2/reference/hisayama/REPORT.md)) |
+| **EPOCH-JAPAN** | Japan | 2021 | `epoch_japan` | 🔁 C + B ([report](https://github.com/m-aljasem/PyCVDRisk/blob/v2/reference/epoch_japan/REPORT.md)) |
+| **JALS** | Japan | 2019 | `jals`, `jals_risk` | 🔁 C + B ([report](https://github.com/m-aljasem/PyCVDRisk/blob/v2/reference/jals/REPORT.md)) |
+| **Suita** | Japan | 2014 | `suita`, `suita_risk` | 📄 C (+ partial B) ([report](https://github.com/m-aljasem/PyCVDRisk/blob/v2/reference/suita/REPORT.md)) |
+| **Suita CVD** | Japan | 2020 | `suita_cvd`, `suita_cvd_risk` | 📄 C (+ partial B) ([report](https://github.com/m-aljasem/PyCVDRisk/blob/v2/reference/suita_cvd/REPORT.md)) |
+| **PREDICT** (7 equations) | New Zealand | 2018-2022 | `predict_cvd`, `predict_cvd_bmi`, `predict_cvd_policy` | ✅ A + C ([report](https://github.com/m-aljasem/PyCVDRisk/blob/v2/reference/predict/REPORT.md)) |
+| **Globorisk** | Global, 182 countries | 2015-2017 | `globorisk` | ✅ A ([report](https://github.com/m-aljasem/PyCVDRisk/blob/v2/reference/globorisk/REPORT.md)) |
+| **WHO 2019** | Global, 21 regions / 190 countries | 2019 | `who2019` | ✅ A + B ([report](https://github.com/m-aljasem/PyCVDRisk/blob/v2/reference/who2019/REPORT.md)) |
+| **WHO/ISH** | Global, 14 WHO subregions | 2007 | `who_ish` | ✅ A + B ([report](https://github.com/m-aljasem/PyCVDRisk/blob/v2/reference/who_ish/REPORT.md)) |
 
 #### Diabetes, kidney disease and established vascular disease
 
 | Score | Region | Year | Function | Evidence |
 |---|---|---|---|---|
-| **SCORE2-Diabetes** | Europe | 2023 | `score2_diabetes` | ✅ A + B + C ([report](reference/score2/REPORT.md)) |
-| **SCORE2-CKD** | Europe | 2022 | `score2_ckd` | ✅ A + C + B ([report](reference/score2_ckd/REPORT.md)) |
-| **DIAL2** | Europe (derived in Sweden) | 2023 | `dial2` | ✅ A + C ([report](reference/dial2/REPORT.md)) |
-| **PREDICT** diabetes, after CVD, after ACS, bleeding | New Zealand | 2017-2021 | `predict_t2d`, `predict_post_cvd`, `predict_post_acs`, `predict_bleed` | ✅ A + C ([report](reference/predict/REPORT.md)) |
-| **SMART-REACH** | International | 2018 | `smart_reach` | ✅ A ([report](reference/smart_reach/REPORT.md)) |
-| **SMART2** | Europe and five other world regions | 2022 | `smart2` | ✅ A ([report](reference/smart2/REPORT.md)) |
+| **SCORE2-Diabetes** | Europe | 2023 | `score2_diabetes` | ✅ A + B + C ([report](https://github.com/m-aljasem/PyCVDRisk/blob/v2/reference/score2/REPORT.md)) |
+| **SCORE2-CKD** | Europe | 2022 | `score2_ckd` | ✅ A + C + B ([report](https://github.com/m-aljasem/PyCVDRisk/blob/v2/reference/score2_ckd/REPORT.md)) |
+| **DIAL2** | Europe (derived in Sweden) | 2023 | `dial2` | ✅ A + C ([report](https://github.com/m-aljasem/PyCVDRisk/blob/v2/reference/dial2/REPORT.md)) |
+| **PREDICT** diabetes, after CVD, after ACS, bleeding | New Zealand | 2017-2021 | `predict_t2d`, `predict_post_cvd`, `predict_post_acs`, `predict_bleed` | ✅ A + C ([report](https://github.com/m-aljasem/PyCVDRisk/blob/v2/reference/predict/REPORT.md)) |
+| **SMART-REACH** | International | 2018 | `smart_reach` | ✅ A ([report](https://github.com/m-aljasem/PyCVDRisk/blob/v2/reference/smart_reach/REPORT.md)) |
+| **SMART2** | Europe and five other world regions | 2022 | `smart2` | ✅ A ([report](https://github.com/m-aljasem/PyCVDRisk/blob/v2/reference/smart2/REPORT.md)) |
 
 #### Atrial fibrillation
 
 | Score | Region | Year | Function | Evidence |
 |---|---|---|---|---|
-| **CHA2DS2-VASc** | Europe | 2010 | `cha2ds2_vasc` | 🔁 C (every input) + B ([report](reference/af/REPORT.md)) |
-| **CHADS2** | United States | 2001 | `chads2` | 🔁 C (every input) + B ([report](reference/af/REPORT.md)) |
-| **HAS-BLED** | Europe | 2010 | `has_bled` | 🔁 C (every input) + B ([report](reference/af/REPORT.md)) |
+| **CHA2DS2-VASc** | Europe | 2010 | `cha2ds2_vasc` | 🔁 C (every input) + B ([report](https://github.com/m-aljasem/PyCVDRisk/blob/v2/reference/af/REPORT.md)) |
+| **CHADS2** | United States | 2001 | `chads2` | 🔁 C (every input) + B ([report](https://github.com/m-aljasem/PyCVDRisk/blob/v2/reference/af/REPORT.md)) |
+| **HAS-BLED** | Europe | 2010 | `has_bled` | 🔁 C (every input) + B ([report](https://github.com/m-aljasem/PyCVDRisk/blob/v2/reference/af/REPORT.md)) |
 
 #### Acute chest pain and coronary syndromes
 
 | Score | Region | Year | Function | Evidence |
 |---|---|---|---|---|
-| **TIMI** UA/NSTEMI | United States (Boston) | 2000 | `timi` | ✅ A + C + B ([report](reference/timi/REPORT.md)) |
-| **GRACE 2.0** | International | 2014 | `grace2` | ✅ A + C ([report](reference/grace2/REPORT.md)) |
-| **GRACE** 6-month and in-hospital | International, 14 countries | 2003-2004 | `grace_6month`, `grace_hospital` | ✅ A (6-month) + C ([report](reference/grace/REPORT.md)) |
-| **HEART** | Netherlands | 2008 | `heart` | 🔁 C (every input) + B ([report](reference/heart/REPORT.md)) |
-| **EDACS** | Australia & New Zealand | 2014 | `edacs` | 🔁 C (every input) + B ([report](reference/edacs/REPORT.md)) |
+| **TIMI** UA/NSTEMI | United States (Boston) | 2000 | `timi` | ✅ A + C + B ([report](https://github.com/m-aljasem/PyCVDRisk/blob/v2/reference/timi/REPORT.md)) |
+| **GRACE 2.0** | International | 2014 | `grace2` | ✅ A + C ([report](https://github.com/m-aljasem/PyCVDRisk/blob/v2/reference/grace2/REPORT.md)) |
+| **GRACE** 6-month and in-hospital | International, 14 countries | 2003-2004 | `grace_6month`, `grace_hospital` | ✅ A (6-month) + C ([report](https://github.com/m-aljasem/PyCVDRisk/blob/v2/reference/grace/REPORT.md)) |
+| **HEART** | Netherlands | 2008 | `heart` | 🔁 C (every input) + B ([report](https://github.com/m-aljasem/PyCVDRisk/blob/v2/reference/heart/REPORT.md)) |
+| **EDACS** | Australia & New Zealand | 2014 | `edacs` | 🔁 C (every input) + B ([report](https://github.com/m-aljasem/PyCVDRisk/blob/v2/reference/edacs/REPORT.md)) |
 
 **In numbers:** 29 scores have level-A evidence (Reynolds for men only), 7 more rest on an independent package,
 and 4 on their papers alone. For pure point scores with no developer software (CHADS2, CHA2DS2-VASc,
@@ -186,7 +186,7 @@ HAS-BLED, HEART, EDACS), every possible input combination is checked against the
    have issued a correction.
 
 The full reports, the sources and the owner actions still open are in
-[`reference/README.md`](reference/README.md).
+[`reference/README.md`](https://github.com/m-aljasem/PyCVDRisk/blob/v2/reference/README.md).
 
 ## 📝 Citing PyCVDRisk
 

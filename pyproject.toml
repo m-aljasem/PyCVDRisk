@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "cvd-risk"
-version = "2.0.0.dev0"
+version = "2.0.1"
 description = "Verified, vectorised implementations of cardiovascular risk scores"
 readme = "README.md"
 requires-python = ">=3.10"
@@ -20,3 +20,7 @@ packages = ["src/cvd_risk"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+
+[tool.hatch.build.targets.sdist]
+# only what builds and tests the package; reference/ holds archived third-party sources, paper/ is unpublished
+include = ["/src", "/tests", "/README.md", "/LICENSE", "/CITATION.cff", "/pyproject.toml"]
