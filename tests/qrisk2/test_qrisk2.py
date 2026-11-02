@@ -19,6 +19,9 @@ REF = Path(__file__).parents[2] / "reference" / "qrisk2"
 FLAGS = ("af", "rheumatoid_arthritis", "ckd", "bp_treated", "family_history")
 
 
+
+# ClinRisk's C source is not redistributed here; see reference/README.md for where to download it.
+@pytest.mark.skipif(not (REF / "source" / "c").exists(), reason="ClinRisk C source not downloaded (see reference/README.md)")
 def test_coefficients_file_is_generated_from_clinrisk_source():
     spec = importlib.util.spec_from_file_location("q2x", REF / "extract_coefficients.py")
     ex = importlib.util.module_from_spec(spec)

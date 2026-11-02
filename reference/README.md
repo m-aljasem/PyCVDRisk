@@ -5,6 +5,27 @@ Regenerate any family: `python reference/<family>/make_patients.py`,
 `Rscript reference/<family>/run_reference.R` (QRISK3: `python reference/qrisk3/run_reference.py`
 then `Rscript reference/qrisk3/run_reference_cran.R`), `python reference/<family>/report.py`.
 
+## Third-party reference implementations (download before re-running)
+
+The package and its tests do not need any of these: the tests compare against the reference answers already
+saved in each `fixtures/` folder. They are needed only to regenerate those answers. They are not redistributed
+here; download each into the path shown (the paths are git-ignored). Versions are the ones the reports used.
+
+| Used by | Code | Where to get it | Put it in |
+|---|---|---|---|
+| SCORE2 family, SCORE2-CKD, HEART, TIMI, EDACS | RiskScorescvd 0.3.1 (R, MIT) | [CRAN](https://cran.r-project.org/package=RiskScorescvd): `curl -L https://cran.r-project.org/src/contrib/RiskScorescvd_0.3.1.tar.gz \| tar -xz -C reference/vendor` | `reference/vendor/RiskScorescvd/` |
+| Globorisk | globorisk 1.0.2 (R, MIT) | `git clone https://github.com/boyercb/globorisk reference/vendor/globorisk` | `reference/vendor/globorisk/` |
+| PREDICT | PredictRiskScores 0.9 (R, GPL-2), commit `1dca7fc` | `git clone https://github.com/VIEW2020/PredictRiskScores reference/vendor/PredictRiskScores && git -C reference/vendor/PredictRiskScores checkout 1dca7fc7702dc9eb44b269ae94a8396b20d3941f` | `reference/vendor/PredictRiskScores/` |
+| WHO/ISH | whoishRisk 1.0 (R, GPL-3) | `git clone https://github.com/DylanRJCollins/whoishRisk reference/who_ish/source/whoishRisk` | `reference/who_ish/source/whoishRisk/` |
+| QRISK3 | ClinRisk QRISK3-2017 C source (LGPL-3.0) | qrisk.org source page, archived at [web.archive.org](https://web.archive.org/web/20221210170812/https://qrisk.org/three/src.php) | `reference/qrisk3/source/qrisk3_2017.c` |
+| QRISK2 | ClinRisk QRISK2-2014 C source (LGPL-3.0) | ClinRisk's open-source repository, archived at [web.archive.org](https://web.archive.org/web/20231202142236/https://svn.clinrisk.co.uk/opensource/qrisk2/) | `reference/qrisk2/source/` (`c/`, `include/clinrisk/`) |
+| PCE, Framingham, PREVENT, QRISK3, WHO 2019 | CVrisk, PooledCohort, preventr, QRISK3, WHORiskCalculator (R) | `install.packages(c("CVrisk", "PooledCohort", "preventr", "QRISK3", "WHORiskCalculator"))` | your R library |
+
+The source papers and supplements cited in each report are likewise not redistributed; each report gives
+its DOI. The `harness.c` files in `qrisk2/` and `qrisk3/` are this project's own drivers for ClinRisk's code.
+
+## Status
+
 | Score | Status | Reference | Evidence | Report |
 |---|---|---|---|---|
 | SCORE2 | verified | RiskScorescvd 0.3.1 (R); paper worked example | B + C | `score2/REPORT.md` |

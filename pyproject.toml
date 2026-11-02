@@ -1,22 +1,56 @@
 [build-system]
-requires = ["hatchling"]
+requires = ["hatchling>=1.27"]
 build-backend = "hatchling.build"
 
 [project]
 name = "cvd-risk"
-version = "2.0.0.dev0"
-description = "Verified, vectorised implementations of cardiovascular risk scores"
+dynamic = ["version"]
+description = "Cardiovascular risk scores from across the world (SCORE2, PREVENT, QRISK3, Framingham, WHO and more), implemented in Python and verified against their original publications"
 readme = "README.md"
 requires-python = ">=3.10"
-license = {text = "MIT AND LGPL-3.0-or-later"}  # LGPL covers src/cvd_risk/qrisk2 and qrisk3 only
+# LGPL-3.0-or-later covers src/cvd_risk/qrisk2 and src/cvd_risk/qrisk3 only; everything else is MIT
+license = "MIT AND LGPL-3.0-or-later"
+license-files = ["LICENSE", "src/cvd_risk/qrisk*/LICENSE", "src/cvd_risk/qrisk*/COPYING.GPL"]
 authors = [{name = "Mohamad AlJasem", email = "mohamad@aljasem.eu.org"}]
+maintainers = [{name = "Mohamad AlJasem", email = "mohamad@aljasem.eu.org"}]
+keywords = [
+    "cardiovascular", "cardiovascular disease", "CVD", "risk score", "risk prediction", "epidemiology",
+    "SCORE2", "PREVENT", "QRISK3", "Framingham", "pooled cohort equations", "ASCVD", "WHO", "Globorisk",
+]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Science/Research",
+    "Intended Audience :: Healthcare Industry",
+    "Topic :: Scientific/Engineering :: Medical Science Apps.",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+]
 dependencies = ["numpy>=1.24"]
 
 [project.optional-dependencies]
 test = ["pytest>=7.4", "hypothesis>=6.80", "pandas>=2.0"]
 
+[project.urls]
+Homepage = "https://pycvdrisk.aljasem.eu.org"
+Documentation = "https://pycvdrisk.aljasem.eu.org"
+Repository = "https://github.com/m-aljasem/PyCVDRisk"
+Issues = "https://github.com/m-aljasem/PyCVDRisk/issues"
+"Verification reports" = "https://github.com/m-aljasem/PyCVDRisk/blob/HEAD/reference/README.md"
+
+[tool.hatch.version]
+path = "src/cvd_risk/__init__.py"
+
 [tool.hatch.build.targets.wheel]
 packages = ["src/cvd_risk"]
+
+# The sdist holds what is needed to build; tests need the fixtures in reference/, so they run from the repository.
+[tool.hatch.build.targets.sdist]
+include = ["/src/cvd_risk", "/README.md", "/LICENSE", "/CITATION.cff"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

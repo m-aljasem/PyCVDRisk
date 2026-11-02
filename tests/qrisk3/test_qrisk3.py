@@ -20,6 +20,9 @@ FLAGS = ("af", "atypical_antipsychotics", "corticosteroids", "erectile_dysfuncti
          "rheumatoid_arthritis", "ckd", "severe_mental_illness", "sle", "bp_treated", "family_history")
 
 
+
+# ClinRisk's C source is not redistributed here; see reference/README.md for where to download it.
+@pytest.mark.skipif(not (REF / "source" / "qrisk3_2017.c").exists(), reason="ClinRisk C source not downloaded (see reference/README.md)")
 def test_coefficients_file_is_generated_from_clinrisk_source():
     spec = importlib.util.spec_from_file_location("extract", REF / "extract_coefficients.py")
     ex = importlib.util.module_from_spec(spec)

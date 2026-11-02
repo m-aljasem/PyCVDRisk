@@ -149,3 +149,9 @@ reference/**/source/*.xml
 reference/**/source/*.xls
 reference/**/source/*.xlsx
 reference/prevent/source/erratum_*.txt
+
+# Third-party reference implementations: download them as described in reference/README.md
+reference/vendor/
+reference/qrisk2/source/
+reference/qrisk3/source/qrisk3_2017.c
+reference/who_ish/source/whoishRisk/

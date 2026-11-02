@@ -1,27 +1,29 @@
 cff-version: 1.2.0
 message: "If you use this software, please cite it as below."
+title: "PyCVDRisk: cardiovascular risk scores from across the world, verified, in Python"
+abstract: >-
+  Python implementations of published cardiovascular risk scores (SCORE2, PREVENT, QRISK3,
+  Framingham, the WHO charts and others) under one vectorised API, each implemented from its
+  original publication and verified against it and, where one exists, an independent reference
+  implementation.
+type: software
 authors:
   - given-names: Mohamad
     family-names: AlJasem
-title: "CVD Risk Calculator: Production-grade cardiovascular risk assessment in Python"
-version: 0.1.0
-date-released: 2024-01-01
+    email: mohamad@aljasem.eu.org
+version: 2.0.0
+date-released: 2026-11-02
 repository-code: "https://github.com/m-aljasem/PyCVDRisk"
 url: "https://pycvdrisk.aljasem.eu.org"
-license: MIT
+license:
+  - MIT
+  - LGPL-3.0-or-later
 keywords:
   - cardiovascular disease
-  - risk assessment
-  - clinical decision support
+  - risk prediction
   - epidemiology
   - SCORE2
-  - Framingham
-  - ASCVD
+  - PREVENT
   - QRISK3
-preferred-citation:
-  title: "CVD Risk Calculator: Production-grade cardiovascular risk assessment in Python"
-  type: software
-  authors:
-    - given-names: Mohamad
-      family-names: AlJasem
-
+  - Framingham
+  - Python

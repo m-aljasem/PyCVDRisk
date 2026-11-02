@@ -41,4 +41,4 @@ from cvd_risk.who2019 import who2019
 from cvd_risk.who_ish import who_ish
 
 __all__ = ["adrs", "cha2ds2_vasc", "chads2", "dial2", "edacs", "finrisk", "framingham", "globorisk", "grace_6month", "grace_hospital", "guideline_score", "has_bled", "heart", "life_cvd2", "pce", "predict_bleed", "predict_cvd", "predict_cvd_bmi", "predict_cvd_policy", "predict_post_acs", "predict_post_cvd", "predict_t2d", "prevent", "procam", "qrisk2", "qrisk3", "regicor", "reynolds", "score", "score2", "score2_asia_pacific", "score2_ckd", "score2_diabetes", "score2_op", "smart_reach", "timi", "uniscore", "who2019", "who_ish"]
-__version__ = "2.0.0.dev0"
+__version__ = "2.0.0"
