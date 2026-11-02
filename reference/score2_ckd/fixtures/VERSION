@@ -1,0 +1,5 @@
+reference: RiskScorescvd SCORE2_CKD (vendored at reference/vendor/RiskScorescvd)
+package_version: 0.3.1
+R: R version 4.3.3 (2024-02-29)
+generated: 2026-11-01
+rounding: disabled (round replaced by identity)

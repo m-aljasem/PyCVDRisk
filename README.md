@@ -1,410 +1,55 @@
-<div align="center"> <img src="./docs/pycvdrisk-github-header-banner.png"> </div>
+# cvd-risk
 
-# PyCVDRisk 🫀
+Verified, vectorised Python implementations of cardiovascular risk scores.
 
-<div align="center">
-
-### World's Most Comprehensive CVD Risk Models Package
-
-*The world's most comprehensive CVD risk assessment library with global coverage*
-
-[![PyPI version](https://badge.fury.io/py/cvd-risk.svg)](https://pypi.org/project/cvd-risk/)
-[![Python versions](https://img.shields.io/pypi/pyversions/cvd-risk)](https://pypi.org/project/cvd-risk/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![CI](https://github.com/m-aljasem/PyCVDRisk/actions/workflows/ci.yml/badge.svg)](https://github.com/m-aljasem/PyCVDRisk/actions)
-
-[📖 Documentation](https://pycvdrisk.aljasem.eu.org) • [🚀 Quick Start](#installation) • [💬 Discussions](https://github.com/m-aljasem/PyCVDRisk/discussions)
-
-</div>
-
----
-
-## ✨ What is PyCVDRisk?
-
-PyCVDRisk is the **world's most comprehensive Python package** for cardiovascular disease risk prediction, implementing **46 validated models** from **35+ countries**. Whether you're a researcher analyzing global biobank data or a clinician integrating risk assessment into your workflow, PyCVDRisk provides accurate, validated, and easy-to-use CVD risk calculations with unmatched geographic and ethnic coverage.
-
-### 🎯 Key Features
-
-- **46 Production-Ready Models**: World's most comprehensive CVD risk library with global coverage across 35+ countries and regions
-- **Global Coverage**: Models from every major continent (Europe, Americas, Asia, Oceania, Middle East)
-- **Ethnic Diversity**: 15+ ethnic groups represented (European, African American, Asian, Hispanic, Maori, Pacific Islander, etc.)
-- **Batch Processing**: Handle thousands of patients efficiently with vectorized operations
-- **Type-Safe**: Full type hints and validation with Pydantic
-- **Well-Tested**: Comprehensive test suite with high code coverage
-- **Research-Grade**: Based on peer-reviewed algorithms and clinical guidelines
-
-### 🌍 Global Coverage & Diversity
-
-PyCVDRisk offers unparalleled geographic and ethnic coverage:
-
-- **Europe**: 15+ models (SCORE2, PROCAM, REGICOR, Progetto CUORE, PRIME, DECODE, INTERHEART, etc.)
-- **Americas**: 8+ models (ASCVD, Framingham, PREVENT, Reynolds, Brazilian CVD, Mexican CVD, etc.)
-- **Asia**: 4+ models (Singapore, Malaysian CVD, QRISK2/3, SCORE2-Asia CKD)
-- **Oceania**: 3+ models (New Zealand, PREDICT)
-- **Middle East**: 1+ model (Gulf RACE)
-- **Global**: 3+ models (WHO CVD, Globorisk, INTERHEART)
-
-**Special Populations Covered:**
-- HIV-positive patients (D:A:D Score)
-- Diabetes patients (DIAL2, SCORE2-DM, DECODE)
-- CKD patients (SCORE2-CKD)
-- Elderly populations (SCORE2-OP, Rotterdam Study)
-- Young adults (CARDIA)
-- Atrial fibrillation (CHADS2, CHA2DS2-VASc)
-- Anticoagulation bleeding risk (HAS-BLED)
-
----
-
-## 🚀 Installation
-
-```bash
-pip install cvd-risk
-```
-
-That's it! PyCVDRisk is now ready to use.
-
----
-
-## 📖 Quick Start
-
-### Calculate Risk for One Patient
+Every score is implemented from its original publication, every coefficient
+cites its source, and every score is checked against an independent reference
+implementation before it is released. See `reference/<score>/REPORT.md`.
 
 ```python
-from cvd_risk import SCORE2, PatientData
-
-# Create a patient profile
-patient = PatientData(
-    age=55,
-    sex='male',
-    systolic_bp=140,
-    total_cholesterol=6.0,
-    hdl_cholesterol=1.2,
-    smoking=True,
-    region='moderate'
-)
-
-# Calculate 10-year CVD risk
-model = SCORE2()
-result = model.calculate(patient)
-
-print(f"Risk Score: {result.risk_score:.1f}%")
-print(f"Risk Category: {result.risk_category}")
+from cvd_risk import score2
+score2(age=[50, 62], sex=["male", "female"], smoker=[1, 0], sbp=[140, 130],
+       total_chol=[5.5, 6.1], hdl_chol=[1.3, 1.6], diabetes=0, region="low")
+# array([0.0591..., 0.0379...])   10-year risk as a fraction
 ```
 
-**Output:**
-```
-Risk Score: 10.6%
-Risk Category: Moderate risk
-```
+| Score | Status |
+|---|---|
+| SCORE2, SCORE2-OP, SCORE2-Diabetes, SCORE2 Asia-Pacific, SCORE2-CKD | implemented, verified vs R `RiskScorescvd` (and published worked examples) |
+| Globorisk (lab, office, fatal; 182 countries) | implemented, verified vs the authors' R package |
+| PREVENT (base, UACR, HbA1c, SDI, full; 10/30-year; 5 outcomes) | implemented, verified vs the authors' worked examples and R `preventr` |
+| WHO 2019 (lab, non-lab; 21 regions / 190 countries) | implemented, verified vs every cell of the official WHO charts and R `WHORiskCalculator` |
+| QRISK2-2014 | implemented (LGPL-3.0 module), verified vs ClinRisk's own C code, validation included (30,000 patients, 2.9e-13) |
+| QRISK3-2017 | implemented (LGPL-3.0 module), verified vs ClinRisk's own C code and R `QRISK3` |
+| Pooled Cohort Equations (ACC/AHA 2013) | implemented, verified vs the guideline's Table A and R `CVrisk` / `PooledCohort` |
+| Framingham 2008 general CVD (lab, BMI) | implemented, verified vs the Framingham Heart Study's own calculator spreadsheets, the paper's worked examples and R `CVrisk` |
+| SCORE (2003), fatal CVD, total-cholesterol model | implemented, verified vs the 800 cells of the official charts (798 within printed-coefficient precision; 2 chart anomalies documented); no working third-party implementation exists |
+| SMART-REACH (10-year risk, CVD-free life expectancy) | implemented, verified vs the authors' calculator spreadsheet (600 patients, 3e-15); a defect in the calculator's life expectancy documented |
+| LIFE-CVD2 (lifetime risk to 80, CVD-free life expectancy, treatment benefit; 4 ESC regions) | implemented, verified vs the authors' 16 published charts (7,167/7,168 cells within printed precision); a defective chart row documented |
+| DIAL2 core model (type 2 diabetes: 10-year and lifetime risk, CVD-free life expectancy; low/moderate ESC regions) | implemented, verified vs the paper's two worked examples (6/6 printed values; the caption's eGFR for example B is 90, not 70); no calculator or third-party implementation available |
+| Reynolds Risk Score (women 2007, men 2008) | implemented from the printed formulas (19/19 terms quoted from the PDFs), checked vs the papers' 17 worked examples (14 round exactly, all within printed precision); no calculator or third-party implementation available |
+| FINRISK calculator (Finland 2016; 10-year CHD, stroke, CVD; ages 30-64) | implemented from the paper's Table 2 equations (4/4 found in the PDF); Figure 1 reproduced, 29/30 bars exact and 1 off by 0.01 (after inferring the unstated HDL; two bars per sex were drawn with SBP 180, not the captioned 160) |
+| Abu Dhabi Risk Study, ADRS (UAE 2024; 10-year ASCVD, hard CAD, stroke; ages 18+) | implemented from the paper's Table 2 and the supplement's SPSS syntax (32/32 terms agree); no worked example or calculator exists, so evidence is weak; the unprinted cohort GFR mean (111.4) is derived from Table 1, and of the supplement's two stroke formulas the one matching the printed mean score is used |
+| PREDICT, New Zealand (7 equations: primary prevention 2018 and with BMI, VARIANZ policy, type 2 diabetes, major bleeding, after CVD, after ACS) | implemented from the authors' R package PredictRiskScores; all coefficients identical to its source, 49/49 printed table rows and both worked examples of the 2018 and bleeding papers reproduced; comparison by running the R code pending; 6 defects in the R code documented |
+| PROCAM score (men 35-65; points and the published points-to-risk table) | implemented from the paper's Tables 3-4, 30/30 bands checked at both ends against the PDF |
+| REGICOR (Framingham hard-CHD function recalibrated to Gerona, Spain; ages 35-74) | implemented from the paper's Tables 1-2 (39/39 rows found in the PDF, 40/40 bands checked at both ends); the paper's worked example contains two arithmetic slips (documented), so it cannot confirm the output |
+| WHO/ISH charts (2007; 14 subregions, with and without cholesterol) | implemented as the chart lookup, verified vs every cell of the guideline's two printed charts (768/768) and R `whoishRisk` (10,749/10,752 cells; the 3 others are whoishRisk transcription errors corrected from the guideline) |
+| HEART (chest pain, 0-10) | implemented from the published point rules (18/18), verified vs R `RiskScorescvd` (5,000 patients identical) |
+| CHADS2, CHA2DS2-VASc, HAS-BLED (atrial fibrillation) | implemented from each paper's point table, 32/32 published rules and Gage's worked example; no independent implementation used |
+| TIMI UA/NSTEMI (0-7) | implemented from the paper (11/11 rules), verified vs R `RiskScorescvd` (5,000 patients identical) |
+| EDACS (chest pain) | implemented from the paper (29/29 rules), verified vs R `RiskScorescvd` (5,000 patients identical) |
+| GRACE in-hospital (Granger 2003) and 6-month post-discharge (Eagle 2004) | implemented from the published nomograms, 78/78 bands checked at both ends against the PDFs; Granger's worked examples disagree with its own table (documented) |
 
-### Batch Processing for Multiple Patients
+### One call for any country
+
+`uniscore` gives each person the score their country's guideline body recommends:
+PREVENT (USA), QRISK3 (UK), SCORE2/SCORE2-OP (the 55 ESC countries of SCORE2 Fig 5),
+SCORE2 Asia-Pacific (48 countries) and WHO 2019 everywhere else. The routing table,
+with a source for every country, is `src/cvd_risk/uniscore/routing.csv`.
 
 ```python
-import pandas as pd
-from cvd_risk import SCORE2
-
-# Load your patient data
-df = pd.DataFrame({
-    'age': [45, 60, 55, 70],
-    'sex': ['female', 'male', 'male', 'female'],
-    'systolic_bp': [120, 150, 135, 145],
-    'total_cholesterol': [5.5, 7.2, 6.1, 4.8],
-    'hdl_cholesterol': [1.8, 1.0, 1.3, 1.5],
-    'smoking': [False, True, False, True],
-    'region': ['low', 'high', 'moderate', 'moderate']
-})
-
-# Calculate risks for all patients
-model = SCORE2()
-results_df = model.calculate_batch(df)
-
-# Results are added to the original dataframe
-print(results_df[['age', 'sex', 'risk_score', 'risk_category']])
+from cvd_risk import uniscore, guideline_score
+uniscore(["USA", "DEU", "JPN", "BRA"], age=60, sex="female", sbp=135, total_chol=5.8,
+         hdl_chol=1.4, smoker=0, diabetes=0, bp_treated=1, statin=0, egfr=85, bmi=29)
+guideline_score(["USA", "DEU", "JPN", "BRA"])  # prevent, score2, score2_asia_pacific, who2019
 ```
-
----
-
-## 🏥 Available Models
-
-### Primary Prevention Models
-
-| Model | Population | Primary Use | Status |
-|-------|------------|-------------|--------|
-| **SCORE2** | European adults (40-69) | Primary prevention | ✅ Production Ready |
-| **ASCVD** | US/International adults | Primary prevention | ✅ Production Ready |
-| **Framingham** | US adults | Primary prevention | ✅ Production Ready |
-| **QRISK2** | UK adults | Primary prevention | ✅ Production Ready |
-| **QRISK3** | UK primary care | Primary prevention | ✅ Production Ready |
-| **SCORE** | European adults | Primary prevention | ✅ Production Ready |
-| **WHO CVD** | Global populations | Primary prevention | ✅ Production Ready |
-| **Globorisk** | 182 countries | Primary prevention | ✅ Production Ready |
-| **INTERHEART** | 52 countries | Primary prevention | ✅ Production Ready |
-| **PREVENT** | US adults (40-79) | Primary prevention | ✅ Production Ready |
-| **PROCAM** | German adults | Primary prevention | ✅ Production Ready |
-| **Reynolds** | US adults | Primary prevention (hsCRP) | ✅ Production Ready |
-| **FINRISK** | Finnish adults | Primary prevention | ✅ Production Ready |
-| **REGICOR** | Spanish adults | Primary prevention | ✅ Production Ready |
-| **Progetto CUORE** | Italian adults | Primary prevention | ✅ Production Ready |
-| **PRIME** | France/Ireland adults | Primary prevention | ✅ Production Ready |
-| **RISC** | German adults | Primary prevention | ✅ Production Ready |
-| **ARIC Update** | US multi-ethnic | Primary prevention | ✅ Production Ready |
-| **Jackson Heart** | US African American | Primary prevention | ✅ Production Ready |
-| **CARDIA** | US young adults | Primary prevention | ✅ Production Ready |
-| **Rotterdam** | Dutch elderly | Primary prevention | ✅ Production Ready |
-| **Heinz Nixdorf** | German adults | Primary prevention | ✅ Production Ready |
-| **EPIC-Norfolk** | UK adults | Primary prevention | ✅ Production Ready |
-| **Singapore** | Singapore adults | Primary prevention | ✅ Production Ready |
-| **PREDICT** | New Zealand adults | Primary prevention | ✅ Production Ready |
-| **New Zealand** | New Zealand adults | Primary prevention | ✅ Production Ready |
-| **Dundee** | Scottish adults | Primary prevention | ✅ Production Ready |
-| **Cambridge** | UK adults | Primary prevention | ✅ Production Ready |
-| **DECODE** | European adults | Primary prevention | ✅ Production Ready |
-| **NHANES** | US population survey | Primary prevention | ✅ Production Ready |
-| **Malaysian CVD** | Malaysian adults | Primary prevention | ✅ Production Ready |
-| **Brazilian CVD** | Brazilian adults | Primary prevention | ✅ Production Ready |
-| **Mexican CVD** | Mexican adults | Primary prevention | ✅ Production Ready |
-| **Gulf RACE** | Gulf countries | Primary prevention | ✅ Production Ready |
-
-### Secondary Prevention Models
-
-| Model | Population | Primary Use | Status |
-|-------|------------|-------------|--------|
-| **SMART2** | Established CVD patients | Recurrent CVD risk | ✅ Production Ready |
-| **SMART-REACH** | Established CVD patients | Recurrent CVD risk | ✅ Production Ready |
-
-### Diabetes-Specific Models
-
-| Model | Population | Primary Use | Status |
-|-------|------------|-------------|--------|
-| **DIAL2** | Type 2 diabetes patients | Lifetime CVD risk | ✅ Production Ready |
-| **SCORE2-DM** | Diabetes patients | CVD risk assessment | ✅ Production Ready |
-
-### HIV-Specific Models
-
-| Model | Population | Primary Use | Status |
-|-------|------------|-------------|--------|
-| **D:A:D Score** | HIV-positive patients | CVD risk assessment | ✅ Production Ready |
-
-### CKD-Specific Models
-
-| Model | Population | Primary Use | Status |
-|-------|------------|-------------|--------|
-| **SCORE2-CKD** | CKD patients | CVD risk assessment | ✅ Production Ready |
-| **SCORE2-OP** | Older persons | CVD risk assessment | ✅ Production Ready |
-
-### Region-Specific Models
-
-| Model | Population | Primary Use | Status |
-|-------|------------|-------------|--------|
-| **ASSIGN** | Scottish adults | Primary prevention | ✅ Production Ready |
-| **SCORE2-Asia CKD** | Asian CKD patients | CVD risk assessment | ✅ Production Ready |
-| **REGICOR** | Spanish adults | Primary prevention | ✅ Production Ready |
-| **Progetto CUORE** | Italian adults | Primary prevention | ✅ Production Ready |
-| **PRIME** | France/Ireland adults | Primary prevention | ✅ Production Ready |
-| **RISC** | German adults | Primary prevention | ✅ Production Ready |
-| **Heinz Nixdorf** | German adults | Primary prevention | ✅ Production Ready |
-| **EPIC-Norfolk** | UK adults | Primary prevention | ✅ Production Ready |
-| **Singapore** | Singapore adults | Primary prevention | ✅ Production Ready |
-| **PREDICT** | New Zealand adults | Primary prevention | ✅ Production Ready |
-| **New Zealand** | New Zealand adults | Primary prevention | ✅ Production Ready |
-| **Dundee** | Scottish adults | Primary prevention | ✅ Production Ready |
-| **Cambridge** | UK adults | Primary prevention | ✅ Production Ready |
-| **DECODE** | European adults | Primary prevention | ✅ Production Ready |
-| **NHANES** | US population survey | Primary prevention | ✅ Production Ready |
-| **Malaysian CVD** | Malaysian adults | Primary prevention | ✅ Production Ready |
-| **Brazilian CVD** | Brazilian adults | Primary prevention | ✅ Production Ready |
-| **Mexican CVD** | Mexican adults | Primary prevention | ✅ Production Ready |
-| **Gulf RACE** | Gulf countries | Primary prevention | ✅ Production Ready |
-
-### Lifetime Risk Models
-
-| Model | Population | Primary Use | Status |
-|-------|------------|-------------|--------|
-| **LifeCVD2** | General population | Lifetime CVD risk | ✅ Production Ready |
-
-### Acute Coronary Syndrome Models
-
-| Model | Population | Primary Use | Status |
-|-------|------------|-------------|--------|
-| **GRACE2** | ACS patients | 6-month mortality | ✅ Production Ready |
-| **TIMI** | UA/NSTEMI patients | Short-term risk | ✅ Production Ready |
-
-### Emergency Department Models
-
-| Model | Population | Primary Use | Status |
-|-------|------------|-------------|--------|
-| **EDACS** | Chest pain patients | MACE risk stratification | ✅ Production Ready |
-| **HEART** | Chest pain patients | MACE risk stratification | ✅ Production Ready |
-
----
-
-## 🔬 Usage Examples
-
-### Clinical Integration
-
-```python
-from cvd_risk import SCORE2, ASCVD, PROCAM, PatientData
-
-# Compare multiple models for the same patient
-patient = PatientData(
-    age=65, sex='male', systolic_bp=150,
-    total_cholesterol=6.5, hdl_cholesterol=1.1,
-    smoking=False
-)
-
-# European models
-score2_model = SCORE2()
-procam_model = PROCAM()
-
-# US models
-ascvd_model = ASCVD()
-
-score2_result = score2_model.calculate(patient)
-procam_result = procam_model.calculate(patient)
-ascvd_result = ascvd_model.calculate(patient)
-
-print(f"SCORE2 (Europe): {score2_result.risk_score:.1f}%")
-print(f"PROCAM (Germany): {procam_result.risk_score:.1f}%")
-print(f"ASCVD (US): {ascvd_result.risk_score:.1f}%")
-```
-
-### Epidemiological Research
-
-```python
-import pandas as pd
-from cvd_risk import SCORE2
-
-# Process large cohorts efficiently
-biobank_data = pd.read_csv('large_cohort.csv')  # 100K+ patients
-
-# Calculate risks (takes ~1 second for large datasets)
-model = SCORE2()
-results_df = model.calculate_batch(biobank_data)
-
-# Statistical analysis
-high_risk = (results_df['risk_score'] > 10).sum()
-total_patients = len(biobank_data)
-high_risk_percentage = (high_risk / total_patients) * 100
-
-print(f"High-risk patients: {high_risk:,} ({high_risk_percentage:.1f}%)")
-```
-
-### Model Comparison
-
-```python
-from cvd_risk import SCORE2, Framingham, PROCAM, Singapore, PREDICT
-import pandas as pd
-import numpy as np
-
-# Compare international model predictions across a global population
-np.random.seed(42)
-n_patients = 100
-
-# Generate synthetic global population data
-population_df = pd.DataFrame({
-    'age': np.random.normal(55, 10, n_patients).clip(40, 80).astype(int),
-    'sex': np.random.choice(['male', 'female'], n_patients),
-    'systolic_bp': np.random.normal(130, 20, n_patients).clip(90, 200),
-    'total_cholesterol': np.random.normal(5.5, 1.2, n_patients).clip(3, 10),
-    'hdl_cholesterol': np.random.normal(1.3, 0.4, n_patients).clip(0.5, 2.5),
-    'smoking': np.random.choice([True, False], n_patients, p=[0.2, 0.8]),
-    'region': np.random.choice(['low', 'moderate', 'high'], n_patients),
-    'ethnicity': np.random.choice(['chinese', 'malay', 'indian', 'white'], n_patients)
-})
-
-# Calculate risks with international models
-score2_model = SCORE2()
-framingham_model = Framingham()
-procam_model = PROCAM()
-singapore_model = Singapore()
-predict_model = PREDICT()
-
-score2_results = score2_model.calculate_batch(population_df)
-framingham_results = framingham_model.calculate_batch(population_df)
-procam_results = procam_model.calculate_batch(population_df)
-singapore_results = singapore_model.calculate_batch(population_df)
-predict_results = predict_model.calculate_batch(population_df)
-
-# Compare average risks across continents
-avg_risks = {
-    'SCORE2 (Europe)': score2_results['risk_score'].mean(),
-    'Framingham (US)': framingham_results['risk_score'].mean(),
-    'PROCAM (Germany)': procam_results['risk_score'].mean(),
-    'Singapore (Asia)': singapore_results['risk_score'].mean(),
-    'PREDICT (New Zealand)': predict_results['risk_score'].mean()
-}
-
-print("Average 10-year CVD risk by international models:")
-for model, risk in avg_risks.items():
-    print(f"{model}: {risk:.1f}%")
-```
-
----
-
-## 📚 Documentation
-
-- **[Full Documentation](https://pycvdrisk.aljasem.eu.org)** - Complete API reference and guides
-- **[Model Details](https://pycvdrisk.aljasem.eu.org/models)** - Clinical background for each algorithm
-- **[Validation](https://pycvdrisk.aljasem.eu.org/validation)** - How we ensure accuracy
-- **[Contributing Guide](CONTRIBUTING.md)** - Add new models or improve the package
-
----
-
-## 🤝 Contributing
-
-We welcome contributions! Here's how to get involved:
-
-### Ways to Contribute
-- 🐛 **Report bugs** via [GitHub Issues](https://github.com/m-aljasem/PyCVDRisk/issues)
-- 💡 **Suggest features** in [Discussions](https://github.com/m-aljasem/PyCVDRisk/discussions)
-- 📝 **Improve documentation** by editing files
-- 🧪 **Add test cases** or validation data
-- 🔧 **Implement new risk models**
-
-### Development Setup
-
-```bash
-# Clone the repository
-git clone https://github.com/m-aljasem/PyCVDRisk.git
-cd PyCVDRisk
-
-# Install in development mode with all dependencies
-pip install -e .[dev]
-
-# Run tests
-python build_script.py test
-
-# Run all checks (linting + tests)
-python build_script.py check
-```
-
----
-
-## 📄 License
-
-**MIT License** - Free for academic, clinical, and commercial use.
-
-Just cite us in your research! 📚
-
----
-
-## 🙏 Acknowledgments
-
-- **European Society of Cardiology** - SCORE2 algorithm
-- **American Heart Association** - ASCVD and Framingham algorithms
-- **National Health Services (UK)** - QRISK algorithms
-- **World Health Organization** - Global CVD risk charts
-- **International Cardiology Societies** - INTERHEART, PRIME, and other global studies
-- **National Health Ministries** - Country-specific algorithms (Finland, Singapore, Thailand, Malaysia, Brazil, Mexico, etc.)
-- **Scientific Python Community** - NumPy, Pandas, SciPy
-- **Open Source Contributors** - Making global research software accessible
-
----
-
-<div align="center">
-
-**Built with ❤️ for global cardiovascular research and clinical practice**
-
-[⭐ Star us on GitHub](https://github.com/m-aljasem/PyCVDRisk) • [📧 Contact](mailto:mohamad@aljasem.eu.org)
-
-</div>

@@ -1,0 +1,5 @@
+reference: WHORiskCalculator (CRAN), R implementation of the 2019 WHO CVD risk models
+package_version: 1.1.0
+R: R version 4.3.3 (2024-02-29)
+generated: 2026-11-01
+rounding: none (package returns unrounded risks)

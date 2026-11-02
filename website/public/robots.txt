@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://pycvdrisk.aljasem.eu.org/sitemap.xml

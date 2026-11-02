@@ -1,0 +1,5 @@
+reference: globorisk (authors' R package), vendored at reference/vendor/globorisk
+package_version: 1.0.2
+R: R version 4.3.3 (2024-02-29)
+generated: 2026-11-01
+options: updated_lac = FALSE (default)

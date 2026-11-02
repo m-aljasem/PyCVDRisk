@@ -1,0 +1,6 @@
+reference: RiskScorescvd (CRAN) — vendored source, see reference/vendor/RiskScorescvd/DESCRIPTION
+package_version: 0.3.1
+R: R version 4.3.3 (2024-02-29)
+dplyr: 1.1.4
+generated: 2026-11-01
+rounding: disabled (round and round_to_nearest_digit overridden with identity)

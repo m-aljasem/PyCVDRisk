@@ -1,0 +1,4 @@
+reference: CVrisk 1.2.1 (rounding, 1% floor and 30% cap removed)
+official: Framingham Heart Study spreadsheets gencardio_lipids.xls, gencardio_bmi.xls (cached examples)
+R: R version 4.3.3 (2024-02-29)
+generated: 2026-11-01

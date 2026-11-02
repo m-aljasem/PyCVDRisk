@@ -1,0 +1,12 @@
+Package: PredictRiskScores
+Type: Package
+Title: Functions for generating PREDICT CVD risk scores
+Version: 0.9
+Author: Billy Wu
+Maintainer: Billy Wu <billy.nz@gmail.com>
+Description: Function for PREDICT Risk Scores developed by the VIEW team from the University of Auckland
+License: GPL-2
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 7.0.2
+Roxygen: list(markdown = TRUE)

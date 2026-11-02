@@ -1,0 +1,6 @@
+reference: preventr (CRAN), R implementation of the AHA PREVENT equations
+package_version: 0.12.2
+R: R version 4.3.3 (2024-02-29)
+generated: 2026-11-01
+rounding: disabled (preventr:::round_half_up replaced by identity)
+models: base, uacr, hba1c, sdi, full (SDI decile passed via zip); HbA1c erratum 2026-10-14 included

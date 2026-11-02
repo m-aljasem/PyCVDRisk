@@ -1,0 +1,4 @@
+reference: ClinRisk QRISK3-2017 C source (reference/qrisk3/source/qrisk3_2017.c), unmodified
+compiler: cc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0 (-O0 -std=c99)
+generated: 2026-11-01
+secondary: QRISK3 (CRAN) 0.6.0 - R version 4.3.3 (2024-02-29) 

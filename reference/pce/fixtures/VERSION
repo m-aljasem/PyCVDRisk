@@ -1,0 +1,4 @@
+reference: CVrisk 1.2.1 (rounding and 1% floor removed)
+secondary: PooledCohort 0.0.2 (equation_version = Goff_2013)
+R: R version 4.3.3 (2024-02-29)
+generated: 2026-11-01

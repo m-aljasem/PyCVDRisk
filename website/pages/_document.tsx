@@ -4,9 +4,10 @@ export default function Document() {
   return (
     <Html lang="en">
       <Head>
-        <meta name="description" content="Production-grade Python package for cardiovascular disease risk calculation" />
-        <meta name="keywords" content="cardiovascular, risk assessment, epidemiology, clinical decision support" />
         <link rel="icon" href="/favicon.ico" />
+        <link rel="apple-touch-icon" href="/PyCVDRisk-Logo.png" />
+        <meta name="theme-color" content="#6366f1" />
+        <meta name="author" content="Mohamad AlJasem" />
       </Head>
       <body>
         <Main />
@@ -15,4 +16,3 @@ export default function Document() {
     </Html>
   )
 }
-

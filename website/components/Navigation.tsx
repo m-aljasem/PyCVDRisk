@@ -1,7 +1,8 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import { useState } from 'react'
-import { HeartIcon, Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
+import { REPO } from '@/lib/site'
+import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
 
 export default function Navigation() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
@@ -28,9 +29,10 @@ export default function Navigation() {
           
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-8">
-            <a href="#features" className="text-gray-600 hover:text-gray-900 transition-colors">Features</a>
-            <a href="#models" className="text-gray-600 hover:text-gray-900 transition-colors">Models</a>
-            <a href="https://github.com/m-aljasem/PyCVDRisk" className="btn-secondary">
+            <a href="/#verification" className="text-gray-600 hover:text-gray-900 transition-colors">Verification</a>
+            <a href="/#models" className="text-gray-600 hover:text-gray-900 transition-colors">Risk scores</a>
+            <Link href="/about" className="text-gray-600 hover:text-gray-900 transition-colors">About</Link>
+            <a href={REPO} className="btn-secondary">
               GitHub
             </a>
           </div>
@@ -54,21 +56,28 @@ export default function Navigation() {
         {mobileMenuOpen && (
           <div className="md:hidden py-4 space-y-2">
             <a
-              href="#features"
+              href="/#verification"
               className="block px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg"
               onClick={() => setMobileMenuOpen(false)}
             >
-              Features
+              Verification
             </a>
             <a
-              href="#models"
+              href="/#models"
               className="block px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg"
               onClick={() => setMobileMenuOpen(false)}
             >
-              Models
+              Risk scores
             </a>
+            <Link
+              href="/about"
+              className="block px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg"
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              About
+            </Link>
             <a
-              href="https://github.com/m-aljasem/PyCVDRisk"
+              href={REPO}
               className="block px-4 py-2 btn-secondary text-center"
               onClick={() => setMobileMenuOpen(false)}
             >

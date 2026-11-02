@@ -140,3 +140,12 @@ benchmarks/results/
 notebooks/*.ipynb
 
 temp/
+reference/globorisk/data/
+
+# Publisher documents used for verification: kept locally, not redistributed
+reference/**/source/*.pdf
+reference/**/source/*.docx
+reference/**/source/*.xml
+reference/**/source/*.xls
+reference/**/source/*.xlsx
+reference/prevent/source/erratum_*.txt
