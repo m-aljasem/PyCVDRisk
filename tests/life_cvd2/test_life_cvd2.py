@@ -27,10 +27,12 @@ def _load(name):
     return m
 
 
+@pytest.mark.skipif(not (REF / "source" / "hageman2024_supplement.pdf").exists(), reason="publisher document not in the repository (see reference/README.md)")
 def test_coefficients_match_supplement():
     assert _load("check_coefficients").main() == 0
 
 
+@pytest.mark.skipif(not (REF / "source" / "hageman2024_appendix1_charts.pdf").exists(), reason="publisher document not in the repository (see reference/README.md)")
 def test_published_charts():
     R = _load("report")
     outliers, worst = [], [0.0]

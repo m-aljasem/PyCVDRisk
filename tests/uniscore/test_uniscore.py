@@ -15,6 +15,7 @@ P = dict(sex="female", sbp=135, total_chol=5.8, hdl_chol=1.4, smoker=0, diabetes
 S2 = dict(sex="female", smoker=0, sbp=135, total_chol=5.8, hdl_chol=1.4, diabetes=0)
 
 
+@pytest.mark.skipif(not (ROOT / "reference/score2/source/score2_asia_pacific_ehae609_supplement.docx").exists(), reason="publisher document not in the repository (see reference/README.md)")
 def test_routing_table_is_current():
     spec = importlib.util.spec_from_file_location("b", ROOT / "reference/uniscore/build_routing.py")
     b = importlib.util.module_from_spec(spec)

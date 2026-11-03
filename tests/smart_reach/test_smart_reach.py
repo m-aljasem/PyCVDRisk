@@ -33,6 +33,7 @@ P = pd.read_csv(REF / "fixtures" / "patients.csv")
 REF10, REF_LE = R.reference()
 
 
+@pytest.mark.skipif(not (REF / "source" / "kaasenbrood2018_supplement.pdf").exists(), reason="publisher document not in the repository (see reference/README.md)")
 def test_coefficients_match_calculator_and_supplement():
     assert _load("check_coefficients").main() == 0
 

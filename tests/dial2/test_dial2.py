@@ -25,6 +25,7 @@ def _load(name):
     return m
 
 
+@pytest.mark.skipif(not (REF / "source" / "ostergaard2023_supplement.pdf").exists(), reason="publisher document not in the repository (see reference/README.md)")
 def test_coefficients_match_supplement():
     assert _load("check_coefficients").main() == 0
 

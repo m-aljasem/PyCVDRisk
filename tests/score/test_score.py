@@ -26,6 +26,7 @@ def _load(name):
     return m
 
 
+@pytest.mark.skipif(not (REF / "source" / "conroy2003.pdf").exists(), reason="publisher document not in the repository (see reference/README.md)")
 def test_coefficients_match_the_publication():
     assert _load("check_coefficients").main() == 0
 

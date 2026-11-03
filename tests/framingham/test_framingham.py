@@ -26,6 +26,7 @@ def _kw(model, d):
     return dict(bmi=d.bmi)
 
 
+@pytest.mark.skipif(not (REF / "source" / "dagostino2008.pdf").exists(), reason="publisher document not in the repository (see reference/README.md)")
 def test_coefficients_match_the_publication():
     spec = importlib.util.spec_from_file_location("chk", REF / "check_coefficients.py")
     m = importlib.util.module_from_spec(spec)

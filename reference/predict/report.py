@@ -17,7 +17,6 @@ import re
 from pathlib import Path
 
 import numpy as np
-import pypdf
 
 from cvd_risk.predict import coefficients as C
 from cvd_risk.predict import predict as P
@@ -34,6 +33,8 @@ MODELS = {"cvd": ("NoPriorCVDRisk", C.CVD, P.predict_cvd), "cvd_bmi": ("NoPriorC
 
 
 def pdf_text(name):
+    import pypdf  # only for regenerating the report from the PDFs; tests import this module without it
+
     t = " ".join(p.extract_text() or "" for p in pypdf.PdfReader(HERE / "source" / name).pages)
     return re.sub(r"\s+", " ", t.replace("·", ".").replace("–", "-").replace("−", "-"))
 
