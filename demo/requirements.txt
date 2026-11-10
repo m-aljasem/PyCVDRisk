@@ -1,0 +1,2 @@
+cvd-risk==2.0.0
+streamlit>=1.40

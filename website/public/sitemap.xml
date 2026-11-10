@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url><loc>https://pycvdrisk.aljasem.eu.org</loc></url>
+  <url><loc>https://pycvdrisk.aljasem.eu.org/demo</loc></url>
   <url><loc>https://pycvdrisk.aljasem.eu.org/about</loc></url>
   <url><loc>https://pycvdrisk.aljasem.eu.org/credits</loc></url>
   <url><loc>https://pycvdrisk.aljasem.eu.org/docs/models/score2</loc></url>

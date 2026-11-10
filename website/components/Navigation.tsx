@@ -32,9 +32,12 @@ export default function Navigation() {
             <a href="/#verification" className="text-gray-600 hover:text-gray-900 transition-colors">Verification</a>
             <a href="/#models" className="text-gray-600 hover:text-gray-900 transition-colors">Risk scores</a>
             <Link href="/about" className="text-gray-600 hover:text-gray-900 transition-colors">About</Link>
-            <a href={REPO} className="btn-secondary">
+            <a href={REPO} className="btn-secondary !px-4 !py-2">
               GitHub
             </a>
+            <Link href="/demo" className="btn-primary !px-5 !py-2">
+              Try Now
+            </Link>
           </div>
 
           {/* Mobile menu button */}
@@ -83,6 +86,13 @@ export default function Navigation() {
             >
               GitHub
             </a>
+            <Link
+              href="/demo"
+              className="block btn-primary text-center"
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              Try Now
+            </Link>
           </div>
         )}
       </div>
