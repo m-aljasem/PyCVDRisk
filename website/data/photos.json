@@ -156,7 +156,7 @@
   "title": "Spain flag waving.jpg",
   "page": "https://commons.wikimedia.org/wiki/File:Spain_flag_waving.jpg",
   "license": "CC BY 2.0",
-  "artist": "Catherine K\u00f5rtsmik from Tallinn, Estonia",
+  "artist": "Catherine Kõrtsmik from Tallinn, Estonia",
   "caption": "The flag of Spain"
  },
  "nz_flag": {
@@ -169,7 +169,7 @@
  },
  "insulin": {
   "file": "insulin.jpg",
-  "title": "Improperly Discarded \u2018Sharps\u2019 Can Be Dangerous (6321875537).jpg",
+  "title": "Improperly Discarded ‘Sharps’ Can Be Dangerous (6321875537).jpg",
   "page": "https://commons.wikimedia.org/wiki/File:Improperly_Discarded_%E2%80%98Sharps%E2%80%99_Can_Be_Dangerous_(6321875537).jpg",
   "license": "Public domain",
   "artist": "The U.S. Food and Drug Administration",
@@ -204,7 +204,7 @@
   "title": "New York Fire Department Ambulance at Pulaski Day Parade, 20231001 1350 1160.jpg",
   "page": "https://commons.wikimedia.org/wiki/File:New_York_Fire_Department_Ambulance_at_Pulaski_Day_Parade,_20231001_1350_1160.jpg",
   "license": "CC BY 4.0",
-  "artist": "Jakub Ha\u0142un",
+  "artist": "Jakub Hałun",
   "caption": "An FDNY ambulance, New York"
  },
  "score2_map": {
@@ -230,5 +230,45 @@
   "license": "Public domain",
   "artist": "PyCVDRisk (illustration)",
   "caption": "Framingham town-line sign (illustration)"
+ },
+ "suita_ncvc": {
+  "file": "suita_ncvc.jpg",
+  "title": "National Cerebral and Cardiovascular Center Hospital.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:National_Cerebral_and_Cardiovascular_Center_Hospital.jpg",
+  "license": "CC BY-SA 4.0",
+  "artist": "KishujiRapid",
+  "caption": "National Cerebral and Cardiovascular Center, Suita, Osaka (home of the Suita Study)"
+ },
+ "suita_park": {
+  "file": "suita_park.jpg",
+  "title": "131116 Expo Commemoration Park Suita Osaka pref Japan01s3.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:131116_Expo_Commemoration_Park_Suita_Osaka_pref_Japan01s3.jpg",
+  "license": "CC BY 2.5",
+  "artist": "663highland",
+  "caption": "Expo '70 Commemorative Park, Suita, Osaka"
+ },
+ "hisayama": {
+  "file": "hisayama.jpg",
+  "title": "Mount Tomidake in Hisayama, Kasuya, Fukuoka.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Mount_Tomidake_in_Hisayama,_Kasuya,_Fukuoka.jpg",
+  "license": "CC BY-SA 4.0",
+  "artist": "そらみみ",
+  "caption": "Mount Tomidake, Hisayama, Fukuoka"
+ },
+ "mount_fuji": {
+  "file": "mount_fuji.jpg",
+  "title": "Mount Fuji at sunset, March 2025.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Mount_Fuji_at_sunset,_March_2025.jpg",
+  "license": "CC0",
+  "artist": "Romain Guy from San Francisco, USA",
+  "caption": "Mount Fuji at sunset"
+ },
+ "japan_flag": {
+  "file": "japan_flag.jpg",
+  "title": "Waving Japanese flag.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Waving_Japanese_flag.jpg",
+  "license": "CC BY-SA 3.0",
+  "artist": "Mj-bird",
+  "caption": "The flag of Japan"
  }
 }
