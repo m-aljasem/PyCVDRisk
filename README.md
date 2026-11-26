@@ -4,6 +4,8 @@
 ### Cardiovascular risk scores from across the world, verified, in Python
 
 [![PyPI version](https://img.shields.io/pypi/v/cvd-risk.svg)](https://pypi.org/project/cvd-risk/)
+[![Downloads](https://static.pepy.tech/badge/cvd-risk)](https://pepy.tech/project/cvd-risk)
+[![Downloads per month](https://img.shields.io/pypi/dm/cvd-risk.svg)](https://pypistats.org/packages/cvd-risk)
 [![Python versions](https://img.shields.io/pypi/pyversions/cvd-risk.svg)](https://pypi.org/project/cvd-risk/)
 [![CI](https://github.com/m-aljasem/PyCVDRisk/actions/workflows/ci.yml/badge.svg)](https://github.com/m-aljasem/PyCVDRisk/actions/workflows/ci.yml)
 [![License](https://img.shields.io/badge/license-MIT%20%2B%20LGPL--3.0%20(QRISK)-blue.svg)](LICENSE)
