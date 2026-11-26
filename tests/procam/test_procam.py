@@ -8,6 +8,7 @@ from cvd_risk import procam, procam_stroke
 from cvd_risk.prevent.prevent import MG_PER_MMOL as K
 from cvd_risk.procam import CATEGORIES, STROKE_RISK
 
+
 REF = Path(__file__).parents[2] / "reference" / "procam"
 
 
@@ -23,11 +24,13 @@ def rep():
     return _report()
 
 
+@pytest.mark.skipif(not (Path(__file__).parents[2] / "reference/procam/source/assmann2007.pdf").exists(), reason="publisher document not in the repository (see reference/*/source/SOURCES.md)")
 def test_table2_bands_against_pdf(rep):
     rows = rep.table2_rows(rep.flat(rep.pages()[3]))
     assert all(found and lo == p == hi for _, _, p, found, lo, hi in rows) and len(rows) == 50
 
 
+@pytest.mark.skipif(not (Path(__file__).parents[2] / "reference/procam/source/assmann2007.pdf").exists(), reason="publisher document not in the repository (see reference/*/source/SOURCES.md)")
 def test_tables3_4_against_pdf(rep):
     parsed, slips = rep.risk_rows(rep.pages()[4])
     for sex, rows in parsed.items():
@@ -36,6 +39,7 @@ def test_tables3_4_against_pdf(rep):
     assert slips == [("female", "46 < 44 45–53 54–62 63–69 = 68")]  # printed overlap, see REPORT.md
 
 
+@pytest.mark.skipif(not (Path(__file__).parents[2] / "reference/procam/source/assmann2007.pdf").exists(), reason="publisher document not in the repository (see reference/*/source/SOURCES.md)")
 def test_table7_against_pdf(rep):
     assert rep.table7_rows(rep.flat(rep.pages()[5])) == STROKE_RISK
 

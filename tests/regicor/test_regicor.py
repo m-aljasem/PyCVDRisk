@@ -9,6 +9,7 @@ from cvd_risk import regicor
 from cvd_risk.prevent.prevent import MG_PER_MMOL as K
 from cvd_risk.regicor import mean_lp
 
+
 REF = Path(__file__).parents[2] / "reference" / "regicor"
 
 
@@ -19,6 +20,7 @@ def _report():
     return mod
 
 
+@pytest.mark.skipif(not (Path(__file__).parents[2] / "reference/regicor/source/marrugat2003_rev_esp_cardiol.pdf").exists() or not (Path(__file__).parents[2] / "reference/regicor/source/wilson1998.pdf").exists(), reason="publisher document not in the repository (see reference/*/source/SOURCES.md)")
 def test_tables_against_pdfs():
     rep = _report()
     assert rep.wilson_table6() in rep.text("wilson1998.pdf")

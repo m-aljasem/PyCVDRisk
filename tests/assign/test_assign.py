@@ -13,6 +13,7 @@ from cvd_risk import assign
 from cvd_risk.assign.assign import BETA, MEAN, SURVIVAL
 
 pypdf = pytest.importorskip("pypdf")
+
 SRC = Path(__file__).parents[2] / "reference" / "assign" / "source"
 logging.getLogger("pypdf").setLevel(logging.ERROR)
 
@@ -25,6 +26,7 @@ def _printed(x):  # "6.22520" is printed with trailing zeros, "0.0481" without; 
     return f"{abs(x):.10g}"
 
 
+@pytest.mark.skipif(not (Path(__file__).parents[2] / "reference/assign/source/woodward2007_appendix.pdf").exists(), reason="publisher document not in the repository (see reference/*/source/SOURCES.md)")
 def test_version1_constants_in_2007_appendix():
     t = _text("woodward2007_appendix.pdf")
     for s in ("male", "female"):
@@ -33,6 +35,7 @@ def test_version1_constants_in_2007_appendix():
         assert _printed(MEAN[1][s][7]) in t
 
 
+@pytest.mark.skipif(not (Path(__file__).parents[2] / "reference/assign/source/welsh2025_heart.pdf").exists(), reason="publisher document not in the repository (see reference/*/source/SOURCES.md)")
 def test_version2_constants_in_2025_supplement():
     t = _text("welsh2025_heart.pdf")
     for s in ("male", "female"):

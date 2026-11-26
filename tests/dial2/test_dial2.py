@@ -14,6 +14,7 @@ import pytest
 
 from cvd_risk import dial2
 
+
 REF = Path(__file__).parents[2] / "reference" / "dial2"
 
 
@@ -25,6 +26,7 @@ def _load(name):
     return m
 
 
+@pytest.mark.skipif(not (Path(__file__).parents[2] / "reference/dial2/source/ostergaard2023_supplement.docx").exists() or not (Path(__file__).parents[2] / "reference/dial2/source/ostergaard2023_supplement.pdf").exists(), reason="publisher document not in the repository (see reference/*/source/SOURCES.md)")
 def test_coefficients_match_supplement():
     assert _load("check_coefficients").main() == 0
 

@@ -15,6 +15,7 @@ import pytest
 
 from cvd_risk import score
 
+
 REF = Path(__file__).parents[2] / "reference" / "score"
 
 
@@ -26,6 +27,7 @@ def _load(name):
     return m
 
 
+@pytest.mark.skipif(not (Path(__file__).parents[2] / "reference/score/source/conroy2003.pdf").exists(), reason="publisher document not in the repository (see reference/*/source/SOURCES.md)")
 def test_coefficients_match_the_publication():
     assert _load("check_coefficients").main() == 0
 

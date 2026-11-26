@@ -19,6 +19,7 @@ import pytest
 from cvd_risk import pce
 from cvd_risk.prevent.prevent import MG_PER_MMOL
 
+
 REF = Path(__file__).parents[2] / "reference" / "pce"
 mod = importlib.import_module("cvd_risk.pce.pce")
 GROUPS = [("female", "white"), ("female", "african_american"), ("male", "white"), ("male", "african_american")]
@@ -41,6 +42,7 @@ def _load(name):
     return m
 
 
+@pytest.mark.skipif(not (Path(__file__).parents[2] / "reference/pce/source/goff2013_PMC4700825.xml").exists(), reason="publisher document not in the repository (see reference/*/source/SOURCES.md)")
 def test_coefficients_match_table_a():
     assert _load("check_coefficients").main() == 0
 

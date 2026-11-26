@@ -16,6 +16,7 @@ import pytest
 
 from cvd_risk import life_cvd2
 
+
 REF = Path(__file__).parents[2] / "reference" / "life_cvd2"
 
 
@@ -27,10 +28,12 @@ def _load(name):
     return m
 
 
+@pytest.mark.skipif(not (Path(__file__).parents[2] / "reference/life_cvd2/source/hageman2024_appendix1_charts.pdf").exists() or not (Path(__file__).parents[2] / "reference/life_cvd2/source/hageman2024_supplement.pdf").exists(), reason="publisher document not in the repository (see reference/*/source/SOURCES.md)")
 def test_coefficients_match_supplement():
     assert _load("check_coefficients").main() == 0
 
 
+@pytest.mark.skipif(not (Path(__file__).parents[2] / "reference/life_cvd2/source/hageman2024_appendix1_charts.pdf").exists() or not (Path(__file__).parents[2] / "reference/life_cvd2/source/hageman2024_supplement.pdf").exists(), reason="publisher document not in the repository (see reference/*/source/SOURCES.md)")
 def test_published_charts():
     R = _load("report")
     outliers, worst = [], [0.0]

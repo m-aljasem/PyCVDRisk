@@ -17,6 +17,7 @@ import pytest
 
 from cvd_risk import smart_reach
 
+
 REF = Path(__file__).parents[2] / "reference" / "smart_reach"
 
 
@@ -33,6 +34,7 @@ P = pd.read_csv(REF / "fixtures" / "patients.csv")
 REF10, REF_LE = R.reference()
 
 
+@pytest.mark.skipif(not (Path(__file__).parents[2] / "reference/smart_reach/source/kaasenbrood2018_supplement.pdf").exists(), reason="publisher document not in the repository (see reference/*/source/SOURCES.md)")
 def test_coefficients_match_calculator_and_supplement():
     assert _load("check_coefficients").main() == 0
 

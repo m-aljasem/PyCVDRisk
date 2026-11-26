@@ -143,3 +143,21 @@ notebooks/*.ipynb
 temp/
 reference/globorisk/data/
 
+
+# Publisher documents are not redistributed: each reference/<score>/source/SOURCES.md says where to get them
+reference/**/*.pdf
+reference/**/*.doc
+reference/**/*.docx
+reference/*/source/PMC*.xml
+reference/*/source/*_PMC*.xml
+reference/china_par/source/eastern_china_application.txt
+reference/china_par/source/yang2016_cdtm.txt
+reference/china_par/source/yang2016_cdtm_supplement.txt
+reference/china_par/source/yang2016_circulation.txt
+reference/epoch_japan/source/li2021.txt
+reference/hisayama/source/honda2022.txt
+reference/jals/source/harada2019.txt
+reference/jals/source/supp1.txt
+reference/jals/source/supp2.txt
+reference/jals/source/supp3.txt
+reference/jals/source/supp4.txt

@@ -17,6 +17,7 @@ import pytest
 from cvd_risk import framingham
 from cvd_risk.prevent.prevent import MG_PER_MMOL as K
 
+
 REF = Path(__file__).parents[2] / "reference" / "framingham"
 
 
@@ -26,6 +27,7 @@ def _kw(model, d):
     return dict(bmi=d.bmi)
 
 
+@pytest.mark.skipif(not (Path(__file__).parents[2] / "reference/framingham/source/dagostino2008.pdf").exists() or not (Path(__file__).parents[2] / "reference/framingham/source/dagostino2008_supplement.pdf").exists(), reason="publisher document not in the repository (see reference/*/source/SOURCES.md)")
 def test_coefficients_match_the_publication():
     spec = importlib.util.spec_from_file_location("chk", REF / "check_coefficients.py")
     m = importlib.util.module_from_spec(spec)

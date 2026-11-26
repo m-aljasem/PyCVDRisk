@@ -9,6 +9,7 @@ import pytest
 from cvd_risk import (guideline_score, prevent, qrisk3, score2, score2_asia_pacific, score2_op,
                       uniscore, who2019)
 
+
 ROOT = Path(__file__).parents[2]
 P = dict(sex="female", sbp=135, total_chol=5.8, hdl_chol=1.4, smoker=0, diabetes=0, bp_treated=1,
          statin=0, egfr=85, bmi=29, ethnicity="indian", smoking="ex", sbp_sd=6)
@@ -20,6 +21,7 @@ def same(a, b):
 S2 = dict(sex="female", smoker=0, sbp=135, total_chol=5.8, hdl_chol=1.4, diabetes=0)
 
 
+@pytest.mark.skipif(not (Path(__file__).parents[2] / "reference/score2/source/score2_asia_pacific_ehae609_supplement.docx").exists(), reason="publisher document not in the repository (see reference/*/source/SOURCES.md)")
 def test_routing_table_is_current():
     spec = importlib.util.spec_from_file_location("b", ROOT / "reference/uniscore/build_routing.py")
     b = importlib.util.module_from_spec(spec)
